@@ -1,3 +1,11 @@
+import type { HomeEntrancePhase } from "./voiceWorld";
+
+export function homeSurfaceColor(entrance: HomeEntrancePhase) {
+  if (entrance === "active" || entrance === "preparing") return "#F2E8DB";
+  if (entrance === "wake-reward") return "#D8D5C5";
+  return "#23323A";
+}
+
 /** Foreground follows the actual animated surface, not the next phase. */
 export function homeSurfaceInk(background: string) {
   const rgb = background.startsWith("#")

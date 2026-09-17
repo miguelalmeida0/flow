@@ -2,17 +2,23 @@
 
 **Voice-first personal computing where conversation directly changes calendars, journals, people, and memories.**
 
-<p align="center">
-  <img src="./docs/readme/current/01-home-desktop.png" alt="Flow home" width="100%">
-</p>
-
 ## Conversation as interface
 
 Flow is built around an active spoken loop rather than a command box. The user wakes the assistant, speaks naturally, receives spoken clarification when needed, and changes structured application state without repeatedly reaching for the screen.
 
 <p align="center">
-  <img src="./docs/readme/current/02-listening-desktop.png" alt="Flow listening state" width="100%">
+  <img src="./docs/readme/current/03-live-listening-desktop.png" alt="Flow live listening home with Calendar, Journal, Friends and Memories" width="100%">
 </p>
+
+<p align="center"><sub><strong>Listening home.</strong> Voice remains present while the editable day and personal surfaces stay visible.</sub></p>
+
+## Wake into the living day
+
+<p align="center">
+  <img src="./docs/readme/current/04-all-set-desktop.png" alt="Flow All set wake transition with mascot" width="100%">
+</p>
+
+<p align="center"><sub><strong>Wake transition.</strong> Flow acknowledges the wake event before revealing the living-day workspace.</sub></p>
 
 ## Product surfaces
 

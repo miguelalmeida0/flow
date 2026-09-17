@@ -29,6 +29,7 @@ import { StudioRestingShelf, StudioSecondarySurface } from "../features/studio/S
 import { VoiceInspector } from "../shared/command/VoiceInspector";
 import { VoiceTargetPulse } from "../features/voice-home/VoiceEnergy";
 import { WakeAcknowledgement } from "../features/voice-home/WakeAcknowledgement";
+import { homeSurfaceColor } from "../features/voice-home/homeSurfaceInk";
 import { pageTaskEntity, usePageTaskReveal } from "./usePageTaskReveal";
 
 function EnvironmentProjection({ recognitionAdapter, voiceLocale, liveOwnership, promptSpeechAdapter }: { recognitionAdapter?: RecognitionAdapter; voiceLocale?: VoiceLocale; liveOwnership?: LiveOwnershipCoordinator; promptSpeechAdapter?: PromptSpeechAdapter }) {
@@ -37,6 +38,10 @@ function EnvironmentProjection({ recognitionAdapter, voiceLocale, liveOwnership,
   const taskEntity = pageTaskEntity(document, route, context, focusedEntityId, activePlanId, peopleView);
   usePageTaskReveal(route, taskEntity, pageNavigation, reducedMotion);
   const homeActive = route === "home" && voiceWorld.entrance === "active";
+  const homeCanvasColor = route === "home" ? homeSurfaceColor(voiceWorld.entrance) : undefined;
+  const homeCanvasBorder = voiceWorld.entrance === "wake-armed"
+    ? "rgba(248, 242, 232, 0.14)"
+    : "#D8CEC2";
   const screens = {
     home: <HomeSpace />,
     today: <CalendarSpace />,
@@ -55,7 +60,12 @@ function EnvironmentProjection({ recognitionAdapter, voiceLocale, liveOwnership,
     <div className="fixed inset-0 flex h-dvh min-h-0 w-full flex-col overflow-clip bg-flow-page text-flow-ink antialiased [overflow-anchor:none] selection:bg-flow-blue/15" data-flow-viewport>
       <WakeAcknowledgement entrance={voiceWorld.entrance} />
       {route !== "home" && <EnvironmentHeader />}
-      <main className={`relative min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain ${homeActive ? "bg-[#F2E8DB]" : "bg-flow-page"}`} data-primary-content-rect data-flow-region="primary">
+      <main
+        className={`relative h-0 min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain ${route === "home" ? "" : "bg-flow-page"}`}
+        data-primary-content-rect
+        data-flow-region="primary"
+        style={homeCanvasColor ? { backgroundColor: homeCanvasColor } : undefined}
+      >
         <LayoutGroup id="flow-spaces">
           <motion.div
             animate={{ opacity: 1, y: 0 }}
@@ -74,7 +84,11 @@ function EnvironmentProjection({ recognitionAdapter, voiceLocale, liveOwnership,
         </LayoutGroup>
       </main>
       <VoiceTargetPulse home={route === "home" && ["today", "journal", "people", "memories"].includes(voiceWorld.domain ?? "")} snapshot={voiceWorld} />
-      <footer className={`relative z-50 shrink-0 border-t px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md ${homeActive ? "border-[#D8CEC2] bg-[#F2E8DB]/95" : "border-flow-border bg-flow-page/95"}`} data-workspace-dock>
+      <footer
+        className={`relative z-50 shrink-0 border-t px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md ${route === "home" ? "" : "border-flow-border bg-flow-page/95"}`}
+        data-workspace-dock
+        style={homeCanvasColor ? { backgroundColor: homeCanvasColor, borderColor: homeCanvasBorder } : undefined}
+      >
         <StudioSecondarySurface />
         <div className="mx-auto grid w-full max-w-[1680px] grid-cols-1 items-center gap-2 lg:grid-cols-[1fr_minmax(360px,630px)_1fr]">
           {route !== "home" && <div className="hidden min-w-0 lg:block lg:justify-self-start"><StudioRestingShelf /></div>}

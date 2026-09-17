@@ -8,7 +8,7 @@ import { MascotRenderer } from "../../core/mascot/MascotRenderer";
 import { VoiceEnergy } from "../voice-home/VoiceEnergy";
 import { HomePreviews } from "../voice-home/HomePreviews";
 import type { HomeEntrancePhase, VoiceWorldPhase } from "../voice-home/voiceWorld";
-import { homeSurfaceInk } from "../voice-home/homeSurfaceInk";
+import { homeSurfaceColor, homeSurfaceInk } from "../voice-home/homeSurfaceInk";
 import { HomeDateScene } from "./HomeDateScene";
 
 function homeMascotPresentation(base: MascotPresentation, entrance: HomeEntrancePhase, phase: VoiceWorldPhase, attention: MascotPresentation["attention"]): MascotPresentation {
@@ -25,8 +25,7 @@ export function HomeSpace() {
   const environment = useFlowEnvironment();
   const reducedMotion = useReducedMotionPreference();
   const { document, temporalScope, currentTime, voiceWorld, flowLiveStatus, feedback } = environment;
-  const surfaceColor = voiceWorld.entrance === "active" || voiceWorld.entrance === "preparing" ? "#F2E8DB"
-    : voiceWorld.entrance === "wake-reward" ? "#D8D5C5" : "#23323A";
+  const surfaceColor = homeSurfaceColor(voiceWorld.entrance);
   const backgroundColor = useMotionValue(surfaceColor);
   const surfaceInk = useTransform(backgroundColor, homeSurfaceInk);
   const model = buildEliteHomeModel(document, temporalScope, currentTime);

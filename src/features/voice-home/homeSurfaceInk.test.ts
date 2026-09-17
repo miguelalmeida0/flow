@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { homeSurfaceInk } from "./homeSurfaceInk";
+import { homeSurfaceColor, homeSurfaceInk } from "./homeSurfaceInk";
 
 function luminance(hex: string) {
   const rgb = [1, 3, 5].map((start) => Number.parseInt(hex.slice(start, start + 2), 16) / 255)
@@ -19,4 +19,12 @@ it("keeps readable ink throughout every sampled wake brightening frame", () => {
   }
   expect(homeSurfaceInk("#23323A")).toBe("#F8F2E8");
   expect(homeSurfaceInk("#D8D5C5")).toBe("#233039");
+});
+
+
+it("maps every Home entrance phase to the shell canvas", () => {
+  expect(homeSurfaceColor("wake-armed")).toBe("#23323A");
+  expect(homeSurfaceColor("wake-reward")).toBe("#D8D5C5");
+  expect(homeSurfaceColor("preparing")).toBe("#F2E8DB");
+  expect(homeSurfaceColor("active")).toBe("#F2E8DB");
 });
