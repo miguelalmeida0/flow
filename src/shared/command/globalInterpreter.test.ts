@@ -122,6 +122,24 @@ const corpus: CorpusRow[] = [
   ["Move proposal deadline to Monday", "home", { type: "commitment-due", query: "proposal", dueAt: `${monday}T17:00:00.000Z` }],
   ["Reserve 30 minutes for the proposal promise to Maya Friday at ten", "home", { type: "commitment-schedule", person: "Maya", query: "proposal", dateKey: friday, minutes: 600, durationMinutes: 30 }],
   ["Find time for the proposal promise to Maya", "home", { type: "commitment-find-time", person: "Maya", query: "proposal" }],
+  ["Start a new note", "home", { type: "journal-create", beginRecording: false }],
+  ["Create a note", "home", { type: "journal-create", beginRecording: false }],
+  ["Make a note", "home", { type: "journal-create", beginRecording: false }],
+  ["Save a note", "home", { type: "journal-create", beginRecording: false }],
+  ["Start a new entry", "home", { type: "journal-create", beginRecording: false }],
+  ["Start a new journal entry", "home", { type: "journal-create", beginRecording: false }],
+  ["Create a journal entry", "home", { type: "journal-create", beginRecording: false }],
+  ["New journal entry", "home", { type: "journal-create", beginRecording: false }],
+  ["Write this down", "home", { type: "journal-create", beginRecording: false }],
+  ["Delete this entry", "home", { type: "journal-delete" }],
+  ["Remove this entry", "home", { type: "journal-delete" }],
+  ["Delete this note", "home", { type: "capture-delete" }],
+  ["Erase this entry", "home", { type: "journal-delete" }],
+  ["Rename this entry", "home", { type: "clarification", title: "What should I rename it to?" }],
+  ["Open my journal", "home", { type: "navigate", route: "journal" }],
+  ["Show today's journal", "home", { type: "navigate", route: "journal" }],
+  ["Add to journal", "home", { type: "studio-select", collection: "journal", selector: { ordinal: 1 } }],
+  ["Continue my journal entry", "home", { type: "studio-select", collection: "journal", selector: { ordinal: 1 } }],
   ["Schedule Documents", "plans", { type: "clarification", title: "When should I schedule Documents?" }],
   ["Add renew passport", "home", { type: "clarification", title: "Should I capture that in Inbox or schedule it?" }],
   ["Maya by Friday", "home", { type: "clarification", title: "What did you promise Maya?" }],
@@ -234,6 +252,8 @@ const neverCaptureCorpus = [
   "Blah blah", "Open sesame", "Do the thing",
 ];
 
+const neverCalendarJournalCorpus = ["Start a new note", "Create a note", "Rename this entry", "Delete this entry"];
+
 describe("strict global router safety", () => {
   it.each(navigationCorpus)("routes $utterance without capture", ({ utterance, route }) => {
     expect(interpretGlobalCommand(utterance, contexts.inbox, dateKey)).toEqual({ type: "navigate", route });
@@ -246,6 +266,9 @@ describe("strict global router safety", () => {
   });
   it.each(neverCaptureCorpus)("never silently captures $utterance", (utterance) => {
     expect(interpretGlobalCommand(utterance, contexts.inbox, dateKey).type).not.toBe("capture-create");
+  });
+  it.each(neverCalendarJournalCorpus)("never misroutes a Journal command into Calendar: $utterance", (utterance) => {
+    expect(interpretGlobalCommand(utterance, contexts.home, dateKey).type).not.toBe("calendar");
   });
   it("keeps domain phrases distinct from whole-utterance system commands", () => {
     expect(interpretGlobalCommand("Pause this plan", contexts.plans, dateKey)).toMatchObject({ type: "plan-status", status: "paused" });

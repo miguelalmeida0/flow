@@ -2,14 +2,15 @@ import type { LifeContext } from "../../../domain/life-model";
 import { literalValue } from "../../../shared/command/literalValue";
 import { commandBoundary } from "../../day-planner/interpretation/sourceClauses";
 import { parseNumberWords } from "../../day-planner/interpretation/numbers";
+import { latestOrdinal } from "./journalSynonyms";
 
-export type StudioObjectSelector = { ordinal: number } | { title: string } | { source: "memory" };
+export type StudioObjectSelector = { ordinal: number } | { title: string } | { source: "memory" } | { bookmarked: true };
 export type StudioSelectionIntent =
   | { type: "studio-select"; collection: "journal" | "memories"; selector: StudioObjectSelector }
   | { type: "studio-source-select"; source: "photo" | "bookmark"; ordinal: number; operation: "select" | "remove" };
 
 const ordinals: Record<string, number> = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10 };
-const ordinal = (value: string) => ordinals[value.toLowerCase()] ?? (/^\d+$/.test(value) ? Number(value) : undefined);
+const ordinal = (value: string) => ordinals[value.toLowerCase()] ?? latestOrdinal(value) ?? (/^\d+$/.test(value) ? Number(value) : undefined);
 
 /** Explicit object nouns establish a collection. Ordinals refer to the same
  * sorted collection or source ordering rendered by the editor, never seed IDs. */
@@ -22,8 +23,10 @@ export function parseStudioSelection(source: string, context: LifeContext): Stud
   const raw = source.trim()
     .replace(/^use (?:the )?(.+?) bookmarked moment for (?:this|the) memory's voice$/i, "Use the $1 bookmark")
     .replace(/^switch (?:this|the) memory to (?:the )?(.+)$/i, "Use the $1");
-  const byOrdinal = raw.match(/^(?:open|show|select)\s+(?:the )?(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|\d+)\s+(journal(?: entry)?|entry|memory)$/i);
+  const byOrdinal = raw.match(/^(?:open|show|select)\s+(?:the |my )?(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|latest|last|newest|most recent|\d+)\s+(journal(?: entry)?|entry|memory)$/i);
   if (byOrdinal) return { type: "studio-select", collection: /memory/i.test(byOrdinal[2]!) ? "memories" : "journal", selector: { ordinal: ordinal(byOrdinal[1]!)! } };
+  const bookmarkedEntry = raw.match(/^(?:open|show)\s+(?:the |my )?bookmarked (?:journal )?entry$/i);
+  if (bookmarkedEntry) return { type: "studio-select", collection: "journal", selector: { bookmarked: true } };
   const byTitle = raw.match(/^(?:open|show|select)\s+(?:the )?(journal entry|journal|memory)\s+(?:(?:called|named)\s+)?(.+)$/i);
   if (byTitle) {
     const value = byTitle[2]!;

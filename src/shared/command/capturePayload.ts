@@ -1,5 +1,6 @@
 import { normalizeTranscript } from "../../features/day-planner/interpretation/normalize";
 import { annotatedLiteralValue } from "./literalValue";
+import { isBareJournalObject } from "../../features/studio/interpretation/journalSynonyms";
 
 /** Read the longest complete capture frame before its literal payload. */
 export function parseExplicitCapture(transcript: string): string | null {
@@ -18,5 +19,13 @@ export function parseExplicitCapture(transcript: string): string | null {
     ?? transcript.match(/^save\s+([\s\S]+)$/i);
   const value = clause ? remember[1]! : match?.[1];
   const title = value ? annotatedLiteralValue(value.replace(/[.!?]+$/g, "").trim()) : null;
-  return title && (/^["“'‘]/.test(value?.trim() ?? "") || !/^(?:this|that|it|area|page|screen|section|view|space|inbox)$/.test(normalizeTranscript(title))) ? title : null;
+  if (!title) return null;
+  const literal = /^["“'‘]/.test(value?.trim() ?? "");
+  if (literal) return title;
+  const normalizedTitle = normalizeTranscript(title);
+  // A bare "note"/"a note"/"journal entry" has no real capture content — it
+  // is Journal's own "start a new note" creation grammar, not an Inbox item
+  // literally titled "a note".
+  if (isBareJournalObject(normalizedTitle)) return null;
+  return /^(?:this|that|it|area|page|screen|section|view|space|inbox)$/.test(normalizedTitle) ? null : title;
 }

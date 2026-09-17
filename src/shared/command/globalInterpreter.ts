@@ -32,6 +32,7 @@ import { parsePresentationCapability, type PresentationIntent } from "./presenta
 import { calendarCreationTimeAnswer, creationTimingHint, type CalendarCreationContinuation } from "./calendarCreationContext";
 import { parseFriendIntent, type FriendIntent } from "../../features/friends/friendIntents";
 import { bindCalendarParticipants } from "../../features/friends/calendarParticipants";
+import { isJournalCreateCommand, isJournalDeleteCommand, isJournalRenameMissingTitle } from "../../features/studio/interpretation/journalSynonyms";
 
 export type GlobalSequenceStep =
   | { type: "temporal"; scope: { kind: "day" | "week"; dateKey: string; endDateKey?: string } }
@@ -163,6 +164,10 @@ function inspectCalendarSelector(normalized: string) {
   if (!match) return null;
   const subject = match[1]!;
   if (/\banchor\b/.test(subject)) return null;
+  // "Entry"/"note"/"journal" are Journal's object nouns, not Calendar's.
+  // Without this, "open the last entry" was swallowed by Calendar's bare
+  // current/next/previous/last fallback before Journal ever saw it.
+  if (/\b(?:entry|note|journal)\b/.test(subject)) return null;
   if (!/\b(?:meeting|event|appointment|call|block)\b/.test(subject)
     && !/\b(?:current|next|previous|last)\b/.test(subject)) return null;
   return parseSourceEventReference(subject);
@@ -439,7 +444,11 @@ function captureFeatureProposals(transcript: string, context: LifeContext): Glob
   if (event) proposals.push({ type: "capture-convert-event", scheduleText: clean(event[2]!), durationMinutes: parseDurationExpression(event[1] ?? "") ?? 30 });
   const commitment = spoken.match(/^turn (?:this|that|the selected)(?: capture| note)? into (?:a )?(?:(waiting on|next conversation) )?commitment (?:with|to|from) ([a-z][\w'-]*)$/i);
   if (commitment) proposals.push({ type: "capture-convert-commitment", person: titleCase(commitment[2]!), direction: commitment[1]?.toLowerCase() === "waiting on" ? "waiting-on" : commitment[1]?.toLowerCase() === "next conversation" ? "next-conversation" : "i-owe" });
-  if (/^(?:turn|make|convert|create (?:plan|outcome) from|plan)\b.*\b(?:plan|outcome|capture|note|item)\b|^turn that into (?:a |an )?(?:plan|outcome)$/.test(normalized)) {
+  // "Make a note"/"create a note" is a bare Journal creation command, not a
+  // request to convert something into a note — guard it out before the loose
+  // conversion-verb match below, which would otherwise treat any sentence
+  // containing "note" or "plan" as a conversion.
+  if (!isJournalCreateCommand(normalized) && /^(?:turn|make|convert|create (?:plan|outcome) from|plan)\b.*\b(?:plan|outcome|capture|note|item)\b|^turn that into (?:a |an )?(?:plan|outcome)$/.test(normalized)) {
     const query = normalized.match(/^turn (?:the )?(.+?) (?:item|capture|note) into (?:a |an )?(?:plan|outcome)$/)?.[1]
       ?? normalized.match(/(?:from|convert)\s+(.+?)(?:\s+(?:capture|note))?(?:\s+into (?:a |an )?(?:plan|outcome))?$/)?.[1];
     const resolvedQuery = /\blatest capture\b/.test(normalized) ? "latest" : query && !/^(?:that|this|latest)$/.test(query) ? query : undefined;
@@ -710,7 +719,7 @@ function studioCandidate(input: CandidateInput, intent: StudioIntent): GlobalInt
   const active = (domain === "journal" && (input.context.route === "journal" || input.context.topic === "journal" || input.context.activeJournalEntryId))
     || (domain === "atmosphere" && (input.context.route === "atmosphere" || input.context.topic === "atmosphere"))
     || (domain === "memory" && (input.context.route === "memories" || input.context.topic === "memory"));
-  const explicit = domain === "journal" ? /\b(?:journal|entry|voice|record|bookmark|write|talk)\b/.test(input.normalized)
+  const explicit = domain === "journal" ? /\b(?:journal|entry|voice|record|bookmark|write|talk|note)\b/.test(input.normalized)
     : domain === "atmosphere" ? /\b(?:atmosphere|sound|rain|tone|music|pulse|texture|sunday evening|room to think|deep focus)\b/.test(input.normalized)
       : domain === "memory" ? /\b(?:memory|photo|bookmark|passage|date)\b/.test(input.normalized) : true;
   const dictationOwnsTurn = input.context.voiceMode === "journal-longform" && Boolean(input.context.activeJournalEntryId);
@@ -836,9 +845,14 @@ function legacyDomain(intent: GlobalIntent): IntentDomain {
 }
 
 function calendarCandidate(input: CandidateInput, actionType: CalendarAction["type"]): GlobalIntentCandidate | null {
-  if (/^(?:new|add|create|i want) (?:an? )?(?:outcome|journal|memory|commitment|promise)\b/.test(input.normalized)) return null;
+  if (/^(?:new|add|create|i want|start|begin|make|write) (?:an? )?(?:new )?(?:outcome|journal|memory|commitment|promise|note|entry)\b/.test(input.normalized)) return null;
+  // "Rename/delete this entry" with no Calendar noun is never a Calendar
+  // event operation — Calendar has no "entry" object type. Without this,
+  // Calendar's generic pronoun grounding ("Which Today event do you mean?")
+  // could otherwise answer a bare, title-less Journal command.
+  if (isJournalRenameMissingTitle(input.normalized) || isJournalDeleteCommand(input.normalized, true)) return null;
   if (attentionFeatureProposals(input.transcript, input.context).some(({ type }) => type === "focus-request")) return null;
-  if (input.studioIntents.length && /\b(?:journal|journaling|recording|rhythm|rain|piano|pulse|texture)\b/.test(input.normalized)
+  if (input.studioIntents.length && /\b(?:journal|journaling|recording|rhythm|rain|piano|pulse|texture|note)\b/.test(input.normalized)
     && !/\b(?:meeting|event|appointment|calendar)\b/.test(input.normalized)) return null;
   const parsed = input.calendarParse;
   if (parsed.status !== "ready") return null;
@@ -1090,6 +1104,12 @@ export const globalIntentRegistry: readonly IntentDefinition[] = [
   } },
   { id: "atmosphere.amount-clarification", domain: "atmosphere", intentTypes: ["clarification"], examples: ["More"], resolve: (input) => input.normalized === "more" && (input.context.route === "atmosphere" || input.context.topic === "atmosphere")
     ? candidate("atmosphere.amount-clarification", "atmosphere", { type: "clarification", title: "More of which sound?", detail: "Name a layer and whether its volume or speed should increase." }, 100, ["incomplete-studio-adjustment"]) : null },
+  // Journal error recovery: a rename with no new title is a recognizable,
+  // incomplete Journal command, not unsupported speech. Ask for the missing
+  // piece by voice instead of falling through to a generic failure or a
+  // misfired Calendar clarification (see the calendarCandidate guard above).
+  { id: "journal.rename-missing-title", domain: "journal", intentTypes: ["clarification"], examples: ["Rename this entry", "Rename my note"], resolve: (input) => isJournalRenameMissingTitle(input.normalized)
+    ? candidate("journal.rename-missing-title", "journal", { type: "clarification", title: "What should I rename it to?", detail: "Say the new title. Nothing changed." }, 118, ["incomplete-journal-rename"]) : null },
   { id: "navigation.presentation", domain: "navigation", intentTypes: ["command-surface", "sensory-preference", "voice-retry"], examples: ["Open the command field", "Use reduced motion", "Open sensory settings"], resolve: (input) => {
     const intent = parsePresentationCapability(input.transcript);
     return intent ? candidate("navigation.presentation", "navigation", intent, 158, ["explicit-presentation-control", "no-business-mutation"]) : null;

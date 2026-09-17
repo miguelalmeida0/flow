@@ -9,8 +9,16 @@ export function planStudioSelection(intent: StudioSelectionIntent, document: Lif
     const selector = intent.selector;
     const matches = "source" in selector ? collection.filter(({ id }) => id === memory?.journalEntryId)
       : "ordinal" in selector ? collection.slice(selector.ordinal - 1, selector.ordinal)
+      : "bookmarked" in selector ? collection.filter((item): item is JournalEntry => "bookmarks" in item && item.bookmarks.length > 0).slice(0, 1)
       : collection.filter(({ title }) => title.toLocaleLowerCase() === selector.title.toLocaleLowerCase());
-    if (matches.length !== 1 || "ordinal" in selector && selector.ordinal < 1) return { status: "clarification", title: matches.length ? "Which one should I open?" : "I couldn't find that item.", detail: (matches.length ? matches : collection).slice(0, 3).map(({ title }) => title).join(" · ") || "Nothing was created or changed." };
+    if (matches.length !== 1 || "ordinal" in selector && selector.ordinal < 1) {
+      if (!matches.length && !collection.length) {
+        return intent.collection === "journal"
+          ? { status: "clarification", title: "There is no journal entry yet.", detail: "Say “start a new entry” to begin one." }
+          : { status: "clarification", title: "There is no memory yet.", detail: "Create one from a journal entry first." };
+      }
+      return { status: "clarification", title: matches.length ? "Which one should I open?" : "I couldn't find that item.", detail: (matches.length ? matches : collection).slice(0, 3).map(({ title }) => title).join(" · ") || "Nothing was created or changed." };
+    }
     const item = matches[0]!;
     return { status: "ready", actions: [], summary: `Opened ${item.title}.`, navigateTo: intent.collection, focusId: item.id, runtimeCommands: [], contextPatch: intent.collection === "journal" ? { activeJournalEntryId: item.id, topic: "journal", voiceMode: "command" } : { activeMemoryId: item.id, topic: "memory", voiceMode: "command" } };
   }
