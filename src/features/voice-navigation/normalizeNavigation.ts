@@ -34,10 +34,10 @@ export function normalizeNavigation(sourceText: string): NormalizedNavigation {
   let destinationText = frame ? normalizedText.slice(frame.length).trim() : normalizedText;
   if (frame) {
     // Speech recognition and generated phrase variation can occasionally
-    // stack harmless determiners ("open the my journal"). Treat them as
-    // navigation framing rather than allowing the phrase to fall into an
-    // unrelated domain.
-    destinationText = destinationText.replace(/^(?:(?:the|my|our)\s+)+/, "");
+    // stack harmless determiners ("open the my journal") or a possessive
+    // "today's" ("show today's journal"). Treat them as navigation framing
+    // rather than allowing the phrase to fall into an unrelated domain.
+    destinationText = destinationText.replace(/^(?:(?:the|my|our|todays|today's|current)\s+)+/, "");
     const surfacePattern = new RegExp(`\\s+(?:${genericSurfaceNouns.join("|")})$`);
     destinationText = destinationText.replace(surfacePattern, "").trim();
   }

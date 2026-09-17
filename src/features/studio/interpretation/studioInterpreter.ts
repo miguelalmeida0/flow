@@ -16,6 +16,7 @@ import { parseAtmosphereRoleFrame } from "./atmosphereRoleFrames";
 import { atmosphereLayerPattern, atmosphereLayerReference as layerFor } from "./atmosphereLayerReference";
 import { atmospherePlaybackQuery } from "./atmospherePlaybackQuery";
 import { journalBookmarkAnchor } from "../journalBookmark";
+import { isJournalCreateCommand } from "./journalSynonyms";
 
 export type StudioPlanStep = StudioIntent | { type: "navigate"; route: LifeRoute };
 
@@ -159,13 +160,21 @@ function parseClause(source: string, context: LifeContext): StudioPlanStep | nul
 
   const journalText = text.match(/^(?:journal this|write this down|take this down|keep this for me|capture (?:this |a )?thought)\s+(.+)$/);
   if (journalText) return { type: "journal-create", initialText: journalText[1], beginRecording: false };
-  if (/^(?:new journal entry|new entry|open a new journal(?: i just want to talk)?|make a new journal entry|make a journal entry|make a new entry|create (?:a |an )?(?:journal )?entry|another entry|write a new entry|start writing|start a journal|start journaling|start a new (?:journal|entry)|(?:let me|i want to) talk(?: for (?:a bit|a while))?|let me get something down|get (?:something|this) out|i need to get (?:something|this) out|i need somewhere to (?:think|write|get this down)|i want to record something|i want to write something|write something down|i need to write something down|i want to capture a thought|write this down)$/.test(text)) {
+  if (/^(?:new journal entry|new entry|open a new journal(?: i just want to talk)?|make a new journal entry|make a journal entry|make a new entry|create (?:a |an )?(?:journal )?entry|another entry|write a new entry|start writing|start a journal|start journaling|start a new (?:journal|entry)|(?:let me|i want to) talk(?: for (?:a bit|a while))?|let me get something down|get (?:something|this) out|i need to get (?:something|this) out|i need somewhere to (?:think|write|get this down)|i want to record something|i want to write something|write something down|i need to write something down|i want to capture a thought|write this down|save a note|save note)$/.test(text)
+    || isJournalCreateCommand(text)) {
     return { type: "journal-create", beginRecording: /\b(?:talk|record)\b/.test(text) };
   }
   if (/^(?:(?:start|make|open) a )?new one$/.test(text) && (context.topic === "journal" || context.route === "journal" || context.activeJournalEntryId)) return { type: "journal-create", beginRecording: false };
   if (/^(?:i want to journal|i want to write|i want to remember something|open (?:a |my )?journal|take me to my journal)$/.test(text)) return { type: "journal-create", beginRecording: false };
-  const journalRename = text.match(/^(?:rename|call) (?:this |the )?(?:journal|entry) (?:to |)(.+)$/);
-  if (journalRename?.[1]) return { type: "journal-rename", title: journalRename[1] };
+  if (/^(?:continue (?:my |the |this )?(?:journal(?: entry)?|entry|writing)|keep writing|add to (?:my |the )?journal)$/.test(text)) {
+    return { type: "studio-select", collection: "journal", selector: { ordinal: 1 } };
+  }
+  // Match against the original-case `source`, not the lowercased `text`, so
+  // a rename never flattens the user's capitalization (e.g. "Morning Pages"
+  // must not become "morning pages"). The leading filler/politeness prefix
+  // mirrors the `fillers` pattern above without forcing lowercase.
+  const journalRename = source.trim().match(/^(?:(?:okay|ok|hey|um|uh|actually|just|please)\s+)*(?:(?:can|could|would) you\s+)?(?:rename|call)\s+(?:this\s+|the\s+)?(?:journal|entry)\s+(?:to\s+)?([\s\S]+)$/i);
+  if (journalRename?.[1]) return { type: "journal-rename", title: literalValue(journalRename[1]) };
   if (/^(?:save|keep) (?:this |the )?(?:journal|entry)$/.test(text)) return { type: "journal-save" };
 
   const atmosphereQuery = atmospherePlaybackQuery(source, text);

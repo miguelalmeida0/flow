@@ -3,6 +3,7 @@ import { normalizeTranscript } from "../../day-planner/interpretation/normalize"
 import { literalValue } from "../../../shared/command/literalValue";
 import { journalRoleFrame } from "./journalRoleFrames";
 import { journalBookmarkAnchor } from "../journalBookmark";
+import { isJournalDeleteCommand } from "./journalSynonyms";
 
 export type JournalEditingIntent = (
   | { type: "journal-delete" }
@@ -18,8 +19,14 @@ export type JournalEditingIntent = (
 export function parseJournalCapability(source: string, context: LifeContext): JournalEditingIntent | null {
   const text = normalizeTranscript(source);
   const active = context.route === "journal" || context.topic === "journal" || Boolean(context.activeJournalEntryId && context.voiceMode === "journal-longform");
+  const onJournalSurface = context.route === "journal" || context.topic === "journal" || Boolean(context.activeJournalEntryId);
   if (/^(?:delete|remove|discard) (?:the |my )?(?:this |current |active )?(?:journal(?: entry)?|entry)(?: i(?:'m| am) writing)?$/.test(text)
-    || /^throw (?:this|the|my) (?:journal(?: entry)?|entry) away$/.test(text)) return { type: "journal-delete" };
+    || /^throw (?:this|the|my) (?:journal(?: entry)?|entry) away$/.test(text)
+    // "note" is Inbox capture vocabulary everywhere else in Flow (see
+    // capturePayload.ts). isJournalDeleteCommand only accepts the "note"
+    // object noun when the caller confirms the user is on a Journal surface,
+    // so an unrelated Inbox item is never silently deleted from Journal.
+    || isJournalDeleteCommand(text, onJournalSurface)) return { type: "journal-delete" };
   if (/^(?:create (?:a )?journal|another journal|let me write|record a thought|write this down in my journal|i want to journal|i want to write)$/.test(text)) return { type: "journal-create", beginRecording: false };
   const explicit = /\bjournal\b/.test(text);
   if (active || explicit) {
