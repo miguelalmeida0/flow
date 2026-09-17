@@ -23,9 +23,9 @@ export function parseStudioSelection(source: string, context: LifeContext): Stud
   const raw = source.trim()
     .replace(/^use (?:the )?(.+?) bookmarked moment for (?:this|the) memory's voice$/i, "Use the $1 bookmark")
     .replace(/^switch (?:this|the) memory to (?:the )?(.+)$/i, "Use the $1");
-  const byOrdinal = raw.match(/^(?:open|show|select)\s+(?:the |my )?(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|latest|last|newest|most recent|\d+)\s+(journal(?: entry)?|entry|memory)$/i);
+  const byOrdinal = raw.match(/^(?:(?:open|show|select)\s+)?(?:the |my )?(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|latest|last|newest|most recent|\d+)\s+(journal(?: entry)?|entry|memory)$/i);
   if (byOrdinal) return { type: "studio-select", collection: /memory/i.test(byOrdinal[2]!) ? "memories" : "journal", selector: { ordinal: ordinal(byOrdinal[1]!)! } };
-  const bookmarkedEntry = raw.match(/^(?:open|show)\s+(?:the |my )?bookmarked (?:journal )?entry$/i);
+  const bookmarkedEntry = raw.match(/^(?:(?:open|show)\s+)?(?:the |my )?bookmarked (?:journal )?entry$/i);
   if (bookmarkedEntry) return { type: "studio-select", collection: "journal", selector: { bookmarked: true } };
   const byTitle = raw.match(/^(?:open|show|select)\s+(?:the )?(journal entry|journal|memory)\s+(?:(?:called|named)\s+)?(.+)$/i);
   if (byTitle) {
