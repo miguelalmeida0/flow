@@ -36,6 +36,7 @@ function EnvironmentProjection({ recognitionAdapter, voiceLocale, liveOwnership,
   const reducedMotion = useReducedMotionPreference();
   const taskEntity = pageTaskEntity(document, route, context, focusedEntityId, activePlanId, peopleView);
   usePageTaskReveal(route, taskEntity, pageNavigation, reducedMotion);
+  const homeActive = route === "home" && voiceWorld.entrance === "active";
   const screens = {
     home: <HomeSpace />,
     today: <CalendarSpace />,
@@ -51,16 +52,16 @@ function EnvironmentProjection({ recognitionAdapter, voiceLocale, liveOwnership,
   };
   const motionRoute = route === "capture" ? "inbox" : route === "outcomes" ? "plans" : route;
   return <MotionBoundary>
-    <div className="fixed inset-0 flex h-dvh flex-col overflow-clip bg-flow-page text-flow-ink antialiased [overflow-anchor:none] selection:bg-flow-blue/15" data-flow-viewport>
+    <div className="fixed inset-0 flex h-dvh min-h-0 w-full flex-col overflow-clip bg-flow-page text-flow-ink antialiased [overflow-anchor:none] selection:bg-flow-blue/15" data-flow-viewport>
       <WakeAcknowledgement entrance={voiceWorld.entrance} />
       {route !== "home" && <EnvironmentHeader />}
-      <main className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto" data-primary-content-rect data-flow-region="primary">
+      <main className={`relative min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain ${homeActive ? "bg-[#F2E8DB]" : "bg-flow-page"}`} data-primary-content-rect data-flow-region="primary">
         <LayoutGroup id="flow-spaces">
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             data-layout-id={reducedMotion ? undefined : `space-${motionRoute}`}
             data-space-shell={route}
-            className={route === "home" && voiceWorld.entrance !== "active" ? "h-full" : undefined}
+            className={route === "home" ? "h-full min-h-full w-full" : "min-h-full w-full"}
             data-space-transition-mode={reducedMotion ? "reduced" : "shared-layout"}
             // Route content must never disappear while a shared entity carries
             // the transition. The transient Tide/Bloom layer explains the
@@ -73,12 +74,18 @@ function EnvironmentProjection({ recognitionAdapter, voiceLocale, liveOwnership,
         </LayoutGroup>
       </main>
       <VoiceTargetPulse home={route === "home" && ["today", "journal", "people", "memories"].includes(voiceWorld.domain ?? "")} snapshot={voiceWorld} />
-      <footer className="relative z-50 shrink-0 border-t border-flow-border bg-flow-page px-3 py-2" data-workspace-dock>
+      <footer className={`relative z-50 shrink-0 border-t px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md ${homeActive ? "border-[#D8CEC2] bg-[#F2E8DB]/95" : "border-flow-border bg-flow-page/95"}`} data-workspace-dock>
         <StudioSecondarySurface />
-        <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-center gap-4 sm:justify-between">
-          <GlobalCommandDock promptSpeechAdapter={promptSpeechAdapter} liveOwnership={liveOwnership} recognitionAdapter={recognitionAdapter} voiceLocale={voiceLocale} />
-          {route === "home" && voiceWorld.entrance === "active" && <div data-flow-region="time"><TimeScopeControl /></div>}
-          {route !== "home" && <StudioRestingShelf />}
+        <div className="mx-auto grid w-full max-w-[1680px] grid-cols-1 items-center gap-2 lg:grid-cols-[1fr_minmax(360px,630px)_1fr]">
+          {route !== "home" && <div className="hidden min-w-0 lg:block lg:justify-self-start"><StudioRestingShelf /></div>}
+          <div className="min-w-0 w-full lg:col-start-2">
+            <GlobalCommandDock promptSpeechAdapter={promptSpeechAdapter} liveOwnership={liveOwnership} recognitionAdapter={recognitionAdapter} voiceLocale={voiceLocale} />
+          </div>
+          {homeActive
+            ? <div className="min-w-0 w-full sm:w-auto sm:justify-self-end lg:col-start-3" data-flow-region="time"><TimeScopeControl /></div>
+            : route !== "home"
+              ? <div className="min-w-0 sm:justify-self-end lg:hidden"><StudioRestingShelf /></div>
+              : null}
         </div>
       </footer>
       <HomeAccessibleActions />

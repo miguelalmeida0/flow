@@ -67,7 +67,7 @@ export function HomeSpace() {
   return <motion.section
     animate={{ backgroundColor: surfaceColor }}
     style={{ backgroundColor, color: surfaceInk }}
-    className={`relative min-h-full px-5 pb-6 pt-6 sm:px-9 lg:px-12 ${activeHome ? "[@media(min-width:1024px)_and_(max-height:900px)]:py-3" : "flex h-full flex-col"}`}
+    className={`relative flex min-h-full w-full flex-col px-4 pb-5 pt-5 sm:px-7 sm:pb-6 sm:pt-6 lg:px-10 xl:px-12 ${activeHome ? "[@media(min-width:1024px)_and_(max-height:900px)]:py-3" : ""}`}
     data-home-entrance={voiceWorld.entrance}
     data-testid="home-space"
     data-voice-domain={voiceWorld.domain}
@@ -79,7 +79,7 @@ export function HomeSpace() {
       <div className={`text-right text-[11px] font-medium uppercase tracking-[0.14em] ${activeHome ? "text-[#736F68]" : "text-inherit"}`}><p>{model.dateLabel}</p><p className="mt-2 normal-case tracking-normal">{flowLiveStatus === "listening" ? "Live voice ready" : flowLiveStatus === "unavailable" ? "Typed control ready" : "Wake-aware session"}</p></div>
     </header>
 
-    <div className={`relative z-10 mx-auto w-full max-w-[1840px] ${activeHome ? "" : "flex min-h-0 flex-1 flex-col justify-center"}`}>
+    <div className={`relative z-10 mx-auto flex min-h-0 w-full max-w-[1840px] flex-1 flex-col ${activeHome ? "" : "justify-center"}`}>
       <div className={activeHome ? "mx-auto mt-6 grid max-w-[1140px] items-center justify-items-center gap-5 md:grid-cols-[minmax(0,1fr)_160px] [@media(min-width:1024px)_and_(max-height:900px)]:mt-2 [@media(min-width:1024px)_and_(max-height:900px)]:gap-2" : "grid justify-items-center gap-[clamp(16px,3vh,36px)]"} data-home-composition>
       <motion.div className="mx-auto w-full max-w-3xl text-center" data-home-hero layout={reducedMotion ? false : "position"}>
         <motion.div animate={{ opacity: 1, y: 0 }} initial={reducedMotion || voiceWorld.entrance === "wake-reward" ? false : { opacity: 0, y: 8 }} key={`${voiceWorld.entrance}-${voiceWorld.phase}`}>
@@ -105,7 +105,7 @@ export function HomeSpace() {
       <motion.div
         animate={{ opacity: activeHome ? 1 : assemblingHome ? 0.24 : 0, y: activeHome ? 0 : assemblingHome ? 38 : 56, scale: activeHome ? 1 : assemblingHome ? 0.98 : 0.96 }}
         aria-hidden={!activeHome}
-        className={`mt-8 xl:mt-10 ${activeHome ? "pointer-events-auto [@media(min-width:1024px)_and_(max-height:900px)]:mt-3" : "pointer-events-none absolute inset-x-0 top-full"}`}
+        className={`mt-6 sm:mt-8 xl:mt-10 ${activeHome ? "pointer-events-auto [@media(min-width:1024px)_and_(max-height:900px)]:mt-3" : "pointer-events-none absolute inset-x-0 top-full"}`}
         data-home-temporal-scene
         inert={activeHome ? undefined : true}
         onAnimationComplete={() => activeHome && window.dispatchEvent(new Event(HOME_LAYOUT_SETTLED_EVENT))}

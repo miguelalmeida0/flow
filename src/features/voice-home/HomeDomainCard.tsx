@@ -41,7 +41,7 @@ export function HomeDomainCard({ destination, title, eyebrow, icon, children }: 
   return <motion.button data-action-id="home.domain-card"
     animate={reduced ? { opacity: receded ? 0.72 : 1 } : { y: active && worldEnabled ? -9 : 0, scale: active && worldEnabled ? 1.035 : receded ? 0.975 : 1, opacity: receded ? 0.68 : 1 }}
     aria-label={`Open ${title}`}
-    className="group relative h-full min-h-[278px] w-full overflow-hidden rounded-[30px] border border-[#D6C9BA] bg-[#FFFDF8] p-6 text-left shadow-[0_22px_55px_rgba(80,61,43,0.09)] outline-none transition-colors hover:border-[#AABDB7] focus-visible:ring-2 focus-visible:ring-[#376F6A] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F2E8DB] [@media(min-width:1024px)_and_(max-height:900px)]:min-h-[244px] [@media(min-width:1024px)_and_(max-height:900px)]:p-4"
+    className="group relative h-full min-h-[228px] w-full overflow-hidden rounded-[26px] border border-[#D6C9BA] bg-[#FFFDF8] p-5 text-left shadow-[0_22px_55px_rgba(80,61,43,0.09)] outline-none transition-colors hover:border-[#AABDB7] focus-visible:ring-2 focus-visible:ring-[#376F6A] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F2E8DB] sm:min-h-[248px] sm:rounded-[30px] sm:p-6 lg:min-h-[278px] [@media(min-width:1024px)_and_(max-height:900px)]:min-h-[220px] [@media(min-width:1024px)_and_(max-height:900px)]:p-4"
     data-flow-action={`Open ${title}`}
     data-home-domain={destination}
     data-voice-targeted={active ? "true" : "false"}

@@ -61,7 +61,7 @@ export function HomePreviews() {
   const environment = useFlowEnvironment();
   const legacyModel = buildEliteHomeModel(environment.document, environment.temporalScope, environment.currentTime);
   const insight = environment.nowQuery ? environment.nowCandidates[0] : undefined;
-  return <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4" data-elite-lens-grid data-testid="locked-home-previews">
+  return <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4" data-elite-lens-grid data-testid="locked-home-previews">
     <div><CalendarPreview /></div><div><JournalPreview /></div><div><FriendsPreview /></div><div><MemoriesPreview /></div>
     <div className="col-span-full flex flex-wrap items-center justify-between gap-3 border-t border-[#D8CEC2] px-1 pt-4 text-xs text-[#6F6D68]"><div><h2 className="inline font-semibold text-[#3E514F]">Good to know</h2><span> · {insight?.reason ?? "Flow only surfaces grounded, locally derived context."}</span></div><button data-action-id="home.domain-card" aria-label="Open Focus" className="min-h-11 rounded-full border border-[#CFC4B7] bg-[#FFFDF8] px-4 font-semibold text-[#385E5B] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#376F6A]" data-flow-action="Open Focus" onClick={() => environment.navigate("focus")} type="button">Focus</button><div aria-hidden="true" className="sr-only" data-home-legacy-projections><TodayLens model={legacyModel} /><FocusLens model={legacyModel} /><WeatherLens model={legacyModel} /><PeopleLens model={legacyModel} /><InstinctLens model={legacyModel} /></div></div>
   </div>;
