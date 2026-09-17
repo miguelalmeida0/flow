@@ -1,0 +1,92 @@
+{
+  "status": "ROOT_STATIC_REVIEW_NOT_EXECUTED_OR_ADMITTED",
+  "fixtureId": "LM60",
+  "clock": "2026-09-05T12:00:00.000Z",
+  "nowMs": 1788609600000,
+  "context": {
+    "route": "memories",
+    "topic": "memory",
+    "activeMemoryId": "memory-curated",
+    "activeMode": "command"
+  },
+  "preserveBase": "Literal reviewed populated Sep5/Sep6 Life base with all12 original events, existing defaults/studio presets/rituals/environment/preferences/workspace; revision0,past[],future[],viewed Sep5. No parser-derived fixtures; no active Journal/photo/bookmark/passage/recent selection injected.",
+  "studioOverrides": {
+    "journalEntries": [
+      {
+        "id": "evaluation-journal",
+        "kind": "journal-entry",
+        "title": "Evaluation journal",
+        "text": "A real passage for production evaluation.",
+        "status": "saved",
+        "recordingState": "idle",
+        "recordingDurationMs": 60000,
+        "audioAssetId": "evaluation-journal-audio",
+        "photoAssetIds": [
+          "evaluation-photo"
+        ],
+        "bookmarks": [
+          {
+            "id": "evaluation-bookmark",
+            "timestampMs": 15000,
+            "transcriptAnchor": "A real passage",
+            "createdAt": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "transcriptSegments": [
+          {
+            "id": "evaluation-segment",
+            "text": "A real passage",
+            "startMs": 0,
+            "endMs": 15000,
+            "source": "typed"
+          }
+        ],
+        "drawings": [],
+        "tags": [],
+        "createdAt": "2026-09-05T12:00:00.000Z",
+        "updatedAt": "2026-09-05T12:00:00.000Z"
+      }
+    ],
+    "mediaAssets": [
+      {
+        "id": "evaluation-journal-audio",
+        "kind": "journal-audio",
+        "name": "evaluation.webm",
+        "mimeType": "audio/webm",
+        "size": 512,
+        "createdAt": "2026-09-05T12:00:00.000Z"
+      },
+      {
+        "id": "evaluation-photo",
+        "kind": "journal-photo",
+        "name": "evaluation.jpg",
+        "mimeType": "image/jpeg",
+        "size": 512,
+        "createdAt": "2026-09-05T12:00:00.000Z"
+      }
+    ],
+    "memories": [
+      {
+        "id": "memory-curated",
+        "kind": "memory",
+        "title": "Evaluation memory",
+        "journalEntryId": "evaluation-journal",
+        "composition": "page",
+        "passage": "A real passage",
+        "showDate": true,
+        "datePlacement": "inline",
+        "textScale": 1,
+        "textOffset": {
+          "x": 0,
+          "y": 0
+        },
+        "audioEnabled": true,
+        "audioInMs": 0,
+        "audioOutMs": 30000,
+        "status": "draft",
+        "createdAt": "2026-09-05T12:00:00.000Z",
+        "updatedAt": "2026-09-05T12:00:00.000Z"
+      }
+    ]
+  }
+}

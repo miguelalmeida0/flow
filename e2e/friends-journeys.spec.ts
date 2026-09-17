@@ -1,0 +1,35 @@
+import { expect, test } from "@playwright/test";
+import { createFreshLifeSnapshot } from "../src/domain/life-storage";
+import { canonicalPerson } from "../src/features/friends/people";
+import { installAcceptanceRecognition, lifeSnapshot, typedCommand } from "./real-user-helpers";
+const at = "2026-09-12T10:00:00Z";
+test.beforeEach(async ({ page }) => {
+  await page.clock.setFixedTime(new Date(at)); await installAcceptanceRecognition(page);
+  const snapshot = createFreshLifeSnapshot("2026-09-12");
+  snapshot.document.people = ["Sarah", "John"].map((name) => canonicalPerson({ id: name.toLowerCase(), kind: "person", name, createdAt: at, updatedAt: at }));
+  snapshot.document.studio.journalEntries.push({ id: "private-journal", kind: "journal-entry", title: "Private journal", text: "Private opening. Are you free Saturday? Private ending.", recordingState: "idle", recordingDurationMs: 30000, status: "saved", photoAssetIds: [], bookmarks: [], transcriptSegments: [], drawings: [], tags: [], markers: [{ id: "question", recordingId: "private-journal", title: "Saturday question", excerpt: "Are you free Saturday?", kind: "question", startMs: 15000, endMs: 20000, segmentIds: [], origin: "manual", alignment: "segment-estimate", status: "kept", createdAt: at }], createdAt: at, updatedAt: at });
+  await page.addInitScript((value) => { if (!sessionStorage.getItem("friends-journey")) { localStorage.clear(); localStorage.setItem("flow.life.v3", JSON.stringify(value)); sessionStorage.setItem("friends-journey", "true"); } }, snapshot);
+});
+for (const width of [430, 1440]) test(`real command field: draft, group plan, marker privacy and reload at ${width}px`, async ({ page }, info) => {
+  const errors: string[] = []; page.on("pageerror", (error) => errors.push(error.message)); page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
+  await page.setViewportSize({ width, height: 900 }); if (width === 430) await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/people"); await expect(page.getByTestId("friends-space")).toBeVisible();
+  await typedCommand(page, "Text Sarah that I can come, actually cancel lunch");
+  await expect.poll(async () => (await lifeSnapshot(page)).document.friends?.messages[0]?.body).toBe("I can come, actually cancel lunch");
+  await typedCommand(page, "Add 'are you free this weekend?'"); await typedCommand(page, "yes");
+  await expect(page.getByText("Delivered in Flow locally", { exact: true }).first()).toBeVisible();
+  await page.screenshot({ path: info.outputPath("friends-delivered.png"), fullPage: true });
+  await typedCommand(page, "Create a group called Barcelona with Sarah and John"); await typedCommand(page, "Ask Barcelona who's free Saturday afternoon");
+  await typedCommand(page, "yes"); await typedCommand(page, "Who replied?"); await expect(page.locator("[data-flow-feedback]")).toContainText("Nobody's availability is assumed");
+  await typedCommand(page, "Saturday at five then"); const before = await lifeSnapshot(page); await typedCommand(page, "yes");
+  await expect.poll(async () => (await lifeSnapshot(page)).past.length).toBe(before.past.length + 1);
+  await expect.poll(async () => (await lifeSnapshot(page)).document.friends?.groupPlans[0]?.status).toBe("confirmed");
+  await typedCommand(page, "Open Journal"); await page.getByRole("button", { name: /Private journal.*marks/ }).click();
+  await typedCommand(page, "Select the first marker"); await typedCommand(page, "Send that part to Sarah"); await typedCommand(page, "The text"); await typedCommand(page, "yes");
+  const after = await lifeSnapshot(page); expect(after.document.friends?.messages.at(-1)?.body).toBe("Are you free Saturday?"); expect(JSON.stringify(after.document.friends?.messages.at(-1))).not.toContain("private-journal");
+  await expect(page).toHaveURL(/\/people\/person\/sarah$/); await page.reload(); await expect(page.getByRole("heading", { name: "Sarah", level: 2 })).toBeVisible();
+  expect((await lifeSnapshot(page)).document).toEqual(after.document);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth); expect(overflow).toBe(false);
+  await page.screenshot({ path: info.outputPath("friends-reloaded.png"), fullPage: true });
+  await info.attach("browser-errors", { body: JSON.stringify(errors), contentType: "application/json" }); expect(errors).toEqual([]);
+});

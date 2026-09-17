@@ -1,0 +1,998 @@
+{
+  "status": "FROZEN_STUDIO_RECIPES_PENDING_SECOND_READER_SCHEMA_EXPANSION_NOT_ADMITTED_NOT_EXECUTED",
+  "source": {
+    "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+    "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+  },
+  "defaults": {
+    "contextOverrides": {},
+    "expected": {
+      "resolution": "execute"
+    },
+    "semantic": {
+      "feedbackPhase": "completed",
+      "historyDelta": 1
+    },
+    "requiresNoPending": true
+  },
+  "declarations": {
+    "AT": "fixture acceptanceClock ISO",
+    "AT_SLUG": "lowercase AT, non-[a-z0-9] runs replaced by hyphen",
+    "LAYERS": [
+      {
+        "id": "texture",
+        "label": "Room",
+        "volume": 0.2,
+        "enabled": true,
+        "character": 0.42,
+        "rate": 1
+      },
+      {
+        "id": "rain",
+        "label": "Rain",
+        "volume": 0.32,
+        "enabled": true,
+        "character": 0.58,
+        "rate": 1
+      },
+      {
+        "id": "tone",
+        "label": "Tonal bed",
+        "volume": 0.18,
+        "enabled": true,
+        "character": 0.36,
+        "rate": 1
+      },
+      {
+        "id": "pulse",
+        "label": "Pulse",
+        "volume": 0.08,
+        "enabled": true,
+        "character": 0.28,
+        "rate": 0.72
+      }
+    ],
+    "PLAYING_SUNDAY": {
+      "presetId": "atmosphere-sunday-evening",
+      "playing": true,
+      "muted": false,
+      "masterVolume": 0.55,
+      "layers": "$LAYERS"
+    },
+    "JOURNAL_MEMORY": {
+      "id": "memory-my-journey-$AT_SLUG",
+      "kind": "memory",
+      "title": "My Journey",
+      "journalEntryId": "J1",
+      "composition": "page",
+      "passage": "The train was late. I still enjoyed the walk.\n\nTomorrow feels less daunting.",
+      "audioInMs": 0,
+      "showDate": true,
+      "datePlacement": "inline",
+      "textScale": 1,
+      "textOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "audioEnabled": false,
+      "status": "draft",
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    }
+  },
+  "recipeContract": "Clone complete named BEFORE; expand only explicitly declared constants. documentPatch replaces only listed leaf/object fields; collectionAppend appends declared full record preserving all existing records/order; collectionPatch replaces only declared fields on named ID and updatedAt if specified; unset removes only listed optional property. Other fields, entities, audio assets, Journal original text and global calendars/history complements remain unchanged. actions are ordered LifeActions. runtimeCommands are requested side effects, not proven physical behavior. Cases individually begin fresh; no prior-row state.",
+  "cases": [
+    {
+      "id": "repository-draft-0267",
+      "utterance": "Play Sunday evening",
+      "sourceLine": 48,
+      "fixtureId": "empty-home",
+      "expected": {
+        "intent": "atmosphere-play",
+        "route": "home"
+      },
+      "intent": {
+        "type": "atmosphere-play",
+        "query": "sunday evening"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.activate",
+          "state": "$PLAYING_SUNDAY"
+        },
+        {
+          "type": "workspace.update",
+          "patch": {
+            "secondary": "atmosphere",
+            "minimized": []
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.activeAtmosphere": "$PLAYING_SUNDAY",
+        "studio.workspace.secondary": "atmosphere"
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-play",
+        "languageFeature": "named-built-in-preset-from-home"
+      }
+    },
+    {
+      "id": "repository-draft-0268",
+      "utterance": "Start Sunday evening",
+      "sourceLine": 49,
+      "fixtureId": "empty-home",
+      "expected": {
+        "intent": "atmosphere-play",
+        "route": "home"
+      },
+      "intent": {
+        "type": "atmosphere-play",
+        "query": "sunday evening"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.activate",
+          "state": "$PLAYING_SUNDAY"
+        },
+        {
+          "type": "workspace.update",
+          "patch": {
+            "secondary": "atmosphere",
+            "minimized": []
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.activeAtmosphere": "$PLAYING_SUNDAY",
+        "studio.workspace.secondary": "atmosphere"
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-play",
+        "languageFeature": "start-preset-not-calendar-event"
+      }
+    },
+    {
+      "id": "repository-draft-0269",
+      "utterance": "Put on Sunday evening",
+      "sourceLine": 49,
+      "fixtureId": "empty-home",
+      "expected": {
+        "intent": "atmosphere-play",
+        "route": "home"
+      },
+      "intent": {
+        "type": "atmosphere-play",
+        "query": "sunday evening"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.activate",
+          "state": "$PLAYING_SUNDAY"
+        },
+        {
+          "type": "workspace.update",
+          "patch": {
+            "secondary": "atmosphere",
+            "minimized": []
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.activeAtmosphere": "$PLAYING_SUNDAY",
+        "studio.workspace.secondary": "atmosphere"
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-play",
+        "languageFeature": "put-on-playback-phrasal-verb"
+      }
+    },
+    {
+      "id": "repository-draft-0270",
+      "utterance": "Use my Sunday evening atmosphere",
+      "sourceLine": 50,
+      "fixtureId": "empty-home",
+      "expected": {
+        "intent": "atmosphere-play",
+        "route": "home"
+      },
+      "intent": {
+        "type": "atmosphere-play",
+        "query": "sunday evening"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.activate",
+          "state": "$PLAYING_SUNDAY"
+        },
+        {
+          "type": "workspace.update",
+          "patch": {
+            "secondary": "atmosphere",
+            "minimized": []
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.activeAtmosphere": "$PLAYING_SUNDAY",
+        "studio.workspace.secondary": "atmosphere"
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-play",
+        "languageFeature": "possessive-preset-qualified-by-domain"
+      }
+    },
+    {
+      "id": "repository-draft-0271",
+      "utterance": "Make the rain softer",
+      "sourceLine": 52,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "atmosphere-adjust",
+        "layerId": "rain",
+        "property": "volume",
+        "operation": "decrease"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.layer.update",
+          "layerId": "rain",
+          "patch": {
+            "volume": 0.22
+          }
+        }
+      ],
+      "layerChanges": [
+        {
+          "id": "rain",
+          "patch": {
+            "volume": 0.22
+          }
+        }
+      ],
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-adjust",
+        "languageFeature": "softer-means-ten-percentage-points"
+      }
+    },
+    {
+      "id": "repository-draft-0272",
+      "utterance": "Lower the music",
+      "sourceLine": 55,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "atmosphere-adjust",
+        "layerId": "tone",
+        "property": "volume",
+        "operation": "decrease"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.layer.update",
+          "layerId": "tone",
+          "patch": {
+            "volume": 0.08
+          }
+        }
+      ],
+      "layerChanges": [
+        {
+          "id": "tone",
+          "patch": {
+            "volume": 0.08
+          }
+        }
+      ],
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-adjust",
+        "languageFeature": "music-alias-targets-tonal-layer"
+      }
+    },
+    {
+      "id": "repository-draft-0273",
+      "utterance": "Remove the rhythm",
+      "sourceLine": 56,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "atmosphere-adjust",
+        "layerId": "pulse",
+        "property": "enabled",
+        "operation": "remove"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.layer.update",
+          "layerId": "pulse",
+          "patch": {
+            "enabled": false
+          }
+        }
+      ],
+      "layerChanges": [
+        {
+          "id": "pulse",
+          "patch": {
+            "enabled": false
+          }
+        }
+      ],
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-adjust",
+        "languageFeature": "remove-disables-pulse-not-preset-deletion"
+      }
+    },
+    {
+      "id": "repository-draft-0274",
+      "utterance": "Leave the music playing",
+      "sourceLine": 59,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "atmosphere-playback",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "atmosphere-playback",
+        "mode": "resume"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.playback",
+          "playing": true,
+          "muted": false
+        }
+      ],
+      "semantic": {
+        "historyDelta": 0
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-playback",
+        "languageFeature": "resume-already-playing-no-op"
+      }
+    },
+    {
+      "id": "repository-draft-0275",
+      "utterance": "Save this",
+      "sourceLine": 60,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "atmosphere-save",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "atmosphere-save",
+        "mode": "save"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.preset.update",
+          "presetId": "atmosphere-sunday-evening",
+          "patch": {
+            "layers": "$LAYERS",
+            "masterVolume": 0.55
+          }
+        }
+      ],
+      "collectionPatch": [
+        {
+          "collection": "studio.atmospherePresets",
+          "id": "atmosphere-sunday-evening",
+          "patch": {
+            "layers": "$LAYERS",
+            "masterVolume": 0.55,
+            "updatedAt": "$AT"
+          }
+        }
+      ],
+      "noCreation": true,
+      "editorial": {
+        "family": "atmosphere-save",
+        "languageFeature": "topic-pronoun-save-existing-preset"
+      }
+    },
+    {
+      "id": "repository-draft-0276",
+      "utterance": "Save this as Sunday room",
+      "sourceLine": 61,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "atmosphere-save",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "atmosphere-save",
+        "mode": "save",
+        "name": "Sunday room"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.preset.create",
+          "preset": "$ROW_NEW_PRESET"
+        },
+        {
+          "type": "atmosphere.activate",
+          "state": {
+            "presetId": "atmosphere-sunday-room",
+            "playing": true,
+            "muted": false,
+            "masterVolume": 0.55,
+            "layers": "$LAYERS"
+          }
+        }
+      ],
+      "newPreset": {
+        "id": "atmosphere-sunday-room",
+        "kind": "atmosphere",
+        "name": "Sunday room",
+        "builtIn": false,
+        "layers": "$LAYERS",
+        "masterVolume": 0.55,
+        "createdAt": "$AT",
+        "updatedAt": "$AT"
+      },
+      "collectionAppend": {
+        "collection": "studio.atmospherePresets",
+        "record": "$ROW_NEW_PRESET"
+      },
+      "documentPatch": {
+        "studio.activeAtmosphere.presetId": "atmosphere-sunday-room"
+      },
+      "noCreation": false,
+      "editorial": {
+        "family": "atmosphere-save",
+        "languageFeature": "save-as-named-copy-retains-original"
+      }
+    },
+    {
+      "id": "repository-draft-0277",
+      "utterance": "Save this as Sunday evening studio",
+      "sourceLine": 62,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "atmosphere-save",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "atmosphere-save",
+        "mode": "save",
+        "name": "Sunday evening studio"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.preset.create",
+          "preset": "$ROW_NEW_PRESET"
+        },
+        {
+          "type": "atmosphere.activate",
+          "state": {
+            "presetId": "atmosphere-sunday-evening-studio",
+            "playing": true,
+            "muted": false,
+            "masterVolume": 0.55,
+            "layers": "$LAYERS"
+          }
+        }
+      ],
+      "newPreset": {
+        "id": "atmosphere-sunday-evening-studio",
+        "kind": "atmosphere",
+        "name": "Sunday evening studio",
+        "builtIn": false,
+        "layers": "$LAYERS",
+        "masterVolume": 0.55,
+        "createdAt": "$AT",
+        "updatedAt": "$AT"
+      },
+      "collectionAppend": {
+        "collection": "studio.atmospherePresets",
+        "record": "$ROW_NEW_PRESET"
+      },
+      "documentPatch": {
+        "studio.activeAtmosphere.presetId": "atmosphere-sunday-evening-studio"
+      },
+      "noCreation": false,
+      "editorial": {
+        "family": "atmosphere-save",
+        "languageFeature": "multiword-copy-name-literal-preservation"
+      }
+    },
+    {
+      "id": "repository-draft-0278",
+      "utterance": "Duplicate this atmosphere",
+      "sourceLine": 63,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "atmosphere-save",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "atmosphere-save",
+        "mode": "duplicate"
+      },
+      "actions": [
+        {
+          "type": "atmosphere.preset.create",
+          "preset": "$ROW_NEW_PRESET"
+        },
+        {
+          "type": "atmosphere.activate",
+          "state": {
+            "presetId": "atmosphere-sunday-evening-copy",
+            "playing": true,
+            "muted": false,
+            "masterVolume": 0.55,
+            "layers": "$LAYERS"
+          }
+        }
+      ],
+      "newPreset": {
+        "id": "atmosphere-sunday-evening-copy",
+        "kind": "atmosphere",
+        "name": "Sunday evening copy",
+        "builtIn": false,
+        "layers": "$LAYERS",
+        "masterVolume": 0.55,
+        "createdAt": "$AT",
+        "updatedAt": "$AT"
+      },
+      "collectionAppend": {
+        "collection": "studio.atmospherePresets",
+        "record": "$ROW_NEW_PRESET"
+      },
+      "documentPatch": {
+        "studio.activeAtmosphere.presetId": "atmosphere-sunday-evening-copy"
+      },
+      "noCreation": false,
+      "editorial": {
+        "family": "atmosphere-save",
+        "languageFeature": "duplicate-copy-label-with-stable-original"
+      }
+    },
+    {
+      "id": "repository-draft-0286",
+      "utterance": "Remove the photo",
+      "sourceLine": 73,
+      "fixtureId": "memory-source",
+      "expected": {
+        "intent": "memory-update",
+        "route": "memories"
+      },
+      "intent": {
+        "type": "memory-update",
+        "property": "photo",
+        "operation": "hide"
+      },
+      "actions": [
+        {
+          "type": "memory.update",
+          "memoryId": "M1",
+          "patch": {
+            "photoAssetId": "$UNDEFINED"
+          }
+        }
+      ],
+      "collectionPatch": [
+        {
+          "collection": "studio.memories",
+          "id": "M1",
+          "unset": [
+            "photoAssetId"
+          ],
+          "patch": {
+            "updatedAt": "$AT"
+          }
+        }
+      ],
+      "noCreation": true,
+      "editorial": {
+        "family": "memory-update",
+        "languageFeature": "remove-photo-reference-retains-original-media"
+      }
+    },
+    {
+      "id": "repository-draft-0290",
+      "utterance": "Play it",
+      "sourceLine": 78,
+      "fixtureId": "memory-source",
+      "expected": {
+        "intent": "memory-playback",
+        "route": "memories"
+      },
+      "intent": {
+        "type": "memory-playback",
+        "mode": "play"
+      },
+      "actions": [],
+      "semantic": {
+        "historyDelta": 0
+      },
+      "runtimeCommands": [
+        {
+          "target": "memory",
+          "mode": "play",
+          "memoryId": "M1"
+        }
+      ],
+      "noCreation": true,
+      "editorial": {
+        "family": "memory-playback",
+        "languageFeature": "contextual-memory-play-request-no-data-write"
+      }
+    },
+    {
+      "id": "repository-draft-0291",
+      "utterance": "Start it again",
+      "sourceLine": 79,
+      "fixtureId": "memory-source",
+      "expected": {
+        "intent": "memory-playback",
+        "route": "memories"
+      },
+      "intent": {
+        "type": "memory-playback",
+        "mode": "restart"
+      },
+      "actions": [],
+      "semantic": {
+        "historyDelta": 0
+      },
+      "runtimeCommands": [
+        {
+          "target": "memory",
+          "mode": "restart",
+          "memoryId": "M1"
+        }
+      ],
+      "noCreation": true,
+      "editorial": {
+        "family": "memory-playback",
+        "languageFeature": "restart-memory-context-without-new-recording"
+      }
+    },
+    {
+      "id": "repository-draft-0293",
+      "utterance": "Bring my journal closer",
+      "sourceLine": 81,
+      "fixtureId": "journal-editing",
+      "expected": {
+        "intent": "workspace",
+        "route": "journal"
+      },
+      "intent": {
+        "type": "workspace",
+        "operation": "primary",
+        "surface": "journal"
+      },
+      "actions": [
+        {
+          "type": "workspace.update",
+          "patch": {
+            "primary": "journal",
+            "minimized": []
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.workspace.primary": "journal"
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "workspace-primary",
+        "languageFeature": "closer-promotes-existing-journal-surface"
+      }
+    },
+    {
+      "id": "repository-draft-0294",
+      "utterance": "Leave the music open beside it",
+      "sourceLine": 82,
+      "fixtureId": "journal-editing",
+      "expected": {
+        "intent": "workspace",
+        "route": "journal"
+      },
+      "intent": {
+        "type": "workspace",
+        "operation": "secondary",
+        "surface": "atmosphere"
+      },
+      "actions": [
+        {
+          "type": "workspace.update",
+          "patch": {
+            "primary": "journal",
+            "secondary": "atmosphere",
+            "minimized": []
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.workspace.primary": "journal",
+        "studio.workspace.secondary": "atmosphere"
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "workspace-secondary",
+        "languageFeature": "beside-retains-current-journal-primary"
+      }
+    },
+    {
+      "id": "repository-draft-0295",
+      "utterance": "Keep the journal alongside",
+      "sourceLine": 83,
+      "fixtureId": "atmosphere",
+      "expected": {
+        "intent": "workspace",
+        "route": "atmosphere"
+      },
+      "intent": {
+        "type": "workspace",
+        "operation": "secondary",
+        "surface": "journal"
+      },
+      "actions": [
+        {
+          "type": "workspace.update",
+          "patch": {
+            "primary": "atmosphere",
+            "secondary": "journal",
+            "minimized": []
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.workspace.primary": "atmosphere",
+        "studio.workspace.secondary": "journal"
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "workspace-secondary",
+        "languageFeature": "alongside-retains-atmosphere-primary"
+      }
+    },
+    {
+      "id": "repository-draft-0296",
+      "utterance": "Put the journal away",
+      "sourceLine": 84,
+      "fixtureId": "journal-editing",
+      "expected": {
+        "intent": "workspace",
+        "route": "home"
+      },
+      "intent": {
+        "type": "workspace",
+        "operation": "put-away",
+        "surface": "journal"
+      },
+      "actions": [
+        {
+          "type": "workspace.update",
+          "patch": {
+            "minimized": [
+              "journal"
+            ]
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.workspace.minimized": [
+          "journal"
+        ]
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "workspace-put-away",
+        "languageFeature": "minimize-current-route-preserves-journal-entry"
+      }
+    },
+    {
+      "id": "repository-draft-0297",
+      "utterance": "Put these away",
+      "sourceLine": 85,
+      "fixtureId": "empty-home",
+      "expected": {
+        "intent": "workspace",
+        "route": "home"
+      },
+      "intent": {
+        "type": "workspace",
+        "operation": "put-away"
+      },
+      "actions": [
+        {
+          "type": "workspace.update",
+          "patch": {
+            "minimized": []
+          }
+        }
+      ],
+      "semantic": {
+        "historyDelta": 0
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "workspace-put-away",
+        "languageFeature": "empty-workspace-put-away-no-op"
+      }
+    },
+    {
+      "id": "repository-draft-0298",
+      "utterance": "Show less",
+      "sourceLine": 85,
+      "fixtureId": "journal-editing",
+      "expected": {
+        "intent": "workspace",
+        "route": "journal"
+      },
+      "intent": {
+        "type": "workspace",
+        "operation": "show-less"
+      },
+      "actions": [
+        {
+          "type": "workspace.update",
+          "patch": {
+            "quiet": true
+          }
+        }
+      ],
+      "documentPatch": {
+        "studio.workspace.quiet": true
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "workspace-density",
+        "languageFeature": "quiet-density-not-data-deletion"
+      }
+    },
+    {
+      "id": "repository-draft-0299",
+      "utterance": "Show everything again",
+      "sourceLine": 86,
+      "fixtureId": "journal-editing",
+      "expected": {
+        "intent": "workspace",
+        "route": "journal"
+      },
+      "intent": {
+        "type": "workspace",
+        "operation": "show-more"
+      },
+      "actions": [
+        {
+          "type": "workspace.update",
+          "patch": {
+            "quiet": false
+          }
+        }
+      ],
+      "semantic": {
+        "historyDelta": 0
+      },
+      "noCreation": true,
+      "editorial": {
+        "family": "workspace-density",
+        "languageFeature": "already-full-density-no-op"
+      }
+    },
+    {
+      "id": "repository-draft-0264",
+      "utterance": "Keep the selected lines",
+      "sourceLine": 45,
+      "fixtureId": "journal-editing",
+      "expected": {
+        "intent": "journal-bookmark",
+        "route": "journal"
+      },
+      "intent": {
+        "type": "journal-bookmark",
+        "anchor": "selection"
+      },
+      "actions": [],
+      "semantic": {
+        "historyDelta": 0,
+        "feedbackPhase": "clarification"
+      },
+      "clarificationRequirement": "Ask which passage; fixture declares no selectedJournalPassage. Do not bookmark whole entry or invent selection.",
+      "noCreation": true,
+      "editorial": {
+        "family": "journal-bookmark",
+        "languageFeature": "missing-selected-lines-focused-clarification"
+      }
+    },
+    {
+      "id": "repository-draft-0279",
+      "utterance": "Make something from this",
+      "sourceLine": 64,
+      "fixtureId": "journal-editing",
+      "expected": {
+        "intent": "memory-create",
+        "route": "memories"
+      },
+      "intent": {
+        "type": "memory-create"
+      },
+      "actions": [
+        {
+          "type": "memory.create",
+          "memory": "$JOURNAL_MEMORY"
+        },
+        {
+          "type": "workspace.update",
+          "patch": {
+            "primary": "memories",
+            "minimized": []
+          }
+        }
+      ],
+      "collectionAppend": {
+        "collection": "studio.memories",
+        "record": "$JOURNAL_MEMORY"
+      },
+      "documentPatch": {
+        "studio.workspace.primary": "memories"
+      },
+      "noCreation": false,
+      "editorial": {
+        "family": "memory-create",
+        "languageFeature": "contextual-compose-from-existing-journal-not-invented-content"
+      }
+    },
+    {
+      "id": "repository-draft-0280",
+      "utterance": "Make a memory from this",
+      "sourceLine": 65,
+      "fixtureId": "journal-editing",
+      "expected": {
+        "intent": "memory-create",
+        "route": "memories"
+      },
+      "intent": {
+        "type": "memory-create"
+      },
+      "actions": [
+        {
+          "type": "memory.create",
+          "memory": "$JOURNAL_MEMORY"
+        },
+        {
+          "type": "workspace.update",
+          "patch": {
+            "primary": "memories",
+            "minimized": []
+          }
+        }
+      ],
+      "collectionAppend": {
+        "collection": "studio.memories",
+        "record": "$JOURNAL_MEMORY"
+      },
+      "documentPatch": {
+        "studio.workspace.primary": "memories"
+      },
+      "noCreation": false,
+      "editorial": {
+        "family": "memory-create",
+        "languageFeature": "explicit-memory-from-context-preserves-source"
+      }
+    }
+  ]
+}

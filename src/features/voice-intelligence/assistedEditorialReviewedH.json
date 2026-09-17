@@ -1,0 +1,690 @@
+{
+  "batch": "new-assisted-901-920",
+  "source": "assisted-editorial",
+  "status": "pending-independent-review-and-execution",
+  "defaults": {
+    "contextOverrides": {},
+    "semantic": {
+      "historyDelta": 0,
+      "feedbackPhase": "completed",
+      "noCreation": true,
+      "actions": []
+    }
+  },
+  "expansion": "Fixture context plus overrides; arrays replace. collectionChanges uses complete independently declared BEFORE array with exact ID patches/fixture-clock updatedAt. No parser/actualAfter-derived values; unchanged complements; exact H1 UndoRedo.",
+  "staticCheck": "Auditor combined80 had zero normalized/editorialFingerprint collisions against4082 archival rows or within80. Bookkeeping only. Root archive establishes new assisted provenance; no fabricated human/source hash claim.",
+  "cases": [
+    {
+      "id": 901,
+      "utterance": "Call the 2 PM block 'Deep Work — no interruptions', and make it blue.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-atomic-metadata",
+      "feature": "time-addressed nonselected event receives literal em-dash title and color in one request",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "eventChanges": [
+          {
+            "id": "E2",
+            "patch": {
+              "title": "Deep Work — no interruptions",
+              "color": "blue"
+            }
+          }
+        ],
+        "calendarActionTypes": [
+          "update",
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 902,
+      "utterance": "For Shareholders, add the label 'follow up' rather than changing its name.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-label-isolation",
+      "feature": "fronted named target and rather-than clause distinguish labels from title",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "labels": [
+                "follow up"
+              ]
+            }
+          }
+        ],
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 903,
+      "utterance": "Put this back at eleven thirty; leave the thirty-minute length alone.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-idempotent-placement",
+      "feature": "explicit existing placement is a no-op even with back wording; duration remains exact",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "move",
+                "destination": {
+                  "type": "absolute",
+                  "minutes": 690
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "move"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 904,
+      "utterance": "Give Deep Work ninety minutes in total, starting where it already starts.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-duration",
+      "feature": "in-total explicitly chooses set-duration rather than additive extension",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "resize",
+                "mode": "set",
+                "minutes": 90
+              }
+            ]
+          }
+        },
+        "historyDelta": 1,
+        "eventChanges": [
+          {
+            "id": "E2",
+            "patch": {
+              "end": 930
+            }
+          }
+        ],
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 905,
+      "utterance": "Shift Shareholders later by ten minutes, not to ten o'clock.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-relative-shift",
+      "feature": "by-duration explicitly excludes similarly worded absolute clock interpretation",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "shift",
+                "deltaMinutes": 10
+              }
+            ]
+          }
+        },
+        "historyDelta": 1,
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 700,
+              "end": 730
+            }
+          }
+        ],
+        "calendarActionTypes": [
+          "shift"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 906,
+      "utterance": "Make the selected event green and critical; keep the scheduling unchanged.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-atomic-metadata",
+      "feature": "coordinate metadata adjectives share one update while geometry is explicitly preserved",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "color": "green",
+              "importance": "critical"
+            }
+          }
+        ],
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 907,
+      "utterance": "I want the words 'Undo and redo' as this meeting's title, not as commands.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-literal-name",
+      "feature": "history command names inside quoted title cannot execute global history",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "title": "Undo and redo"
+            }
+          }
+        ],
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 908,
+      "utterance": "Deleting the meeting would be a mistake; don't do it.",
+      "fixtureId": "calendar-reference",
+      "family": "negative-destructive-control",
+      "feature": "counterfactual deletion mention and explicit prohibition never create pending authority",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "unsupported"
+        },
+        "feedbackPhase": "error"
+      }
+    },
+    {
+      "id": 909,
+      "utterance": "Home library should wait; set that plan to paused.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-status",
+      "feature": "named plan statement resolves intra-turn that-plan reference to explicit paused state",
+      "expected": {
+        "intent": "plan-status",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "plan-status",
+          "status": "paused"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "status": "paused"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "status": "paused"
+          }
+        }
+      ]
+    },
+    {
+      "id": 910,
+      "utterance": "The next step is Sort books, not a new event called Sort books.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-next-step",
+      "feature": "declarative next-step selection rejects explicitly contrasted same-title event creation",
+      "expected": {
+        "intent": "step-set-next",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "step-set-next"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "nextStepId": "S2"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "nextStepId": "S2"
+          }
+        }
+      ]
+    },
+    {
+      "id": 911,
+      "utterance": "Keep Home library active, but rename it 'Home library: phase one'.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-rename",
+      "feature": "preserved status followed by quoted title edit must not pause or complete the plan",
+      "expected": {
+        "intent": "plan-rename",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "plan-rename",
+          "title": "Home library: phase one"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "title": "Home library: phase one"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "title": "Home library: phase one"
+          }
+        }
+      ]
+    },
+    {
+      "id": 912,
+      "utterance": "Change only the estimate for Sort books to an hour.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-duration",
+      "feature": "only-estimate constraint preserves status, order, title and scheduling",
+      "expected": {
+        "intent": "step-duration",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "step-duration",
+          "minutes": 60
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.step.update",
+            "stepId": "S2",
+            "patch": {
+              "estimatedMinutes": 60
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "steps",
+          "id": "S2",
+          "patch": {
+            "estimatedMinutes": 60
+          }
+        }
+      ]
+    },
+    {
+      "id": 913,
+      "utterance": "Don't mistake the word 'completed' in a title for finishing the plan.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-mentioned-status-negative",
+      "feature": "quoted status word cannot complete the active plan or its steps",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "unsupported"
+        },
+        "feedbackPhase": "error"
+      }
+    },
+    {
+      "id": 914,
+      "utterance": "Archive the capture we were discussing, without converting it to anything.",
+      "fixtureId": "capture-reference",
+      "family": "capture-archive",
+      "feature": "fresh discussion reference plus explicit no-conversion constraint retains raw capture record",
+      "expected": {
+        "intent": "capture-archive",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-archive"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "capture.archive",
+            "captureId": "C1"
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "captures",
+          "id": "C1",
+          "patch": {
+            "status": "archived"
+          }
+        }
+      ]
+    },
+    {
+      "id": 915,
+      "utterance": "This capture should say 'Ask Daniel, then wait', including the comma.",
+      "fixtureId": "capture-reference",
+      "family": "capture-raw-title",
+      "feature": "literal title contains a person and sequence marker without creating a commitment or second command",
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-edit",
+          "title": "Ask Daniel, then wait"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "title": "Ask Daniel, then wait"
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "captures",
+          "id": "C1",
+          "patch": {
+            "title": "Ask Daniel, then wait"
+          }
+        }
+      ]
+    },
+    {
+      "id": 916,
+      "utterance": "Before deleting Maya's Send sketch promise, let me confirm that exact one.",
+      "fixtureId": "commitment-reference",
+      "family": "commitment-destructive-preview",
+      "feature": "future confirmation request is not current consent and binds the named promise only",
+      "expected": {
+        "intent": "commitment-delete",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "intent": {
+          "type": "commitment-delete"
+        },
+        "feedbackPhase": "confirmation",
+        "actions": [
+          {
+            "type": "commitment.delete",
+            "commitmentId": "K1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 917,
+      "utterance": "Mark Delivery confirmation from Daniel complete, not Maya's sketch.",
+      "fixtureId": "commitment-reference",
+      "family": "commitment-completion-target",
+      "feature": "explicit excluded recent promise preserves K1 while completing named waiting-on K2",
+      "expected": {
+        "intent": "commitment-complete",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "intent": {
+          "type": "commitment-complete"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K2",
+            "patch": {
+              "status": "completed"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "commitments",
+          "id": "K2",
+          "patch": {
+            "status": "completed"
+          }
+        }
+      ]
+    },
+    {
+      "id": 918,
+      "utterance": "The Return keys deadline needs to be Friday, with no change to Send sketch.",
+      "fixtureId": "commitment-reference",
+      "family": "commitment-deadline",
+      "feature": "named deadline correction distinguishes two promises belonging to the same person",
+      "expected": {
+        "intent": "commitment-due",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "intent": {
+          "type": "commitment-due",
+          "dueAt": "2026-09-11T17:00:00.000Z"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K3",
+            "patch": {
+              "dueAt": "2026-09-11T17:00:00.000Z"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "commitments",
+          "id": "K3",
+          "patch": {
+            "dueAt": "2026-09-11T17:00:00.000Z"
+          }
+        }
+      ]
+    },
+    {
+      "id": 919,
+      "utterance": "Use 'Finish later?' as the Journal title, including the question mark.",
+      "fixtureId": "journal-editing",
+      "family": "journal-heading",
+      "feature": "explicit quoted punctuation survives utterance punctuation normalization",
+      "expected": {
+        "intent": "journal-rename",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-rename",
+          "title": "Finish later?"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "title": "Finish later?"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "title": "Finish later?"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 920,
+      "utterance": "I was describing a memory, not asking you to create one.",
+      "fixtureId": "memory-source",
+      "family": "memory-narrative-negative",
+      "feature": "past-tense description and explicit creation denial cannot produce a second Memory",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "unsupported"
+        },
+        "feedbackPhase": "error"
+      }
+    }
+  ]
+}

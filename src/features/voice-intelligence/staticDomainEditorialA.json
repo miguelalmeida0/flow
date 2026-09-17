@@ -1,0 +1,1177 @@
+{
+  "status": "DRAFT_ARCHIVED_NOT_ADMITTED_NOT_EXECUTED",
+  "batch": "static-domain-freeze-1-of-2",
+  "recipeContract": "Expand collectionRecipes against immutable named BEFORE fixture, preserving every unmentioned entity/field; updatedAt=fixture acceptanceClock ISO only for explicitly edited records. contextReferenceRecipes sets fresh reference at=context.nowMs-ageMs. pendingActions asserts pending-confirmation scope, not committed mutation. Never use actualAfter or parser output. Schema normalization must be declared independently before evaluation.",
+  "fixtureSnapshot": {
+    "path": "src/features/voice-intelligence/acceptanceDomainFixtures.ts",
+    "sha256": "0bf4a54abc51c717c9ca2fc0f2a537b48793beaaac01da9641e48f0644f8f0cc"
+  },
+  "cases": [
+    {
+      "id": "repository-draft-0282",
+      "utterance": "Use this photo and that bookmark",
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "selectedPhotoAssetId": "P2",
+        "selectedBookmarkId": "B1"
+      },
+      "expected": {
+        "intent": "memory-source",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-source",
+          "source": "photo-bookmark"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "photoAssetId": "P2",
+              "bookmarkId": "B1",
+              "audioInMs": 2000,
+              "audioEnabled": true
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "photoAssetId": "P2",
+              "bookmarkId": "B1",
+              "audioInMs": 2000,
+              "audioEnabled": true
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 67,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "memory-source",
+        "languageFeature": "explicit-photo-and-bookmark-context"
+      }
+    },
+    {
+      "id": "repository-draft-0283",
+      "utterance": "Use the bookmarked part",
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "selectedBookmarkId": "B2"
+      },
+      "expected": {
+        "intent": "memory-source",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-source",
+          "source": "bookmark"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "bookmarkId": "B2",
+              "audioInMs": 8400,
+              "audioEnabled": true
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "bookmarkId": "B2",
+              "audioInMs": 8400,
+              "audioEnabled": true
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 68,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "memory-source",
+        "languageFeature": "bookmarked-passage-context-reference"
+      }
+    },
+    {
+      "id": "repository-draft-0284",
+      "utterance": "Use that sentence",
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "selectedJournalPassage": "The room felt quiet."
+      },
+      "expected": {
+        "intent": "memory-source",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-source",
+          "source": "passage"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "passage": "The room felt quiet."
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "passage": "The room felt quiet."
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 69,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "memory-source",
+        "languageFeature": "literal-selected-sentence-boundary"
+      }
+    },
+    {
+      "id": "repository-draft-0285",
+      "utterance": "Keep the photo unchanged",
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "selectedPhotoAssetId": "P1"
+      },
+      "expected": {
+        "intent": "memory-source",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-source",
+          "source": "photo"
+        }
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 70,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "memory-source",
+        "languageFeature": "unchanged-photo-no-op"
+      }
+    },
+    {
+      "id": "repository-draft-0287",
+      "utterance": "Bring the photograph back",
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "selectedPhotoAssetId": "P2"
+      },
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-update",
+          "property": "photo",
+          "operation": "show"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "photoAssetId": "P2"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "photoAssetId": "P2"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 74,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "memory-photo",
+        "languageFeature": "restore-contextually-named-photo"
+      }
+    },
+    {
+      "id": "repository-draft-0288",
+      "utterance": "Make the words larger",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-update",
+          "property": "textScale",
+          "operation": "increase"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textScale": 1.12
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textScale": 1.12
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 75,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "memory-text",
+        "languageFeature": "words-as-text-scale-reference"
+      }
+    },
+    {
+      "id": "repository-draft-0289",
+      "utterance": "Move the text down",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-update",
+          "property": "textY",
+          "operation": "down"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textOffset": {
+                "x": 0,
+                "y": 8
+              }
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textOffset": {
+                "x": 0,
+                "y": 8
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 77,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "memory-text",
+        "languageFeature": "spatial-text-edit-not-calendar-move"
+      }
+    },
+    {
+      "id": "repository-draft-0292",
+      "utterance": "Keep this",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "memory-save",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-save"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "status": "saved"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "status": "saved"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 80,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "memory-save",
+        "languageFeature": "contextual-keep-not-protect"
+      }
+    },
+    {
+      "id": "repository-draft-0266",
+      "utterance": "Save this journal",
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1"
+      },
+      "expected": {
+        "intent": "journal-save",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "journal-save"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "status": "saved"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "status": "saved"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+        "line": 47,
+        "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+      },
+      "editorial": {
+        "family": "journal-save",
+        "languageFeature": "save-linked-entry-without-source-mutation"
+      }
+    },
+    {
+      "id": "repository-supplement-draft-0115",
+      "utterance": "Use the second photo",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "studio-source-select",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "studio-source-select",
+          "source": "photo",
+          "ordinal": 2,
+          "operation": "select"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "photoAssetId": "P2"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "photoAssetId": "P2"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/studioCommandPlan.test.ts",
+        "line": 50,
+        "sha256": "9c35acd5bc1277ab339affd70ad2355886333a66cd0f97dee5e903581b148979"
+      },
+      "editorial": {
+        "family": "memory-source",
+        "languageFeature": "ordered-source-photo-ordinal"
+      }
+    },
+    {
+      "id": "repository-supplement-draft-0116",
+      "utterance": "Use the third photo",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "studio-source-select",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "clarification",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "studio-source-select",
+          "source": "photo",
+          "ordinal": 3,
+          "operation": "select"
+        },
+        "actions": []
+      },
+      "source": {
+        "file": "src/features/studio/studioCommandPlan.test.ts",
+        "line": 52,
+        "sha256": "9c35acd5bc1277ab339affd70ad2355886333a66cd0f97dee5e903581b148979"
+      },
+      "editorial": {
+        "family": "memory-source-clarification",
+        "languageFeature": "out-of-range-source-ordinal"
+      }
+    },
+    {
+      "id": "repository-supplement-draft-0117",
+      "utterance": "Remove the second attached photo",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "studio-source-select",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "studio-source-select",
+          "source": "photo",
+          "ordinal": 2,
+          "operation": "remove"
+        }
+      },
+      "source": {
+        "file": "src/features/studio/studioCommandPlan.test.ts",
+        "line": 54,
+        "sha256": "9c35acd5bc1277ab339affd70ad2355886333a66cd0f97dee5e903581b148979"
+      },
+      "editorial": {
+        "family": "journal-photo-confirmation",
+        "languageFeature": "linked-source-ordinal-removal-confirmation"
+      },
+      "pendingActions": [
+        {
+          "type": "journal.photo.remove",
+          "entryId": "J1",
+          "assetId": "P2"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0123",
+      "utterance": "Put the date in the corner",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "memory-update",
+          "property": "dateCorner",
+          "operation": "show"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "showDate": true,
+              "datePlacement": "corner"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "showDate": true,
+              "datePlacement": "corner"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/studio/studioCommandPlan.test.ts",
+        "line": 207,
+        "sha256": "9c35acd5bc1277ab339affd70ad2355886333a66cd0f97dee5e903581b148979"
+      },
+      "editorial": {
+        "family": "memory-layout",
+        "languageFeature": "date-placement-with-visible-date"
+      }
+    },
+    {
+      "id": "repository-draft-0071",
+      "utterance": "Move this to tomorrow",
+      "fixtureId": "calendar-dated",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "defer"
+        ],
+        "datedEventChanges": [
+          {
+            "id": "D1",
+            "sourceDate": "2026-09-08",
+            "destinationDate": "2026-09-09",
+            "patch": {
+              "start": 540,
+              "end": 600
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 119,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-defer",
+        "languageFeature": "fresh-context-cross-date-stable-identity"
+      },
+      "contextReferenceRecipes": [
+        {
+          "field": "lastReferenced",
+          "kind": "calendar-event",
+          "id": "D1",
+          "ageMs": 1000
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0333",
+      "utterance": "Edit this capture to renew passport urgently",
+      "fixtureId": "capture-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "capture-edit",
+          "title": "renew passport urgently"
+        },
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "title": "renew passport urgently"
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 82,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "capture-edit",
+        "languageFeature": "fresh-capture-reference-title-replacement"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "captures",
+          "id": "C1",
+          "patch": {
+            "title": "renew passport urgently"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0334",
+      "utterance": "Archive this capture",
+      "fixtureId": "capture-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "capture-archive",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "capture-archive"
+        },
+        "actions": [
+          {
+            "type": "capture.archive",
+            "captureId": "C1"
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 83,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "capture-archive",
+        "languageFeature": "archive-one-preserves-other-captures"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "captures",
+          "id": "C1",
+          "patch": {
+            "status": "archived"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0335",
+      "utterance": "Delete this capture",
+      "fixtureId": "capture-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "capture-delete",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "capture-delete"
+        }
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 84,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "capture-delete-confirmation",
+        "languageFeature": "contextual-single-capture-destructive-scope"
+      },
+      "pendingActions": [
+        {
+          "type": "capture.delete",
+          "captureId": "C1"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0337",
+      "utterance": "Archive all capture items",
+      "fixtureId": "capture-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "capture-batch-archive",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "capture-batch-archive"
+        },
+        "actions": [
+          {
+            "type": "capture.archive",
+            "captureId": "C1"
+          },
+          {
+            "type": "capture.archive",
+            "captureId": "C2"
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 87,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "capture-batch",
+        "languageFeature": "archive-unresolved-batch-one-history-entry"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "captures",
+          "id": "C1",
+          "patch": {
+            "status": "archived"
+          },
+          "updatedAt": "fixtureClock"
+        },
+        {
+          "collection": "captures",
+          "id": "C2",
+          "patch": {
+            "status": "archived"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0168",
+      "utterance": "Rename this plan to Senegal preparation",
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "plan-rename",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "plan-rename",
+          "title": "Senegal preparation"
+        },
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "title": "Senegal preparation"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/globalInterpreter.test.ts",
+        "line": 86,
+        "sha256": "097d2d75cca1fb20999cb9b4aa8b92122ed0227640ef88bad72ce4ff7405d02c"
+      },
+      "editorial": {
+        "family": "outcome-rename",
+        "languageFeature": "existing-outcome-renamed-not-recreated"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "title": "Senegal preparation"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0187",
+      "utterance": "Pause this plan",
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "plan-status",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "plan-status",
+          "status": "paused"
+        },
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "status": "paused"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/globalInterpreter.test.ts",
+        "line": 105,
+        "sha256": "097d2d75cca1fb20999cb9b4aa8b92122ed0227640ef88bad72ce4ff7405d02c"
+      },
+      "editorial": {
+        "family": "outcome-status",
+        "languageFeature": "pause-preserves-existing-step-graph"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "status": "paused"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0338",
+      "utterance": "Rename this plan to Senegal ready",
+      "fixtureId": "outcome-scheduled",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "plan-rename",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "plan-rename",
+          "title": "Senegal ready"
+        },
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "title": "Senegal ready"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 88,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "outcome-rename",
+        "languageFeature": "rename-preserves-linked-calendar-reservation"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "title": "Senegal ready"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0339",
+      "utterance": "Pause this outcome",
+      "fixtureId": "outcome-scheduled",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "plan-status",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "plan-status",
+          "status": "paused"
+        },
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "status": "paused"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 89,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "outcome-status",
+        "languageFeature": "pause-does-not-unschedule-linked-step"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "status": "paused"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0340",
+      "utterance": "Resume this outcome",
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {
+        "activePlanId": "O2"
+      },
+      "expected": {
+        "intent": "plan-status",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "plan-status",
+          "status": "active"
+        },
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O2",
+            "patch": {
+              "status": "active"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 90,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "outcome-status",
+        "languageFeature": "resume-explicit-current-paused-outcome"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "plans",
+          "id": "O2",
+          "patch": {
+            "status": "active"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ],
+      "contextReferenceRecipes": [
+        {
+          "field": "lastReferenced",
+          "kind": "plan",
+          "id": "O2",
+          "ageMs": 1000
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0341",
+      "utterance": "Delete this outcome",
+      "fixtureId": "outcome-scheduled",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "plan-delete",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "plan-delete"
+        }
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 91,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "outcome-delete-confirmation",
+        "languageFeature": "linked-outcome-graph-preserved-before-confirmation"
+      },
+      "pendingActions": [
+        {
+          "type": "plan.delete",
+          "planId": "O1"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0174",
+      "utterance": "Finish this step",
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "step-complete",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "step-complete",
+          "query": "this"
+        },
+        "actions": [
+          {
+            "type": "plan.step.update",
+            "stepId": "S1",
+            "patch": {
+              "status": "completed"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/globalInterpreter.test.ts",
+        "line": 92,
+        "sha256": "097d2d75cca1fb20999cb9b4aa8b92122ed0227640ef88bad72ce4ff7405d02c"
+      },
+      "editorial": {
+        "family": "outcome-step-complete",
+        "languageFeature": "fresh-step-reference-not-whole-outcome-completion"
+      },
+      "collectionRecipes": [
+        {
+          "collection": "steps",
+          "id": "S1",
+          "patch": {
+            "status": "completed"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ],
+      "contextReferenceRecipes": [
+        {
+          "field": "lastReferenced",
+          "kind": "plan-step",
+          "id": "S1",
+          "ageMs": 1000
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+Read the repository AGENTS.md and docs/quality/VERIFICATION.md first.
+
+Then read every file under FLOW_LIVING_ENVIRONMENT_HANDOFF in the exact order listed in FLOW_LIVING_ENVIRONMENT_HANDOFF/README.md.
+
+Inspect all supplied boards and screen references, especially:
+
+- FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/motion-reference-annotated.png
+- FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/inbox-to-plan-storyboard.png
+- FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/06-inbox-to-plan-morph.png
+
+After reading everything, execute FLOW_LIVING_ENVIRONMENT_HANDOFF/FLOW_LIVING_ENVIRONMENT_MASTER_PROMPT.md completely.
+
+This is an implementation mission, not a concept review.
+
+Do not stop after planning or scaffolding.
+Do not pin or change the Codex model.
+Do not replace the existing working Tide scheduling engine.
+Do not build static mock screens.
+Do not add Three.js, WebGL, shaders, a canvas-only renderer, image generation, a paid LLM runtime, a backend, authentication, or provider integrations.
+Do not create parallel state mutation paths for voice, typing, pointer input, or automation.
+Do not weaken existing tests or fabricate motion/browser evidence.
+
+The target release is:
+
+Flow = Breathing Day calendar + living four-space shell + one shared life model + calm cross-space motion + persistent voice session.
+
+The signature vertical slice must be fully real:
+
+1. Capture “Renew passport before Senegal” in Inbox.
+2. Say or type “Turn that into a plan.”
+3. The capture transforms into a Plan using the six-beat Tide choreography.
+4. Schedule a plan step into Calendar.
+5. Create a promise linked to a person and deadline.
+6. Ask “What fits right now?” and receive deterministic recommendations from the same shared data.
+7. Undo and redo the cross-space operations exactly.
+
+Implement the P0 release and the P1 polish defined in the handoff. Preserve all current calendar capabilities, produce the required automated/browser/motion evidence, and report real microphone acceptance separately from synthetic transcript tests.
+
+Proceed now.

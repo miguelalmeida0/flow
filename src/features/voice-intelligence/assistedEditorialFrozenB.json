@@ -1,0 +1,1160 @@
+{
+  "batch": "assisted-frozen-B",
+  "status": "pending-second-reader-review",
+  "sourceRoot": "artifacts/voice-control-rebuild-20260908/",
+  "sources": {
+    "A": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-001-120.md",
+      "sha256": "6d2e570449da5f92dc7e86d3ff39d6b5190b7273ea6cb2195bbd11480fa85800"
+    },
+    "B": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-121-300.md",
+      "sha256": "81efe8a1fb6f0ab7b001951cf1466bccf5b0b9bc1d2caee08a4978e6dae29050"
+    }
+  },
+  "caseDefaults": {
+    "source": "editorial_product",
+    "provenance": {
+      "authoringMethod": "assisted-editorial",
+      "transformations": [],
+      "reviewStatus": "pending",
+      "contractVersion": "2026-09-08"
+    },
+    "editorial": {
+      "origin": "product-editorial-review",
+      "reviewScope": "Independently frozen against the named existing fixture before execution; assisted proposal awaiting root second-reader review."
+    }
+  },
+  "identityRule": "id=voice-rebuild-editorial-NNN; provenance.baseCaseId=language-audit-proposal-NNN; editorial.languageFeature=feature; family=family",
+  "semanticDefaults": {
+    "historyDelta": 0,
+    "feedbackPhase": "completed",
+    "actions": [],
+    "noCreation": true
+  },
+  "stateOracle": "Exact expectedDocument equality: all unlisted collections, fields, IDs, protection, titles and media remain unchanged. H1 must pass exact global undo/redo. Context and temporal scope are not LifeDocument mutation.",
+  "fixtureGrounding": "Calendar-reference has selected E1 Shareholders11:30–12, E2 Deep Work14–15, E3 fixed Interview17–18, E4 protected Dinner19–20. Calendar-near has only E1 and no selection. Atmosphere fixture uses Sunday evening: rain.volume0.32, pulse.rate0.72, all layers initially enabled. Canonical volume step0.10 and rate step0.15 are applied to these actual values, not the earlier A fixture's0.50/1.00. No fixture data is changed.",
+  "cases": [
+    {
+      "id": 95,
+      "utterance": "Rename the meeting starting at eleven thirty to Budget check",
+      "sourceLocator": {
+        "file": "A",
+        "row": 95,
+        "line": 129
+      },
+      "fixtureId": "calendar-near",
+      "contextOverrides": {},
+      "family": "calendar-temporal-reference",
+      "feature": "unique source start expressed in number words resolves without selected event",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "update",
+                "patch": {
+                  "title": "Budget check"
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "title": "Budget check"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 101,
+      "utterance": "Move Deep Work to noon",
+      "sourceLocator": {
+        "file": "A",
+        "row": 101,
+        "line": 135
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-move",
+      "feature": "named nonselected target and noon boundary touching another event end",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "move",
+                "destination": {
+                  "type": "absolute",
+                  "minutes": 720
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "move"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E2",
+            "patch": {
+              "start": 720,
+              "end": 780
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 102,
+      "utterance": "Put Shareholders immediately before Deep Work",
+      "sourceLocator": {
+        "file": "A",
+        "row": 102,
+        "line": 136
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-relative-placement",
+      "feature": "immediately before means adjacency rather than merely already-before no-op",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "move",
+                "destination": {
+                  "type": "relative",
+                  "relation": "before"
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "move"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 810,
+              "end": 840
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 103,
+      "utterance": "Make Deep Work forty-five minutes long",
+      "sourceLocator": {
+        "file": "A",
+        "row": 103,
+        "line": 137
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-duration",
+      "feature": "hyphenated number duration changes named target while preserving start",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "resize",
+                "mode": "set",
+                "minutes": 45
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E2",
+            "patch": {
+              "end": 885
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 104,
+      "utterance": "Give this meeting another quarter of an hour",
+      "sourceLocator": {
+        "file": "A",
+        "row": 104,
+        "line": 138
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-duration",
+      "feature": "additive quarter-hour idiom uses existing selected target",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "resize",
+                "mode": "add",
+                "minutes": 15
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "end": 735
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 105,
+      "utterance": "Shorten this by ten minutes",
+      "sourceLocator": {
+        "file": "A",
+        "row": 105,
+        "line": 139
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-duration",
+      "feature": "subtractive by-duration differs from setting total duration",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "resize",
+                "mode": "add",
+                "minutes": -10
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "end": 710
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 106,
+      "utterance": "Move Shareholders to half past six in the evening",
+      "sourceLocator": {
+        "file": "A",
+        "row": 106,
+        "line": 140
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-move",
+      "feature": "idiomatic clock plus explicit evening disambiguation touches protected Dinner without moving it",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "move",
+                "destination": {
+                  "type": "absolute",
+                  "minutes": 1110
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "move"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 1110,
+              "end": 1140
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 107,
+      "utterance": "Shift the interview by thirty minutes",
+      "sourceLocator": {
+        "file": "A",
+        "row": 107,
+        "line": 141
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-explicit-fixed-move",
+      "feature": "direct named fixed-event shift authorizes that target only and preserves fixed metadata",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 0,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "shift",
+                "deltaMinutes": 30
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "shift"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "feedbackPhase": "confirmation"
+      },
+      "oracleCorrection": {
+        "reviewer": "root",
+        "reason": "Established anchored-event policy requires explicit confirmation after direct named intent.",
+        "supersedes": {
+          "historyDelta": 1,
+          "eventChanges": [
+            {
+              "id": "E3",
+              "patch": {
+                "start": 1050,
+                "end": 1110
+              }
+            }
+          ]
+        },
+        "confirmedTargetId": "E3",
+        "unaffectedProtectedTargetId": "E4"
+      }
+    },
+    {
+      "id": 113,
+      "utterance": "Rename it Product Design and mark it important",
+      "sourceLocator": {
+        "file": "A",
+        "row": 113,
+        "line": 147
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-atomic-metadata",
+      "feature": "new explicit edit verb ends free-form title and composes importance into one history entry",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "update",
+                "patch": {
+                  "title": "Product Design"
+                }
+              },
+              {
+                "type": "update",
+                "patch": {
+                  "importance": "important"
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "update",
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "title": "Product Design",
+              "importance": "important"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 148,
+      "utterance": "Start this at half past ten instead",
+      "sourceLocator": {
+        "file": "B",
+        "row": 148,
+        "line": 46
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-move",
+      "feature": "start-at instruction changes placement not duration; instead does not require a second guessed target",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "move",
+                "destination": {
+                  "type": "absolute",
+                  "minutes": 630
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "move"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 630,
+              "end": 660
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 150,
+      "utterance": "Put it immediately before the interview",
+      "sourceLocator": {
+        "file": "B",
+        "row": 150,
+        "line": 48
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-relative-placement",
+      "feature": "selected flexible target is placed adjacent to named fixed anchor without moving anchor",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "move",
+                "destination": {
+                  "type": "relative",
+                  "relation": "before"
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "move"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 990,
+              "end": 1020
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 153,
+      "utterance": "Can you give this another ten minutes?",
+      "sourceLocator": {
+        "file": "B",
+        "row": 153,
+        "line": 51
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-duration",
+      "feature": "polite interrogative give-another idiom is additive duration, not creation",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "resize",
+                "mode": "add",
+                "minutes": 10
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "end": 730
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 179,
+      "utterance": "Move this to ten and make it forty-five minutes",
+      "sourceLocator": {
+        "file": "B",
+        "row": 179,
+        "line": 77
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "calendar-atomic-geometry",
+      "feature": "deictic follow-up within one request composes placement and total duration atomically",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "move",
+                "destination": {
+                  "type": "absolute",
+                  "minutes": 600
+                }
+              },
+              {
+                "type": "resize",
+                "mode": "set",
+                "minutes": 45
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "move",
+          "resize"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 600,
+              "end": 645
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 116,
+      "utterance": "Turn the rain down a little",
+      "sourceLocator": {
+        "file": "A",
+        "row": 116,
+        "line": 150
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-volume",
+      "feature": "qualitative small decrease uses canonical UI step and preserves enabled state",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "rain",
+          "property": "volume",
+          "operation": "decrease"
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 117,
+      "utterance": "Take the pulse out, but leave the rain alone",
+      "sourceLocator": {
+        "file": "A",
+        "row": 117,
+        "line": 151
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-constraint",
+      "feature": "removal controls enabled state, not layer deletion; explicit other-layer preservation",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "pulse",
+          "property": "enabled",
+          "operation": "remove"
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "enabled": false
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "pulse",
+            "patch": {
+              "enabled": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 243,
+      "utterance": "Can you make the rainfall a touch softer?",
+      "sourceLocator": {
+        "file": "B",
+        "row": 243,
+        "line": 141
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-volume",
+      "feature": "rainfall synonym and interrogative touch-softer map to exact volume step",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "rain",
+          "property": "volume",
+          "operation": "decrease"
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 244,
+      "utterance": "Bring the rain up a notch",
+      "sourceLocator": {
+        "file": "B",
+        "row": 244,
+        "line": 142
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-volume",
+      "feature": "bring-up idiom means level increase rather than route opening",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "rain",
+          "property": "volume",
+          "operation": "increase"
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "rain",
+            "patch": {
+              "volume": 0.42
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "rain",
+            "patch": {
+              "volume": 0.42
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 245,
+      "utterance": "I only want the rain layer turned off",
+      "sourceLocator": {
+        "file": "B",
+        "row": 245,
+        "line": 143
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-isolation",
+      "feature": "only scopes disabling to named layer and retains its volume for later restore",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "rain",
+          "property": "enabled",
+          "operation": "remove"
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "rain",
+            "patch": {
+              "enabled": false
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "rain",
+            "patch": {
+              "enabled": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 251,
+      "utterance": "Make the pulse a little slower",
+      "sourceLocator": {
+        "file": "B",
+        "row": 251,
+        "line": 149
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-rate",
+      "feature": "slower modifies pace rather than volume using canonical UI rate step",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "pulse",
+          "property": "rate",
+          "operation": "decrease"
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "rate": 0.57
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "pulse",
+            "patch": {
+              "rate": 0.57
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 252,
+      "utterance": "Nudge the pulse faster",
+      "sourceLocator": {
+        "file": "B",
+        "row": 252,
+        "line": 150
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-rate",
+      "feature": "nudge-faster adjusts rate with exact bounded increment and no restart",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "pulse",
+          "property": "rate",
+          "operation": "increase"
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "rate": 0.87
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "pulse",
+            "patch": {
+              "rate": 0.87
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 285,
+      "utterance": "Don't open a new journal",
+      "sourceLocator": {
+        "file": "B",
+        "row": 285,
+        "line": 183
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "negative-creation-control",
+      "feature": "negated Journal opening cannot start recorder or create entry",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 288,
+      "utterance": "Remember is the title of the book",
+      "sourceLocator": {
+        "file": "B",
+        "row": 288,
+        "line": 186
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "capture-keyword-confusion",
+      "feature": "remember as mentioned book title is not a save-content imperative",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 293,
+      "utterance": "Show me what a promise means",
+      "sourceLocator": {
+        "file": "B",
+        "row": 293,
+        "line": 191
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "commitment-concept-confusion",
+      "feature": "definition request is not a commitment, person lookup or navigation instruction",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 297,
+      "utterance": "Could you not delete my appointment?",
+      "sourceLocator": {
+        "file": "B",
+        "row": 297,
+        "line": 195
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "negative-destructive-control",
+      "feature": "polite negative deletion must not create a destructive candidate or ask confirmation",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 298,
+      "utterance": "Move nothing; I was only thinking aloud",
+      "sourceLocator": {
+        "file": "B",
+        "row": 298,
+        "line": 196
+      },
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "family": "negative-calendar-control",
+      "feature": "explicit empty action and metalinguistic withdrawal cancel any implicit move interpretation",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    }
+  ]
+}

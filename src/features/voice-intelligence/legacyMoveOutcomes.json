@@ -1,0 +1,153 @@
+{
+  "status": "INDEPENDENT_STATIC_SLOTS_NOT_EXECUTED_OR_ADMITTED",
+  "sourceSha256": "341a5f8cd4bc720cedee6c24c10167512c39da596d8db413dc4babba61397295",
+  "beforeRecipe": "Original populatedSep5/Sep6+one declared30min target900–930, as resize100 positive target recipe. No production-derived targets. Full stable IDs and mirrors.",
+  "columns": [
+    "code",
+    "rowCount",
+    "targetStart",
+    "targetEnd",
+    "collateral"
+  ],
+  "rows": [
+    [
+      535,
+      1,
+      535,
+      565,
+      {
+        "id": "deep-work",
+        "patch": {
+          "start": 565,
+          "end": 625
+        }
+      }
+    ],
+    [
+      540,
+      26,
+      540,
+      570,
+      {
+        "id": "deep-work",
+        "patch": {
+          "start": 570,
+          "end": 630
+        }
+      }
+    ],
+    [
+      600,
+      1,
+      600,
+      630,
+      null
+    ],
+    [
+      630,
+      1,
+      630,
+      660,
+      null
+    ],
+    [
+      645,
+      1,
+      645,
+      675,
+      {
+        "id": "email",
+        "patch": {
+          "start": 675,
+          "end": 720
+        }
+      }
+    ],
+    [
+      660,
+      32,
+      660,
+      690,
+      {
+        "id": "email",
+        "patch": {
+          "start": 690,
+          "end": 735
+        }
+      }
+    ],
+    [
+      840,
+      17,
+      840,
+      870,
+      {
+        "id": "roadmap",
+        "patch": {
+          "start": 870,
+          "end": 930
+        }
+      }
+    ],
+    [
+      960,
+      24,
+      960,
+      990,
+      {
+        "id": "workout",
+        "patch": {
+          "start": 1080,
+          "end": 1140
+        }
+      }
+    ],
+    [
+      965,
+      1,
+      965,
+      995,
+      {
+        "id": "workout",
+        "patch": {
+          "start": 1080,
+          "end": 1140
+        }
+      }
+    ],
+    [
+      1080,
+      30,
+      1080,
+      1110,
+      null
+    ],
+    [
+      "B",
+      33,
+      720,
+      750,
+      null
+    ],
+    [
+      "A",
+      33,
+      795,
+      825,
+      null
+    ]
+  ],
+  "expected": {
+    "intent": "calendar",
+    "resolution": "execute",
+    "route": "calendar",
+    "historyDelta": 1,
+    "feedbackPhase": "completed",
+    "noPending": true,
+    "noCreation": true,
+    "calendarActionTypes": [
+      "move"
+    ]
+  },
+  "review": "Root independently approved exact literal-time displacement and Move after/before re-placement (not Keep/preserveIfSatisfied). 16/16:05 later-first preference is not mathematically minimal displacement; earlierWorkout900–960 exists. Explicit9/11clock overrides colloquial back; no invented date rollover. All unlisted fields/entities/nextday unchanged; all200H1 one atomic transaction,102collateral/98target-only; exact full UndoRedo. Archive schemas are oracle recipes not executed output."
+}

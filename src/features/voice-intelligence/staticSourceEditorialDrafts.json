@@ -1,0 +1,1699 @@
+[
+  {
+    "id": "repository-draft-0003",
+    "utterance": "Reschedule deep work for 2:30.",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "move"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "start": 870,
+            "end": 930
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/parser.test.ts",
+      "line": 43,
+      "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+    },
+    "editorial": {
+      "family": "calendar-move",
+      "languageFeature": "title-and-half-hour-destination"
+    }
+  },
+  {
+    "id": "repository-draft-0005",
+    "utterance": "Put the selected event after the interview.",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "move"
+      ],
+      "eventChanges": [
+        {
+          "id": "E1",
+          "patch": {
+            "start": 1080,
+            "end": 1110
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/parser.test.ts",
+      "line": 45,
+      "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+    },
+    "editorial": {
+      "family": "calendar-move",
+      "languageFeature": "selected-target-relative-fixed-anchor"
+    }
+  },
+  {
+    "id": "repository-draft-0037",
+    "utterance": "Shorten the selected event by 15 minutes",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "resize"
+      ],
+      "eventChanges": [
+        {
+          "id": "E1",
+          "patch": {
+            "end": 705
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/parser.test.ts",
+      "line": 80,
+      "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+    },
+    "editorial": {
+      "family": "calendar-resize",
+      "languageFeature": "selected-duration-subtraction"
+    }
+  },
+  {
+    "id": "repository-draft-0038",
+    "utterance": "Extend deep work by half an hour",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "resize"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "end": 930
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/parser.test.ts",
+      "line": 81,
+      "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+    },
+    "editorial": {
+      "family": "calendar-resize",
+      "languageFeature": "title-duration-half-hour-addition"
+    }
+  },
+  {
+    "id": "repository-draft-0045",
+    "utterance": "Reduce this by 5 minutes",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "resize"
+      ],
+      "eventChanges": [
+        {
+          "id": "E1",
+          "patch": {
+            "end": 715
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/parser.test.ts",
+      "line": 88,
+      "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+    },
+    "editorial": {
+      "family": "calendar-resize",
+      "languageFeature": "demonstrative-duration-subtraction"
+    }
+  },
+  {
+    "id": "repository-draft-0086",
+    "utterance": "Move the 2 PM meeting to four",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "move"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "start": 960,
+            "end": 1020
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 22,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-move",
+      "languageFeature": "source-time-overrides-selected-distractor"
+    }
+  },
+  {
+    "id": "repository-draft-0088",
+    "utterance": "Shift the event at fourteen hundred back twenty minutes",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "shift"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "start": 860,
+            "end": 920
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 24,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-shift",
+      "languageFeature": "military-source-time-word-delay"
+    }
+  },
+  {
+    "id": "repository-draft-0107",
+    "utterance": "Stretch the 2 PM meeting to ninety minutes",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "resize"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "end": 930
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 46,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-resize",
+      "languageFeature": "source-time-word-duration-set"
+    }
+  },
+  {
+    "id": "repository-draft-0108",
+    "utterance": "Trim the next meeting by ten minutes",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "resize"
+      ],
+      "eventChanges": [
+        {
+          "id": "E1",
+          "patch": {
+            "end": 710
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 47,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-resize",
+      "languageFeature": "next-position-duration-reduction"
+    }
+  },
+  {
+    "id": "repository-draft-0109",
+    "utterance": "Give interview another fifteen minutes",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "resize"
+      ],
+      "eventChanges": [
+        {
+          "id": "E3",
+          "patch": {
+            "end": 1095
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 48,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-resize",
+      "languageFeature": "explicit-fixed-title-duration-extension"
+    }
+  },
+  {
+    "id": "repository-draft-0113",
+    "utterance": "Make the event at 2 PM forty five minutes",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "resize"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "end": 885
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 52,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-resize",
+      "languageFeature": "source-time-compound-number-duration"
+    }
+  },
+  {
+    "id": "repository-draft-0114",
+    "utterance": "Reduce the selected event by a quarter hour",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "resize"
+      ],
+      "eventChanges": [
+        {
+          "id": "E1",
+          "patch": {
+            "end": 705
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 53,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-resize",
+      "languageFeature": "selected-fractional-hour-reduction"
+    }
+  },
+  {
+    "id": "repository-draft-0117",
+    "utterance": "Make the 2 PM meeting important and red",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "importance": "important",
+            "color": "red"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 57,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-properties",
+      "languageFeature": "source-time-two-compatible-properties"
+    }
+  },
+  {
+    "id": "repository-draft-0120",
+    "utterance": "Paint interview cyan",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E3",
+          "patch": {
+            "color": "cyan"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 60,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-color",
+      "languageFeature": "fixed-event-nongeometric-color-edit"
+    }
+  },
+  {
+    "id": "repository-draft-0121",
+    "utterance": "Color deep work blue",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "color": "blue"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 61,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-color",
+      "languageFeature": "partial-title-color-value"
+    }
+  },
+  {
+    "id": "repository-draft-0123",
+    "utterance": "Make the next meeting green",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E1",
+          "patch": {
+            "color": "green"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 63,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-color",
+      "languageFeature": "next-position-color-edit"
+    }
+  },
+  {
+    "id": "repository-draft-0124",
+    "utterance": "Make the event covering 2:30 red",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "color": "red"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 64,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-color",
+      "languageFeature": "containing-time-interval-reference"
+    }
+  },
+  {
+    "id": "repository-draft-0125",
+    "utterance": "Make the last event yellow",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E4",
+          "patch": {
+            "color": "yellow"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 65,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-color",
+      "languageFeature": "last-position-protected-event-color"
+    }
+  },
+  {
+    "id": "repository-draft-0128",
+    "utterance": "Make interview blue and important",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E3",
+          "patch": {
+            "color": "blue",
+            "importance": "important"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 68,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-properties",
+      "languageFeature": "color-change-existing-importance-preserved"
+    }
+  },
+  {
+    "id": "repository-draft-0138",
+    "utterance": "Rename the 2 PM meeting to design review",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "title": "design review"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 78,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-rename",
+      "languageFeature": "source-time-literal-lowercase-title"
+    }
+  },
+  {
+    "id": "repository-draft-0139",
+    "utterance": "Call the next meeting portfolio review",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E1",
+          "patch": {
+            "title": "portfolio review"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 79,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-rename",
+      "languageFeature": "next-position-call-as-rename"
+    }
+  },
+  {
+    "id": "repository-draft-0141",
+    "utterance": "Label the 2 PM meeting client",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "labels": [
+              "client"
+            ]
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 82,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-labels",
+      "languageFeature": "source-time-single-label-addition"
+    }
+  },
+  {
+    "id": "repository-draft-0144",
+    "utterance": "Add client label to interview",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "update"
+      ],
+      "eventChanges": [
+        {
+          "id": "E3",
+          "patch": {
+            "labels": [
+              "client"
+            ]
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 85,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-labels",
+      "languageFeature": "label-add-not-event-create"
+    }
+  },
+  {
+    "id": "repository-draft-0149",
+    "utterance": "Protect the 2 PM event",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "protect"
+      ],
+      "eventChanges": [
+        {
+          "id": "E2",
+          "patch": {
+            "protected": true
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 91,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-protection",
+      "languageFeature": "source-time-protection-without-move"
+    }
+  },
+  {
+    "id": "repository-draft-0150",
+    "utterance": "Remove protection from dinner",
+    "fixtureId": "calendar-reference",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "calendar"
+      },
+      "calendarActionTypes": [
+        "unprotect"
+      ],
+      "eventChanges": [
+        {
+          "id": "E4",
+          "patch": {
+            "protected": false
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "line": 92,
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    },
+    "editorial": {
+      "family": "calendar-protection",
+      "languageFeature": "remove-protection-not-delete-event"
+    }
+  },
+  {
+    "id": "repository-draft-0265",
+    "utterance": "Rename this journal to Night walk",
+    "fixtureId": "journal-editing",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "journal-rename",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "noCreation": true,
+      "intent": {
+        "type": "journal-rename",
+        "title": "Night walk"
+      },
+      "actions": [
+        {
+          "type": "journal.update",
+          "entryId": "J1",
+          "patch": {
+            "title": "Night walk"
+          }
+        }
+      ],
+      "journalChanges": [
+        {
+          "id": "J1",
+          "patch": {
+            "title": "Night walk"
+          }
+        }
+      ]
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 46,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "journal-rename",
+      "languageFeature": "active-entry-literal-title-casing"
+    }
+  },
+  {
+    "id": "repository-draft-0225",
+    "utterance": "Journal",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 16,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "bare-surface-name"
+    }
+  },
+  {
+    "id": "repository-draft-0227",
+    "utterance": "Open the journal area",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 16,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "surface-area-noun"
+    }
+  },
+  {
+    "id": "repository-draft-0228",
+    "utterance": "Go to the journal page",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 17,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "surface-page-noun"
+    }
+  },
+  {
+    "id": "repository-draft-0230",
+    "utterance": "Take me to my journal",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 17,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "possessive-surface-navigation"
+    }
+  },
+  {
+    "id": "repository-draft-0231",
+    "utterance": "Take me over to the journal screen",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 18,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "phrasal-navigation-screen-noun"
+    }
+  },
+  {
+    "id": "repository-draft-0232",
+    "utterance": "Bring up the journal section",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 18,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "bring-up-section-navigation"
+    }
+  },
+  {
+    "id": "repository-draft-0234",
+    "utterance": "Switch to journal",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 19,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "switch-surface-navigation"
+    }
+  },
+  {
+    "id": "repository-draft-0235",
+    "utterance": "I want journal",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 19,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "elliptical-desire-navigation"
+    }
+  },
+  {
+    "id": "repository-draft-0236",
+    "utterance": "I want to see my journal",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 19,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "first-person-view-request"
+    }
+  },
+  {
+    "id": "repository-draft-0237",
+    "utterance": "Can I see the journal view",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 19,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "interrogative-view-request"
+    }
+  },
+  {
+    "id": "repository-draft-0238",
+    "utterance": "Atmosphere",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "atmosphere"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "atmosphere"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 20,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "bare-surface-name"
+    }
+  },
+  {
+    "id": "repository-draft-0239",
+    "utterance": "Open the atmosphere area",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "atmosphere"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "atmosphere"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 20,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "surface-area-noun"
+    }
+  },
+  {
+    "id": "repository-draft-0240",
+    "utterance": "Go into the sound space",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "atmosphere"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "atmosphere"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 20,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "sound-space-surface-alias"
+    }
+  },
+  {
+    "id": "repository-draft-0241",
+    "utterance": "Take me over to music",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "atmosphere"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "atmosphere"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 21,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "music-surface-alias-not-playback"
+    }
+  },
+  {
+    "id": "repository-draft-0242",
+    "utterance": "Show the listening room",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "atmosphere"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "atmosphere"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 21,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "listening-room-surface-alias"
+    }
+  },
+  {
+    "id": "repository-draft-0243",
+    "utterance": "Memories",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "memories"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "memories"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 21,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "bare-surface-name"
+    }
+  },
+  {
+    "id": "repository-draft-0245",
+    "utterance": "Open the memory page",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "memories"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "memories"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 22,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "singular-memory-surface-alias"
+    }
+  },
+  {
+    "id": "repository-draft-0246",
+    "utterance": "Go into my keepsakes",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "memories"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "memories"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 22,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "keepsakes-surface-alias"
+    }
+  },
+  {
+    "id": "repository-draft-0247",
+    "utterance": "Return to journal",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "journal"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "journal"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/studio/interpretation/studioLanguageCorpus.test.ts",
+      "line": 22,
+      "sha256": "49fbb265986cc18ad093971bf0f9c9c36d3fbb3291d1e2417e58f5410bfb25d7"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "explicit-return-destination"
+    }
+  },
+  {
+    "id": "repository-draft-0339",
+    "utterance": "Open the calendar.",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "navigate",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "navigate",
+        "route": "calendar"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/shared/command/eliteSemanticCorpus.test.ts",
+      "line": 90,
+      "sha256": "fa86ee81611601aa2f472a66799c72740531ac416828c44fd2d1f0e589038c95"
+    },
+    "editorial": {
+      "family": "navigation",
+      "languageFeature": "calendar-navigation-with-final-punctuation"
+    }
+  },
+  {
+    "id": "repository-draft-0084",
+    "utterance": "Dance around the calendar",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "unsupported",
+      "resolution": "unsupported",
+      "route": "home"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "unsupported"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/features/day-planner/parser.test.ts",
+      "line": 141,
+      "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+    },
+    "editorial": {
+      "family": "unsupported-safety",
+      "languageFeature": "surface-word-without-supported-operation"
+    }
+  },
+  {
+    "id": "repository-draft-0352",
+    "utterance": "Coffee.",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "unsupported",
+      "resolution": "unsupported",
+      "route": "home"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "unsupported"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/shared/command/eliteSemanticCorpus.test.ts",
+      "line": 108,
+      "sha256": "fa86ee81611601aa2f472a66799c72740531ac416828c44fd2d1f0e589038c95"
+    },
+    "editorial": {
+      "family": "unsupported-safety",
+      "languageFeature": "bare-object-without-creation-authority"
+    }
+  },
+  {
+    "id": "repository-draft-0353",
+    "utterance": "Tell me a joke.",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "unsupported",
+      "resolution": "unsupported",
+      "route": "home"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "unsupported"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/shared/command/eliteSemanticCorpus.test.ts",
+      "line": 109,
+      "sha256": "fa86ee81611601aa2f472a66799c72740531ac416828c44fd2d1f0e589038c95"
+    },
+    "editorial": {
+      "family": "unsupported-safety",
+      "languageFeature": "nonproduct-conversational-request"
+    }
+  },
+  {
+    "id": "repository-draft-0355",
+    "utterance": "Add something.",
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "intent": "clarification",
+      "resolution": "clarify",
+      "route": "home"
+    },
+    "semantic": {
+      "historyDelta": 0,
+      "noCreation": true,
+      "intent": {
+        "type": "clarification"
+      },
+      "actions": []
+    },
+    "source": {
+      "file": "src/shared/command/eliteSemanticCorpus.test.ts",
+      "line": 111,
+      "sha256": "fa86ee81611601aa2f472a66799c72740531ac416828c44fd2d1f0e589038c95"
+    },
+    "editorial": {
+      "family": "clarification-safety",
+      "languageFeature": "creation-verb-with-missing-content-and-time"
+    }
+  }
+]

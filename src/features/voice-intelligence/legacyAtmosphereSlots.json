@@ -1,0 +1,1327 @@
+{
+  "sourceSha256": "341a5f8cd4bc720cedee6c24c10167512c39da596d8db413dc4babba61397295",
+  "playRows": [
+    [
+      "curated-0053",
+      648,
+      "Play Long-form focus atmosphere",
+      "Long-form focus",
+      "evaluation-atmosphere-long-form-focus"
+    ],
+    [
+      "curated-0115",
+      1436,
+      "Start the Small hours sound",
+      "Small hours",
+      "evaluation-atmosphere-small-hours"
+    ],
+    [
+      "curated-0161",
+      2028,
+      "Put on Warm silence",
+      "Warm silence",
+      "evaluation-atmosphere-warm-silence"
+    ],
+    [
+      "curated-0169",
+      2127,
+      "Use my Quiet harbor atmosphere",
+      "Quiet harbor",
+      "evaluation-atmosphere-quiet-harbor"
+    ],
+    [
+      "curated-0176",
+      2212,
+      "Play Open attention atmosphere",
+      "Open attention",
+      "evaluation-atmosphere-open-attention"
+    ],
+    [
+      "curated-0249",
+      3142,
+      "Start the Calm drafting sound",
+      "Calm drafting",
+      "evaluation-atmosphere-calm-drafting"
+    ],
+    [
+      "curated-0252",
+      3179,
+      "Put on Quiet return",
+      "Quiet return",
+      "evaluation-atmosphere-quiet-return"
+    ],
+    [
+      "curated-0288",
+      3637,
+      "Use my Evening pages atmosphere",
+      "Evening pages",
+      "evaluation-atmosphere-evening-pages"
+    ],
+    [
+      "curated-0295",
+      3725,
+      "Play Rainy reading atmosphere",
+      "Rainy reading",
+      "evaluation-atmosphere-rainy-reading"
+    ],
+    [
+      "curated-0332",
+      4193,
+      "Start the Sunday letters sound",
+      "Sunday letters",
+      "evaluation-atmosphere-sunday-letters"
+    ],
+    [
+      "curated-0335",
+      4232,
+      "Put on Slow morning",
+      "Slow morning",
+      "evaluation-atmosphere-slow-morning"
+    ],
+    [
+      "curated-0359",
+      4533,
+      "Use my Warm library atmosphere",
+      "Warm library",
+      "evaluation-atmosphere-warm-library"
+    ],
+    [
+      "curated-0395",
+      4995,
+      "Play Window seat atmosphere",
+      "Window seat",
+      "evaluation-atmosphere-window-seat"
+    ],
+    [
+      "curated-0437",
+      5537,
+      "Start the Forest desk sound",
+      "Forest desk",
+      "evaluation-atmosphere-forest-desk"
+    ],
+    [
+      "curated-0446",
+      5654,
+      "Put on Still workshop",
+      "Still workshop",
+      "evaluation-atmosphere-still-workshop"
+    ],
+    [
+      "curated-0472",
+      5974,
+      "Use my Misty harbor atmosphere",
+      "Misty harbor",
+      "evaluation-atmosphere-misty-harbor"
+    ],
+    [
+      "curated-0549",
+      6961,
+      "Play Listening desk atmosphere",
+      "Listening desk",
+      "evaluation-atmosphere-listening-desk"
+    ],
+    [
+      "curated-0552",
+      6998,
+      "Start the Deep room sound",
+      "Deep room",
+      "evaluation-atmosphere-deep-room"
+    ],
+    [
+      "curated-0646",
+      8172,
+      "Put on Muted garden",
+      "Muted garden",
+      "evaluation-atmosphere-muted-garden"
+    ],
+    [
+      "curated-0649",
+      8212,
+      "Use my Cloudy terrace atmosphere",
+      "Cloudy terrace",
+      "evaluation-atmosphere-cloudy-terrace"
+    ],
+    [
+      "curated-0675",
+      8546,
+      "Play Soft workshop atmosphere",
+      "Soft workshop",
+      "evaluation-atmosphere-soft-workshop"
+    ],
+    [
+      "curated-0678",
+      8585,
+      "Start the Autumn table sound",
+      "Autumn table",
+      "evaluation-atmosphere-autumn-table"
+    ],
+    [
+      "curated-0766",
+      9712,
+      "Put on Soft landing",
+      "Soft landing",
+      "evaluation-atmosphere-soft-landing"
+    ],
+    [
+      "curated-0840",
+      10645,
+      "Use my Slow pulse atmosphere",
+      "Slow pulse",
+      "evaluation-atmosphere-slow-pulse"
+    ],
+    [
+      "curated-1071",
+      13544,
+      "Play After dinner atmosphere",
+      "After dinner",
+      "evaluation-atmosphere-after-dinner"
+    ],
+    [
+      "curated-1081",
+      13670,
+      "Start the Clear thinking sound",
+      "Clear thinking",
+      "evaluation-atmosphere-clear-thinking"
+    ],
+    [
+      "curated-1088",
+      13759,
+      "Put on After the storm",
+      "After the storm",
+      "evaluation-atmosphere-after-the-storm"
+    ],
+    [
+      "curated-1145",
+      14474,
+      "Use my Calm kitchen atmosphere",
+      "Calm kitchen",
+      "evaluation-atmosphere-calm-kitchen"
+    ],
+    [
+      "curated-1199",
+      15168,
+      "Play Sunday evening atmosphere",
+      "Sunday evening",
+      "atmosphere-sunday-evening"
+    ],
+    [
+      "curated-1287",
+      16294,
+      "Start the Steady hands sound",
+      "Steady hands",
+      "evaluation-atmosphere-steady-hands"
+    ],
+    [
+      "curated-1313",
+      16617,
+      "Put on Tea and thunder",
+      "Tea and thunder",
+      "evaluation-atmosphere-tea-and-thunder"
+    ],
+    [
+      "curated-1340",
+      16965,
+      "Use my Coastal focus atmosphere",
+      "Coastal focus",
+      "evaluation-atmosphere-coastal-focus"
+    ],
+    [
+      "curated-1351",
+      17106,
+      "Play Paper and rain atmosphere",
+      "Paper and rain",
+      "evaluation-atmosphere-paper-and-rain"
+    ],
+    [
+      "curated-1412",
+      17880,
+      "Start the Late afternoon sound",
+      "Late afternoon",
+      "evaluation-atmosphere-late-afternoon"
+    ],
+    [
+      "curated-1439",
+      18229,
+      "Put on Patient rhythm",
+      "Patient rhythm",
+      "evaluation-atmosphere-patient-rhythm"
+    ],
+    [
+      "curated-1491",
+      18889,
+      "Use my Night library atmosphere",
+      "Night library",
+      "evaluation-atmosphere-night-library"
+    ],
+    [
+      "curated-1668",
+      21113,
+      "Play Low lantern atmosphere",
+      "Low lantern",
+      "evaluation-atmosphere-low-lantern"
+    ],
+    [
+      "curated-1674",
+      21190,
+      "Start the Low tide sound",
+      "Low tide",
+      "evaluation-atmosphere-low-tide"
+    ],
+    [
+      "curated-1684",
+      21312,
+      "Put on Dawn notebook",
+      "Dawn notebook",
+      "evaluation-atmosphere-dawn-notebook"
+    ],
+    [
+      "curated-1707",
+      21600,
+      "Use my Clean slate atmosphere",
+      "Clean slate",
+      "evaluation-atmosphere-clean-slate"
+    ],
+    [
+      "curated-1769",
+      22383,
+      "Play Quiet momentum atmosphere",
+      "Quiet momentum",
+      "evaluation-atmosphere-quiet-momentum"
+    ],
+    [
+      "curated-1800",
+      22771,
+      "Start the Deep evening sound",
+      "Deep evening",
+      "evaluation-atmosphere-deep-evening"
+    ],
+    [
+      "curated-1854",
+      23451,
+      "Put on Blue hour",
+      "Blue hour",
+      "evaluation-atmosphere-blue-hour"
+    ],
+    [
+      "curated-1890",
+      23912,
+      "Use my Gentle rain atmosphere",
+      "Gentle rain",
+      "evaluation-atmosphere-gentle-rain"
+    ],
+    [
+      "curated-2036",
+      25764,
+      "Play Early light atmosphere",
+      "Early light",
+      "evaluation-atmosphere-early-light"
+    ],
+    [
+      "curated-2073",
+      26221,
+      "Start the Soft concentration sound",
+      "Soft concentration",
+      "evaluation-atmosphere-soft-concentration"
+    ],
+    [
+      "curated-2094",
+      26478,
+      "Put on Gentle office",
+      "Gentle office",
+      "evaluation-atmosphere-gentle-office"
+    ],
+    [
+      "curated-2126",
+      26882,
+      "Use my Open window atmosphere",
+      "Open window",
+      "evaluation-atmosphere-open-window"
+    ],
+    [
+      "curated-2179",
+      27550,
+      "Play Reading lamp atmosphere",
+      "Reading lamp",
+      "evaluation-atmosphere-reading-lamp"
+    ],
+    [
+      "curated-2217",
+      28035,
+      "Start the Hidden piano sound",
+      "Hidden piano",
+      "evaluation-atmosphere-hidden-piano"
+    ],
+    [
+      "curated-2247",
+      28415,
+      "Put on Thinking weather",
+      "Thinking weather",
+      "evaluation-atmosphere-thinking-weather"
+    ],
+    [
+      "curated-2253",
+      28493,
+      "Use my Patient morning atmosphere",
+      "Patient morning",
+      "evaluation-atmosphere-patient-morning"
+    ],
+    [
+      "curated-2262",
+      28606,
+      "Play Distant thunder atmosphere",
+      "Distant thunder",
+      "evaluation-atmosphere-distant-thunder"
+    ],
+    [
+      "curated-2276",
+      28780,
+      "Start the Stone courtyard sound",
+      "Stone courtyard",
+      "evaluation-atmosphere-stone-courtyard"
+    ],
+    [
+      "curated-2297",
+      29044,
+      "Put on Measured focus",
+      "Measured focus",
+      "evaluation-atmosphere-measured-focus"
+    ],
+    [
+      "curated-2312",
+      29243,
+      "Use my River room atmosphere",
+      "River room",
+      "evaluation-atmosphere-river-room"
+    ],
+    [
+      "curated-2371",
+      29983,
+      "Play Winter studio atmosphere",
+      "Winter studio",
+      "evaluation-atmosphere-winter-studio"
+    ],
+    [
+      "curated-2408",
+      30443,
+      "Start the Wooden room sound",
+      "Wooden room",
+      "evaluation-atmosphere-wooden-room"
+    ],
+    [
+      "curated-2438",
+      30818,
+      "Put on City drizzle",
+      "City drizzle",
+      "evaluation-atmosphere-city-drizzle"
+    ],
+    [
+      "curated-2496",
+      31548,
+      "Use my Night train atmosphere",
+      "Night train",
+      "evaluation-atmosphere-night-train"
+    ]
+  ],
+  "adjustRows": [
+    [
+      "curated-0045",
+      549,
+      "restore the rain",
+      "rain",
+      "enabled",
+      "restore",
+      true,
+      0
+    ],
+    [
+      "curated-0122",
+      1526,
+      "bring the texture back",
+      "texture",
+      "enabled",
+      "restore",
+      true,
+      0
+    ],
+    [
+      "curated-0125",
+      1566,
+      "turn the texture down",
+      "texture",
+      "volume",
+      "decrease",
+      0.1,
+      1
+    ],
+    [
+      "curated-0127",
+      1593,
+      "turn the piano down",
+      "tone",
+      "volume",
+      "decrease",
+      0.08,
+      1
+    ],
+    [
+      "curated-0145",
+      1821,
+      "remove the texture",
+      "texture",
+      "enabled",
+      "remove",
+      false,
+      1
+    ],
+    [
+      "curated-0232",
+      2923,
+      "make the texture quieter",
+      "texture",
+      "volume",
+      "decrease",
+      0.1,
+      1
+    ],
+    [
+      "curated-0235",
+      2962,
+      "turn everything quieter",
+      "*",
+      "volume",
+      "decrease",
+      [
+        0.1,
+        0.22,
+        0.08,
+        0
+      ],
+      1
+    ],
+    [
+      "curated-0245",
+      3090,
+      "more texture",
+      "texture",
+      "volume",
+      "increase",
+      0.3,
+      1
+    ],
+    [
+      "curated-0304",
+      3842,
+      "make the rain louder",
+      "rain",
+      "volume",
+      "increase",
+      0.42,
+      1
+    ],
+    [
+      "curated-0342",
+      4317,
+      "more piano",
+      "tone",
+      "volume",
+      "increase",
+      0.28,
+      1
+    ],
+    [
+      "curated-0409",
+      5169,
+      "make the pulse louder",
+      "pulse",
+      "volume",
+      "increase",
+      0.18,
+      1
+    ],
+    [
+      "curated-0448",
+      5679,
+      "turn the rain down",
+      "rain",
+      "volume",
+      "decrease",
+      0.22,
+      1
+    ],
+    [
+      "curated-0465",
+      5888,
+      "turn the pulse down",
+      "pulse",
+      "volume",
+      "decrease",
+      0,
+      1
+    ],
+    [
+      "curated-0538",
+      6819,
+      "remove the pulse",
+      "pulse",
+      "enabled",
+      "remove",
+      false,
+      1
+    ],
+    [
+      "curated-0569",
+      7210,
+      "restore the texture",
+      "texture",
+      "enabled",
+      "restore",
+      true,
+      0
+    ],
+    [
+      "curated-0631",
+      7981,
+      "less rain",
+      "rain",
+      "volume",
+      "decrease",
+      0.22,
+      1
+    ],
+    [
+      "curated-0667",
+      8443,
+      "less piano",
+      "tone",
+      "volume",
+      "decrease",
+      0.08,
+      1
+    ],
+    [
+      "curated-0680",
+      8610,
+      "remove the rain",
+      "rain",
+      "enabled",
+      "remove",
+      false,
+      1
+    ],
+    [
+      "curated-0759",
+      9627,
+      "make the texture louder",
+      "texture",
+      "volume",
+      "increase",
+      0.3,
+      1
+    ],
+    [
+      "curated-0774",
+      9817,
+      "lower the piano",
+      "tone",
+      "volume",
+      "decrease",
+      0.08,
+      1
+    ],
+    [
+      "curated-0811",
+      10286,
+      "make everything quieter",
+      "*",
+      "volume",
+      "decrease",
+      [
+        0.1,
+        0.22,
+        0.08,
+        0
+      ],
+      1
+    ],
+    [
+      "curated-0880",
+      11134,
+      "bring the piano back",
+      "tone",
+      "enabled",
+      "restore",
+      true,
+      0
+    ],
+    [
+      "curated-1040",
+      13154,
+      "make the piano louder",
+      "tone",
+      "volume",
+      "increase",
+      0.28,
+      1
+    ],
+    [
+      "curated-1065",
+      13469,
+      "restore the piano",
+      "tone",
+      "enabled",
+      "restore",
+      true,
+      0
+    ],
+    [
+      "curated-1077",
+      13620,
+      "bring the rain back",
+      "rain",
+      "enabled",
+      "restore",
+      true,
+      0
+    ],
+    [
+      "curated-1180",
+      14918,
+      "make the piano quieter",
+      "tone",
+      "volume",
+      "decrease",
+      0.08,
+      1
+    ],
+    [
+      "curated-1184",
+      14971,
+      "more pulse",
+      "pulse",
+      "volume",
+      "increase",
+      0.18,
+      1
+    ],
+    [
+      "curated-1191",
+      15063,
+      "less pulse",
+      "pulse",
+      "volume",
+      "decrease",
+      0,
+      1
+    ],
+    [
+      "curated-1323",
+      16746,
+      "more rain",
+      "rain",
+      "volume",
+      "increase",
+      0.42,
+      1
+    ],
+    [
+      "curated-1377",
+      17438,
+      "lower the rain",
+      "rain",
+      "volume",
+      "decrease",
+      0.22,
+      1
+    ],
+    [
+      "curated-1429",
+      18094,
+      "slow the texture",
+      "texture",
+      "rate",
+      "decrease",
+      0.85,
+      1
+    ],
+    [
+      "curated-1502",
+      19025,
+      "less texture",
+      "texture",
+      "volume",
+      "decrease",
+      0.1,
+      1
+    ],
+    [
+      "curated-1510",
+      19125,
+      "slow the pulse",
+      "pulse",
+      "rate",
+      "decrease",
+      0.57,
+      1
+    ],
+    [
+      "curated-1537",
+      19467,
+      "make the pulse quieter",
+      "pulse",
+      "volume",
+      "decrease",
+      0,
+      1
+    ],
+    [
+      "curated-1697",
+      21477,
+      "remove the piano",
+      "tone",
+      "enabled",
+      "remove",
+      false,
+      1
+    ],
+    [
+      "curated-1861",
+      23541,
+      "make the rain quieter",
+      "rain",
+      "volume",
+      "decrease",
+      0.22,
+      1
+    ],
+    [
+      "curated-2166",
+      27383,
+      "lower the pulse",
+      "pulse",
+      "volume",
+      "decrease",
+      0,
+      1
+    ],
+    [
+      "curated-2188",
+      27669,
+      "restore the pulse",
+      "pulse",
+      "enabled",
+      "restore",
+      true,
+      0
+    ],
+    [
+      "curated-2190",
+      27694,
+      "lower the texture",
+      "texture",
+      "volume",
+      "decrease",
+      0.1,
+      1
+    ],
+    [
+      "curated-2208",
+      27923,
+      "bring the pulse back",
+      "pulse",
+      "enabled",
+      "restore",
+      true,
+      0
+    ]
+  ],
+  "saveRows": [
+    [
+      "curated-0084",
+      1042,
+      "Save this as Muted garden",
+      "SAVEAS",
+      "Muted garden",
+      "atmosphere-muted-garden",
+      1
+    ],
+    [
+      "curated-0286",
+      3612,
+      "Call this Evening pages",
+      "RENAME",
+      "Evening pages",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-0319",
+      4031,
+      "Rename this to Listening desk",
+      "RENAME",
+      "Listening desk",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-0370",
+      4673,
+      "Save this as Low tide",
+      "SAVEAS",
+      "Low tide",
+      "atmosphere-low-tide",
+      1
+    ],
+    [
+      "curated-0422",
+      5339,
+      "Call this Misty harbor",
+      "RENAME",
+      "Misty harbor",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-0565",
+      7159,
+      "Rename this to Gentle office",
+      "RENAME",
+      "Gentle office",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-0696",
+      8816,
+      "Save this as Patient rhythm",
+      "SAVEAS",
+      "Patient rhythm",
+      "atmosphere-patient-rhythm",
+      1
+    ],
+    [
+      "curated-0789",
+      10009,
+      "Call this Quiet momentum",
+      "RENAME",
+      "Quiet momentum",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-0909",
+      11506,
+      "Rename this to Soft concentration",
+      "RENAME",
+      "Soft concentration",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-0982",
+      12431,
+      "Save this as Small hours",
+      "SAVEAS",
+      "Small hours",
+      "atmosphere-small-hours",
+      1
+    ],
+    [
+      "curated-1057",
+      13366,
+      "Call this Blue hour",
+      "RENAME",
+      "Blue hour",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1079",
+      13645,
+      "Rename this to Tea and thunder",
+      "RENAME",
+      "Tea and thunder",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1127",
+      14254,
+      "Save this as Calm kitchen",
+      "SAVEAS",
+      "Calm kitchen",
+      "atmosphere-calm-kitchen",
+      1
+    ],
+    [
+      "curated-1137",
+      14375,
+      "Call this Dawn notebook",
+      "RENAME",
+      "Dawn notebook",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1175",
+      14855,
+      "Rename this to Hidden piano",
+      "RENAME",
+      "Hidden piano",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1181",
+      14931,
+      "Save this as Reading lamp",
+      "SAVEAS",
+      "Reading lamp",
+      "atmosphere-reading-lamp",
+      1
+    ],
+    [
+      "curated-1227",
+      15531,
+      "Call this Warm library",
+      "RENAME",
+      "Warm library",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1350",
+      17093,
+      "Rename this to Soft workshop",
+      "RENAME",
+      "Soft workshop",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1357",
+      17179,
+      "Save this as Cloudy terrace",
+      "SAVEAS",
+      "Cloudy terrace",
+      "atmosphere-cloudy-terrace",
+      1
+    ],
+    [
+      "curated-1367",
+      17309,
+      "Call this Window seat",
+      "RENAME",
+      "Window seat",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1397",
+      17692,
+      "Rename this to Sunday evening",
+      "RENAME",
+      "Sunday evening",
+      "atmosphere-sunday-evening",
+      0
+    ],
+    [
+      "curated-1433",
+      18150,
+      "Save this as Distant thunder",
+      "SAVEAS",
+      "Distant thunder",
+      "atmosphere-distant-thunder",
+      1
+    ],
+    [
+      "curated-1633",
+      20672,
+      "Call this Night train",
+      "RENAME",
+      "Night train",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1672",
+      21165,
+      "Rename this to Winter studio",
+      "RENAME",
+      "Winter studio",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1692",
+      21411,
+      "Save this as Late afternoon",
+      "SAVEAS",
+      "Late afternoon",
+      "atmosphere-late-afternoon",
+      1
+    ],
+    [
+      "curated-1708",
+      21613,
+      "Call this Slow morning",
+      "RENAME",
+      "Slow morning",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1745",
+      22079,
+      "Rename this to Wooden room",
+      "RENAME",
+      "Wooden room",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-1964",
+      24847,
+      "Save this as Autumn table",
+      "SAVEAS",
+      "Autumn table",
+      "atmosphere-autumn-table",
+      1
+    ],
+    [
+      "curated-1994",
+      25233,
+      "Call this City drizzle",
+      "RENAME",
+      "City drizzle",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-2006",
+      25386,
+      "Rename this to Forest desk",
+      "RENAME",
+      "Forest desk",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-2033",
+      25727,
+      "Save this as Slow pulse",
+      "SAVEAS",
+      "Slow pulse",
+      "atmosphere-slow-pulse",
+      1
+    ],
+    [
+      "curated-2039",
+      25801,
+      "Call this Stone courtyard",
+      "RENAME",
+      "Stone courtyard",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-2055",
+      25994,
+      "Rename this to Deep room",
+      "RENAME",
+      "Deep room",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-2085",
+      26369,
+      "Save this as Paper and rain",
+      "SAVEAS",
+      "Paper and rain",
+      "atmosphere-paper-and-rain",
+      1
+    ],
+    [
+      "curated-2107",
+      26645,
+      "Call this Rainy reading",
+      "RENAME",
+      "Rainy reading",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-2258",
+      28556,
+      "Rename this to Coastal focus",
+      "RENAME",
+      "Coastal focus",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-2260",
+      28581,
+      "Save this as Early light",
+      "SAVEAS",
+      "Early light",
+      "atmosphere-early-light",
+      1
+    ],
+    [
+      "curated-2274",
+      28755,
+      "Call this Open window",
+      "RENAME",
+      "Open window",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-2325",
+      29406,
+      "Rename this to After dinner",
+      "RENAME",
+      "After dinner",
+      "atmosphere-sunday-evening",
+      1
+    ],
+    [
+      "curated-2485",
+      31412,
+      "Save this as Quiet harbor",
+      "SAVEAS",
+      "Quiet harbor",
+      "atmosphere-quiet-harbor",
+      1
+    ]
+  ],
+  "playbackRows": [
+    {
+      "id": "curated-0086",
+      "idLine": 1067,
+      "utterance": "mute the atmosphere",
+      "mode": "mute",
+      "actionPatch": {
+        "playing": false,
+        "muted": true
+      },
+      "afterPlaying": false,
+      "afterMuted": true,
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-0130",
+      "idLine": 1633,
+      "utterance": "leave the sound playing",
+      "mode": "resume",
+      "actionPatch": {
+        "playing": true,
+        "muted": false
+      },
+      "afterPlaying": true,
+      "afterMuted": false,
+      "historyDelta": 0
+    },
+    {
+      "id": "curated-0219",
+      "idLine": 2760,
+      "utterance": "leave the atmosphere playing",
+      "mode": "resume",
+      "actionPatch": {
+        "playing": true,
+        "muted": false
+      },
+      "afterPlaying": true,
+      "afterMuted": false,
+      "historyDelta": 0
+    },
+    {
+      "id": "curated-0515",
+      "idLine": 6528,
+      "utterance": "mute the sound",
+      "mode": "mute",
+      "actionPatch": {
+        "playing": false,
+        "muted": true
+      },
+      "afterPlaying": false,
+      "afterMuted": true,
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-0546",
+      "idLine": 6918,
+      "utterance": "stop the atmosphere",
+      "mode": "stop",
+      "actionPatch": {
+        "playing": false
+      },
+      "afterPlaying": false,
+      "afterMuted": false,
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-0612",
+      "idLine": 7746,
+      "utterance": "pause the atmosphere",
+      "mode": "pause",
+      "actionPatch": {
+        "playing": false
+      },
+      "afterPlaying": false,
+      "afterMuted": false,
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-0736",
+      "idLine": 9333,
+      "utterance": "pause the music",
+      "mode": "pause",
+      "actionPatch": {
+        "playing": false
+      },
+      "afterPlaying": false,
+      "afterMuted": false,
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-0981",
+      "idLine": 12418,
+      "utterance": "resume the music",
+      "mode": "resume",
+      "actionPatch": {
+        "playing": true,
+        "muted": false
+      },
+      "afterPlaying": true,
+      "afterMuted": false,
+      "historyDelta": 0
+    },
+    {
+      "id": "curated-1489",
+      "idLine": 18864,
+      "utterance": "stop the music",
+      "mode": "stop",
+      "actionPatch": {
+        "playing": false
+      },
+      "afterPlaying": false,
+      "afterMuted": false,
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-1889",
+      "idLine": 23899,
+      "utterance": "resume the atmosphere",
+      "mode": "resume",
+      "actionPatch": {
+        "playing": true,
+        "muted": false
+      },
+      "afterPlaying": true,
+      "afterMuted": false,
+      "historyDelta": 0
+    }
+  ]
+}

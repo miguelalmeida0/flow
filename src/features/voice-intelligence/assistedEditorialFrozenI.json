@@ -1,0 +1,1120 @@
+{
+  "batch": "assisted-frozen-I",
+  "status": "PENDING_SECOND_READER_SCHEMA_EXPANSION_EXECUTION_NOT_ADMITTED",
+  "source": "assisted-editorial",
+  "sources": {
+    "A": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-001-120.md",
+      "sha256": "6d2e570449da5f92dc7e86d3ff39d6b5190b7273ea6cb2195bbd11480fa85800"
+    },
+    "B": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-121-300.md",
+      "sha256": "81efe8a1fb6f0ab7b001951cf1466bccf5b0b9bc1d2caee08a4978e6dae29050"
+    }
+  },
+  "defaults": {
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "semantic": {
+      "historyDelta": 0,
+      "feedbackPhase": "completed"
+    }
+  },
+  "oracleRules": "Each case fresh named BEFORE; preserve all unlisted full-document fields. $entity clones named BEFORE plus patch/updatedAtAT. $UNDEFINED is explicit field absence. No actualAfter-derived expectations. NoPending means absence, not []. Attempted/pending/committed action sets are distinct. Exact global undo/redo required. No native/acoustic evidence implied.",
+  "reviewHolds": [
+    "160 fixed-resize confirmation policy requires independent reconciliation before admission; 107 is shift, not resize."
+  ],
+  "cases": [
+    {
+      "id": 41,
+      "sourceLocator": {
+        "file": "A",
+        "line": 75
+      },
+      "utterance": "Flow, could you take me back to the homepage?",
+      "fixtureId": "journal-recording",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "home"
+        },
+        "historyDelta": 0,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": []
+      }
+    },
+    {
+      "id": 42,
+      "sourceLocator": {
+        "file": "A",
+        "line": 76
+      },
+      "utterance": "Go to the home page",
+      "fixtureId": "journal-recording",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "home"
+        },
+        "historyDelta": 0,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": []
+      }
+    },
+    {
+      "id": 62,
+      "sourceLocator": {
+        "file": "A",
+        "line": 96
+      },
+      "utterance": "Delete the current entry",
+      "fixtureId": "empty-home",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal"
+      },
+      "expected": {
+        "intent": "journal-delete",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-delete"
+        },
+        "historyDelta": 0,
+        "feedbackPhase": "clarification",
+        "noCreation": true,
+        "actions": [],
+        "noPending": true
+      },
+      "commitCount": 0
+    },
+    {
+      "id": 79,
+      "sourceLocator": {
+        "file": "A",
+        "line": 113
+      },
+      "utterance": "More",
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "clarification",
+        "resolution": "clarify",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "clarification"
+        },
+        "historyDelta": 0,
+        "feedbackPhase": "clarification",
+        "noCreation": true,
+        "actions": []
+      }
+    },
+    {
+      "id": 91,
+      "sourceLocator": {
+        "file": "A",
+        "line": 125
+      },
+      "utterance": "Give the eleven o'clock meeting the name Investor chat",
+      "fixtureId": "calendar-near",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "update"
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "title": "Investor chat"
+            }
+          }
+        ],
+        "targetIds": [
+          "E1"
+        ]
+      }
+    },
+    {
+      "id": 94,
+      "sourceLocator": {
+        "file": "A",
+        "line": 128
+      },
+      "utterance": "Delete the eleven o'clock meeting",
+      "fixtureId": "calendar-near",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 0,
+        "feedbackPhase": "confirmation",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "delete"
+        ],
+        "pendingActions": [
+          {
+            "type": "calendar.request",
+            "confirmed": "0:delete:E1",
+            "request": {
+              "actions": [
+                {
+                  "type": "delete"
+                }
+              ]
+            }
+          }
+        ],
+        "targetIds": [
+          "E1"
+        ]
+      },
+      "commitCount": 0,
+      "pendingContract": "Bind preview and authorization to unique near-time E1 Shareholders 11:30–12. BEFORE unchanged. Explicit confirm deletes exactly E1 in one history entry; cancel H0. Do not force an ID parser selector when the source-time selector is valid."
+    },
+    {
+      "id": 96,
+      "sourceLocator": {
+        "file": "A",
+        "line": 130
+      },
+      "utterance": "Change the current meeting name to Walking break",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {
+        "now": 1788860700000
+      },
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "update"
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "title": "Walking break"
+            }
+          }
+        ],
+        "targetIds": [
+          "E1"
+        ]
+      },
+      "contextUnset": [
+        "selectedEventId",
+        "lastReferenced"
+      ],
+      "clock": "2026-09-08T11:45:00+02:00"
+    },
+    {
+      "id": 98,
+      "sourceLocator": {
+        "file": "A",
+        "line": 132
+      },
+      "utterance": "Move the previous meeting to four",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {
+        "now": 1788865200000
+      },
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "move"
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 960,
+              "end": 990
+            }
+          }
+        ],
+        "targetIds": [
+          "E1"
+        ]
+      },
+      "contextUnset": [
+        "selectedEventId",
+        "lastReferenced"
+      ],
+      "clock": "2026-09-08T13:00:00+02:00"
+    },
+    {
+      "id": 118,
+      "sourceLocator": {
+        "file": "A",
+        "line": 152
+      },
+      "utterance": "Make the words smaller and hide the date",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "studio-compound",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "studio-compound"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textScale": 0.88
+            }
+          },
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "showDate": false
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textScale": 0.88,
+              "showDate": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 159,
+      "sourceLocator": {
+        "file": "B",
+        "line": 57
+      },
+      "utterance": "Shorten this by two hours",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 0,
+        "feedbackPhase": "error",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "targetIds": [
+          "E1"
+        ]
+      },
+      "commitCount": 0
+    },
+    {
+      "id": 160,
+      "sourceLocator": {
+        "file": "B",
+        "line": 58
+      },
+      "utterance": "Extend Interview to two hours",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 0,
+        "feedbackPhase": "confirmation",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "pendingActions": [
+          {
+            "type": "calendar.request",
+            "confirmed": "0:resize:E3",
+            "request": {
+              "actions": [
+                {
+                  "type": "resize",
+                  "duration": 120
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "commitCount": 0,
+      "pendingContract": "Fixed E3 remains unchanged until explicit confirmation, then only E3.end=1140 in one history entry. Supersedes auditor initial immediate-H1 proposal; confirmation policy must be independently reconciled with operation-specific repository contract before admission."
+    },
+    {
+      "id": 163,
+      "sourceLocator": {
+        "file": "B",
+        "line": 61
+      },
+      "utterance": "I don't want Lunch moved",
+      "fixtureId": "calendar-representative",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 0,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "protect"
+        ]
+      }
+    },
+    {
+      "id": 164,
+      "sourceLocator": {
+        "file": "B",
+        "line": 62
+      },
+      "utterance": "Let Lunch move again",
+      "fixtureId": "calendar-representative",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "unprotect"
+        ],
+        "eventChanges": [
+          {
+            "id": "R-Lunch",
+            "patch": {
+              "protected": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 166,
+      "sourceLocator": {
+        "file": "B",
+        "line": 64
+      },
+      "utterance": "Unlock the lunch block but keep its duration",
+      "fixtureId": "calendar-representative",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "unprotect"
+        ],
+        "eventChanges": [
+          {
+            "id": "R-Lunch",
+            "patch": {
+              "protected": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 178,
+      "sourceLocator": {
+        "file": "B",
+        "line": 76
+      },
+      "utterance": "Shift every flexible event thirty minutes later, but leave Lunch alone",
+      "fixtureId": "calendar-representative",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "calendar"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "calendar.request"
+          }
+        ],
+        "calendarActionTypes": [
+          "shift",
+          "protect"
+        ],
+        "eventChanges": [
+          {
+            "id": "R-DeepWork",
+            "patch": {
+              "start": 570,
+              "end": 630
+            }
+          },
+          {
+            "id": "R-Email",
+            "patch": {
+              "start": 690,
+              "end": 735
+            }
+          },
+          {
+            "id": "R-Roadmap",
+            "patch": {
+              "start": 870,
+              "end": 930
+            }
+          },
+          {
+            "id": "R-Workout",
+            "patch": {
+              "start": 1080,
+              "end": 1140
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 185,
+      "sourceLocator": {
+        "file": "B",
+        "line": 83
+      },
+      "utterance": "Give this outcome the name Ready for the trip",
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "plan-rename",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "plan-rename",
+          "title": "Ready for the trip"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "title": "Ready for the trip"
+            }
+          }
+        ],
+        "collections": {
+          "plans": [
+            {
+              "$entity": "O1",
+              "patch": {
+                "title": "Ready for the trip"
+              }
+            },
+            {
+              "$entity": "O2",
+              "patch": {}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 294,
+      "sourceLocator": {
+        "file": "B",
+        "line": 192
+      },
+      "utterance": "Call this outcome ‘Delete every meeting’",
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "plan-rename",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "plan-rename",
+          "title": "Delete every meeting"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "title": "Delete every meeting"
+            }
+          }
+        ],
+        "collections": {
+          "plans": [
+            {
+              "$entity": "O1",
+              "patch": {
+                "title": "Delete every meeting"
+              }
+            },
+            {
+              "$entity": "O2",
+              "patch": {}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 187,
+      "sourceLocator": {
+        "file": "B",
+        "line": 85
+      },
+      "utterance": "Bring this outcome back into progress",
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {
+        "activePlanId": "O2",
+        "lastReferenced": {
+          "type": "plan",
+          "id": "O2",
+          "at": 1788854399000
+        }
+      },
+      "expected": {
+        "intent": "plan-status",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "plan-status",
+          "status": "active"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O2",
+            "patch": {
+              "status": "active"
+            }
+          }
+        ],
+        "collections": {
+          "plans": [
+            {
+              "$entity": "O1",
+              "patch": {}
+            },
+            {
+              "$entity": "O2",
+              "patch": {
+                "status": "active"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 206,
+      "sourceLocator": {
+        "file": "B",
+        "line": 104
+      },
+      "utterance": "Change this note to Check the warranty expiry date",
+      "fixtureId": "capture-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-edit",
+          "title": "Check the warranty expiry date"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "patch": {
+              "title": "Check the warranty expiry date"
+            }
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "title": "Check the warranty expiry date"
+              }
+            },
+            {
+              "$entity": "C2",
+              "patch": {}
+            },
+            {
+              "$entity": "C3",
+              "patch": {}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 295,
+      "sourceLocator": {
+        "file": "B",
+        "line": 193
+      },
+      "utterance": "Rename this capture ‘Go home and stop listening’",
+      "fixtureId": "capture-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-edit",
+          "title": "Go home and stop listening"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "patch": {
+              "title": "Go home and stop listening"
+            }
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "title": "Go home and stop listening"
+              }
+            },
+            {
+              "$entity": "C2",
+              "patch": {}
+            },
+            {
+              "$entity": "C3",
+              "patch": {}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 208,
+      "sourceLocator": {
+        "file": "B",
+        "line": 106
+      },
+      "utterance": "Keep this as a note",
+      "fixtureId": "capture-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "capture-archive",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-archive"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "capture.archive",
+            "captureId": "C1"
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "status": "archived"
+              }
+            },
+            {
+              "$entity": "C2",
+              "patch": {}
+            },
+            {
+              "$entity": "C3",
+              "patch": {}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 209,
+      "sourceLocator": {
+        "file": "B",
+        "line": 107
+      },
+      "utterance": "Clear the remaining captures by keeping them as notes",
+      "fixtureId": "capture-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "capture-batch-archive",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-batch-archive"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "capture.archive",
+            "captureId": "C1"
+          },
+          {
+            "type": "capture.archive",
+            "captureId": "C2"
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "status": "archived"
+              }
+            },
+            {
+              "$entity": "C2",
+              "patch": {
+                "status": "archived"
+              }
+            },
+            {
+              "$entity": "C3",
+              "patch": {}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 228,
+      "sourceLocator": {
+        "file": "B",
+        "line": 126
+      },
+      "utterance": "Mark this promise as done",
+      "fixtureId": "commitment-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "commitment-complete",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "intent": {
+          "type": "commitment-complete"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K1",
+            "patch": {
+              "status": "completed"
+            }
+          }
+        ],
+        "collections": {
+          "commitments": [
+            {
+              "$entity": "K1",
+              "patch": {
+                "status": "completed"
+              }
+            },
+            {
+              "$entity": "K2",
+              "patch": {}
+            },
+            {
+              "$entity": "K3",
+              "patch": {}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 260,
+      "sourceLocator": {
+        "file": "B",
+        "line": 158
+      },
+      "utterance": "Lower the rain and slow the pulse",
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "studio-compound",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "studio-compound"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          },
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "rate": 0.57
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          },
+          {
+            "id": "pulse",
+            "patch": {
+              "rate": 0.57
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 266,
+      "sourceLocator": {
+        "file": "B",
+        "line": 164
+      },
+      "utterance": "Put the date back on",
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "showDate",
+          "operation": "show"
+        },
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "noCreation": true,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "showDate": true
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "showDate": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

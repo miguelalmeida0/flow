@@ -1,0 +1,167 @@
+{
+  "name": "Flow Living Environment Elite Handoff",
+  "version": "1.0.0",
+  "created": "2026-09-03",
+  "files": [
+    {
+      "path": "00_EXECUTIVE_MANDATE.md",
+      "bytes": 2089,
+      "sha256": "f45e3099e1ba8926921e4940299e784779164d323ea9296b9a4024fab18a6612"
+    },
+    {
+      "path": "01_PRODUCT_NORTH_STAR.md",
+      "bytes": 3041,
+      "sha256": "3d017755ee57acfc3acd26a5563da029a4a725e359c46dd92b6dcacf1fdb68eb"
+    },
+    {
+      "path": "02_INFORMATION_ARCHITECTURE.md",
+      "bytes": 3353,
+      "sha256": "5db9b75747b2b87e619fff0e88ef914426050dda035ebd6f01b5e0fa715a0127"
+    },
+    {
+      "path": "03_SCREEN_SPECIFICATIONS.md",
+      "bytes": 6476,
+      "sha256": "e7637a8ecd534470e683bebedc6e85361526ca32ed39acd900a1f1f4e369c5ae"
+    },
+    {
+      "path": "04_MOTION_SYSTEM.md",
+      "bytes": 6297,
+      "sha256": "0dd8eefe483614779a742067e5b42c525c1f2a991aee7b1b6bc0db9830537967"
+    },
+    {
+      "path": "05_INBOX_TO_PLAN_CHOREOGRAPHY.md",
+      "bytes": 3420,
+      "sha256": "37b5b9c7f93acbd32c075045bfffb48a7cedaf33e50dff5c3f7f5ff82988085f"
+    },
+    {
+      "path": "06_GLOBAL_VOICE_AND_PRESENCE.md",
+      "bytes": 3552,
+      "sha256": "597a9cc6fb45ba9a86fac6dd12d0f3217929b4f0152a4d03f9b2dd3e3f8de72f"
+    },
+    {
+      "path": "07_DESIGN_SYSTEM.md",
+      "bytes": 4269,
+      "sha256": "79b071a549b9c8624a37cf26da76292cdb30583fda2b5cb650d4222e9b460aac"
+    },
+    {
+      "path": "08_DOMAIN_ARCHITECTURE.md",
+      "bytes": 4212,
+      "sha256": "58b0f9069d3534a5cebd1c9732a9ac4f74cb7139b5066e3a459ff063c5a1dab3"
+    },
+    {
+      "path": "09_IMPLEMENTATION_ROADMAP.md",
+      "bytes": 3759,
+      "sha256": "1199425defc036684afd9b20b1ceff4ac3a3be5fd96dc86e103530d136261ca0"
+    },
+    {
+      "path": "10_ACCEPTANCE_AND_QA.md",
+      "bytes": 5335,
+      "sha256": "aa90ab28b5062aaf6f2da4da1b6d52bb6cca22f966d563f5e15e1d081e1958b6"
+    },
+    {
+      "path": "11_SCOPE_AND_NON_GOALS.md",
+      "bytes": 1533,
+      "sha256": "ae3ecb7466c47809443111cce042482c0920d5ad62af91639e65c0bcae1e166d"
+    },
+    {
+      "path": "12_PORTFOLIO_DEMO_SCRIPT.md",
+      "bytes": 1940,
+      "sha256": "43c619aa8166508a43458eaa49817dccfe93e78eab3db7126b9637d91ba688ad"
+    },
+    {
+      "path": "FLOW_LIVING_ENVIRONMENT_MASTER_PROMPT.md",
+      "bytes": 8139,
+      "sha256": "09fbae8eba2a9c28fed84d1eba0474706233da8f6aee21805d5e8c1575fd2ce8"
+    },
+    {
+      "path": "PASTE_THIS_IN_CODEX.txt",
+      "bytes": 2051,
+      "sha256": "062fb4fee051b9f5e0efa6ae0aab91e43639d8946d628bc5b80e7c67eab7937f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3997,
+      "sha256": "7b847d3f4e998f891cf396e26b79388e09c7b314b03366b2fc661d0788b8c787"
+    },
+    {
+      "path": "assets/boards/inbox-to-plan-storyboard.png",
+      "bytes": 369105,
+      "sha256": "08fd77c2bd3ee88a7953c0dfec806887dfb52274ac103f8c489c048833134ea3"
+    },
+    {
+      "path": "assets/boards/motion-reference-annotated.png",
+      "bytes": 1487888,
+      "sha256": "b1fe16b0312641f7cd9d22a71c2cc05c82ab07604cd89378f563028eb1afc69c"
+    },
+    {
+      "path": "assets/boards/screen-map.png",
+      "bytes": 1380220,
+      "sha256": "dfe862746eceeaceb23b016d97c5be5036eb661c86807b1755da46b76f3fbb4a"
+    },
+    {
+      "path": "assets/reference/inbox-plan-animation-reference.png",
+      "bytes": 2258446,
+      "sha256": "7e7078bd271c00e850c26781f279cebcbe4335870521a7a6739923302649fd71"
+    },
+    {
+      "path": "assets/screens/01-living-home.png",
+      "bytes": 1315596,
+      "sha256": "a2955042b73616bcc6925f5fc1ab0247a070f9dba8342d470b1a64a13c2bdcdc"
+    },
+    {
+      "path": "assets/screens/02-breathing-calendar.png",
+      "bytes": 1231581,
+      "sha256": "cc68e4c066bc544f67612a198536c27e653014d0c734e9376712d6fbf228c8ca"
+    },
+    {
+      "path": "assets/screens/03-global-command-preview.png",
+      "bytes": 1455802,
+      "sha256": "ac12239a502cb3213556d1352fd6a7b079f17fa3ac685dc10e6d402d63fdcee5"
+    },
+    {
+      "path": "assets/screens/04-automatic-tide-recovery.png",
+      "bytes": 1550852,
+      "sha256": "b14e26c8b9e1035de5c1374cc6e98addca79a9f8d3abf4d07378054f53ccc2b4"
+    },
+    {
+      "path": "assets/screens/05-what-if-preview.png",
+      "bytes": 1586679,
+      "sha256": "73b89a6dabf4a8e3229cedec423ee04291b7be1af964e521291cfde4aeacdaf6"
+    },
+    {
+      "path": "assets/screens/06-inbox-to-plan-morph.png",
+      "bytes": 2258446,
+      "sha256": "7e7078bd271c00e850c26781f279cebcbe4335870521a7a6739923302649fd71"
+    },
+    {
+      "path": "assets/screens/07-plan-detail.png",
+      "bytes": 1166772,
+      "sha256": "7481e2b384925ff638da8b99d96aa0081585b754bc64352b462fc5d6f2368b11"
+    },
+    {
+      "path": "assets/screens/08-people-commitments.png",
+      "bytes": 1527847,
+      "sha256": "eb5ae1373a7b981e78b78445c125f504484bc9f784ebae63e971d32fd8b2ab57"
+    },
+    {
+      "path": "assets/screens/09-now-engine.png",
+      "bytes": 1412812,
+      "sha256": "110cf1df8f63fb553cac80aad9db8f5a70aff12301e98e60ccd4be0c5b9d47d8"
+    },
+    {
+      "path": "reference/flow-design-tokens.reference.ts",
+      "bytes": 1287,
+      "sha256": "bb5090a19a82df2d3d7380690144bfda03ef9913b87a14fe2999b00d2a7b9522"
+    },
+    {
+      "path": "reference/life-domain-model.reference.ts",
+      "bytes": 1921,
+      "sha256": "98222347e666a7a20724f538b2db0cb9b71676a8e913df981ed13791f98319f3"
+    },
+    {
+      "path": "reference/motion-presets.reference.ts",
+      "bytes": 907,
+      "sha256": "a726a56a18dadada694e2f9755ecbe77616871472c426c5d4679e698600b2230"
+    }
+  ]
+}

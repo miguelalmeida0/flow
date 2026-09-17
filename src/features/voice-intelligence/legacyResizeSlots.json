@@ -1,0 +1,811 @@
+{
+  "sourceFiles": [
+    "LEGACY-RESIZE100-SLOTS-1.json",
+    "LEGACY-RESIZE100-SLOTS-2.json",
+    "LEGACY-RESIZE100-SLOTS-3.json",
+    "LEGACY-RESIZE100-SLOTS-4.json"
+  ],
+  "sourceSha256": "341a5f8cd4bc720cedee6c24c10167512c39da596d8db413dc4babba61397295",
+  "rows": [
+    [
+      "0016",
+      186,
+      "Make grocery planning 30 minutes",
+      "Grocery planning",
+      "S",
+      30
+    ],
+    [
+      "0025",
+      298,
+      "Change portfolio writing to 30 minutes",
+      "Portfolio writing",
+      "S",
+      30
+    ],
+    [
+      "0063",
+      773,
+      "Take 15 minutes off email review",
+      "Email review",
+      "R",
+      15
+    ],
+    [
+      "0138",
+      1734,
+      "Add 15 minutes to reading session",
+      "Reading session",
+      "A",
+      15
+    ],
+    [
+      "0153",
+      1926,
+      "Give passport paperwork another 15 minutes",
+      "Passport paperwork",
+      "A",
+      15
+    ],
+    [
+      "0192",
+      2415,
+      "Make the travel planning session 30 minutes",
+      "Travel planning",
+      "S",
+      30
+    ],
+    [
+      "0205",
+      2579,
+      "Change the mentor call block to 20 minutes",
+      "Mentor call",
+      "S",
+      20
+    ],
+    [
+      "0215",
+      2709,
+      "Take 15 minutes off grocery planning",
+      "Grocery planning",
+      "R",
+      15
+    ],
+    [
+      "0218",
+      2748,
+      "Make customer research 40 minutes",
+      "Customer research",
+      "S",
+      40
+    ],
+    [
+      "0227",
+      2863,
+      "Change passport paperwork to 40 minutes",
+      "Passport paperwork",
+      "S",
+      40
+    ],
+    [
+      "0273",
+      3451,
+      "Take 15 minutes off prototype testing",
+      "Prototype testing",
+      "R",
+      15
+    ],
+    [
+      "0297",
+      3750,
+      "Add 15 minutes to grocery planning",
+      "Grocery planning",
+      "A",
+      15
+    ],
+    [
+      "0344",
+      4344,
+      "Give strength training another 15 minutes",
+      "Strength training",
+      "A",
+      15
+    ],
+    [
+      "0367",
+      4637,
+      "Make the budget planning session 40 minutes",
+      "Budget planning",
+      "S",
+      40
+    ],
+    [
+      "0380",
+      4801,
+      "Change the mobility workout block to 30 minutes",
+      "Mobility workout",
+      "S",
+      30
+    ],
+    [
+      "0447",
+      5667,
+      "Take 15 minutes off customer research",
+      "Customer research",
+      "R",
+      15
+    ],
+    [
+      "0539",
+      6832,
+      "Make customer research 20 minutes",
+      "Customer research",
+      "S",
+      20
+    ],
+    [
+      "0550",
+      6974,
+      "Change team retro to 30 minutes",
+      "Team retro",
+      "S",
+      30
+    ],
+    [
+      "0595",
+      7535,
+      "Take 15 minutes off accessibility review",
+      "Accessibility review",
+      "R",
+      15
+    ],
+    [
+      "0605",
+      7658,
+      "Add 15 minutes to team retro",
+      "Team retro",
+      "A",
+      15
+    ],
+    [
+      "0622",
+      7869,
+      "Give email review another 15 minutes",
+      "Email review",
+      "A",
+      15
+    ],
+    [
+      "0630",
+      7969,
+      "Make the garden planning session one hour",
+      "Garden planning",
+      "S",
+      60
+    ],
+    [
+      "0679",
+      8598,
+      "Change the strength training block to 40 minutes",
+      "Strength training",
+      "S",
+      40
+    ],
+    [
+      "0693",
+      8777,
+      "Take 15 minutes off strength training",
+      "Strength training",
+      "R",
+      15
+    ],
+    [
+      "0713",
+      9039,
+      "Make photo editing 60 minutes",
+      "Photo editing",
+      "S",
+      60
+    ],
+    [
+      "0722",
+      9152,
+      "Change mentor call to 60 minutes",
+      "Mentor call",
+      "S",
+      60
+    ],
+    [
+      "0742",
+      9408,
+      "Take 15 minutes off conference rehearsal",
+      "Conference rehearsal",
+      "R",
+      15
+    ],
+    [
+      "0781",
+      9910,
+      "Add 15 minutes to mobility workout",
+      "Mobility workout",
+      "A",
+      15
+    ],
+    [
+      "0786",
+      9973,
+      "Give design critique another 15 minutes",
+      "Design critique",
+      "A",
+      15
+    ],
+    [
+      "0792",
+      10046,
+      "Make the customer research session 20 minutes",
+      "Customer research",
+      "S",
+      20
+    ],
+    [
+      "0802",
+      10174,
+      "Change the email review block to 40 minutes",
+      "Email review",
+      "S",
+      40
+    ],
+    [
+      "0810",
+      10274,
+      "Take 15 minutes off team retro",
+      "Team retro",
+      "R",
+      15
+    ],
+    [
+      "0814",
+      10325,
+      "Make prototype testing one hour",
+      "Prototype testing",
+      "S",
+      60
+    ],
+    [
+      "0826",
+      10473,
+      "Change accessibility review to 40 minutes",
+      "Accessibility review",
+      "S",
+      40
+    ],
+    [
+      "0829",
+      10509,
+      "Take 15 minutes off grocery planning session",
+      "Grocery planning",
+      "R",
+      15
+    ],
+    [
+      "0853",
+      10805,
+      "Add 15 minutes to conference rehearsal",
+      "Conference rehearsal",
+      "A",
+      15
+    ],
+    [
+      "0872",
+      11036,
+      "Give reading session another 15 minutes",
+      "Reading session",
+      "A",
+      15
+    ],
+    [
+      "0876",
+      11084,
+      "Make the project briefing session 20 minutes",
+      "Project briefing",
+      "S",
+      20
+    ],
+    [
+      "0924",
+      11694,
+      "Change the reading session block to 30 minutes",
+      "Reading session",
+      "S",
+      30
+    ],
+    [
+      "0932",
+      11795,
+      "Take 15 minutes off travel planning",
+      "Travel planning",
+      "R",
+      15
+    ],
+    [
+      "0939",
+      11882,
+      "Make language practice 40 minutes",
+      "Language practice",
+      "S",
+      40
+    ],
+    [
+      "1042",
+      13181,
+      "Change doctor follow-up to 30 minutes",
+      "Doctor follow-up",
+      "S",
+      30
+    ],
+    [
+      "1044",
+      13205,
+      "Take 15 minutes off invoice review",
+      "Invoice review",
+      "R",
+      15
+    ],
+    [
+      "1058",
+      13379,
+      "Add 15 minutes to roadmap review",
+      "Roadmap review",
+      "A",
+      15
+    ],
+    [
+      "1068",
+      13506,
+      "Give customer research another 15 minutes",
+      "Customer research",
+      "A",
+      15
+    ],
+    [
+      "1090",
+      13784,
+      "Make the brief project briefing session 20 minutes",
+      "Brief project briefing",
+      "S",
+      20
+    ],
+    [
+      "1092",
+      13808,
+      "Change the prototype testing block to forty minutes",
+      "Prototype testing",
+      "S",
+      40
+    ],
+    [
+      "1128",
+      14267,
+      "Take 15 minutes off design critique",
+      "Design critique",
+      "R",
+      15
+    ],
+    [
+      "1130",
+      14291,
+      "Make weekly reflection one hour",
+      "Weekly reflection",
+      "S",
+      60
+    ],
+    [
+      "1149",
+      14528,
+      "Change strength training to 25 minutes",
+      "Strength training",
+      "S",
+      25
+    ],
+    [
+      "1233",
+      15606,
+      "Take 15 minutes off the brief accessibility review",
+      "Brief accessibility review",
+      "R",
+      15
+    ],
+    [
+      "1241",
+      15710,
+      "Extend project briefing by 15 minutes",
+      "Project briefing",
+      "A",
+      15
+    ],
+    [
+      "1247",
+      15785,
+      "Give mentor call another 15 minutes",
+      "Mentor call",
+      "A",
+      15
+    ],
+    [
+      "1250",
+      15821,
+      "Make the portfolio writing session twenty minutes",
+      "Portfolio writing",
+      "S",
+      20
+    ],
+    [
+      "1270",
+      16077,
+      "Change the garden planning block to twenty minutes",
+      "Garden planning",
+      "S",
+      20
+    ],
+    [
+      "1303",
+      16492,
+      "Reduce prototype testing by 15 minutes",
+      "Prototype testing",
+      "R",
+      15
+    ],
+    [
+      "1342",
+      16990,
+      "Make doctor follow-up half an hour",
+      "Doctor follow-up",
+      "S",
+      30
+    ],
+    [
+      "1364",
+      17273,
+      "Change mobility workout to 45 minutes",
+      "Mobility workout",
+      "S",
+      45
+    ],
+    [
+      "1376",
+      17426,
+      "Shorten documentation work by 15 minutes",
+      "Documentation work",
+      "R",
+      15
+    ],
+    [
+      "1378",
+      17451,
+      "Extend brief project briefing by 15 minutes",
+      "Brief project briefing",
+      "A",
+      15
+    ],
+    [
+      "1493",
+      18914,
+      "Give strategy review another 15 minutes",
+      "Strategy review",
+      "A",
+      15
+    ],
+    [
+      "1497",
+      18962,
+      "Make the weekly reflection session one hour",
+      "Weekly reflection",
+      "S",
+      60
+    ],
+    [
+      "1562",
+      19786,
+      "Change the team retro block to one hour",
+      "Team retro",
+      "S",
+      60
+    ],
+    [
+      "1593",
+      20161,
+      "Reduce language practice by 15 minutes",
+      "Language practice",
+      "R",
+      15
+    ],
+    [
+      "1655",
+      20947,
+      "Make strategy review half an hour",
+      "Strategy review",
+      "S",
+      30
+    ],
+    [
+      "1658",
+      20983,
+      "Change email review to one hour",
+      "Email review",
+      "S",
+      60
+    ],
+    [
+      "1675",
+      21203,
+      "Shorten design critique by 15 minutes",
+      "Design critique",
+      "R",
+      15
+    ],
+    [
+      "1699",
+      21502,
+      "Extend passport paperwork by 15 minutes",
+      "Passport paperwork",
+      "A",
+      15
+    ],
+    [
+      "1721",
+      21782,
+      "Give brief strategy review another 15 minutes",
+      "Brief strategy review",
+      "A",
+      15
+    ],
+    [
+      "1724",
+      21818,
+      "Make the doctor follow-up session forty minutes",
+      "Doctor follow-up",
+      "S",
+      40
+    ],
+    [
+      "1813",
+      22935,
+      "Change the strength training block to half an hour",
+      "Strength training",
+      "S",
+      30
+    ],
+    [
+      "1839",
+      23268,
+      "Reduce brief language practice by 15 minutes",
+      "Brief language practice",
+      "R",
+      15
+    ],
+    [
+      "1908",
+      24144,
+      "Make mentor call forty-five minutes",
+      "Mentor call",
+      "S",
+      45
+    ],
+    [
+      "1934",
+      24466,
+      "Change strategy review to twenty minutes",
+      "Strategy review",
+      "S",
+      20
+    ],
+    [
+      "1970",
+      24922,
+      "Shorten language practice by 15 minutes",
+      "Language practice",
+      "R",
+      15
+    ],
+    [
+      "2078",
+      26285,
+      "Extend travel planning by 15 minutes",
+      "Travel planning",
+      "A",
+      15
+    ],
+    [
+      "2091",
+      26442,
+      "Give doctor follow-up another 15 minutes",
+      "Doctor follow-up",
+      "A",
+      15
+    ],
+    [
+      "2125",
+      26870,
+      "Make the photo editing session twenty minutes",
+      "Photo editing",
+      "S",
+      20
+    ],
+    [
+      "2149",
+      27177,
+      "Change the conference rehearsal block to half an hour",
+      "Conference rehearsal",
+      "S",
+      30
+    ],
+    [
+      "2220",
+      28072,
+      "Reduce brief design critique by 15 minutes",
+      "Brief design critique",
+      "R",
+      15
+    ],
+    [
+      "2252",
+      28481,
+      "Make architecture review twenty-five minutes",
+      "Architecture review",
+      "S",
+      25
+    ],
+    [
+      "2259",
+      28569,
+      "Change security review to one hour",
+      "Security review",
+      "S",
+      60
+    ],
+    [
+      "2280",
+      28829,
+      "Shorten budget planning by 15 minutes",
+      "Budget planning",
+      "R",
+      15
+    ],
+    [
+      "2286",
+      28901,
+      "Extend accessibility review by 15 minutes",
+      "Accessibility review",
+      "A",
+      15
+    ],
+    [
+      "2289",
+      28939,
+      "Give conference rehearsal another 15 minutes",
+      "Conference rehearsal",
+      "A",
+      15
+    ],
+    [
+      "2302",
+      29111,
+      "Make the reading session session one hour",
+      "Reading session",
+      "S",
+      60
+    ],
+    [
+      "2316",
+      29295,
+      "Change the photo editing block to forty-five minutes",
+      "Photo editing",
+      "S",
+      45
+    ],
+    [
+      "2332",
+      29496,
+      "Reduce mobility workout by 15 minutes",
+      "Mobility workout",
+      "R",
+      15
+    ],
+    [
+      "2335",
+      29532,
+      "Make weekly reflection half an hour",
+      "Weekly reflection",
+      "S",
+      30
+    ],
+    [
+      "2385",
+      30160,
+      "Change photo editing to thirty minutes",
+      "Photo editing",
+      "S",
+      30
+    ],
+    [
+      "2387",
+      30186,
+      "Reduce brief accessibility review by 15 minutes",
+      "Brief accessibility review",
+      "R",
+      15
+    ],
+    [
+      "2416",
+      30549,
+      "Extend research synthesis by 15 minutes",
+      "Research synthesis",
+      "A",
+      15
+    ],
+    [
+      "2423",
+      30633,
+      "Give weekly reflection another 15 minutes",
+      "Weekly reflection",
+      "A",
+      15
+    ],
+    [
+      "2425",
+      30657,
+      "Make the home repairs session thirty minutes",
+      "Home repairs",
+      "S",
+      30
+    ],
+    [
+      "2431",
+      30729,
+      "Change the travel planning block to forty minutes",
+      "Travel planning",
+      "S",
+      40
+    ],
+    [
+      "2454",
+      31019,
+      "Reduce garden planning by 15 minutes",
+      "Garden planning",
+      "R",
+      15
+    ],
+    [
+      "2456",
+      31043,
+      "Make garden planning forty-five minutes",
+      "Garden planning",
+      "S",
+      45
+    ],
+    [
+      "2463",
+      31130,
+      "Change passport paperwork to twenty-five minutes",
+      "Passport paperwork",
+      "S",
+      25
+    ],
+    [
+      "2473",
+      31257,
+      "Shorten brief budget planning by 15 minutes",
+      "Brief budget planning",
+      "R",
+      15
+    ],
+    [
+      "2491",
+      31485,
+      "Extend portfolio writing by 15 minutes",
+      "Portfolio writing",
+      "A",
+      15
+    ]
+  ]
+}

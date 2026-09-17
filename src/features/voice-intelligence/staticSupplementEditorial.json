@@ -1,0 +1,707 @@
+{
+  "status": "PENDING_SECOND_READER_SCHEMA_EXECUTION_NOT_ADMITTED",
+  "sourceFiles": {
+    "viewport": {
+      "file": "src/shared/command/voiceControlRebuild.test.ts",
+      "sha256": "c7df5703b106a34953945450fbbe81c870f1a59c2862e8316b8bb26352bfbb59"
+    },
+    "global": {
+      "file": "src/shared/command/globalInterpreter.test.ts",
+      "sha256": "097d2d75cca1fb20999cb9b4aa8b92122ed0227640ef88bad72ce4ff7405d02c"
+    }
+  },
+  "defaults": {
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "expected": {
+      "resolution": "execute",
+      "route": "home"
+    },
+    "semantic": {
+      "feedbackPhase": "completed",
+      "historyDelta": 0,
+      "noCreation": true,
+      "actions": [],
+      "noPending": true
+    }
+  },
+  "captureRecipe": "Expected capture-create; semantic.intent={type:capture-create,title:intentTitle}; H1/noCreationfalse. C={id:captureId,kind:capture,title:displayTitle,status:unresolved,source:typed,provenance:{routerVersion:2,transcript:EXACT_ROW_UTTERANCE,commandId:evaluation-EXACT_ROW_UTTERANCE},createdAt:fixtureClockISO,updatedAt:fixtureClockISO}. Actions[capture.create{capture:C}],AFTER.captures=[C]. All remaining complete-document fields unchanged. CommandId fixed as evaluator input before execution. Each row independently starts fresh. No actualAfter reads.",
+  "cases": [
+    {
+      "id": "repository-supplement-draft-0091",
+      "utterance": "scroll down",
+      "fixtureId": "calendar-representative",
+      "expected": {
+        "intent": "scroll",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "scroll",
+          "direction": "down",
+          "fraction": 0.45
+        }
+      },
+      "viewportContract": {
+        "direction": "down",
+        "fraction": 0.45
+      },
+      "editorial": {
+        "family": "viewport-scroll",
+        "languageFeature": "91-literal-viewport-reference-not-data"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/voiceControlRebuild.test.ts",
+          "sourceLine": 20,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"scroll down\", \"down\", 0.45]",
+          "enclosingTestSource": "it.each([\n    [\"scroll down\", \"down\", 0.45], [\"I need to scroll down\", \"down\", 0.45], [\"scroll up\", \"up\", 0.45], [\"scroll back up\", \"up\", 0.45], [\"page down\", \"down\", 0.85], [\"go to the top\", \"top\", 0], [\"take me to the end\", \"bottom\", 1],\n  ])(\"uses exact viewport slots: %s\", (text, direction, fraction) => expect(resolve(String(text))).toMatchObject({ type: \"scroll\", direction, fraction }))"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0092",
+      "utterance": "scroll up",
+      "fixtureId": "calendar-representative",
+      "expected": {
+        "intent": "scroll",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "scroll",
+          "direction": "up",
+          "fraction": 0.45
+        }
+      },
+      "viewportContract": {
+        "direction": "up",
+        "fraction": 0.45
+      },
+      "editorial": {
+        "family": "viewport-scroll",
+        "languageFeature": "92-literal-viewport-reference-not-data"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/voiceControlRebuild.test.ts",
+          "sourceLine": 20,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"scroll up\", \"up\", 0.45]",
+          "enclosingTestSource": "it.each([\n    [\"scroll down\", \"down\", 0.45], [\"I need to scroll down\", \"down\", 0.45], [\"scroll up\", \"up\", 0.45], [\"scroll back up\", \"up\", 0.45], [\"page down\", \"down\", 0.85], [\"go to the top\", \"top\", 0], [\"take me to the end\", \"bottom\", 1],\n  ])(\"uses exact viewport slots: %s\", (text, direction, fraction) => expect(resolve(String(text))).toMatchObject({ type: \"scroll\", direction, fraction }))"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0093",
+      "utterance": "scroll back up",
+      "fixtureId": "calendar-representative",
+      "expected": {
+        "intent": "scroll",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "scroll",
+          "direction": "up",
+          "fraction": 0.45
+        }
+      },
+      "viewportContract": {
+        "direction": "up",
+        "fraction": 0.45
+      },
+      "editorial": {
+        "family": "viewport-scroll",
+        "languageFeature": "93-literal-viewport-reference-not-data"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/voiceControlRebuild.test.ts",
+          "sourceLine": 20,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"scroll back up\", \"up\", 0.45]",
+          "enclosingTestSource": "it.each([\n    [\"scroll down\", \"down\", 0.45], [\"I need to scroll down\", \"down\", 0.45], [\"scroll up\", \"up\", 0.45], [\"scroll back up\", \"up\", 0.45], [\"page down\", \"down\", 0.85], [\"go to the top\", \"top\", 0], [\"take me to the end\", \"bottom\", 1],\n  ])(\"uses exact viewport slots: %s\", (text, direction, fraction) => expect(resolve(String(text))).toMatchObject({ type: \"scroll\", direction, fraction }))"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0094",
+      "utterance": "page down",
+      "fixtureId": "calendar-representative",
+      "expected": {
+        "intent": "scroll",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "scroll",
+          "direction": "down",
+          "fraction": 0.85
+        }
+      },
+      "viewportContract": {
+        "direction": "down",
+        "fraction": 0.85
+      },
+      "editorial": {
+        "family": "viewport-scroll",
+        "languageFeature": "94-literal-viewport-reference-not-data"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/voiceControlRebuild.test.ts",
+          "sourceLine": 20,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"page down\", \"down\", 0.85]",
+          "enclosingTestSource": "it.each([\n    [\"scroll down\", \"down\", 0.45], [\"I need to scroll down\", \"down\", 0.45], [\"scroll up\", \"up\", 0.45], [\"scroll back up\", \"up\", 0.45], [\"page down\", \"down\", 0.85], [\"go to the top\", \"top\", 0], [\"take me to the end\", \"bottom\", 1],\n  ])(\"uses exact viewport slots: %s\", (text, direction, fraction) => expect(resolve(String(text))).toMatchObject({ type: \"scroll\", direction, fraction }))"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0095",
+      "utterance": "go to the top",
+      "fixtureId": "calendar-representative",
+      "expected": {
+        "intent": "scroll",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "scroll",
+          "direction": "top",
+          "fraction": 0
+        }
+      },
+      "viewportContract": {
+        "direction": "top",
+        "fraction": 0
+      },
+      "editorial": {
+        "family": "viewport-scroll",
+        "languageFeature": "95-literal-viewport-reference-not-data"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/voiceControlRebuild.test.ts",
+          "sourceLine": 20,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"go to the top\", \"top\", 0]",
+          "enclosingTestSource": "it.each([\n    [\"scroll down\", \"down\", 0.45], [\"I need to scroll down\", \"down\", 0.45], [\"scroll up\", \"up\", 0.45], [\"scroll back up\", \"up\", 0.45], [\"page down\", \"down\", 0.85], [\"go to the top\", \"top\", 0], [\"take me to the end\", \"bottom\", 1],\n  ])(\"uses exact viewport slots: %s\", (text, direction, fraction) => expect(resolve(String(text))).toMatchObject({ type: \"scroll\", direction, fraction }))"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0096",
+      "utterance": "take me to the end",
+      "fixtureId": "calendar-representative",
+      "expected": {
+        "intent": "scroll",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "scroll",
+          "direction": "bottom",
+          "fraction": 1
+        }
+      },
+      "viewportContract": {
+        "direction": "bottom",
+        "fraction": 1
+      },
+      "editorial": {
+        "family": "viewport-scroll",
+        "languageFeature": "96-literal-viewport-reference-not-data"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/voiceControlRebuild.test.ts",
+          "sourceLine": 20,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"take me to the end\", \"bottom\", 1]",
+          "enclosingTestSource": "it.each([\n    [\"scroll down\", \"down\", 0.45], [\"I need to scroll down\", \"down\", 0.45], [\"scroll up\", \"up\", 0.45], [\"scroll back up\", \"up\", 0.45], [\"page down\", \"down\", 0.85], [\"go to the top\", \"top\", 0], [\"take me to the end\", \"bottom\", 1],\n  ])(\"uses exact viewport slots: %s\", (text, direction, fraction) => expect(resolve(String(text))).toMatchObject({ type: \"scroll\", direction, fraction }))"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0215",
+      "utterance": "Previous day",
+      "contextOverrides": {
+        "currentTimeScope": {
+          "kind": "day",
+          "dateKey": "2026-09-10"
+        }
+      },
+      "expected": {
+        "intent": "temporal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "temporal",
+          "scope": {
+            "kind": "day",
+            "dateKey": "2026-09-09"
+          }
+        },
+        "scope": {
+          "kind": "day",
+          "dateKey": "2026-09-09"
+        }
+      },
+      "editorial": {
+        "family": "temporal-relative",
+        "languageFeature": "relative-to-open-scope-not-current-clock"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 180,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"Previous day\", \"2026-09-04\"]",
+          "enclosingTestSource": "it.each([[\"Previous day\", \"2026-09-04\"], [\"Next day\", \"2026-09-06\"], [\"Show previous day\", \"2026-09-04\"], [\"Open next day\", \"2026-09-06\"]])(\"speaks the current-scope date control: %s\", (utterance, expectedDate) => {\n    const context: LifeContext = { route: \"home\", nowMs: new Date(\"2026-09-03T09:00:00\").getTime(), currentTimeScope: { kind: \"day\", dateKey: \"2026-09-05\" } };\n    expect(interpretGlobalCommand(utterance, context, \"2026-09-05\")).toMatchObject({ type: \"temporal\", scope: { kind: \"day\", dateKey: expectedDate } });\n  })"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0216",
+      "utterance": "Next day",
+      "contextOverrides": {
+        "currentTimeScope": {
+          "kind": "day",
+          "dateKey": "2026-09-10"
+        }
+      },
+      "expected": {
+        "intent": "temporal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "temporal",
+          "scope": {
+            "kind": "day",
+            "dateKey": "2026-09-11"
+          }
+        },
+        "scope": {
+          "kind": "day",
+          "dateKey": "2026-09-11"
+        }
+      },
+      "editorial": {
+        "family": "temporal-relative",
+        "languageFeature": "relative-to-open-scope-not-current-clock"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 180,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"Next day\", \"2026-09-06\"]",
+          "enclosingTestSource": "it.each([[\"Previous day\", \"2026-09-04\"], [\"Next day\", \"2026-09-06\"], [\"Show previous day\", \"2026-09-04\"], [\"Open next day\", \"2026-09-06\"]])(\"speaks the current-scope date control: %s\", (utterance, expectedDate) => {\n    const context: LifeContext = { route: \"home\", nowMs: new Date(\"2026-09-03T09:00:00\").getTime(), currentTimeScope: { kind: \"day\", dateKey: \"2026-09-05\" } };\n    expect(interpretGlobalCommand(utterance, context, \"2026-09-05\")).toMatchObject({ type: \"temporal\", scope: { kind: \"day\", dateKey: expectedDate } });\n  })"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0217",
+      "utterance": "Show previous day",
+      "contextOverrides": {
+        "currentTimeScope": {
+          "kind": "day",
+          "dateKey": "2026-09-10"
+        }
+      },
+      "expected": {
+        "intent": "temporal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "temporal",
+          "scope": {
+            "kind": "day",
+            "dateKey": "2026-09-09"
+          }
+        },
+        "scope": {
+          "kind": "day",
+          "dateKey": "2026-09-09"
+        }
+      },
+      "editorial": {
+        "family": "temporal-relative",
+        "languageFeature": "relative-to-open-scope-not-current-clock"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 180,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"Show previous day\", \"2026-09-04\"]",
+          "enclosingTestSource": "it.each([[\"Previous day\", \"2026-09-04\"], [\"Next day\", \"2026-09-06\"], [\"Show previous day\", \"2026-09-04\"], [\"Open next day\", \"2026-09-06\"]])(\"speaks the current-scope date control: %s\", (utterance, expectedDate) => {\n    const context: LifeContext = { route: \"home\", nowMs: new Date(\"2026-09-03T09:00:00\").getTime(), currentTimeScope: { kind: \"day\", dateKey: \"2026-09-05\" } };\n    expect(interpretGlobalCommand(utterance, context, \"2026-09-05\")).toMatchObject({ type: \"temporal\", scope: { kind: \"day\", dateKey: expectedDate } });\n  })"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0218",
+      "utterance": "Open next day",
+      "contextOverrides": {
+        "currentTimeScope": {
+          "kind": "day",
+          "dateKey": "2026-09-10"
+        }
+      },
+      "expected": {
+        "intent": "temporal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "temporal",
+          "scope": {
+            "kind": "day",
+            "dateKey": "2026-09-11"
+          }
+        },
+        "scope": {
+          "kind": "day",
+          "dateKey": "2026-09-11"
+        }
+      },
+      "editorial": {
+        "family": "temporal-relative",
+        "languageFeature": "relative-to-open-scope-not-current-clock"
+      },
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 180,
+          "kind": "tuple-row",
+          "existingRowSource": "[\"Open next day\", \"2026-09-06\"]",
+          "enclosingTestSource": "it.each([[\"Previous day\", \"2026-09-04\"], [\"Next day\", \"2026-09-06\"], [\"Show previous day\", \"2026-09-04\"], [\"Open next day\", \"2026-09-06\"]])(\"speaks the current-scope date control: %s\", (utterance, expectedDate) => {\n    const context: LifeContext = { route: \"home\", nowMs: new Date(\"2026-09-03T09:00:00\").getTime(), currentTimeScope: { kind: \"day\", dateKey: \"2026-09-05\" } };\n    expect(interpretGlobalCommand(utterance, context, \"2026-09-05\")).toMatchObject({ type: \"temporal\", scope: { kind: \"day\", dateKey: expectedDate } });\n  })"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0154",
+      "utterance": "Remember to renew my passport",
+      "captureId": "capture-renew-my-passport",
+      "intentTitle": "renew my passport",
+      "displayTitle": "Renew my passport",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "remember-to-explicit-capture-authority"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 71,
+          "kind": "tuple-row",
+          "sourceTable": "corpus",
+          "existingRowSource": "[\"Remember to renew my passport\", \"home\", { type: \"capture-create\", title: \"renew my passport\" }]"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0155",
+      "utterance": "Add to Inbox: renew passport",
+      "captureId": "capture-renew-passport",
+      "intentTitle": "renew passport",
+      "displayTitle": "Renew passport",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "fronted-destination-colon-payload"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 72,
+          "kind": "tuple-row",
+          "sourceTable": "corpus",
+          "existingRowSource": "[\"Add to Inbox: renew passport\", \"home\", { type: \"capture-create\", title: \"renew passport\" }]"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0156",
+      "utterance": "Jot down visa photos",
+      "captureId": "capture-visa-photos",
+      "intentTitle": "visa photos",
+      "displayTitle": "Visa photos",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "jot-down-phrasal-capture"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 73,
+          "kind": "tuple-row",
+          "sourceTable": "corpus",
+          "existingRowSource": "[\"Jot down visa photos\", \"home\", { type: \"capture-create\", title: \"visa photos\" }]"
+        },
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 218,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Jot down visa photos\", title: \"visa photos\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0243",
+      "utterance": "Capture buy coffee",
+      "captureId": "capture-buy-coffee",
+      "intentTitle": "buy coffee",
+      "displayTitle": "Buy coffee",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "explicit-capture-task-payload"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 216,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Capture buy coffee\", title: \"buy coffee\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0244",
+      "utterance": "Remember to buy coffee",
+      "captureId": "capture-buy-coffee",
+      "intentTitle": "buy coffee",
+      "displayTitle": "Buy coffee",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "remember-to-task-payload"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 216,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Remember to buy coffee\", title: \"buy coffee\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0245",
+      "utterance": "Remember that Maya likes tea",
+      "captureId": "capture-maya-likes-tea",
+      "intentTitle": "Maya likes tea",
+      "displayTitle": "Maya likes tea",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "remember-that-fact-preserve-proper-name"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 217,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Remember that Maya likes tea\", title: \"Maya likes tea\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0246",
+      "utterance": "Note call the embassy",
+      "captureId": "capture-call-the-embassy",
+      "intentTitle": "call the embassy",
+      "displayTitle": "Call the embassy",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "note-task-with-embedded-call-verb"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 217,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Note call the embassy\", title: \"call the embassy\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0247",
+      "utterance": "Note that the passport expires soon",
+      "captureId": "capture-the-passport-expires-soon",
+      "intentTitle": "the passport expires soon",
+      "displayTitle": "The passport expires soon",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "note-that-fact-preserves-determiner"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 218,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Note that the passport expires soon\", title: \"the passport expires soon\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0248",
+      "utterance": "Write down book the hotel",
+      "captureId": "capture-book-the-hotel",
+      "intentTitle": "book the hotel",
+      "displayTitle": "Book the hotel",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "write-down-contained-book-verb-not-calendar"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 219,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Write down book the hotel\", title: \"book the hotel\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0249",
+      "utterance": "Log renew passport",
+      "captureId": "capture-renew-passport",
+      "intentTitle": "renew passport",
+      "displayTitle": "Renew passport",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "log-explicit-task-capture"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 219,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Log renew passport\", title: \"renew passport\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0250",
+      "utterance": "Save pack adapters",
+      "captureId": "capture-pack-adapters",
+      "intentTitle": "pack adapters",
+      "displayTitle": "Pack adapters",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "save-task-no-active-studio-topic"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 220,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Save pack adapters\", title: \"pack adapters\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0251",
+      "utterance": "Add coffee to inbox",
+      "captureId": "capture-coffee",
+      "intentTitle": "coffee",
+      "displayTitle": "Coffee",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "trailing-to-inbox-destination"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 220,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Add coffee to inbox\", title: \"coffee\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0252",
+      "utterance": "Add renew passport in my inbox",
+      "captureId": "capture-renew-passport",
+      "intentTitle": "renew passport",
+      "displayTitle": "Renew passport",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "trailing-in-my-inbox-destination"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 221,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Add renew passport in my inbox\", title: \"renew passport\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0253",
+      "utterance": "Save itinerary to inbox",
+      "captureId": "capture-itinerary",
+      "intentTitle": "itinerary",
+      "displayTitle": "Itinerary",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "save-to-explicit-inbox-destination"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 221,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Save itinerary to inbox\", title: \"itinerary\" }"
+        }
+      ]
+    },
+    {
+      "id": "repository-supplement-draft-0254",
+      "utterance": "Put visa check in inbox",
+      "captureId": "capture-visa-check",
+      "intentTitle": "visa check",
+      "displayTitle": "Visa check",
+      "editorial": {
+        "family": "capture-create",
+        "languageFeature": "put-in-inbox-not-calendar-move"
+      },
+      "oracleRecipe": "capture",
+      "sourceOccurrences": [
+        {
+          "sourceFile": "src/shared/command/globalInterpreter.test.ts",
+          "sourceLine": 222,
+          "kind": "object-row",
+          "sourceTable": "explicitCaptureCorpus",
+          "existingRowSource": "{ utterance: \"Put visa check in inbox\", title: \"visa check\" }"
+        }
+      ]
+    }
+  ]
+}

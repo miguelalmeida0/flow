@@ -1,0 +1,677 @@
+{
+  "batch": "new-assisted-861-880",
+  "source": "assisted-editorial",
+  "status": "pending-independent-review-and-execution",
+  "defaults": {
+    "contextOverrides": {},
+    "semantic": {
+      "historyDelta": 0,
+      "feedbackPhase": "completed",
+      "noCreation": true,
+      "actions": []
+    }
+  },
+  "expansion": "Same as new-assisted-841-860.json: complete BEFORE collection plus only declared ID patches and fixture updatedAt, semantic defaults merge/arrays replace, exact unchanged complements and H1 Undo/Redo. No parser/actualAfter-derived expectations.",
+  "cases": [
+    {
+      "id": 861,
+      "utterance": "Before removing Window measurements, show me exactly what will go.",
+      "fixtureId": "capture-reference",
+      "family": "capture-destructive-preview",
+      "feature": "request for pre-deletion preview binds a named nonreferenced capture",
+      "expected": {
+        "intent": "capture-delete",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "intent": {
+          "type": "capture-delete"
+        },
+        "actions": [
+          {
+            "type": "capture.delete",
+            "captureId": "C2"
+          }
+        ]
+      }
+    },
+    {
+      "id": 862,
+      "utterance": "I'm finished with the boiler receipt note; archive it.",
+      "fixtureId": "capture-reference",
+      "family": "capture-intra-turn-archive",
+      "feature": "named-note statement binds following pronoun while archive retains data",
+      "expected": {
+        "intent": "capture-archive",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "capture-archive"
+        },
+        "actions": [
+          {
+            "type": "capture.archive",
+            "captureId": "C1"
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "captures",
+          "id": "C1",
+          "patch": {
+            "status": "archived"
+          }
+        }
+      ]
+    },
+    {
+      "id": 863,
+      "utterance": "Actually, the capture title should be 'Not now — ask me next week'.",
+      "fixtureId": "capture-reference",
+      "family": "capture-raw-title",
+      "feature": "leading correction marker is syntax but em dash and timing words inside quotes are title data",
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "capture-edit",
+          "title": "Not now — ask me next week"
+        },
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "title": "Not now — ask me next week"
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "captures",
+          "id": "C1",
+          "patch": {
+            "title": "Not now — ask me next week"
+          }
+        }
+      ]
+    },
+    {
+      "id": 864,
+      "utterance": "Finding a note called 'Delete everything' isn't permission to delete anything.",
+      "fixtureId": "capture-reference",
+      "family": "quoted-authority-negative",
+      "feature": "metalinguistic statement with destructive title is not search or deletion authority",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "inbox"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 865,
+      "utterance": "In Home library, Donate old books belongs ahead of Sort books.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-step-order",
+      "feature": "fronted plan scope and belongs-ahead relation reorder only stable step IDs",
+      "expected": {
+        "intent": "step-reorder",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "step-reorder"
+        },
+        "actions": [
+          {
+            "type": "plan.step.reorder",
+            "planId": "O1",
+            "stepId": "S3",
+            "beforeStepId": "S2"
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "stepIds": [
+              "S1",
+              "S3",
+              "S2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 866,
+      "utterance": "For Measure shelves, change the estimate to thirty-five minutes.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-duration-estimate",
+      "feature": "estimate noun distinguishes planned-step effort from Calendar event duration",
+      "expected": {
+        "intent": "step-duration",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "step-duration",
+          "minutes": 35
+        },
+        "actions": [
+          {
+            "type": "plan.step.update",
+            "stepId": "S1",
+            "patch": {
+              "estimatedMinutes": 35
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "steps",
+          "id": "S1",
+          "patch": {
+            "estimatedMinutes": 35
+          }
+        }
+      ]
+    },
+    {
+      "id": 867,
+      "utterance": "The Sort books step is really 'Sort books by room'; change the wording.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-step-wording",
+      "feature": "declarative replacement heading followed by explicit edit imperative",
+      "expected": {
+        "intent": "step-rename",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "step-rename",
+          "title": "Sort books by room"
+        },
+        "actions": [
+          {
+            "type": "plan.step.update",
+            "stepId": "S2",
+            "patch": {
+              "title": "Sort books by room"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "steps",
+          "id": "S2",
+          "patch": {
+            "title": "Sort books by room"
+          }
+        }
+      ]
+    },
+    {
+      "id": 868,
+      "utterance": "I've finished Measure shelves; tick that step off.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-step-completion",
+      "feature": "tick-off idiom applies completion to named planned step, not entire Outcome",
+      "expected": {
+        "intent": "step-complete",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "step-complete"
+        },
+        "actions": [
+          {
+            "type": "plan.step.update",
+            "stepId": "S1",
+            "patch": {
+              "status": "completed"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "steps",
+          "id": "S1",
+          "patch": {
+            "status": "completed"
+          }
+        }
+      ]
+    },
+    {
+      "id": 869,
+      "utterance": "Don't schedule anything yet; make Donate old books my next step.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-next-without-time",
+      "feature": "negative scheduling clause leaves positive next-step selection intact",
+      "expected": {
+        "intent": "step-set-next",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "step-set-next"
+        },
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "nextStepId": "S3"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "nextStepId": "S3"
+          }
+        }
+      ]
+    },
+    {
+      "id": 870,
+      "utterance": "Bring Garden notebook back into active work, not Home library.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-explicit-status-target",
+      "feature": "named paused plan overrides active-plan context and explicit excluded plan",
+      "expected": {
+        "intent": "plan-status",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "plan-status",
+          "status": "active"
+        },
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O2",
+            "patch": {
+              "status": "active"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "plans",
+          "id": "O2",
+          "patch": {
+            "status": "active"
+          }
+        }
+      ]
+    },
+    {
+      "id": 871,
+      "utterance": "I want to remove Home library, but ask me before doing it.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-explicit-confirmation",
+      "feature": "explicit ask-before clause preserves destructive preview boundary",
+      "expected": {
+        "intent": "plan-delete",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "intent": {
+          "type": "plan-delete"
+        },
+        "actions": [
+          {
+            "type": "plan.delete",
+            "planId": "O1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 872,
+      "utterance": "The keys are back with Maya; mark Return keys done.",
+      "fixtureId": "commitment-reference",
+      "family": "commitment-completion-target",
+      "feature": "situational preface plus exact promise title selects K3, not recent K1 for same person",
+      "expected": {
+        "intent": "commitment-complete",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "commitment-complete"
+        },
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K3",
+            "patch": {
+              "status": "completed"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "commitments",
+          "id": "K3",
+          "patch": {
+            "status": "completed"
+          }
+        }
+      ]
+    },
+    {
+      "id": 873,
+      "utterance": "Give the Send sketch promise until Wednesday; leave its preparation time alone.",
+      "fixtureId": "commitment-scheduled",
+      "family": "commitment-deadline-reservation-isolation",
+      "feature": "promise deadline moves independently of existing linked R2 Calendar preparation",
+      "expected": {
+        "intent": "commitment-due",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "commitment-due",
+          "dueAt": "2026-09-09T17:00:00.000Z"
+        },
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K1",
+            "patch": {
+              "dueAt": "2026-09-09T17:00:00.000Z"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "commitments",
+          "id": "K1",
+          "patch": {
+            "dueAt": "2026-09-09T17:00:00.000Z"
+          }
+        }
+      ]
+    },
+    {
+      "id": 874,
+      "utterance": "Set aside Daniel's Delivery confirmation until next Monday because he is away.",
+      "fixtureId": "commitment-reference",
+      "family": "commitment-reasoned-deferral",
+      "feature": "set-aside phrasing preserves dueAt while saving date and literal causal reason",
+      "expected": {
+        "intent": "commitment-defer",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "commitment-defer",
+          "dateKey": "2026-09-14",
+          "reason": "he is away"
+        },
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K2",
+            "patch": {
+              "status": "deferred",
+              "deferredUntil": "2026-09-14",
+              "deferReason": "he is away"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "commitments",
+          "id": "K2",
+          "patch": {
+            "status": "deferred",
+            "deferredUntil": "2026-09-14",
+            "deferReason": "he is away"
+          }
+        }
+      ]
+    },
+    {
+      "id": 875,
+      "utterance": "Maya said the words 'cancel my appointment'; that wasn't my instruction.",
+      "fixtureId": "commitment-reference",
+      "family": "reported-speech-negative",
+      "feature": "reported person speech is neither destructive authority nor new commitment",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "people"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 876,
+      "utterance": "Which things am I waiting to receive from Daniel?",
+      "fixtureId": "commitment-reference",
+      "family": "commitment-direction-query",
+      "feature": "receive-from wording selects waiting-on direction and named person without mutation",
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "intent": {
+          "type": "people-query",
+          "mode": "waiting",
+          "person": "daniel"
+        }
+      }
+    },
+    {
+      "id": 877,
+      "utterance": "Add 'family' to the journal tags only if it isn't already there.",
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1",
+        "voiceMode": "command"
+      },
+      "family": "journal-idempotent-label",
+      "feature": "explicit duplicate guard preserves existing tag array and produces no history",
+      "expected": {
+        "intent": "journal-tags",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-tags",
+          "operation": "add",
+          "tags": [
+            "family"
+          ]
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "tags": [
+                "travel",
+                "family"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 878,
+      "utterance": "Remove the final paragraph from this entry, not the entry itself.",
+      "fixtureId": "journal-editing",
+      "family": "journal-bounded-removal",
+      "feature": "final-paragraph scope plus explicit no-entry-deletion constraint",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "paragraph",
+          "operation": "remove"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 879,
+      "utterance": "Set the memory's words to 'Rain & railways / September notes', including the slash.",
+      "fixtureId": "memory-source",
+      "family": "memory-literal-punctuation",
+      "feature": "quoted ampersand/slash payload excludes trailing preservation instruction",
+      "expected": {
+        "intent": "memory-edit",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "memory-edit",
+          "property": "passage",
+          "value": "Rain & railways / September notes"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "passage": "Rain & railways / September notes"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "passage": "Rain & railways / September notes"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 880,
+      "utterance": "Set the pulse speed to one, without raising its volume.",
+      "fixtureId": "atmosphere",
+      "family": "atmosphere-absolute-rate",
+      "feature": "absolute speed uses existing rate control while preserving layer level",
+      "expected": {
+        "intent": "atmosphere-set",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-set",
+          "layerId": "pulse",
+          "property": "rate",
+          "value": 1
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "rate": 1
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "pulse",
+            "patch": {
+              "rate": 1
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "qualifications": "876 Daniel normalized lookup is not persisted person rename; expected result is K2 only and needs actual query/visible result assertion.877 planned idempotent update observable but H0. Metadata-only media is not bytes. Auditor static duplicate check zero collisions against4082 archival rows; no execution/admission claim."
+}

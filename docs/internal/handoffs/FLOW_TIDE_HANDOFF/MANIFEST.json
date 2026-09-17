@@ -1,0 +1,71 @@
+{
+  "name": "flow-tide-elite-handoff",
+  "created_at": "2026-09-02T19:03:29.057015+00:00",
+  "files": [
+    {
+      "path": "FLOW_TIDE_ACCEPTANCE_AND_QA.md",
+      "bytes": 6384,
+      "sha256": "1837593d9d39ff65db01b91932395e788993f8e119787120923a7c7414449d1e"
+    },
+    {
+      "path": "FLOW_TIDE_AGENT_PROMPT.md",
+      "bytes": 8640,
+      "sha256": "ab2d707e47180a85c80a0519efa8ebc55cf5f37286f4b88117bdbc31fdb29ac9"
+    },
+    {
+      "path": "FLOW_TIDE_ARCHITECTURE.md",
+      "bytes": 6850,
+      "sha256": "120b8d37735b51b3a5511a0d917d897c00e6e59a502d0e306f0937fdad022b18"
+    },
+    {
+      "path": "FLOW_TIDE_CURRENT_STATE.md",
+      "bytes": 2105,
+      "sha256": "3c51e39828b3b9981bbeb960bd4c66799d482e7bddd66f47a0037bb9719004c6"
+    },
+    {
+      "path": "FLOW_TIDE_DESIGN_SYSTEM.md",
+      "bytes": 7514,
+      "sha256": "21553e83e0dab1e4def58b6519e1327f33d5a1228e025086c78c3e601e5278b5"
+    },
+    {
+      "path": "FLOW_TIDE_IMPLEMENTATION_SEQUENCE.md",
+      "bytes": 3967,
+      "sha256": "018b6cb22624c6c2273398bd2170d5facb6995ae71d68d3ae55b53af9d4e0c47"
+    },
+    {
+      "path": "FLOW_TIDE_INTERACTION_AND_MOTION.md",
+      "bytes": 6307,
+      "sha256": "3cb6e6cfd02bba0688409ca0d8bbb91e04173c131a9eb58858929b60123f1b1b"
+    },
+    {
+      "path": "FLOW_TIDE_PRODUCT_SPEC.md",
+      "bytes": 8480,
+      "sha256": "e0da9f7af03605ef25de791c89d881c3b7a24c4eed5bd2581b3b0ff48f79604e"
+    },
+    {
+      "path": "PASTE_THIS_IN_CODEX.txt",
+      "bytes": 8640,
+      "sha256": "ab2d707e47180a85c80a0519efa8ebc55cf5f37286f4b88117bdbc31fdb29ac9"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2181,
+      "sha256": "7b658394dcc07526e364bb221d9d44348175a1662147c5f0eab9d1fbc3428ed1"
+    },
+    {
+      "path": "assets/breathing-day-annotated.png",
+      "bytes": 517270,
+      "sha256": "ff686fc755ce1b28aee1acf4ccabc7f2c7c489723e0c7bf4f2c834d89a0621fa"
+    },
+    {
+      "path": "assets/breathing-day-reference.png",
+      "bytes": 583938,
+      "sha256": "b0f25cda7796280c8c8bc5f3070544315862bfe5cef1b7122ec5237416d7b6b9"
+    },
+    {
+      "path": "reference/design-tokens.reference.ts",
+      "bytes": 3243,
+      "sha256": "36c9aa7fcaf20bdd8b6fff092d23cef47bf766e24206fdfddee07286705a3271"
+    }
+  ]
+}

@@ -1,0 +1,1340 @@
+{
+  "batch": "assisted-frozen-C",
+  "status": "pending-second-reader-review",
+  "sourceRoot": "artifacts/voice-control-rebuild-20260908/",
+  "sources": {
+    "F": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-641-680.md",
+      "sha256": "e6e7db662e426a58a214e6b42e9b4de468a1610e1b10a4f4dba455a17fa8fa92"
+    },
+    "G": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-681-720.md",
+      "sha256": "29bc8375a890bad4abcc5643d31e2f6e55931241fe75296c6b999ae21860f82b"
+    },
+    "B": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-121-300.md",
+      "sha256": "81efe8a1fb6f0ab7b001951cf1466bccf5b0b9bc1d2caee08a4978e6dae29050"
+    }
+  },
+  "caseDefaults": {
+    "source": "editorial_product",
+    "provenance": {
+      "authoringMethod": "assisted-editorial",
+      "transformations": [],
+      "reviewStatus": "pending",
+      "contractVersion": "2026-09-08"
+    },
+    "editorial": {
+      "origin": "product-editorial-review",
+      "reviewScope": "Independently frozen against the named existing fixture before execution; assisted proposal awaiting root second-reader review."
+    }
+  },
+  "identityRule": "id=voice-rebuild-editorial-NNN; provenance.baseCaseId=language-audit-proposal-NNN; editorial.languageFeature=feature; family=family",
+  "semanticDefaults": {
+    "historyDelta": 0,
+    "feedbackPhase": "completed",
+    "actions": [],
+    "noCreation": true
+  },
+  "stateOracle": "Exact expectedDocument equality: all unlisted collections, fields, IDs, protection and media remain unchanged. journalChanges include only the named patch plus the oracle's declared updatedAt. H1 must pass exact global undo/redo. Context and temporal scope are not LifeDocument mutation.",
+  "fixtureGrounding": "Exact named Capture/Outcome/Commitment fixtures with Home context overrides; memory-source J1 has two paragraphs, media metadata only, not native bytes. 645/660/662 actions are exact pending scope/H0, requiring observability parity rather than empty trace expectations. 691 archive escape notation represents actual newlines.296 original unsupported proposal rejected; supports existing Words editor.",
+  "cases": [
+    {
+      "id": 641,
+      "utterance": "Edit the capture we were just discussing to 'Receipt and warranty, together'",
+      "sourceLocator": {
+        "file": "F",
+        "row": 641,
+        "line": 15
+      },
+      "fixtureId": "capture-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "capture-context-edit",
+      "feature": "fresh discussion reference without selection and literal conjunction/comma title",
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-edit",
+          "title": "Receipt and warranty, together"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "title": "Receipt and warranty, together"
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "title": "Receipt and warranty, together"
+              }
+            },
+            {
+              "$entity": "C2"
+            },
+            {
+              "$entity": "C3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 642,
+      "utterance": "Change that capture to Find the receipt—actually, Check the serial number first",
+      "sourceLocator": {
+        "file": "F",
+        "row": 642,
+        "line": 16
+      },
+      "fixtureId": "capture-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "capture-value-correction",
+      "feature": "correction replaces raw title value before the one transaction",
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-edit",
+          "title": "Check the serial number first"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "title": "Check the serial number first"
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "title": "Check the serial number first"
+              }
+            },
+            {
+              "$entity": "C2"
+            },
+            {
+              "$entity": "C3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 643,
+      "utterance": "Archive that note, but keep its wording",
+      "sourceLocator": {
+        "file": "F",
+        "row": 643,
+        "line": 17
+      },
+      "fixtureId": "capture-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "capture-archive",
+      "feature": "contextual note identity and explicit wording preservation",
+      "expected": {
+        "intent": "capture-archive",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-archive"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "capture.archive",
+            "captureId": "C1"
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "status": "archived"
+              }
+            },
+            {
+              "$entity": "C2"
+            },
+            {
+              "$entity": "C3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 644,
+      "utterance": "Edit this capture to 'Delete the outcome and go home'",
+      "sourceLocator": {
+        "file": "F",
+        "row": 644,
+        "line": 18
+      },
+      "fixtureId": "capture-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "capture-literal-command-value",
+      "feature": "quoted deletion and navigation remain title content",
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-edit",
+          "title": "Delete the outcome and go home"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "title": "Delete the outcome and go home"
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "title": "Delete the outcome and go home"
+              }
+            },
+            {
+              "$entity": "C2"
+            },
+            {
+              "$entity": "C3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 645,
+      "utterance": "Remove the Window measurements note from Capture",
+      "sourceLocator": {
+        "file": "F",
+        "row": 645,
+        "line": 19
+      },
+      "fixtureId": "capture-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "capture-destructive-preview",
+      "feature": "explicit title outranks fresh different Capture reference; only one pending target",
+      "expected": {
+        "intent": "capture-delete",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-delete"
+        },
+        "feedbackPhase": "confirmation",
+        "actions": [
+          {
+            "type": "capture.delete",
+            "captureId": "C2"
+          }
+        ]
+      }
+    },
+    {
+      "id": 650,
+      "utterance": "Clear all the unresolved captures, not the calendar",
+      "sourceLocator": {
+        "file": "F",
+        "row": 650,
+        "line": 24
+      },
+      "fixtureId": "capture-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "capture-batch-archive",
+      "feature": "status-qualified all and explicit cross-domain exclusion retain records atomically",
+      "expected": {
+        "intent": "capture-batch-archive",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "capture-batch-archive"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "capture.archive",
+            "captureId": "C1"
+          },
+          {
+            "type": "capture.archive",
+            "captureId": "C2"
+          }
+        ],
+        "collections": {
+          "captures": [
+            {
+              "$entity": "C1",
+              "patch": {
+                "status": "archived"
+              }
+            },
+            {
+              "$entity": "C2",
+              "patch": {
+                "status": "archived"
+              }
+            },
+            {
+              "$entity": "C3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 651,
+      "utterance": "I should probably turn that note into a plan eventually",
+      "sourceLocator": {
+        "file": "F",
+        "row": 651,
+        "line": 25
+      },
+      "fixtureId": "capture-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "conversion-speculation-negative",
+      "feature": "fresh Capture reference does not authorize speculative eventual conversion",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "unsupported"
+        },
+        "feedbackPhase": "error"
+      }
+    },
+    {
+      "id": 653,
+      "utterance": "Rename the plan we're working on to 'Home, books and breathing room'",
+      "sourceLocator": {
+        "file": "F",
+        "row": 653,
+        "line": 27
+      },
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "outcome-context-rename",
+      "feature": "active-plan conversational reference and literal comma/conjunction title",
+      "expected": {
+        "intent": "plan-rename",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "plan-rename",
+          "title": "Home, books and breathing room"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "title": "Home, books and breathing room"
+            }
+          }
+        ],
+        "collections": {
+          "plans": [
+            {
+              "$entity": "O1",
+              "patch": {
+                "title": "Home, books and breathing room"
+              }
+            },
+            {
+              "$entity": "O2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 654,
+      "utterance": "The first step will be Check the shelf brackets",
+      "sourceLocator": {
+        "file": "F",
+        "row": 654,
+        "line": 28
+      },
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "outcome-first-step-edit",
+      "feature": "existing planned first step is renamed in place, never duplicated",
+      "expected": {
+        "intent": "step-set-first",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "step-set-first",
+          "title": "Check the shelf brackets"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "nextStepId": "S1"
+            }
+          },
+          {
+            "type": "plan.step.update",
+            "stepId": "S1",
+            "patch": {
+              "title": "Check the shelf brackets"
+            }
+          }
+        ],
+        "collections": {
+          "steps": [
+            {
+              "$entity": "S1",
+              "patch": {
+                "title": "Check the shelf brackets"
+              }
+            },
+            {
+              "$entity": "S2"
+            },
+            {
+              "$entity": "S3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 656,
+      "utterance": "Move Donate old books before Measure shelves in this plan",
+      "sourceLocator": {
+        "file": "F",
+        "row": 656,
+        "line": 30
+      },
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "outcome-step-order",
+      "feature": "named step before named step changes order but preserves explicitly chosen next step",
+      "expected": {
+        "intent": "step-reorder",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "step-reorder"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.step.reorder",
+            "planId": "O1",
+            "stepId": "S3",
+            "beforeStepId": "S1"
+          }
+        ],
+        "collections": {
+          "plans": [
+            {
+              "$entity": "O1",
+              "patch": {
+                "stepIds": [
+                  "S3",
+                  "S1",
+                  "S2"
+                ]
+              }
+            },
+            {
+              "$entity": "O2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 657,
+      "utterance": "Set Sort books as the next step, without putting it on the calendar",
+      "sourceLocator": {
+        "file": "F",
+        "row": 657,
+        "line": 31
+      },
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "outcome-next-step",
+      "feature": "next-step pointer is independent of reservation and explicit no-schedule constraint",
+      "expected": {
+        "intent": "step-set-next",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "step-set-next"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "nextStepId": "S2"
+            }
+          }
+        ],
+        "collections": {
+          "plans": [
+            {
+              "$entity": "O1",
+              "patch": {
+                "nextStepId": "S2"
+              }
+            },
+            {
+              "$entity": "O2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 658,
+      "utterance": "Make the Measure shelves step half an hour long",
+      "sourceLocator": {
+        "file": "F",
+        "row": 658,
+        "line": 32
+      },
+      "fixtureId": "outcome-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "outcome-duration",
+      "feature": "named step estimated duration accepts half-hour idiom without Calendar creation",
+      "expected": {
+        "intent": "step-duration",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "step-duration",
+          "minutes": 30
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "plan.step.update",
+            "stepId": "S1",
+            "patch": {
+              "estimatedMinutes": 30
+            }
+          }
+        ],
+        "collections": {
+          "steps": [
+            {
+              "$entity": "S1",
+              "patch": {
+                "estimatedMinutes": 30
+              }
+            },
+            {
+              "$entity": "S2"
+            },
+            {
+              "$entity": "S3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 660,
+      "utterance": "Unschedule Sort books, but keep it in the outcome",
+      "sourceLocator": {
+        "file": "F",
+        "row": 660,
+        "line": 34
+      },
+      "fixtureId": "outcome-scheduled",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "outcome-unschedule-preview",
+      "feature": "linked reservation removal preview preserves step identity and owning Outcome",
+      "expected": {
+        "intent": "step-unschedule",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "step-unschedule"
+        },
+        "feedbackPhase": "confirmation",
+        "actions": [
+          {
+            "type": "step.unschedule",
+            "stepId": "S2"
+          }
+        ]
+      }
+    },
+    {
+      "id": 662,
+      "utterance": "Delete the Sort books step, including its reserved time",
+      "sourceLocator": {
+        "file": "F",
+        "row": 662,
+        "line": 36
+      },
+      "fixtureId": "outcome-scheduled",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "outcome-linked-delete-preview",
+      "feature": "explicit step deletion previews linked R1 reservation impact without committing either",
+      "expected": {
+        "intent": "step-delete",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "step-delete"
+        },
+        "feedbackPhase": "confirmation",
+        "actions": [
+          {
+            "type": "plan.step.delete",
+            "stepId": "S2"
+          }
+        ]
+      }
+    },
+    {
+      "id": 667,
+      "utterance": "Defer the delivery confirmation commitment from Daniel until Friday because the supplier is away",
+      "sourceLocator": {
+        "file": "F",
+        "row": 667,
+        "line": 41
+      },
+      "fixtureId": "commitment-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "commitment-defer-reason",
+      "feature": "person plus promise phrase resolves nonreferenced target and preserves original deadline",
+      "expected": {
+        "intent": "commitment-defer",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "commitment-defer",
+          "dateKey": "2026-09-11",
+          "reason": "the supplier is away"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K2",
+            "patch": {
+              "status": "deferred",
+              "deferredUntil": "2026-09-11",
+              "deferReason": "the supplier is away"
+            }
+          }
+        ],
+        "collections": {
+          "commitments": [
+            {
+              "$entity": "K1"
+            },
+            {
+              "$entity": "K2",
+              "patch": {
+                "status": "deferred",
+                "deferredUntil": "2026-09-11",
+                "deferReason": "the supplier is away"
+              }
+            },
+            {
+              "$entity": "K3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 668,
+      "utterance": "Move the Send sketch deadline to Monday, not the meeting time",
+      "sourceLocator": {
+        "file": "F",
+        "row": 668,
+        "line": 42
+      },
+      "fixtureId": "commitment-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "commitment-deadline",
+      "feature": "deadline noun and negative meeting clause route to exact promise dueAt, not Calendar",
+      "expected": {
+        "intent": "commitment-due",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "commitment-due",
+          "dueAt": "2026-09-14T17:00:00.000Z"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K1",
+            "patch": {
+              "dueAt": "2026-09-14T17:00:00.000Z"
+            }
+          }
+        ],
+        "collections": {
+          "commitments": [
+            {
+              "$entity": "K1",
+              "patch": {
+                "dueAt": "2026-09-14T17:00:00.000Z"
+              }
+            },
+            {
+              "$entity": "K2"
+            },
+            {
+              "$entity": "K3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 671,
+      "utterance": "Mark the Send sketch promise to Maya complete",
+      "sourceLocator": {
+        "file": "F",
+        "row": 671,
+        "line": 45
+      },
+      "fixtureId": "commitment-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "commitment-complete",
+      "feature": "person and title disambiguate one of Maya's two commitments",
+      "expected": {
+        "intent": "commitment-complete",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "commitment-complete"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K1",
+            "patch": {
+              "status": "completed"
+            }
+          }
+        ],
+        "collections": {
+          "commitments": [
+            {
+              "$entity": "K1",
+              "patch": {
+                "status": "completed"
+              }
+            },
+            {
+              "$entity": "K2"
+            },
+            {
+              "$entity": "K3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 680,
+      "utterance": "I need to send someone the delivery reference",
+      "sourceLocator": {
+        "file": "F",
+        "row": 680,
+        "line": 54
+      },
+      "fixtureId": "commitment-reference",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "commitment-person-clarification",
+      "feature": "indefinite someone requires person clarification, not reuse of recent Maya or PersonSomeone",
+      "expected": {
+        "intent": "clarification",
+        "resolution": "clarify",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "clarification"
+        },
+        "feedbackPhase": "clarification"
+      }
+    },
+    {
+      "id": 691,
+      "utterance": "Replace the journal text with 'One thing.\n\nThen another.'",
+      "sourceLocator": {
+        "file": "G",
+        "row": 691,
+        "line": 27
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1",
+        "voiceMode": "command"
+      },
+      "family": "journal-multiline-literal",
+      "feature": "full-text replacement retains two literal paragraph newlines and punctuation",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "text",
+          "operation": "replace",
+          "value": "One thing.\n\nThen another."
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "One thing.\n\nThen another."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "One thing.\n\nThen another."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 692,
+      "utterance": "Change the last paragraph to 'I stayed, and that was enough.'",
+      "sourceLocator": {
+        "file": "G",
+        "row": 692,
+        "line": 28
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1",
+        "voiceMode": "command"
+      },
+      "family": "journal-paragraph-replacement",
+      "feature": "replace final paragraph preserving first paragraph and conjunction within literal value",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "paragraph",
+          "operation": "replace",
+          "value": "I stayed, and that was enough."
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "I waited by the window.\n\nI stayed, and that was enough."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "I waited by the window.\n\nI stayed, and that was enough."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 693,
+      "utterance": "Add journal tags home and garden, unfinished thoughts",
+      "sourceLocator": {
+        "file": "G",
+        "row": 693,
+        "line": 29
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1",
+        "voiceMode": "command"
+      },
+      "family": "journal-tag-edit",
+      "feature": "comma separates tags while and remains within one multiword label",
+      "expected": {
+        "intent": "journal-tags",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-tags",
+          "operation": "add",
+          "tags": [
+            "home and garden",
+            "unfinished thoughts"
+          ]
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "tags": [
+                "travel",
+                "family",
+                "home and garden",
+                "unfinished thoughts"
+              ]
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "tags": [
+                "travel",
+                "family",
+                "home and garden",
+                "unfinished thoughts"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 694,
+      "utterance": "Remove the FAMILY tag from this journal",
+      "sourceLocator": {
+        "file": "G",
+        "row": 694,
+        "line": 30
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1",
+        "voiceMode": "command"
+      },
+      "family": "journal-tag-edit",
+      "feature": "case-insensitive existing label removal preserves differently named tags",
+      "expected": {
+        "intent": "journal-tags",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-tags",
+          "operation": "remove"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "tags": [
+                "travel"
+              ]
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "tags": [
+                "travel"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 695,
+      "utterance": "Set the journal tags to train rides, small victories",
+      "sourceLocator": {
+        "file": "G",
+        "row": 695,
+        "line": 31
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1",
+        "voiceMode": "command"
+      },
+      "family": "journal-tag-edit",
+      "feature": "set replaces the complete label collection rather than appending",
+      "expected": {
+        "intent": "journal-tags",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-tags",
+          "operation": "set",
+          "tags": [
+            "train rides",
+            "small victories"
+          ]
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "tags": [
+                "train rides",
+                "small victories"
+              ]
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "tags": [
+                "train rides",
+                "small victories"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 696,
+      "utterance": "Make the entry's words say 'What a damn good ordinary day.'",
+      "sourceLocator": {
+        "file": "G",
+        "row": 696,
+        "line": 32
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1",
+        "voiceMode": "command"
+      },
+      "family": "journal-words-parity",
+      "feature": "Words editor paraphrase preserves profanity, casing and sentence punctuation",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "text",
+          "operation": "replace",
+          "value": "What a damn good ordinary day."
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "What a damn good ordinary day."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "What a damn good ordinary day."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 296,
+      "utterance": "Make the text say ‘Less rain’",
+      "sourceLocator": {
+        "file": "B",
+        "row": 296,
+        "line": 194
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-words-parity",
+      "feature": "literal Words editor value is supported Memory edit, not an Atmosphere instruction",
+      "expected": {
+        "intent": "memory-edit",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-edit",
+          "property": "passage",
+          "value": "Less rain"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "passage": "Less rain"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "passage": "Less rain"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "entityLiterals": {
+    "C1": {
+      "id": "C1",
+      "kind": "capture",
+      "title": "Boiler receipt",
+      "status": "unresolved",
+      "source": "typed",
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "C2": {
+      "id": "C2",
+      "kind": "capture",
+      "title": "Window measurements",
+      "status": "unresolved",
+      "source": "typed",
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "C3": {
+      "id": "C3",
+      "kind": "capture",
+      "title": "Old packing list",
+      "status": "archived",
+      "source": "typed",
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "O1": {
+      "id": "O1",
+      "kind": "plan",
+      "title": "Home library",
+      "outcome": "Home library ready",
+      "status": "active",
+      "stepIds": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "nextStepId": "S1",
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "O2": {
+      "id": "O2",
+      "kind": "plan",
+      "title": "Garden notebook",
+      "outcome": "Garden notes organized",
+      "status": "paused",
+      "stepIds": [],
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "S1": {
+      "id": "S1",
+      "kind": "plan-step",
+      "planId": "O1",
+      "title": "Measure shelves",
+      "status": "planned",
+      "estimatedMinutes": 25,
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "S2": {
+      "id": "S2",
+      "kind": "plan-step",
+      "planId": "O1",
+      "title": "Sort books",
+      "status": "planned",
+      "estimatedMinutes": 40,
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "S3": {
+      "id": "S3",
+      "kind": "plan-step",
+      "planId": "O1",
+      "title": "Donate old books",
+      "status": "planned",
+      "estimatedMinutes": 30,
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "K1": {
+      "id": "K1",
+      "kind": "commitment",
+      "personId": "P-Maya",
+      "title": "Send sketch",
+      "direction": "i-owe",
+      "status": "open",
+      "dueAt": "2026-09-11T17:00:00.000Z",
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "K2": {
+      "id": "K2",
+      "kind": "commitment",
+      "personId": "P-Daniel",
+      "title": "Delivery confirmation",
+      "direction": "waiting-on",
+      "status": "open",
+      "dueAt": "2026-09-10T17:00:00.000Z",
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    },
+    "K3": {
+      "id": "K3",
+      "kind": "commitment",
+      "personId": "P-Maya",
+      "title": "Return keys",
+      "direction": "i-owe",
+      "status": "open",
+      "dueAt": "2026-09-09T17:00:00.000Z",
+      "createdAt": "$AT",
+      "updatedAt": "$AT"
+    }
+  },
+  "aliasContract": "Replace {$entity:ID,patch} with complete entityLiterals[ID] plus explicit shallow patch, replace $AT with fixture acceptanceClock ISO. Arrays replace arrays. All unmentioned LifeDocument fields unchanged. Never derive expected values from parser/planner/actualAfter."
+}

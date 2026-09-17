@@ -1,0 +1,464 @@
+{
+  "batch": "assisted-frozen-J",
+  "status": "PENDING_SECOND_READER_SCHEMA_EXPANSION_EXECUTION_NOT_ADMITTED",
+  "source": "assisted-editorial",
+  "sources": {
+    "A": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-001-120.md",
+      "sha256": "6d2e570449da5f92dc7e86d3ff39d6b5190b7273ea6cb2195bbd11480fa85800"
+    },
+    "B": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-121-300.md",
+      "sha256": "81efe8a1fb6f0ab7b001951cf1466bccf5b0b9bc1d2caee08a4978e6dae29050"
+    }
+  },
+  "defaults": {
+    "fixtureId": "empty-home",
+    "contextOverrides": {},
+    "semantic": {
+      "historyDelta": 1,
+      "feedbackPhase": "completed"
+    }
+  },
+  "oracleRules": "Each case fresh named BEFORE; preserve all unlisted full-document fields. $entity clones named BEFORE plus patch/updatedAtAT. $UNDEFINED is explicit field absence. No actualAfter-derived expectations. NoPending means absence, not []. Attempted/pending/committed action sets are distinct. Exact global undo/redo required. No native/acoustic evidence implied.",
+  "recipes": {
+    "capture": "Intent capture-create/title=intentTitle. New C={id:newId,kind:capture,title:storedTitle,status:unresolved,source:typed,provenance:{routerVersion:2,transcript:EXACTutterance,commandId:evaluation-EXACTutterance},createdAt:AT,updatedAt:AT}. Actions[capture.create{capture:C}]; AFTER.captures=[C], routehome. Command ID bound BEFORE evaluation, not read from actualAfter.",
+    "step": "Intent step-add/title=title with no implicit duration slot. New S={id:newId,kind:plan-step,planId:O1,title,status:planned,estimatedMinutes:25,createdAt:AT,updatedAt:AT}. Actions[plan.step.add{step:S}]. AFTER.steps=[S1,S2,S3,S]. O1.stepIds=[S1,S2,S3,newId],updatedAtAT,nextStepId remainsS1; O2 unchanged. Routeplans, no calendar/link creation.",
+    "outcome": "Intent outcome-create/title. New S={id:stepId,kind:plan-step,planId:newId,title:Define the next action,status:planned,estimatedMinutes:20,createdAt:AT,updatedAt:AT}. Initial P={id:newId,kind:plan,title,outcome:Ready: TITLE,status:active,stepIds:[],nextStepId:stepId,createdAt:AT,updatedAt:AT}. Actions[plan.create{plan:P},plan.step.add{step:S}]. AFTER.plans=[P with stepIds:[stepId]],steps=[S]. Routeplans, one history entry.",
+    "commitment": "Intent commitment-create/person=personName/title/direction/statusopen/dueAt declared or absent. New P={id:personId,kind:person,name:personName,createdAt:AT,updatedAt:AT}; K={id:newId,kind:commitment,personId,title,direction,status:open,dueAt:declared-or-undefined,createdAt:AT,updatedAt:AT}. Actions[person.ensure{person:P},commitment.create{commitment:K}]. AFTER.people=[P],commitments=[K]; routepeople oneH1. No invented deadline or calendar/outcome/capture."
+  },
+  "reviewHolds": [
+    "111 changes original known-Miguel context to explicit empty-home creation; must retain both provenance and fixture distinction.",
+    "191 preserve literal lowercase order; do not infer expectation from parser output.",
+    "Source family labels normalize to actual capabilities; diversity dedup still applies."
+  ],
+  "cases": [
+    {
+      "id": 114,
+      "sourceLocator": {
+        "file": "A",
+        "line": 148
+      },
+      "utterance": "Add a step saying Check the requirements",
+      "oracleRecipe": "step",
+      "fixtureId": "outcome-reference",
+      "title": "Check the requirements",
+      "newId": "step-o1-check-the-requirements"
+    },
+    {
+      "id": 190,
+      "sourceLocator": {
+        "file": "B",
+        "line": 88
+      },
+      "utterance": "Add a next step called Ask about processing times",
+      "oracleRecipe": "step",
+      "fixtureId": "outcome-reference",
+      "title": "Ask about processing times",
+      "newId": "step-o1-ask-about-processing-times"
+    },
+    {
+      "id": 191,
+      "sourceLocator": {
+        "file": "B",
+        "line": 89
+      },
+      "utterance": "The next thing to do is order replacement photos",
+      "oracleRecipe": "step",
+      "fixtureId": "outcome-reference",
+      "title": "order replacement photos",
+      "newId": "step-o1-order-replacement-photos"
+    },
+    {
+      "id": 115,
+      "sourceLocator": {
+        "file": "A",
+        "line": 149
+      },
+      "utterance": "Create an outcome called A calmer September",
+      "oracleRecipe": "outcome",
+      "title": "A calmer September",
+      "newId": "plan-a-calmer-september",
+      "stepId": "step-plan-a-calmer-september-define-0irmmsu"
+    },
+    {
+      "id": 181,
+      "sourceLocator": {
+        "file": "B",
+        "line": 79
+      },
+      "utterance": "Create an outcome called Finish the cycling course",
+      "oracleRecipe": "outcome",
+      "title": "Finish the cycling course",
+      "newId": "plan-finish-the-cycling-course",
+      "stepId": "step-plan-finish-the-cycling-course-0ngt1zn"
+    },
+    {
+      "id": 182,
+      "sourceLocator": {
+        "file": "B",
+        "line": 80
+      },
+      "utterance": "Add a new outcome: A usable balcony",
+      "oracleRecipe": "outcome",
+      "title": "A usable balcony",
+      "newId": "plan-a-usable-balcony",
+      "stepId": "step-plan-a-usable-balcony-define-t-0o1otaf"
+    },
+    {
+      "id": 201,
+      "sourceLocator": {
+        "file": "B",
+        "line": 99
+      },
+      "utterance": "Capture a reminder to replace the bike light",
+      "oracleRecipe": "capture",
+      "intentTitle": "a reminder to replace the bike light",
+      "storedTitle": "A reminder to replace the bike light",
+      "newId": "capture-a-reminder-to-replace-the-bike-light"
+    },
+    {
+      "id": 202,
+      "sourceLocator": {
+        "file": "B",
+        "line": 100
+      },
+      "utterance": "Write down: the spare key is with Leila",
+      "oracleRecipe": "capture",
+      "intentTitle": "the spare key is with Leila",
+      "storedTitle": "The spare key is with Leila",
+      "newId": "capture-the-spare-key-is-with-leila"
+    },
+    {
+      "id": 203,
+      "sourceLocator": {
+        "file": "B",
+        "line": 101
+      },
+      "utterance": "Keep this for later: ask the landlord about insulation",
+      "oracleRecipe": "capture",
+      "intentTitle": "ask the landlord about insulation",
+      "storedTitle": "Ask the landlord about insulation",
+      "newId": "capture-ask-the-landlord-about-insulation"
+    },
+    {
+      "id": 204,
+      "sourceLocator": {
+        "file": "B",
+        "line": 102
+      },
+      "utterance": "Put ‘Find a quieter route home’ in Capture",
+      "oracleRecipe": "capture",
+      "intentTitle": "Find a quieter route home",
+      "storedTitle": "Find a quieter route home",
+      "newId": "capture-find-a-quieter-route-home"
+    },
+    {
+      "id": 205,
+      "sourceLocator": {
+        "file": "B",
+        "line": 103
+      },
+      "utterance": "Save the idea of a shared tool cupboard",
+      "oracleRecipe": "capture",
+      "intentTitle": "the idea of a shared tool cupboard",
+      "storedTitle": "The idea of a shared tool cupboard",
+      "newId": "capture-the-idea-of-a-shared-tool-cupboard"
+    },
+    {
+      "id": 217,
+      "sourceLocator": {
+        "file": "B",
+        "line": 115
+      },
+      "utterance": "Remember that the door code changed",
+      "oracleRecipe": "capture",
+      "intentTitle": "the door code changed",
+      "storedTitle": "The door code changed",
+      "newId": "capture-the-door-code-changed"
+    },
+    {
+      "id": 218,
+      "sourceLocator": {
+        "file": "B",
+        "line": 116
+      },
+      "utterance": "Jot down two ideas: repair the chair and donate the desk",
+      "oracleRecipe": "capture",
+      "intentTitle": "two ideas: repair the chair and donate the desk",
+      "storedTitle": "Two ideas: repair the chair and donate the desk",
+      "newId": "capture-two-ideas-repair-the-chair-and-1jzwzc0"
+    },
+    {
+      "id": 219,
+      "sourceLocator": {
+        "file": "B",
+        "line": 117
+      },
+      "utterance": "Capture ‘delete this meeting’ exactly",
+      "oracleRecipe": "capture",
+      "intentTitle": "delete this meeting",
+      "storedTitle": "Delete this meeting",
+      "newId": "capture-delete-this-meeting"
+    },
+    {
+      "id": 111,
+      "sourceLocator": {
+        "file": "A",
+        "line": 145
+      },
+      "utterance": "I need to send Miguel the proposal",
+      "oracleRecipe": "commitment",
+      "personName": "Miguel",
+      "personId": "person-miguel",
+      "title": "Send the proposal",
+      "direction": "i-owe",
+      "newId": "commitment-person-miguel-send-the-proposal",
+      "dueAtPolicy": "absent"
+    },
+    {
+      "id": 221,
+      "sourceLocator": {
+        "file": "B",
+        "line": 119
+      },
+      "utterance": "I promised Miguel I'd send the revised proposal by Friday",
+      "oracleRecipe": "commitment",
+      "personName": "Miguel",
+      "personId": "person-miguel",
+      "title": "Send the revised proposal",
+      "direction": "i-owe",
+      "newId": "commitment-person-miguel-send-the-revised-1kjoqvj",
+      "dueAt": "2026-09-11T17:00:00.000Z"
+    },
+    {
+      "id": 222,
+      "sourceLocator": {
+        "file": "B",
+        "line": 120
+      },
+      "utterance": "Sarah owes me the signed agreement by Thursday",
+      "oracleRecipe": "commitment",
+      "personName": "Sarah",
+      "personId": "person-sarah",
+      "title": "Signed agreement",
+      "direction": "waiting-on",
+      "newId": "commitment-person-sarah-signed-agreement",
+      "dueAt": "2026-09-10T17:00:00.000Z"
+    },
+    {
+      "id": 223,
+      "sourceLocator": {
+        "file": "B",
+        "line": 121
+      },
+      "utterance": "I'm waiting for Daniel's delivery confirmation",
+      "oracleRecipe": "commitment",
+      "personName": "Daniel",
+      "personId": "person-daniel",
+      "title": "Delivery confirmation",
+      "direction": "waiting-on",
+      "newId": "commitment-person-daniel-delivery-confirmation",
+      "dueAtPolicy": "absent"
+    },
+    {
+      "id": 224,
+      "sourceLocator": {
+        "file": "B",
+        "line": 122
+      },
+      "utterance": "I need to send Miguel the floor plan",
+      "oracleRecipe": "commitment",
+      "personName": "Miguel",
+      "personId": "person-miguel",
+      "title": "Send the floor plan",
+      "direction": "i-owe",
+      "newId": "commitment-person-miguel-send-the-floor-plan",
+      "dueAtPolicy": "absent"
+    },
+    {
+      "id": 225,
+      "sourceLocator": {
+        "file": "B",
+        "line": 123
+      },
+      "utterance": "Add a commitment to return Leila's keys on Friday",
+      "oracleRecipe": "commitment",
+      "personName": "Leila",
+      "personId": "person-leila",
+      "title": "Return keys",
+      "direction": "i-owe",
+      "newId": "commitment-person-leila-return-keys",
+      "dueAt": "2026-09-11T17:00:00.000Z"
+    },
+    {
+      "id": 292,
+      "sourceLocator": {
+        "file": "B",
+        "line": 190
+      },
+      "utterance": "Add a promise to send Miguel the floor plan by Friday",
+      "oracleRecipe": "commitment",
+      "personName": "Miguel",
+      "personId": "person-miguel",
+      "title": "Send the floor plan",
+      "direction": "i-owe",
+      "newId": "commitment-person-miguel-send-the-floor-plan",
+      "dueAt": "2026-09-11T17:00:00.000Z"
+    },
+    {
+      "id": 240,
+      "sourceLocator": {
+        "file": "B",
+        "line": 138
+      },
+      "utterance": "I owe someone a reply",
+      "oracleRecipe": "clarification",
+      "expected": {
+        "intent": "clarification",
+        "resolution": "clarify",
+        "route": "home"
+      },
+      "semantic": {
+        "historyDelta": 0,
+        "feedbackPhase": "clarification",
+        "intent": {
+          "type": "clarification"
+        },
+        "actions": [],
+        "noCreation": true,
+        "noPending": true
+      },
+      "focusedQuestion": "Who do you owe a reply to?"
+    },
+    {
+      "id": 268,
+      "sourceLocator": {
+        "file": "B",
+        "line": 166
+      },
+      "utterance": "Hide the photograph for this version",
+      "oracleRecipe": "memory-photo-hide",
+      "fixtureId": "memory-source",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "feedbackPhase": "completed",
+        "intent": {
+          "type": "memory-update",
+          "property": "photo",
+          "operation": "hide"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "photoAssetId": "$UNDEFINED"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "photoAssetId": "$UNDEFINED"
+            }
+          }
+        ],
+        "noCreation": true
+      }
+    },
+    {
+      "id": 290,
+      "sourceLocator": {
+        "file": "B",
+        "line": 188
+      },
+      "utterance": "Remove the voice from the journal entry",
+      "oracleRecipe": "journal-source-audio-delete",
+      "fixtureId": "memory-source",
+      "expected": {
+        "intent": "journal-recording",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "historyDelta": 0,
+        "feedbackPhase": "confirmation",
+        "intent": {
+          "type": "journal-recording",
+          "mode": "discard"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "recordingState": "idle",
+              "recordingDurationMs": 0,
+              "audioAssetId": "$UNDEFINED"
+            }
+          },
+          {
+            "type": "media.remove",
+            "assetId": "A1"
+          }
+        ],
+        "pendingActions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "recordingState": "idle",
+              "recordingDurationMs": 0,
+              "audioAssetId": "$UNDEFINED"
+            }
+          },
+          {
+            "type": "media.remove",
+            "assetId": "A1"
+          }
+        ],
+        "noCreation": true
+      },
+      "commitCount": 0,
+      "pendingContract": "No pre-confirm mutation. Confirm removes A1 metadata and J1.audioAssetId; J1 duration0/stateidle/updatedAtAT; preserve text/photos/bookmarks/P1/P2/M1 and all complement. One H1 exact metadata undo, not invented byte availability. Cancel BEFORE H0."
+    },
+    {
+      "id": 286,
+      "sourceLocator": {
+        "file": "B",
+        "line": 184
+      },
+      "utterance": "Make its words larger",
+      "oracleRecipe": "missing-memory-reference",
+      "contextOverrides": {
+        "route": "memories",
+        "topic": "memory"
+      },
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "historyDelta": 0,
+        "feedbackPhase": "clarification",
+        "intent": {
+          "type": "memory-update",
+          "property": "textScale",
+          "operation": "increase"
+        },
+        "actions": [],
+        "noCreation": true,
+        "noPending": true
+      },
+      "focusedQuestion": "Which memory?"
+    }
+  ]
+}

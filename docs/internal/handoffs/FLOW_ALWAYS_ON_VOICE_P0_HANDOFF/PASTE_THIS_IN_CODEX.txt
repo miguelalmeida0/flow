@@ -1,0 +1,33 @@
+P0 STOP-SHIP: repair Flow's global Live Session before any mascot work.
+
+Read repository AGENTS.md and docs/quality/VERIFICATION.md first.
+
+Then read every file under FLOW_ALWAYS_ON_VOICE_P0_HANDOFF in the exact order listed in FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/README.md.
+
+Inspect the two supplied failure screenshots:
+
+- FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/assets/current-failures/01-home-live-listening.png
+- FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/assets/current-failures/02-navigation-captured-as-inbox.png
+
+Then execute FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/FLOW_ALWAYS_ON_VOICE_MASTER_PROMPT.md completely.
+
+This is an implementation mission, not a review.
+
+The release-blocking defect is that global voice navigation such as “Open the calendar” and “Open the inbox” is being persisted as Inbox captures. The user wants to grant microphone permission once, start one Live Session, navigate among Home/Calendar/Inbox/Plans/People/Now by voice, perform follow-up edits with conversational context, and return Home without pressing the microphone again.
+
+Non-negotiable:
+
+- one application-shell voice owner;
+- one continuous foreground Live Session;
+- strict routing precedence: system → navigation → clarification → domain → cross-space → explicit capture → unsupported;
+- no unknown-to-capture fallback;
+- no navigation phrase may create user data;
+- no repeated mic click;
+- no event/container selection required when time/title/context resolves the target;
+- one shared typed action/transaction pipeline;
+- exact undo/redo;
+- DOM + SVG + Motion only;
+- no paid LLM, backend, Three.js, image generation, or second business-logic path;
+- no mascot implementation until this P0 is physical-microphone green.
+
+Do not stop after diagnosis or scaffolding. Implement, test, run browser QA, and then request the physical microphone acceptance journey.

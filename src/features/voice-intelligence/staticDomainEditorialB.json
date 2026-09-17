@@ -1,0 +1,1002 @@
+{
+  "status": "DRAFT_ARCHIVED_NOT_ADMITTED_NOT_EXECUTED",
+  "batch": "static-domain-freeze-2-of-2",
+  "recipeContract": "Expand collectionRecipes against immutable named BEFORE fixture, preserving every unmentioned entity/field; updatedAt=fixture acceptanceClock ISO only for explicitly edited records. contextReferenceRecipes sets fresh reference at=context.nowMs-ageMs. pendingActions asserts pending-confirmation scope, not committed mutation. Never use actualAfter or parser output. Schema normalization must be declared independently before evaluation.",
+  "fixtureSnapshot": {
+    "path": "src/features/voice-intelligence/acceptanceDomainFixtures.ts",
+    "sha256": "0bf4a54abc51c717c9ca2fc0f2a537b48793beaaac01da9641e48f0644f8f0cc"
+  },
+  "cases": [
+    {
+      "id": "repository-supplement-draft-0332",
+      "utterance": "Complete this step",
+      "fixtureId": "outcome-scheduled",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "step-complete",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "step-complete",
+          "query": "this"
+        },
+        "actions": [
+          {
+            "type": "plan.step.update",
+            "stepId": "S2",
+            "patch": {
+              "status": "completed"
+            }
+          },
+          {
+            "type": "calendar.request",
+            "confirmed": true,
+            "request": {
+              "actions": [
+                {
+                  "type": "update",
+                  "selector": {
+                    "type": "id",
+                    "id": "R1"
+                  },
+                  "patch": {
+                    "status": "done"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "R1",
+            "patch": {
+              "status": "done"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/shared/command/appleSemanticCorpus.test.ts",
+        "line": 81,
+        "sha256": "94a6006658d80c178aeffe912becbdfe2466304b984a314fb6c4f7da6f25d6ce"
+      },
+      "editorial": {
+        "family": "outcome-step-complete",
+        "languageFeature": "linked-step-and-calendar-complete-atomically"
+      },
+      "contextReferenceRecipes": [
+        {
+          "field": "lastReferenced",
+          "kind": "plan-step",
+          "id": "S2",
+          "ageMs": 1000
+        }
+      ],
+      "collectionRecipes": [
+        {
+          "collection": "steps",
+          "id": "S2",
+          "patch": {
+            "status": "completed"
+          },
+          "updatedAt": "fixtureClock"
+        }
+      ]
+    },
+    {
+      "id": "repository-draft-0017",
+      "utterance": "put interview at 5",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "move"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 57,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "explicit-fixed-event-already-at-destination"
+      },
+      "oracleCorrection": {
+        "reason": "Independent root review: existing anchored move confirmation applies even when the destination is unchanged. Confirmation then performs a no-op, with no history.",
+        "supersededSemantic": {
+          "feedbackPhase": "completed",
+          "historyDelta": 0,
+          "noCreation": true,
+          "intent": {
+            "type": "calendar"
+          },
+          "calendarActionTypes": [
+            "move"
+          ]
+        },
+        "reviewStatus": "independently-reviewed"
+      },
+      "pendingActions": [
+        {
+          "type": "calendar.request",
+          "confirmed": "0:move:E3",
+          "request": {
+            "actions": [
+              {
+                "type": "move",
+                "selector": {
+                  "type": "title",
+                  "query": "interview"
+                },
+                "destination": {
+                  "type": "absolute",
+                  "minutes": 1020
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "repository-draft-0041",
+      "utterance": "Shorten this to 30 minutes",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "resize"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 84,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "duration-already-equals-request"
+      }
+    },
+    {
+      "id": "repository-draft-0047",
+      "utterance": "Do not move the interview",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "constraints": [
+              {
+                "type": "keep",
+                "selector": {
+                  "type": "title",
+                  "query": "interview"
+                }
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "protect"
+        ],
+        "eventChanges": [
+          {
+            "id": "E3",
+            "patch": {
+              "protected": true
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 93,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-protection",
+        "languageFeature": "negative-motion-constraint-explicit-protection"
+      }
+    },
+    {
+      "id": "repository-draft-0048",
+      "utterance": "Keep dinner at 7",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "constraints": [
+              {
+                "type": "keep",
+                "selector": {
+                  "type": "title",
+                  "query": "dinner"
+                },
+                "at": 1140
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "protect"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 94,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "already-protected-fixed-time-request"
+      }
+    },
+    {
+      "id": "repository-draft-0052",
+      "utterance": "Release the selected event",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "unprotect"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 98,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "selected-event-already-unprotected"
+      }
+    },
+    {
+      "id": "repository-draft-0053",
+      "utterance": "Lock the interview",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "protect"
+        ],
+        "eventChanges": [
+          {
+            "id": "E3",
+            "patch": {
+              "protected": true
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 99,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-protection",
+        "languageFeature": "lock-explicit-fixed-title"
+      }
+    },
+    {
+      "id": "repository-draft-0054",
+      "utterance": "Fix dinner",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "protect"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 100,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "already-protected-title-request"
+      }
+    },
+    {
+      "id": "repository-draft-0074",
+      "utterance": "Delete the selected event",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "delete"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/parser.test.ts",
+        "line": 122,
+        "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+      },
+      "editorial": {
+        "family": "calendar-delete-confirmation",
+        "languageFeature": "selected-event-preserved-before-confirmation"
+      },
+      "pendingTarget": {
+        "kind": "calendar-event",
+        "id": "E1"
+      }
+    },
+    {
+      "id": "repository-draft-0092",
+      "utterance": "Move this after the interview",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "move"
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 1080,
+              "end": 1110
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 28,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-move",
+        "languageFeature": "demonstrative-relative-fixed-anchor"
+      }
+    },
+    {
+      "id": "repository-draft-0115",
+      "utterance": "Make dinner ninety minutes",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "eventChanges": [
+          {
+            "id": "E4",
+            "patch": {
+              "end": 1230
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 54,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-resize",
+        "languageFeature": "explicit-protected-title-duration-extension"
+      }
+    },
+    {
+      "id": "repository-draft-0132",
+      "utterance": "Make dinner light again",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ],
+        "eventChanges": [
+          {
+            "id": "E4",
+            "patch": {
+              "mobility": "light"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 72,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-mobility",
+        "languageFeature": "mobility-change-does-not-implicitly-unprotect"
+      }
+    },
+    {
+      "id": "repository-draft-0133",
+      "utterance": "Anchor interview",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 73,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "fixed-interview-already-anchored"
+      }
+    },
+    {
+      "id": "repository-draft-0145",
+      "utterance": "Remove client label from the 2 PM meeting",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 86,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "absent-label-removal-is-not-deletion"
+      }
+    },
+    {
+      "id": "repository-draft-0153",
+      "utterance": "Make the selected event flexible",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "unprotect",
+          "update"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 95,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "compound-already-flexible-selected-event"
+      }
+    },
+    {
+      "id": "repository-draft-0154",
+      "utterance": "Lock the next meeting",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "protect"
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "protected": true
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 96,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-protection",
+        "languageFeature": "next-position-protection"
+      }
+    },
+    {
+      "id": "repository-draft-0156",
+      "utterance": "Make dinner flexible again",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "unprotect",
+          "update"
+        ],
+        "eventChanges": [
+          {
+            "id": "E4",
+            "patch": {
+              "protected": false,
+              "mobility": "light"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 98,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-mobility",
+        "languageFeature": "explicit-flexible-releases-protection-and-mobility"
+      }
+    },
+    {
+      "id": "repository-draft-0210",
+      "utterance": "Move the 2 PM meeting to four and make it forty five minutes",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "move",
+          "resize"
+        ],
+        "eventChanges": [
+          {
+            "id": "E2",
+            "patch": {
+              "start": 960,
+              "end": 1005
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 161,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-compound",
+        "languageFeature": "source-time-move-and-anaphoric-resize"
+      }
+    },
+    {
+      "id": "repository-draft-0211",
+      "utterance": "Rename interview to hiring review and paint it blue",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update",
+          "update"
+        ],
+        "eventChanges": [
+          {
+            "id": "E3",
+            "patch": {
+              "title": "hiring review",
+              "color": "blue"
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 162,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-compound",
+        "languageFeature": "rename-followed-by-same-target-color"
+      }
+    },
+    {
+      "id": "repository-draft-0212",
+      "utterance": "Unprotect dinner, make it light, and move it to eight",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 1,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "unprotect",
+          "update",
+          "move"
+        ],
+        "eventChanges": [
+          {
+            "id": "E4",
+            "patch": {
+              "protected": false,
+              "mobility": "light",
+              "start": 1200,
+              "end": 1260
+            }
+          }
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 163,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-compound",
+        "languageFeature": "release-mobility-move-one-transaction"
+      }
+    },
+    {
+      "id": "repository-draft-0221",
+      "utterance": "Remove the client label",
+      "fixtureId": "calendar-reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ]
+      },
+      "source": {
+        "file": "src/features/day-planner/tideLanguage.test.ts",
+        "line": 182,
+        "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+      },
+      "editorial": {
+        "family": "calendar-no-op",
+        "languageFeature": "contextual-absent-label-removal"
+      }
+    },
+    {
+      "id": "repository-draft-0303",
+      "utterance": "Show tomorrow.",
+      "fixtureId": "calendar-dated",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "temporal",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "temporal",
+          "scope": {
+            "kind": "day",
+            "dateKey": "2026-09-09"
+          }
+        },
+        "scope": {
+          "kind": "day",
+          "dateKey": "2026-09-09"
+        },
+        "actions": []
+      },
+      "source": {
+        "file": "src/shared/command/eliteSemanticCorpus.test.ts",
+        "line": 16,
+        "sha256": "fa86ee81611601aa2f472a66799c72740531ac416828c44fd2d1f0e589038c95"
+      },
+      "editorial": {
+        "family": "temporal-navigation",
+        "languageFeature": "future-view-without-moving-entities"
+      }
+    },
+    {
+      "id": "repository-draft-0305",
+      "utterance": "Show Friday.",
+      "fixtureId": "calendar-dated",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "temporal",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "temporal",
+          "scope": {
+            "kind": "day",
+            "dateKey": "2026-09-11"
+          }
+        },
+        "scope": {
+          "kind": "day",
+          "dateKey": "2026-09-11"
+        },
+        "actions": []
+      },
+      "source": {
+        "file": "src/shared/command/eliteSemanticCorpus.test.ts",
+        "line": 19,
+        "sha256": "fa86ee81611601aa2f472a66799c72740531ac416828c44fd2d1f0e589038c95"
+      },
+      "editorial": {
+        "family": "temporal-navigation",
+        "languageFeature": "weekday-view-preserves-dated-calendar-world"
+      }
+    },
+    {
+      "id": "repository-draft-0337",
+      "utterance": "Help.",
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "help",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "help"
+        },
+        "actions": []
+      },
+      "source": {
+        "file": "src/shared/command/eliteSemanticCorpus.test.ts",
+        "line": 88,
+        "sha256": "fa86ee81611601aa2f472a66799c72740531ac416828c44fd2d1f0e589038c95"
+      },
+      "editorial": {
+        "family": "system-help",
+        "languageFeature": "punctuated-help-no-data-creation"
+      }
+    },
+    {
+      "id": "repository-draft-0338",
+      "utterance": "Home.",
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "completed",
+        "historyDelta": 0,
+        "noCreation": true,
+        "intent": {
+          "type": "navigate",
+          "route": "home"
+        },
+        "actions": []
+      },
+      "source": {
+        "file": "src/shared/command/eliteSemanticCorpus.test.ts",
+        "line": 89,
+        "sha256": "fa86ee81611601aa2f472a66799c72740531ac416828c44fd2d1f0e589038c95"
+      },
+      "editorial": {
+        "family": "navigation",
+        "languageFeature": "current-home-navigation-no-history"
+      }
+    }
+  ]
+}

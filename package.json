@@ -1,0 +1,50 @@
+{
+  "name": "flow-voice-calendar",
+  "version": "1.0.1",
+  "private": true,
+  "type": "module",
+  "description": "A voice-first calendar that rearranges and recovers the day in real time.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "test": "TMPDIR=$PWD/node_modules/.tmp vitest",
+    "test:run": "TMPDIR=$PWD/node_modules/.tmp vitest run --maxWorkers=1",
+    "check": "npm run lint && npm run test:run && npm run build",
+    "test:e2e": "TMPDIR=${TMPDIR:-$PWD/node_modules/.tmp} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/node_modules/.cache/ms-playwright} node scripts/run-e2e.mjs",
+    "test:e2e:dev": "TMPDIR=${TMPDIR:-$PWD/node_modules/.tmp} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/node_modules/.cache/ms-playwright} node scripts/run-e2e.mjs --dev",
+    "qa:release": "node scripts/qa-release.mjs",
+    "qa:design-migration": "node scripts/qa-design-migration.mjs",
+    "qa:motion": "node scripts/qa-motion.mjs"
+  },
+  "dependencies": {
+    "motion": "^12.23.12",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@playwright/test": "^1.55.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "eslint": "^9.35.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "jsdom": "^26.1.0",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.42.0",
+    "vite": "^7.1.3",
+    "vitest": "^3.2.4"
+  }
+}

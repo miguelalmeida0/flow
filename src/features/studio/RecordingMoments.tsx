@@ -1,0 +1,21 @@
+import type { VoiceMarker } from "../../domain/friends-model";
+import type { RecordingTarget } from "../../domain/friends-actions";
+import { useFlowEnvironment } from "../../app/FlowEnvironmentProvider";
+import { warmQuietButton } from "../../shared/design-system/WorldPageShell";
+
+const recordingTime = (milliseconds: number) => `${Math.floor(milliseconds / 60_000)}:${String(Math.floor(milliseconds / 1000) % 60).padStart(2, "0")}`;
+export function RecordingMoments({ target, markers }: { target: RecordingTarget; markers: readonly VoiceMarker[] }) {
+  const environment = useFlowEnvironment();
+  const visible = markers.filter(({ status }) => status !== "dismissed").sort((a, b) => a.startMs - b.startMs);
+  return <section className="mt-5" aria-label="Recording moments"><div className="flex items-center justify-between gap-3"><h3 className="font-serif text-xl">Moments</h3><button data-action-id="recording.marker-create" className={warmQuietButton} type="button" onClick={() => environment.dispatchFriend({ type: "recording-marker", operation: "mark", target })}>Mark here</button></div>
+    <ol className="mt-2 divide-y divide-[#E8E0D7]">{visible.map((marker, index) => <li className={`py-3 ${environment.conversationContext.selectedVoiceMarkerId === marker.id ? "rounded-xl bg-flow-neutral-soft px-3" : ""}`} key={marker.id} data-voice-marker-id={marker.id}>
+      <button data-action-id="recording.marker-play" className="w-full text-left focus-visible:outline-2 focus-visible:outline-flow-blue" type="button" onClick={() => environment.dispatchFriend({ type: "recording-marker", operation: "play", target, markerId: marker.id })} aria-label={`Play marker ${index + 1}: ${marker.title}`}><span className="text-xs text-flow-secondary">{recordingTime(marker.startMs)} · {marker.kind}{marker.status === "suggested" ? " · Suggested" : ""}</span><strong className="mt-1 block text-sm font-medium">{marker.title}</strong><span className="mt-1 block text-sm leading-6 text-flow-secondary">{marker.excerpt}</span></button>
+      <div className="mt-2 flex flex-wrap gap-2">{marker.status === "suggested" && <><button data-action-id="recording.marker-keep" className={warmQuietButton} type="button" onClick={() => environment.dispatchFriend({ type: "recording-marker", operation: "keep", target, markerId: marker.id })}>Keep</button><button data-action-id="recording.marker-dismiss" className={warmQuietButton} type="button" onClick={() => environment.dispatchFriend({ type: "recording-marker", operation: "dismiss", target, markerId: marker.id })}>Dismiss</button></>}{[...(target.kind !== "journal" ? ["reply"] : []), "calendar", "commitment", "share"].map((operation) => <button data-action-id="recording.marker-action" className={warmQuietButton} key={operation} type="button" onClick={() => environment.dispatchFriend({ type: "recording-marker", operation: operation as "reply" | "calendar" | "commitment" | "share", target, markerId: marker.id })}>{operation === "reply" ? "Reply" : operation === "calendar" ? "Make a plan" : operation === "commitment" ? "Keep commitment" : "Share"}</button>)}</div>
+    </li>)}</ol>{!visible.length && <p className="mt-3 text-sm text-flow-secondary">No marked moments yet.</p>}
+  </section>;
+}
+
+/** A neutral timeline. It makes no claim to measured audio amplitude. */
+export function RecordingTimeline({ durationMs, positionMs, onSeek, label }: { durationMs: number; positionMs: number; onSeek: (position: number) => void; label: string }) {
+  return <div className="rounded-2xl border border-[#D8D0C8] bg-[#F5F0E9] p-4"><label className="flex justify-between text-xs text-flow-secondary"><span>{label}</span><span>{recordingTime(positionMs)} / {recordingTime(durationMs)}</span><input data-action-id="recording.position" aria-label={`Seek ${label.toLowerCase()}`} className="sr-only" readOnly value={positionMs} /></label><input data-action-id="recording.seek" aria-label={`${label} position`} className="mt-5 w-full accent-[#6D8D8B]" type="range" min={0} max={Math.max(1, durationMs)} value={Math.min(positionMs, durationMs)} onChange={(event) => onSeek(Number(event.target.value))} /><p className="mt-2 text-xs text-flow-muted">Original audio timeline</p></div>;
+}

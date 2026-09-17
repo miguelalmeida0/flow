@@ -1,0 +1,3930 @@
+{
+  "sourceSha256": "341a5f8cd4bc720cedee6c24c10167512c39da596d8db413dc4babba61397295",
+  "policy": "Immutable source slice at independently declared indices; no parser or prefix discovery.",
+  "rows": [
+    {
+      "id": "curated-0003",
+      "line": 27,
+      "text": "Write down take care of that broken bike reflector before you head out",
+      "start": 11,
+      "end": 70,
+      "payload": "take care of that broken bike reflector before you head out",
+      "newId": "capture-take-care-of-that-broken-bike-1fdpwhn"
+    },
+    {
+      "id": "curated-0006",
+      "line": 63,
+      "text": "Remember to clean the coffee grinder during my next break",
+      "start": 12,
+      "end": 57,
+      "payload": "clean the coffee grinder during my next break",
+      "newId": "capture-clean-the-coffee-grinder-durin-18yeytw"
+    },
+    {
+      "id": "curated-0008",
+      "line": 87,
+      "text": "Capture it’s your aunt's birthday soon",
+      "start": 8,
+      "end": 38,
+      "payload": "it’s your aunt's birthday soon",
+      "newId": "capture-it-s-your-aunt-s-birthday-soon"
+    },
+    {
+      "id": "curated-0013",
+      "line": 150,
+      "text": "Remember to review the electricity bill after lunch and make sure I'm not overspending",
+      "start": 12,
+      "end": 86,
+      "payload": "review the electricity bill after lunch and make sure I'm not overspending",
+      "newId": "capture-review-the-electricity-bill-af-133fuat"
+    },
+    {
+      "id": "curated-0015",
+      "line": 174,
+      "text": "Write down water the balcony herbs after lunch",
+      "start": 11,
+      "end": 46,
+      "payload": "water the balcony herbs after lunch",
+      "newId": "capture-water-the-balcony-herbs-after-lunch"
+    },
+    {
+      "id": "curated-0019",
+      "line": 224,
+      "text": "Write down a reminder to pick up those repaired shoes once Maya gets back",
+      "start": 11,
+      "end": 73,
+      "payload": "a reminder to pick up those repaired shoes once Maya gets back",
+      "newId": "capture-a-reminder-to-pick-up-those-re-1526z9a"
+    },
+    {
+      "id": "curated-0027",
+      "line": 322,
+      "text": "Capture next break please replace the water filter so we have clean drinking water again",
+      "start": 8,
+      "end": 88,
+      "payload": "next break please replace the water filter so we have clean drinking water again",
+      "newId": "capture-next-break-please-replace-the-182c7qm"
+    },
+    {
+      "id": "curated-0028",
+      "line": 334,
+      "text": "Capture a reminder to check the guest notes before the house sitter arrives",
+      "start": 8,
+      "end": 75,
+      "payload": "a reminder to check the guest notes before the house sitter arrives",
+      "newId": "capture-a-reminder-to-check-the-guest-02t35zf"
+    },
+    {
+      "id": "curated-0029",
+      "line": 346,
+      "text": "Save for later return that borrowed camera before Friday",
+      "start": 15,
+      "end": 56,
+      "payload": "return that borrowed camera before Friday",
+      "newId": "capture-return-that-borrowed-camera-be-13mtyym"
+    },
+    {
+      "id": "curated-0032",
+      "line": 385,
+      "text": "Write down take a few minutes to review that probability chapter before Thursday",
+      "start": 11,
+      "end": 80,
+      "payload": "take a few minutes to review that probability chapter before Thursday",
+      "newId": "capture-take-a-few-minutes-to-review-t-11iy3ur"
+    },
+    {
+      "id": "curated-0038",
+      "line": 457,
+      "text": "Capture Maya's decision when she replies",
+      "start": 8,
+      "end": 40,
+      "payload": "Maya's decision when she replies",
+      "newId": "capture-maya-s-decision-when-she-replies"
+    },
+    {
+      "id": "curated-0046",
+      "line": 562,
+      "text": "Capture return Noah's cookbook",
+      "start": 8,
+      "end": 30,
+      "payload": "return Noah's cookbook",
+      "newId": "capture-return-noah-s-cookbook"
+    },
+    {
+      "id": "curated-0049",
+      "line": 598,
+      "text": "Save for later double-check the physiotherapy appointment times so you're on time",
+      "start": 15,
+      "end": 81,
+      "payload": "double-check the physiotherapy appointment times so you're on time",
+      "newId": "capture-double-check-the-physiotherapy-0lrn83b"
+    },
+    {
+      "id": "curated-0056",
+      "line": 685,
+      "text": "Write down where to buy blister patches",
+      "start": 11,
+      "end": 39,
+      "payload": "where to buy blister patches",
+      "newId": "capture-where-to-buy-blister-patches"
+    },
+    {
+      "id": "curated-0069",
+      "line": 850,
+      "text": "Save for later: donate the unused kitchen chairs",
+      "start": 16,
+      "end": 48,
+      "payload": "donate the unused kitchen chairs",
+      "newId": "capture-donate-the-unused-kitchen-chairs"
+    },
+    {
+      "id": "curated-0071",
+      "line": 877,
+      "text": "Capture a reminder to log the knee pain after my long walk",
+      "start": 8,
+      "end": 58,
+      "payload": "a reminder to log the knee pain after my long walk",
+      "newId": "capture-a-reminder-to-log-the-knee-pai-16vrdec"
+    },
+    {
+      "id": "curated-0074",
+      "line": 917,
+      "text": "Remember to prepare the guest room when Omar's parents arrive",
+      "start": 12,
+      "end": 61,
+      "payload": "prepare the guest room when Omar's parents arrive",
+      "newId": "capture-prepare-the-guest-room-when-om-19cc158"
+    },
+    {
+      "id": "curated-0077",
+      "line": 955,
+      "text": "Note that I should take a few minutes after lunch to repair the loose button on my jacket",
+      "start": 19,
+      "end": 89,
+      "payload": "take a few minutes after lunch to repair the loose button on my jacket",
+      "newId": "capture-take-a-few-minutes-after-lunch-0skphap"
+    },
+    {
+      "id": "curated-0080",
+      "line": 994,
+      "text": "Remember to schedule that annual checkup during my next break and get it out of the way",
+      "start": 12,
+      "end": 87,
+      "payload": "schedule that annual checkup during my next break and get it out of the way",
+      "newId": "capture-schedule-that-annual-checkup-d-1knjm8d"
+    },
+    {
+      "id": "curated-0081",
+      "line": 1006,
+      "text": "Remember to request read access to the analytics workspace as soon as possible",
+      "start": 12,
+      "end": 78,
+      "payload": "request read access to the analytics workspace as soon as possible",
+      "newId": "capture-request-read-access-to-the-ana-0r06xy7"
+    },
+    {
+      "id": "curated-0089",
+      "line": 1105,
+      "text": "Capture book a table at that new restaurant I've been wanting to try",
+      "start": 8,
+      "end": 68,
+      "payload": "book a table at that new restaurant I've been wanting to try",
+      "newId": "capture-book-a-table-at-that-new-resta-0f3kr8c"
+    },
+    {
+      "id": "curated-0093",
+      "line": 1153,
+      "text": "Remember to return those overdue books before the deadline",
+      "start": 12,
+      "end": 58,
+      "payload": "return those overdue books before the deadline",
+      "newId": "capture-return-those-overdue-books-bef-0eiv5oc"
+    },
+    {
+      "id": "curated-0096",
+      "line": 1191,
+      "text": "Save for later ask the caretaker about that basement leak and get it fixed",
+      "start": 15,
+      "end": 74,
+      "payload": "ask the caretaker about that basement leak and get it fixed",
+      "newId": "capture-ask-the-caretaker-about-that-b-0qla0z7"
+    },
+    {
+      "id": "curated-0098",
+      "line": 1215,
+      "text": "Jot down the language course registration details after lunch and we'll get started soon",
+      "start": 9,
+      "end": 88,
+      "payload": "the language course registration details after lunch and we'll get started soon",
+      "newId": "capture-the-language-course-registrati-0hlw9np"
+    },
+    {
+      "id": "curated-0103",
+      "line": 1280,
+      "text": "Note that I should print out the boarding passes as soon as I get home from work today",
+      "start": 19,
+      "end": 86,
+      "payload": "print out the boarding passes as soon as I get home from work today",
+      "newId": "capture-print-out-the-boarding-passes-0zce792"
+    },
+    {
+      "id": "curated-0119",
+      "line": 1485,
+      "text": "Jot down update my emergency contact info with Maya before the trip",
+      "start": 9,
+      "end": 67,
+      "payload": "update my emergency contact info with Maya before the trip",
+      "newId": "capture-update-my-emergency-contact-in-1aa6p0z"
+    },
+    {
+      "id": "curated-0129",
+      "line": 1621,
+      "text": "Jot down contact from the school regarding those art supplies",
+      "start": 9,
+      "end": 61,
+      "payload": "contact from the school regarding those art supplies",
+      "newId": "capture-contact-from-the-school-regard-07cksqd"
+    },
+    {
+      "id": "curated-0131",
+      "line": 1646,
+      "text": "Capture book that dentist appointment to keep my teeth in check",
+      "start": 8,
+      "end": 63,
+      "payload": "book that dentist appointment to keep my teeth in check",
+      "newId": "capture-book-that-dentist-appointment-1ujhjab"
+    },
+    {
+      "id": "curated-0136",
+      "line": 1708,
+      "text": "Note that I should replace the smoke alarm battery once Maya replies so we don't have a fire safety issue",
+      "start": 19,
+      "end": 105,
+      "payload": "replace the smoke alarm battery once Maya replies so we don't have a fire safety issue",
+      "newId": "capture-replace-the-smoke-alarm-batter-1ef3xmx"
+    },
+    {
+      "id": "curated-0139",
+      "line": 1746,
+      "text": "Jot down request the school transcript from them before the trip",
+      "start": 9,
+      "end": 64,
+      "payload": "request the school transcript from them before the trip",
+      "newId": "capture-request-the-school-transcript-0qdkzhe"
+    },
+    {
+      "id": "curated-0148",
+      "line": 1860,
+      "text": "Remember to check every piece when returning the camping stove",
+      "start": 12,
+      "end": 62,
+      "payload": "check every piece when returning the camping stove",
+      "newId": "capture-check-every-piece-when-returni-1kcoyri"
+    },
+    {
+      "id": "curated-0156",
+      "line": 1962,
+      "text": "Remember to donate the winter coats with this month's charity collection",
+      "start": 12,
+      "end": 72,
+      "payload": "donate the winter coats with this month's charity collection",
+      "newId": "capture-donate-the-winter-coats-with-t-0rjixsi"
+    },
+    {
+      "id": "curated-0165",
+      "line": 2077,
+      "text": "Note that I should update the emergency contact with Maya before my next break",
+      "start": 19,
+      "end": 78,
+      "payload": "update the emergency contact with Maya before my next break",
+      "newId": "capture-update-the-emergency-contact-w-09etap4"
+    },
+    {
+      "id": "curated-0174",
+      "line": 2188,
+      "text": "Note that I should write that thank-you note before Friday",
+      "start": 19,
+      "end": 58,
+      "payload": "write that thank-you note before Friday",
+      "newId": "capture-write-that-thank-you-note-befo-033oojc"
+    },
+    {
+      "id": "curated-0179",
+      "line": 2254,
+      "text": "Jot down order printer paper when you get home from work today and save some for tomorrow too",
+      "start": 9,
+      "end": 93,
+      "payload": "order printer paper when you get home from work today and save some for tomorrow too",
+      "newId": "capture-order-printer-paper-when-you-g-0o547mk"
+    },
+    {
+      "id": "curated-0181",
+      "line": 2278,
+      "text": "Write down update the medical card details after lunch so I'm all set for the upcoming doctor's visit",
+      "start": 11,
+      "end": 101,
+      "payload": "update the medical card details after lunch so I'm all set for the upcoming doctor's visit",
+      "newId": "capture-update-the-medical-card-detail-10mi5tn"
+    },
+    {
+      "id": "curated-0183",
+      "line": 2305,
+      "text": "Note that I should find that blue notebook during my next break",
+      "start": 19,
+      "end": 63,
+      "payload": "find that blue notebook during my next break",
+      "newId": "capture-find-that-blue-notebook-during-1vwsbb0"
+    },
+    {
+      "id": "curated-0185",
+      "line": 2329,
+      "text": "Remember to pack the travel adapter and don't forget any chargers",
+      "start": 12,
+      "end": 65,
+      "payload": "pack the travel adapter and don't forget any chargers",
+      "newId": "capture-pack-the-travel-adapter-and-do-1o1vdep"
+    },
+    {
+      "id": "curated-0189",
+      "line": 2379,
+      "text": "Capture confirm that picnic time with Amir before Saturday",
+      "start": 8,
+      "end": 58,
+      "payload": "confirm that picnic time with Amir before Saturday",
+      "newId": "capture-confirm-that-picnic-time-with-0rg8d7x"
+    },
+    {
+      "id": "curated-0190",
+      "line": 2391,
+      "text": "Write down note to self renew the passport before the trip",
+      "start": 11,
+      "end": 58,
+      "payload": "note to self renew the passport before the trip",
+      "newId": "capture-note-to-self-renew-the-passpor-0ko0yaz"
+    },
+    {
+      "id": "curated-0195",
+      "line": 2451,
+      "text": "Jot down order printer paper during my next break and have some extras ready for tomorrow too",
+      "start": 9,
+      "end": 93,
+      "payload": "order printer paper during my next break and have some extras ready for tomorrow too",
+      "newId": "capture-order-printer-paper-during-my-08sxz5x"
+    },
+    {
+      "id": "curated-0198",
+      "line": 2487,
+      "text": "Capture introduce yourself to the new neighbor and show them around",
+      "start": 8,
+      "end": 67,
+      "payload": "introduce yourself to the new neighbor and show them around",
+      "newId": "capture-introduce-yourself-to-the-new-01jh0iv"
+    },
+    {
+      "id": "curated-0200",
+      "line": 2511,
+      "text": "Jot down archiving the superseded diagram will free up some space",
+      "start": 9,
+      "end": 65,
+      "payload": "archiving the superseded diagram will free up some space",
+      "newId": "capture-archiving-the-superseded-diagr-10dyf61"
+    },
+    {
+      "id": "curated-0211",
+      "line": 2657,
+      "text": "Note that I should confirm with Daniel that his delivery will arrive on time once Maya replies with the update",
+      "start": 19,
+      "end": 110,
+      "payload": "confirm with Daniel that his delivery will arrive on time once Maya replies with the update",
+      "newId": "capture-confirm-with-daniel-that-his-d-1jx43tw"
+    },
+    {
+      "id": "curated-0224",
+      "line": 2824,
+      "text": "Capture practice your conference opening speech without slides soon",
+      "start": 8,
+      "end": 67,
+      "payload": "practice your conference opening speech without slides soon",
+      "newId": "capture-practice-your-conference-openi-1phb7a7"
+    },
+    {
+      "id": "curated-0226",
+      "line": 2851,
+      "text": "Remember to check the train timetable when you get home from work today",
+      "start": 12,
+      "end": 71,
+      "payload": "check the train timetable when you get home from work today",
+      "newId": "capture-check-the-train-timetable-when-1rtrl0n"
+    },
+    {
+      "id": "curated-0228",
+      "line": 2875,
+      "text": "Note that I should review the electricity bill after lunch and make sure we're not overspending again",
+      "start": 19,
+      "end": 101,
+      "payload": "review the electricity bill after lunch and make sure we're not overspending again",
+      "newId": "capture-review-the-electricity-bill-af-03wypm1"
+    },
+    {
+      "id": "curated-0230",
+      "line": 2899,
+      "text": "Save for later donate those winter coats when I get home from work tomorrow",
+      "start": 15,
+      "end": 75,
+      "payload": "donate those winter coats when I get home from work tomorrow",
+      "newId": "capture-donate-those-winter-coats-when-1ya56ni"
+    },
+    {
+      "id": "curated-0231",
+      "line": 2911,
+      "text": "Capture update that research brief with the latest prototype link",
+      "start": 8,
+      "end": 65,
+      "payload": "update that research brief with the latest prototype link",
+      "newId": "capture-update-that-research-brief-wit-1gnmo34"
+    },
+    {
+      "id": "curated-0237",
+      "line": 2987,
+      "text": "Note that I should send those meeting notes before Friday so everyone has them",
+      "start": 19,
+      "end": 78,
+      "payload": "send those meeting notes before Friday so everyone has them",
+      "newId": "capture-send-those-meeting-notes-befor-00knm9w"
+    },
+    {
+      "id": "curated-0239",
+      "line": 3013,
+      "text": "Write down Maya's decision once she replies",
+      "start": 11,
+      "end": 43,
+      "payload": "Maya's decision once she replies",
+      "newId": "capture-maya-s-decision-once-she-replies"
+    },
+    {
+      "id": "curated-0244",
+      "line": 3078,
+      "text": "Write down bring that umbrella after lunch tomorrow",
+      "start": 11,
+      "end": 51,
+      "payload": "bring that umbrella after lunch tomorrow",
+      "newId": "capture-bring-that-umbrella-after-lunc-1k42dks"
+    },
+    {
+      "id": "curated-0246",
+      "line": 3103,
+      "text": "Remember to pack that travel adapter before the trip so we're all set for international travel",
+      "start": 12,
+      "end": 94,
+      "payload": "pack that travel adapter before the trip so we're all set for international travel",
+      "newId": "capture-pack-that-travel-adapter-befor-0psr8l8"
+    },
+    {
+      "id": "curated-0248",
+      "line": 3130,
+      "text": "Note that I should compare insurance renewal rates before Friday to make sure we're getting the best deal",
+      "start": 19,
+      "end": 105,
+      "payload": "compare insurance renewal rates before Friday to make sure we're getting the best deal",
+      "newId": "capture-compare-insurance-renewal-rate-16elxnz"
+    },
+    {
+      "id": "curated-0275",
+      "line": 3475,
+      "text": "Jot down move those herb pots away from the cold window to prevent loss",
+      "start": 9,
+      "end": 71,
+      "payload": "move those herb pots away from the cold window to prevent loss",
+      "newId": "capture-move-those-herb-pots-away-from-11052gu"
+    },
+    {
+      "id": "curated-0277",
+      "line": 3499,
+      "text": "Write down cancel that unused subscription during my next break and free up some space in my budget",
+      "start": 11,
+      "end": 99,
+      "payload": "cancel that unused subscription during my next break and free up some space in my budget",
+      "newId": "capture-cancel-that-unused-subscriptio-1p62n4r"
+    },
+    {
+      "id": "curated-0278",
+      "line": 3511,
+      "text": "Write down check the smoke detector expiration date to stay safe",
+      "start": 11,
+      "end": 64,
+      "payload": "check the smoke detector expiration date to stay safe",
+      "newId": "capture-check-the-smoke-detector-expir-19lbs6v"
+    },
+    {
+      "id": "curated-0281",
+      "line": 3550,
+      "text": "Jot down water those balcony herbs once Maya replies with her update",
+      "start": 9,
+      "end": 68,
+      "payload": "water those balcony herbs once Maya replies with her update",
+      "newId": "capture-water-those-balcony-herbs-once-1mrh21h"
+    },
+    {
+      "id": "curated-0283",
+      "line": 3576,
+      "text": "Save for later replace the water filter after lunch so we have fresh drinking water again",
+      "start": 15,
+      "end": 89,
+      "payload": "replace the water filter after lunch so we have fresh drinking water again",
+      "newId": "capture-replace-the-water-filter-after-1o550uc"
+    },
+    {
+      "id": "curated-0290",
+      "line": 3662,
+      "text": "Save for later call that apartment manager before Friday to report any maintenance issues",
+      "start": 15,
+      "end": 89,
+      "payload": "call that apartment manager before Friday to report any maintenance issues",
+      "newId": "capture-call-that-apartment-manager-be-11ud5wt"
+    },
+    {
+      "id": "curated-0292",
+      "line": 3689,
+      "text": "Write down ask Sofia about joining the language exchange group this week",
+      "start": 11,
+      "end": 72,
+      "payload": "ask Sofia about joining the language exchange group this week",
+      "newId": "capture-ask-sofia-about-joining-the-la-00y9a0r"
+    },
+    {
+      "id": "curated-0294",
+      "line": 3713,
+      "text": "Capture donate those winter coats before the trip and give them to someone in need",
+      "start": 8,
+      "end": 82,
+      "payload": "donate those winter coats before the trip and give them to someone in need",
+      "newId": "capture-donate-those-winter-coats-befo-0idjfb4"
+    },
+    {
+      "id": "curated-0296",
+      "line": 3738,
+      "text": "Remember to book your annual eye exam before the insurance year closes",
+      "start": 12,
+      "end": 70,
+      "payload": "book your annual eye exam before the insurance year closes",
+      "newId": "capture-book-your-annual-eye-exam-befo-1vvwr3n"
+    },
+    {
+      "id": "curated-0308",
+      "line": 3891,
+      "text": "Remember to confirm with the doctor if fasting is required for that health screening",
+      "start": 12,
+      "end": 84,
+      "payload": "confirm with the doctor if fasting is required for that health screening",
+      "newId": "capture-confirm-with-the-doctor-if-fas-0t2yxxk"
+    },
+    {
+      "id": "curated-0312",
+      "line": 3939,
+      "text": "Remember to mend that broken button when I walk in the door tonight",
+      "start": 12,
+      "end": 67,
+      "payload": "mend that broken button when I walk in the door tonight",
+      "newId": "capture-mend-that-broken-button-when-i-0zwxn84"
+    },
+    {
+      "id": "curated-0326",
+      "line": 4121,
+      "text": "Capture double-check those passport photos once lunch is over",
+      "start": 8,
+      "end": 61,
+      "payload": "double-check those passport photos once lunch is over",
+      "newId": "capture-double-check-those-passport-ph-14deu1r"
+    },
+    {
+      "id": "curated-0327",
+      "line": 4133,
+      "text": "Note that I should order a new filter for the vacuum to keep it running smoothly",
+      "start": 19,
+      "end": 80,
+      "payload": "order a new filter for the vacuum to keep it running smoothly",
+      "newId": "capture-order-a-new-filter-for-the-vac-0r44dez"
+    },
+    {
+      "id": "curated-0329",
+      "line": 4157,
+      "text": "Jot down wash those running vest clothes before Sunday's race to save time",
+      "start": 9,
+      "end": 74,
+      "payload": "wash those running vest clothes before Sunday's race to save time",
+      "newId": "capture-wash-those-running-vest-clothe-0p2ni4n"
+    },
+    {
+      "id": "curated-0337",
+      "line": 4257,
+      "text": "Write down schedule a dental cleaning after the conference to stay on top",
+      "start": 11,
+      "end": 73,
+      "payload": "schedule a dental cleaning after the conference to stay on top",
+      "newId": "capture-schedule-a-dental-cleaning-aft-1bpqrf1"
+    },
+    {
+      "id": "curated-0341",
+      "line": 4305,
+      "text": "Write down pick up all the workshop materials before the Friday deadline",
+      "start": 11,
+      "end": 72,
+      "payload": "pick up all the workshop materials before the Friday deadline",
+      "newId": "capture-pick-up-all-the-workshop-mater-1xpzl50"
+    },
+    {
+      "id": "curated-0357",
+      "line": 4509,
+      "text": "Capture hit up the landlord about heating before I head out on my trip",
+      "start": 8,
+      "end": 70,
+      "payload": "hit up the landlord about heating before I head out on my trip",
+      "newId": "capture-hit-up-the-landlord-about-heat-0y556hv"
+    },
+    {
+      "id": "curated-0360",
+      "line": 4546,
+      "text": "Write down reserve folding chairs for that courtyard concert",
+      "start": 11,
+      "end": 60,
+      "payload": "reserve folding chairs for that courtyard concert",
+      "newId": "capture-reserve-folding-chairs-for-tha-1hv8s6l"
+    },
+    {
+      "id": "curated-0374",
+      "line": 4726,
+      "text": "Note that I should grab those concert tickets during my next scheduled break",
+      "start": 19,
+      "end": 76,
+      "payload": "grab those concert tickets during my next scheduled break",
+      "newId": "capture-grab-those-concert-tickets-dur-0ac339b"
+    },
+    {
+      "id": "curated-0376",
+      "line": 4750,
+      "text": "Remember to take a peek at that electricity bill when my next break rolls around",
+      "start": 12,
+      "end": 80,
+      "payload": "take a peek at that electricity bill when my next break rolls around",
+      "newId": "capture-take-a-peek-at-that-electricit-0p19g1z"
+    },
+    {
+      "id": "curated-0378",
+      "line": 4774,
+      "text": "Remember to select the right workshop materials after lunch today",
+      "start": 12,
+      "end": 65,
+      "payload": "select the right workshop materials after lunch today",
+      "newId": "capture-select-the-right-workshop-mate-048hucv"
+    },
+    {
+      "id": "curated-0389",
+      "line": 4916,
+      "text": "Note that I should measure up that guest room before we head out on our trip",
+      "start": 19,
+      "end": 76,
+      "payload": "measure up that guest room before we head out on our trip",
+      "newId": "capture-measure-up-that-guest-room-bef-1op8a0s"
+    },
+    {
+      "id": "curated-0393",
+      "line": 4969,
+      "text": "Jot down organize those travel receipts once my next break comes around",
+      "start": 9,
+      "end": 71,
+      "payload": "organize those travel receipts once my next break comes around",
+      "newId": "capture-organize-those-travel-receipts-1fzo3ey"
+    },
+    {
+      "id": "curated-0397",
+      "line": 5023,
+      "text": "Save for later scheduling a blood donation will keep you healthy and strong",
+      "start": 15,
+      "end": 75,
+      "payload": "scheduling a blood donation will keep you healthy and strong",
+      "newId": "capture-scheduling-a-blood-donation-wi-10n97mw"
+    },
+    {
+      "id": "curated-0401",
+      "line": 5071,
+      "text": "Remember to record those new Portuguese vocabulary words in your journal tonight",
+      "start": 12,
+      "end": 80,
+      "payload": "record those new Portuguese vocabulary words in your journal tonight",
+      "newId": "capture-record-those-new-portuguese-vo-0ou32iw"
+    },
+    {
+      "id": "curated-0403",
+      "line": 5095,
+      "text": "Write down ask the hotel about late check-in options if you can't make it during the day",
+      "start": 11,
+      "end": 88,
+      "payload": "ask the hotel about late check-in options if you can't make it during the day",
+      "newId": "capture-ask-the-hotel-about-late-check-0syf6be"
+    },
+    {
+      "id": "curated-0406",
+      "line": 5131,
+      "text": "Capture introduce Leo to the community organizer before they meet",
+      "start": 8,
+      "end": 65,
+      "payload": "introduce Leo to the community organizer before they meet",
+      "newId": "capture-introduce-leo-to-the-community-1eumhcc"
+    },
+    {
+      "id": "curated-0407",
+      "line": 5143,
+      "text": "Save for later pick a birthday gift before Friday",
+      "start": 15,
+      "end": 49,
+      "payload": "pick a birthday gift before Friday",
+      "newId": "capture-pick-a-birthday-gift-before-friday"
+    },
+    {
+      "id": "curated-0412",
+      "line": 5208,
+      "text": "Remember to verify the Senegal visa photo dimensions are correct for your application",
+      "start": 12,
+      "end": 85,
+      "payload": "verify the Senegal visa photo dimensions are correct for your application",
+      "newId": "capture-verify-the-senegal-visa-photo-190yhoo"
+    },
+    {
+      "id": "curated-0424",
+      "line": 5367,
+      "text": "Note that I should renew that neighborhood parking permit by Tuesday or you might get a fine",
+      "start": 19,
+      "end": 92,
+      "payload": "renew that neighborhood parking permit by Tuesday or you might get a fine",
+      "newId": "capture-renew-that-neighborhood-parkin-0t9k4ba"
+    },
+    {
+      "id": "curated-0430",
+      "line": 5446,
+      "text": "Save for later renew my passport after lunch today",
+      "start": 15,
+      "end": 50,
+      "payload": "renew my passport after lunch today",
+      "newId": "capture-renew-my-passport-after-lunch-today"
+    },
+    {
+      "id": "curated-0433",
+      "line": 5484,
+      "text": "Write down update Change that emergency contact info when I walk in the door tonight",
+      "start": 11,
+      "end": 84,
+      "payload": "update Change that emergency contact info when I walk in the door tonight",
+      "newId": "capture-update-change-that-emergency-c-1u4fl2p"
+    },
+    {
+      "id": "curated-0435",
+      "line": 5510,
+      "text": "Remember to ask the landlord about heating once lunch is over",
+      "start": 12,
+      "end": 61,
+      "payload": "ask the landlord about heating once lunch is over",
+      "newId": "capture-ask-the-landlord-about-heating-1j3j3b1"
+    },
+    {
+      "id": "curated-0440",
+      "line": 5577,
+      "text": "Remember to confirm Get ahold of Daniel's transfer details when I get home tonight",
+      "start": 12,
+      "end": 82,
+      "payload": "confirm Get ahold of Daniel's transfer details when I get home tonight",
+      "newId": "capture-confirm-get-ahold-of-daniel-s-0821jlm"
+    },
+    {
+      "id": "curated-0450",
+      "line": 5706,
+      "text": "Save for later reach out to Maya about this proposal during my next break",
+      "start": 15,
+      "end": 73,
+      "payload": "reach out to Maya about this proposal during my next break",
+      "newId": "capture-reach-out-to-maya-about-this-p-1md20fd"
+    },
+    {
+      "id": "curated-0451",
+      "line": 5718,
+      "text": "Capture remove that obsolete metric from the weekly report soon",
+      "start": 8,
+      "end": 63,
+      "payload": "remove that obsolete metric from the weekly report soon",
+      "newId": "capture-remove-that-obsolete-metric-fr-0qlv56e"
+    },
+    {
+      "id": "curated-0457",
+      "line": 5790,
+      "text": "Note that I should review my insurance renewal during my next scheduled break",
+      "start": 19,
+      "end": 77,
+      "payload": "review my insurance renewal during my next scheduled break",
+      "newId": "capture-review-my-insurance-renewal-du-0cgu02l"
+    },
+    {
+      "id": "curated-0463",
+      "line": 5864,
+      "text": "Save for later replace Swap out the smoke alarm battery before we leave for our trip",
+      "start": 15,
+      "end": 84,
+      "payload": "replace Swap out the smoke alarm battery before we leave for our trip",
+      "newId": "capture-replace-swap-out-the-smoke-ala-02avnwa"
+    },
+    {
+      "id": "curated-0467",
+      "line": 5913,
+      "text": "Write down that accessibility route to workshop attendees so they can follow along",
+      "start": 11,
+      "end": 82,
+      "payload": "that accessibility route to workshop attendees so they can follow along",
+      "newId": "capture-that-accessibility-route-to-wo-0bqxfh4"
+    },
+    {
+      "id": "curated-0469",
+      "line": 5938,
+      "text": "Save for later ask the choir if newcomers are allowed to attend Tuesday's meeting",
+      "start": 15,
+      "end": 81,
+      "payload": "ask the choir if newcomers are allowed to attend Tuesday's meeting",
+      "newId": "capture-ask-the-choir-if-newcomers-are-0j7k7ln"
+    },
+    {
+      "id": "curated-0483",
+      "line": 6115,
+      "text": "Write down luis will appreciate an update on his interview",
+      "start": 11,
+      "end": 58,
+      "payload": "luis will appreciate an update on his interview",
+      "newId": "capture-luis-will-appreciate-an-update-0xgkklx"
+    },
+    {
+      "id": "curated-0491",
+      "line": 6218,
+      "text": "Capture wash those guest towels by Thursday so everyone stays clean",
+      "start": 8,
+      "end": 67,
+      "payload": "wash those guest towels by Thursday so everyone stays clean",
+      "newId": "capture-wash-those-guest-towels-by-thu-1l7z1df"
+    },
+    {
+      "id": "curated-0495",
+      "line": 6269,
+      "text": "Remember to repair Mend that loose button before I head out tomorrow",
+      "start": 12,
+      "end": 68,
+      "payload": "repair Mend that loose button before I head out tomorrow",
+      "newId": "capture-repair-mend-that-loose-button-0lvqj7f"
+    },
+    {
+      "id": "curated-0499",
+      "line": 6317,
+      "text": "Jot down share that food drive list with the building group this week",
+      "start": 9,
+      "end": 69,
+      "payload": "share that food drive list with the building group this week",
+      "newId": "capture-share-that-food-drive-list-wit-1ooyc3j"
+    },
+    {
+      "id": "curated-0502",
+      "line": 6355,
+      "text": "Save for later replace Update the bicycle light once lunch is over",
+      "start": 15,
+      "end": 66,
+      "payload": "replace Update the bicycle light once lunch is over",
+      "newId": "capture-replace-update-the-bicycle-lig-1sjeehn"
+    },
+    {
+      "id": "curated-0504",
+      "line": 6382,
+      "text": "Save for later grab some cash before Sunday's festivities get crazy",
+      "start": 15,
+      "end": 67,
+      "payload": "grab some cash before Sunday's festivities get crazy",
+      "newId": "capture-grab-some-cash-before-sunday-s-1hsjmlm"
+    },
+    {
+      "id": "curated-0506",
+      "line": 6408,
+      "text": "Remember to double-check for that duplicate key in the bike room",
+      "start": 12,
+      "end": 64,
+      "payload": "double-check for that duplicate key in the bike room",
+      "newId": "capture-double-check-for-that-duplicat-1poiorj"
+    },
+    {
+      "id": "curated-0516",
+      "line": 6541,
+      "text": "Remember to the tax statement downloaded during my next break",
+      "start": 12,
+      "end": 61,
+      "payload": "the tax statement downloaded during my next break",
+      "newId": "capture-the-tax-statement-downloaded-d-04h9s5f"
+    },
+    {
+      "id": "curated-0525",
+      "line": 6661,
+      "text": "Note that I should return Hand in those library books when I walk in the door tonight",
+      "start": 19,
+      "end": 85,
+      "payload": "return Hand in those library books when I walk in the door tonight",
+      "newId": "capture-return-hand-in-those-library-b-14cnyic"
+    },
+    {
+      "id": "curated-0527",
+      "line": 6685,
+      "text": "Write down cancel Terminate that unused subscription before we leave for our trip",
+      "start": 11,
+      "end": 81,
+      "payload": "cancel Terminate that unused subscription before we leave for our trip",
+      "newId": "capture-cancel-terminate-that-unused-s-0zs78yo"
+    },
+    {
+      "id": "curated-0531",
+      "line": 6733,
+      "text": "Write down i'm sending accessibility notes to our design team ASAP",
+      "start": 11,
+      "end": 66,
+      "payload": "i'm sending accessibility notes to our design team ASAP",
+      "newId": "capture-i-m-sending-accessibility-note-1vuat52"
+    },
+    {
+      "id": "curated-0533",
+      "line": 6759,
+      "text": "Remember to ask the library about volunteering shifts",
+      "start": 12,
+      "end": 53,
+      "payload": "ask the library about volunteering shifts",
+      "newId": "capture-ask-the-library-about-voluntee-1ew6247"
+    },
+    {
+      "id": "curated-0542",
+      "line": 6868,
+      "text": "Save for later request Grab my school transcript once lunch is over",
+      "start": 15,
+      "end": 67,
+      "payload": "request Grab my school transcript once lunch is over",
+      "newId": "capture-request-grab-my-school-transcr-07ftv9r"
+    },
+    {
+      "id": "curated-0551",
+      "line": 6986,
+      "text": "Write down ana some awesome river walk pics from yesterday",
+      "start": 11,
+      "end": 58,
+      "payload": "ana some awesome river walk pics from yesterday",
+      "newId": "capture-ana-some-awesome-river-walk-pi-06k6ful"
+    },
+    {
+      "id": "curated-0553",
+      "line": 7011,
+      "text": "Save for later discuss the proposal with Maya during my next break",
+      "start": 15,
+      "end": 66,
+      "payload": "discuss the proposal with Maya during my next break",
+      "newId": "capture-discuss-the-proposal-with-maya-00acysr"
+    },
+    {
+      "id": "curated-0556",
+      "line": 7049,
+      "text": "Write down donate those winter coats during my next scheduled break",
+      "start": 11,
+      "end": 67,
+      "payload": "donate those winter coats during my next scheduled break",
+      "newId": "capture-donate-those-winter-coats-duri-03tzhog"
+    },
+    {
+      "id": "curated-0558",
+      "line": 7073,
+      "text": "Remember to organize File away those travel receipts when I walk in the door tonight",
+      "start": 12,
+      "end": 84,
+      "payload": "organize File away those travel receipts when I walk in the door tonight",
+      "newId": "capture-organize-file-away-those-trave-1d7ge9t"
+    },
+    {
+      "id": "curated-0564",
+      "line": 7147,
+      "text": "Jot down replace Swap out that bicycle light before Friday",
+      "start": 9,
+      "end": 58,
+      "payload": "replace Swap out that bicycle light before Friday",
+      "newId": "capture-replace-swap-out-that-bicycle-14k2fq3"
+    },
+    {
+      "id": "curated-0571",
+      "line": 7235,
+      "text": "Capture collect dry cleaning once lunch is over",
+      "start": 8,
+      "end": 47,
+      "payload": "collect dry cleaning once lunch is over",
+      "newId": "capture-collect-dry-cleaning-once-lunc-0yed7e2"
+    },
+    {
+      "id": "curated-0577",
+      "line": 7311,
+      "text": "Save for later pick up those concert tickets when I walk in the door tonight",
+      "start": 15,
+      "end": 76,
+      "payload": "pick up those concert tickets when I walk in the door tonight",
+      "newId": "capture-pick-up-those-concert-tickets-1kx280h"
+    },
+    {
+      "id": "curated-0578",
+      "line": 7323,
+      "text": "Jot down save the embassy emergency number offline on my phone for peace of mind",
+      "start": 9,
+      "end": 80,
+      "payload": "save the embassy emergency number offline on my phone for peace of mind",
+      "newId": "capture-save-the-embassy-emergency-num-1271du7"
+    },
+    {
+      "id": "curated-0579",
+      "line": 7335,
+      "text": "Jot down update Change that emergency contact info before lunch today",
+      "start": 9,
+      "end": 69,
+      "payload": "update Change that emergency contact info before lunch today",
+      "newId": "capture-update-change-that-emergency-c-1iiwkbm"
+    },
+    {
+      "id": "curated-0583",
+      "line": 7388,
+      "text": "Note that I should measure Take a peek at the guest room during my next break",
+      "start": 19,
+      "end": 77,
+      "payload": "measure Take a peek at the guest room during my next break",
+      "newId": "capture-measure-take-a-peek-at-the-gue-02yvrrb"
+    },
+    {
+      "id": "curated-0584",
+      "line": 7400,
+      "text": "Save for later time to register for that neighborhood cleanup morning event",
+      "start": 15,
+      "end": 75,
+      "payload": "time to register for that neighborhood cleanup morning event",
+      "newId": "capture-time-to-register-for-that-neig-1d27zmm"
+    },
+    {
+      "id": "curated-0586",
+      "line": 7424,
+      "text": "Remember to oil the balcony door hinge before winter hits",
+      "start": 12,
+      "end": 57,
+      "payload": "oil the balcony door hinge before winter hits",
+      "newId": "capture-oil-the-balcony-door-hinge-bef-1ycfiwk"
+    },
+    {
+      "id": "curated-0592",
+      "line": 7498,
+      "text": "Note that I should confirm Follow up with Daniel about his delivery when I get home tonight",
+      "start": 19,
+      "end": 91,
+      "payload": "confirm Follow up with Daniel about his delivery when I get home tonight",
+      "newId": "capture-confirm-follow-up-with-daniel-0fj1rf6"
+    },
+    {
+      "id": "curated-0599",
+      "line": 7586,
+      "text": "Save for later confirm the delivery details before we leave for our trip",
+      "start": 15,
+      "end": 72,
+      "payload": "confirm the delivery details before we leave for our trip",
+      "newId": "capture-confirm-the-delivery-details-b-07o5sxt"
+    },
+    {
+      "id": "curated-0601",
+      "line": 7610,
+      "text": "Remember to return the projector by Friday night",
+      "start": 12,
+      "end": 48,
+      "payload": "return the projector by Friday night",
+      "newId": "capture-return-the-projector-by-friday-night"
+    },
+    {
+      "id": "curated-0604",
+      "line": 7646,
+      "text": "Write down bring Take my umbrella with me when I walk out the door tonight",
+      "start": 11,
+      "end": 74,
+      "payload": "bring Take my umbrella with me when I walk out the door tonight",
+      "newId": "capture-bring-take-my-umbrella-with-me-0n2yir6"
+    },
+    {
+      "id": "curated-0609",
+      "line": 7710,
+      "text": "Save for later choose Pick a birthday gift as soon as Maya responds to that message",
+      "start": 15,
+      "end": 83,
+      "payload": "choose Pick a birthday gift as soon as Maya responds to that message",
+      "newId": "capture-choose-pick-a-birthday-gift-as-1hk0953"
+    },
+    {
+      "id": "curated-0614",
+      "line": 7771,
+      "text": "Remember to check the rain plan for the street festival on Saturday",
+      "start": 12,
+      "end": 67,
+      "payload": "check the rain plan for the street festival on Saturday",
+      "newId": "capture-check-the-rain-plan-for-the-st-1ox8v4b"
+    },
+    {
+      "id": "curated-0617",
+      "line": 7807,
+      "text": "Note that I should mend that loose button before Friday",
+      "start": 19,
+      "end": 55,
+      "payload": "mend that loose button before Friday",
+      "newId": "capture-mend-that-loose-button-before-friday"
+    },
+    {
+      "id": "curated-0644",
+      "line": 8148,
+      "text": "Note that I should water Give my balcony herbs some love when I get home tonight",
+      "start": 19,
+      "end": 80,
+      "payload": "water Give my balcony herbs some love when I get home tonight",
+      "newId": "capture-water-give-my-balcony-herbs-so-1ovx4fx"
+    },
+    {
+      "id": "curated-0648",
+      "line": 8200,
+      "text": "Note that I should update Fill out the medical card info during my next break",
+      "start": 19,
+      "end": 77,
+      "payload": "update Fill out the medical card info during my next break",
+      "newId": "capture-update-fill-out-the-medical-ca-0jzlomc"
+    },
+    {
+      "id": "curated-0650",
+      "line": 8225,
+      "text": "Save for later: file those meeting notes when I walk in tonight",
+      "start": 16,
+      "end": 63,
+      "payload": "file those meeting notes when I walk in tonight",
+      "newId": "capture-file-those-meeting-notes-when-0et4ajq"
+    },
+    {
+      "id": "curated-0652",
+      "line": 8249,
+      "text": "Capture check Look up that train timetable before Friday to avoid missing the train",
+      "start": 8,
+      "end": 83,
+      "payload": "check Look up that train timetable before Friday to avoid missing the train",
+      "newId": "capture-check-look-up-that-train-timet-188pggm"
+    },
+    {
+      "id": "curated-0657",
+      "line": 8313,
+      "text": "Jot down i need to update the emergency contact at the climbing gym",
+      "start": 9,
+      "end": 67,
+      "payload": "i need to update the emergency contact at the climbing gym",
+      "newId": "capture-i-need-to-update-the-emergency-0sjbwp2"
+    },
+    {
+      "id": "curated-0673",
+      "line": 8520,
+      "text": "Remember to top up the camera battery before we leave",
+      "start": 12,
+      "end": 53,
+      "payload": "top up the camera battery before we leave",
+      "newId": "capture-top-up-the-camera-battery-befo-1b50fg1"
+    },
+    {
+      "id": "curated-0685",
+      "line": 8676,
+      "text": "Capture remember to renew your passport before our departure",
+      "start": 8,
+      "end": 60,
+      "payload": "remember to renew your passport before our departure",
+      "newId": "capture-remember-to-renew-your-passpor-1pc8aw1"
+    },
+    {
+      "id": "curated-0692",
+      "line": 8765,
+      "text": "Capture swap out the water filter",
+      "start": 8,
+      "end": 33,
+      "payload": "swap out the water filter",
+      "newId": "capture-swap-out-the-water-filter"
+    },
+    {
+      "id": "curated-0698",
+      "line": 8841,
+      "text": "Jot down pick up oat milk on my way home from lunch",
+      "start": 9,
+      "end": 51,
+      "payload": "pick up oat milk on my way home from lunch",
+      "newId": "capture-pick-up-oat-milk-on-my-way-hom-1iwjfru"
+    },
+    {
+      "id": "curated-0701",
+      "line": 8879,
+      "text": "Note that I should bring your reusable bottle on the overnight train for a smoother ride",
+      "start": 19,
+      "end": 88,
+      "payload": "bring your reusable bottle on the overnight train for a smoother ride",
+      "newId": "capture-bring-your-reusable-bottle-on-19ydznd"
+    },
+    {
+      "id": "curated-0703",
+      "line": 8903,
+      "text": "Remember to ask about heating at the landlord's office by Friday",
+      "start": 12,
+      "end": 64,
+      "payload": "ask about heating at the landlord's office by Friday",
+      "newId": "capture-ask-about-heating-at-the-landl-19z2uo9"
+    },
+    {
+      "id": "curated-0718",
+      "line": 9104,
+      "text": "Remember to write a thank-you note after I finish lunch today",
+      "start": 12,
+      "end": 61,
+      "payload": "write a thank-you note after I finish lunch today",
+      "newId": "capture-write-a-thank-you-note-after-i-1avudkq"
+    },
+    {
+      "id": "curated-0724",
+      "line": 9179,
+      "text": "Save for later dry cleaning once Maya says it's ready",
+      "start": 15,
+      "end": 53,
+      "payload": "dry cleaning once Maya says it's ready",
+      "newId": "capture-dry-cleaning-once-maya-says-it-s-ready"
+    },
+    {
+      "id": "curated-0726",
+      "line": 9206,
+      "text": "Remember to pick up Clara's umbrella from work today",
+      "start": 12,
+      "end": 52,
+      "payload": "pick up Clara's umbrella from work today",
+      "newId": "capture-pick-up-clara-s-umbrella-from-0373k8c"
+    },
+    {
+      "id": "curated-0727",
+      "line": 9218,
+      "text": "Remember to charge my camera battery during my next work break",
+      "start": 12,
+      "end": 62,
+      "payload": "charge my camera battery during my next work break",
+      "newId": "capture-charge-my-camera-battery-durin-11ajn1z"
+    },
+    {
+      "id": "curated-0729",
+      "line": 9244,
+      "text": "Jot down annotate that tricky passage in my essay for clarity",
+      "start": 9,
+      "end": 61,
+      "payload": "annotate that tricky passage in my essay for clarity",
+      "newId": "capture-annotate-that-tricky-passage-i-1hw1ia3"
+    },
+    {
+      "id": "curated-0731",
+      "line": 9270,
+      "text": "Write down compare travel insurance policies before I head out",
+      "start": 11,
+      "end": 62,
+      "payload": "compare travel insurance policies before I head out",
+      "newId": "capture-compare-travel-insurance-polic-12v7pup"
+    },
+    {
+      "id": "curated-0738",
+      "line": 9360,
+      "text": "Jot down watch that lecture on distributed transactions for a solid grasp",
+      "start": 9,
+      "end": 73,
+      "payload": "watch that lecture on distributed transactions for a solid grasp",
+      "newId": "capture-watch-that-lecture-on-distribu-04dvjj1"
+    },
+    {
+      "id": "curated-0741",
+      "line": 9396,
+      "text": "Write down schedule the annual health checkup when I get home",
+      "start": 11,
+      "end": 61,
+      "payload": "schedule the annual health checkup when I get home",
+      "newId": "capture-schedule-the-annual-health-che-1xbd4lf"
+    },
+    {
+      "id": "curated-0746",
+      "line": 9460,
+      "text": "Save for later clean out the coffee grinder before Friday",
+      "start": 15,
+      "end": 57,
+      "payload": "clean out the coffee grinder before Friday",
+      "newId": "capture-clean-out-the-coffee-grinder-b-1v6vv7c"
+    },
+    {
+      "id": "curated-0749",
+      "line": 9496,
+      "text": "Jot down invite Priya to the open studio afternoon with some art-inspired treats",
+      "start": 9,
+      "end": 80,
+      "payload": "invite Priya to the open studio afternoon with some art-inspired treats",
+      "newId": "capture-invite-priya-to-the-open-studi-13pyto0"
+    },
+    {
+      "id": "curated-0753",
+      "line": 9552,
+      "text": "Jot down book the workshop materials in advance for our trip",
+      "start": 9,
+      "end": 60,
+      "payload": "book the workshop materials in advance for our trip",
+      "newId": "capture-book-the-workshop-materials-in-02oha5h"
+    },
+    {
+      "id": "curated-0755",
+      "line": 9576,
+      "text": "Jot down grab printer paper at the office supply store before we leave",
+      "start": 9,
+      "end": 70,
+      "payload": "grab printer paper at the office supply store before we leave",
+      "newId": "capture-grab-printer-paper-at-the-offi-02raywr"
+    },
+    {
+      "id": "curated-0764",
+      "line": 9688,
+      "text": "Jot down replace the bike light by Thursday evening",
+      "start": 9,
+      "end": 51,
+      "payload": "replace the bike light by Thursday evening",
+      "newId": "capture-replace-the-bike-light-by-thur-1v57bxa"
+    },
+    {
+      "id": "curated-0787",
+      "line": 9985,
+      "text": "Note that I should save those passport identification pages in digital format",
+      "start": 19,
+      "end": 77,
+      "payload": "save those passport identification pages in digital format",
+      "newId": "capture-save-those-passport-identifica-1ywrzu8"
+    },
+    {
+      "id": "curated-0791",
+      "line": 10034,
+      "text": "Capture a reminder to bring those residency papers home today",
+      "start": 8,
+      "end": 61,
+      "payload": "a reminder to bring those residency papers home today",
+      "newId": "capture-a-reminder-to-bring-those-resi-10i6sdx"
+    },
+    {
+      "id": "curated-0796",
+      "line": 10098,
+      "text": "Write down ask Maya about the proposal over dinner this Friday",
+      "start": 11,
+      "end": 62,
+      "payload": "ask Maya about the proposal over dinner this Friday",
+      "newId": "capture-ask-maya-about-the-proposal-ov-0by2bkx"
+    },
+    {
+      "id": "curated-0798",
+      "line": 10124,
+      "text": "Capture request the vegetarian meal option on my long flight",
+      "start": 8,
+      "end": 60,
+      "payload": "request the vegetarian meal option on my long flight",
+      "newId": "capture-request-the-vegetarian-meal-op-1d2x4gs"
+    },
+    {
+      "id": "curated-0818",
+      "line": 10375,
+      "text": "Jot down register for language courses before we take off",
+      "start": 9,
+      "end": 57,
+      "payload": "register for language courses before we take off",
+      "newId": "capture-register-for-language-courses-1asbm8h"
+    },
+    {
+      "id": "curated-0820",
+      "line": 10399,
+      "text": "Remember to ask Maya about the proposal at our next family gathering",
+      "start": 12,
+      "end": 68,
+      "payload": "ask Maya about the proposal at our next family gathering",
+      "newId": "capture-ask-maya-about-the-proposal-at-1mkolb0"
+    },
+    {
+      "id": "curated-0822",
+      "line": 10425,
+      "text": "Note that I should check in with Daniel on delivery by Thursday afternoon",
+      "start": 19,
+      "end": 73,
+      "payload": "check in with Daniel on delivery by Thursday afternoon",
+      "newId": "capture-check-in-with-daniel-on-delive-1q0olkr"
+    },
+    {
+      "id": "curated-0830",
+      "line": 10521,
+      "text": "Save for later buy oat milk once Maya says yes to oats",
+      "start": 15,
+      "end": 54,
+      "payload": "buy oat milk once Maya says yes to oats",
+      "newId": "capture-buy-oat-milk-once-maya-says-ye-0mkx4oo"
+    },
+    {
+      "id": "curated-0837",
+      "line": 10607,
+      "text": "Jot down bring vaccination records to the clinic for a smooth check-in",
+      "start": 9,
+      "end": 70,
+      "payload": "bring vaccination records to the clinic for a smooth check-in",
+      "newId": "capture-bring-vaccination-records-to-t-1bjplfj"
+    },
+    {
+      "id": "curated-0839",
+      "line": 10633,
+      "text": "Remember to charge my camera battery as soon as I get a chance",
+      "start": 12,
+      "end": 62,
+      "payload": "charge my camera battery as soon as I get a chance",
+      "newId": "capture-charge-my-camera-battery-as-so-0aaikkq"
+    },
+    {
+      "id": "curated-0841",
+      "line": 10658,
+      "text": "Jot down ask the landlord about heating arrangements when we return home",
+      "start": 9,
+      "end": 72,
+      "payload": "ask the landlord about heating arrangements when we return home",
+      "newId": "capture-ask-the-landlord-about-heating-07b8mix"
+    },
+    {
+      "id": "curated-0867",
+      "line": 10976,
+      "text": "Jot down in our reimbursement form during my next work break",
+      "start": 9,
+      "end": 60,
+      "payload": "in our reimbursement form during my next work break",
+      "newId": "capture-in-our-reimbursement-form-duri-0v854h8"
+    },
+    {
+      "id": "curated-0869",
+      "line": 11000,
+      "text": "Capture buy oat milk before our trip",
+      "start": 8,
+      "end": 36,
+      "payload": "buy oat milk before our trip",
+      "newId": "capture-buy-oat-milk-before-our-trip"
+    },
+    {
+      "id": "curated-0871",
+      "line": 11024,
+      "text": "Note that I should clean the coffee grinder and toss old grounds",
+      "start": 19,
+      "end": 64,
+      "payload": "clean the coffee grinder and toss old grounds",
+      "newId": "capture-clean-the-coffee-grinder-and-t-0n7sypo"
+    },
+    {
+      "id": "curated-0873",
+      "line": 11048,
+      "text": "Write down reach out to Maya about the proposal by Wednesday evening",
+      "start": 11,
+      "end": 68,
+      "payload": "reach out to Maya about the proposal by Wednesday evening",
+      "newId": "capture-reach-out-to-maya-about-the-pr-17mrp63"
+    },
+    {
+      "id": "curated-0877",
+      "line": 11096,
+      "text": "Note that I should scan the signed contract once we get back home",
+      "start": 19,
+      "end": 65,
+      "payload": "scan the signed contract once we get back home",
+      "newId": "capture-scan-the-signed-contract-once-0ng85lm"
+    },
+    {
+      "id": "curated-0879",
+      "line": 11122,
+      "text": "Remember to donate those winter coats when I drop them off this Friday",
+      "start": 12,
+      "end": 70,
+      "payload": "donate those winter coats when I drop them off this Friday",
+      "newId": "capture-donate-those-winter-coats-when-00nkli0"
+    },
+    {
+      "id": "curated-0904",
+      "line": 11444,
+      "text": "Jot down pick up a new prescription on my way out of town",
+      "start": 9,
+      "end": 57,
+      "payload": "pick up a new prescription on my way out of town",
+      "newId": "capture-pick-up-a-new-prescription-on-0yeoy9n"
+    },
+    {
+      "id": "curated-0906",
+      "line": 11470,
+      "text": "Write down ask the pharmacist about the travel prescription before Sunday",
+      "start": 11,
+      "end": 73,
+      "payload": "ask the pharmacist about the travel prescription before Sunday",
+      "newId": "capture-ask-the-pharmacist-about-the-t-1f74kka"
+    },
+    {
+      "id": "curated-0910",
+      "line": 11519,
+      "text": "Write down buy oat milk by Thursday morning",
+      "start": 11,
+      "end": 43,
+      "payload": "buy oat milk by Thursday morning",
+      "newId": "capture-buy-oat-milk-by-thursday-morning"
+    },
+    {
+      "id": "curated-0912",
+      "line": 11545,
+      "text": "Note that I should bring back the borrowed camera with me today",
+      "start": 19,
+      "end": 63,
+      "payload": "bring back the borrowed camera with me today",
+      "newId": "capture-bring-back-the-borrowed-camera-0pfvsuu"
+    },
+    {
+      "id": "curated-0914",
+      "line": 11571,
+      "text": "Remember to choose and buy that birthday gift after I pick it up this Friday",
+      "start": 12,
+      "end": 76,
+      "payload": "choose and buy that birthday gift after I pick it up this Friday",
+      "newId": "capture-choose-and-buy-that-birthday-g-141v2zm"
+    },
+    {
+      "id": "curated-0927",
+      "line": 11735,
+      "text": "Note that I should pick out a birthday present during my next break at work",
+      "start": 19,
+      "end": 75,
+      "payload": "pick out a birthday present during my next break at work",
+      "newId": "capture-pick-out-a-birthday-present-du-18vgozq"
+    },
+    {
+      "id": "curated-0928",
+      "line": 11747,
+      "text": "Save for later confirm security review ownership to avoid any issues down the line",
+      "start": 15,
+      "end": 82,
+      "payload": "confirm security review ownership to avoid any issues down the line",
+      "newId": "capture-confirm-security-review-owners-0wiif0t"
+    },
+    {
+      "id": "curated-0930",
+      "line": 11771,
+      "text": "Write down update my medical card information once Maya gives the okay",
+      "start": 11,
+      "end": 70,
+      "payload": "update my medical card information once Maya gives the okay",
+      "newId": "capture-update-my-medical-card-informa-0oojfi6"
+    },
+    {
+      "id": "curated-0933",
+      "line": 11807,
+      "text": "Jot down charge my camera battery when Maya says she's ready",
+      "start": 9,
+      "end": 60,
+      "payload": "charge my camera battery when Maya says she's ready",
+      "newId": "capture-charge-my-camera-battery-when-0dxknv2"
+    },
+    {
+      "id": "curated-0947",
+      "line": 11987,
+      "text": "Jot down check ferry luggage allowance before we head back",
+      "start": 9,
+      "end": 58,
+      "payload": "check ferry luggage allowance before we head back",
+      "newId": "capture-check-ferry-luggage-allowance-1y6f8eg"
+    },
+    {
+      "id": "curated-0953",
+      "line": 12065,
+      "text": "Save for later return that borrowed camera by Friday evening",
+      "start": 15,
+      "end": 60,
+      "payload": "return that borrowed camera by Friday evening",
+      "newId": "capture-return-that-borrowed-camera-by-0u1ytx9"
+    },
+    {
+      "id": "curated-0955",
+      "line": 12091,
+      "text": "Save for later bring back those library books this afternoon",
+      "start": 15,
+      "end": 60,
+      "payload": "bring back those library books this afternoon",
+      "newId": "capture-bring-back-those-library-books-0m6ro8a"
+    },
+    {
+      "id": "curated-0968",
+      "line": 12259,
+      "text": "Save for later write a thank-you note in the next 24 hours",
+      "start": 15,
+      "end": 58,
+      "payload": "write a thank-you note in the next 24 hours",
+      "newId": "capture-write-a-thank-you-note-in-the-0uzjrnb"
+    },
+    {
+      "id": "curated-0972",
+      "line": 12310,
+      "text": "Jot down ask the instructor about that final project rubric for better understanding",
+      "start": 9,
+      "end": 84,
+      "payload": "ask the instructor about that final project rubric for better understanding",
+      "newId": "capture-ask-the-instructor-about-that-1ynshsd"
+    },
+    {
+      "id": "curated-0975",
+      "line": 12346,
+      "text": "Save for later update the medical card info on my way home today",
+      "start": 15,
+      "end": 64,
+      "payload": "update the medical card info on my way home today",
+      "newId": "capture-update-the-medical-card-info-o-13jg45f"
+    },
+    {
+      "id": "curated-0983",
+      "line": 12444,
+      "text": "Capture print signs for the repair cafe today",
+      "start": 8,
+      "end": 45,
+      "payload": "print signs for the repair cafe today",
+      "newId": "capture-print-signs-for-the-repair-cafe-today"
+    },
+    {
+      "id": "curated-0986",
+      "line": 12480,
+      "text": "Capture return that borrowed camera before we leave town",
+      "start": 8,
+      "end": 56,
+      "payload": "return that borrowed camera before we leave town",
+      "newId": "capture-return-that-borrowed-camera-be-1k1prsm"
+    },
+    {
+      "id": "curated-0991",
+      "line": 12541,
+      "text": "Capture our school transcript sent to the right address by Friday",
+      "start": 8,
+      "end": 65,
+      "payload": "our school transcript sent to the right address by Friday",
+      "newId": "capture-our-school-transcript-sent-to-0jhjm32"
+    },
+    {
+      "id": "curated-0993",
+      "line": 12565,
+      "text": "Save for later update emergency contact details by end of week",
+      "start": 15,
+      "end": 62,
+      "payload": "update emergency contact details by end of week",
+      "newId": "capture-update-emergency-contact-detai-0483fp5"
+    },
+    {
+      "id": "curated-0998",
+      "line": 12628,
+      "text": "Remember to residency papers with next scheduled break",
+      "start": 12,
+      "end": 54,
+      "payload": "residency papers with next scheduled break",
+      "newId": "capture-residency-papers-with-next-sch-12zsize"
+    },
+    {
+      "id": "curated-0999",
+      "line": 12640,
+      "text": "Remember to photograph electricity meter readings before I move out",
+      "start": 12,
+      "end": 67,
+      "payload": "photograph electricity meter readings before I move out",
+      "newId": "capture-photograph-electricity-meter-r-0xgqaqk"
+    },
+    {
+      "id": "curated-1001",
+      "line": 12664,
+      "text": "Capture ask the doctor about recurring headaches",
+      "start": 8,
+      "end": 48,
+      "payload": "ask the doctor about recurring headaches",
+      "newId": "capture-ask-the-doctor-about-recurring-0buv409"
+    },
+    {
+      "id": "curated-1005",
+      "line": 12715,
+      "text": "Write down i need to schedule annual checkup post-lunch",
+      "start": 11,
+      "end": 55,
+      "payload": "i need to schedule annual checkup post-lunch",
+      "newId": "capture-i-need-to-schedule-annual-chec-1a5y3vr"
+    },
+    {
+      "id": "curated-1009",
+      "line": 12765,
+      "text": "Write down review electricity bill as soon as Maya gets back",
+      "start": 11,
+      "end": 60,
+      "payload": "review electricity bill as soon as Maya gets back",
+      "newId": "capture-review-electricity-bill-as-soo-0vfshsg"
+    },
+    {
+      "id": "curated-1011",
+      "line": 12789,
+      "text": "Jot down double-check train timetable after lunchtime",
+      "start": 9,
+      "end": 53,
+      "payload": "double-check train timetable after lunchtime",
+      "newId": "capture-double-check-train-timetable-a-1tjux6z"
+    },
+    {
+      "id": "curated-1015",
+      "line": 12837,
+      "text": "Save for later reserve bicycle space in advance for a smooth regional train journey",
+      "start": 15,
+      "end": 83,
+      "payload": "reserve bicycle space in advance for a smooth regional train journey",
+      "newId": "capture-reserve-bicycle-space-in-advan-0bhlatw"
+    },
+    {
+      "id": "curated-1017",
+      "line": 12861,
+      "text": "Jot down print boarding passes when Maya responds",
+      "start": 9,
+      "end": 49,
+      "payload": "print boarding passes when Maya responds",
+      "newId": "capture-print-boarding-passes-when-may-0j54wqi"
+    },
+    {
+      "id": "curated-1019",
+      "line": 12888,
+      "text": "Save for later bring reusable cups to community meetings for our shared environment",
+      "start": 15,
+      "end": 83,
+      "payload": "bring reusable cups to community meetings for our shared environment",
+      "newId": "capture-bring-reusable-cups-to-communi-0d83fdx"
+    },
+    {
+      "id": "curated-1021",
+      "line": 12914,
+      "text": "Note that I should boarding pass printing task for post-lunch",
+      "start": 19,
+      "end": 61,
+      "payload": "boarding pass printing task for post-lunch",
+      "newId": "capture-boarding-pass-printing-task-fo-1hmwcl1"
+    },
+    {
+      "id": "curated-1023",
+      "line": 12938,
+      "text": "Write down find blue notebook before Friday",
+      "start": 11,
+      "end": 43,
+      "payload": "find blue notebook before Friday",
+      "newId": "capture-find-blue-notebook-before-friday"
+    },
+    {
+      "id": "curated-1029",
+      "line": 13014,
+      "text": "Write down ask for school transcript when I get home today",
+      "start": 11,
+      "end": 58,
+      "payload": "ask for school transcript when I get home today",
+      "newId": "capture-ask-for-school-transcript-when-0yiznho"
+    },
+    {
+      "id": "curated-1048",
+      "line": 13256,
+      "text": "Write down confirm airport pickup point before we take off",
+      "start": 11,
+      "end": 58,
+      "payload": "confirm airport pickup point before we take off",
+      "newId": "capture-confirm-airport-pickup-point-b-1xz28mg"
+    },
+    {
+      "id": "curated-1056",
+      "line": 13354,
+      "text": "Note that I should update emergency contact info once Maya confirms",
+      "start": 19,
+      "end": 67,
+      "payload": "update emergency contact info once Maya confirms",
+      "newId": "capture-update-emergency-contact-info-0w1uglh"
+    },
+    {
+      "id": "curated-1066",
+      "line": 13482,
+      "text": "Save for later collect concert tickets as soon as Maya gets back",
+      "start": 15,
+      "end": 64,
+      "payload": "collect concert tickets as soon as Maya gets back",
+      "newId": "capture-collect-concert-tickets-as-soo-12pcctz"
+    },
+    {
+      "id": "curated-1075",
+      "line": 13596,
+      "text": "Capture cancel unused subscription before Friday",
+      "start": 8,
+      "end": 48,
+      "payload": "cancel unused subscription before Friday",
+      "newId": "capture-cancel-unused-subscription-bef-1uoq9oa"
+    },
+    {
+      "id": "curated-1078",
+      "line": 13633,
+      "text": "Note that I should call apartment manager after lunch",
+      "start": 19,
+      "end": 53,
+      "payload": "call apartment manager after lunch",
+      "newId": "capture-call-apartment-manager-after-lunch"
+    },
+    {
+      "id": "curated-1093",
+      "line": 13820,
+      "text": "Capture confirm hotel transfer ahead of schedule",
+      "start": 8,
+      "end": 48,
+      "payload": "confirm hotel transfer ahead of schedule",
+      "newId": "capture-confirm-hotel-transfer-ahead-o-1tjd00s"
+    },
+    {
+      "id": "curated-1106",
+      "line": 13983,
+      "text": "Write down mail residency papers by end of week",
+      "start": 11,
+      "end": 47,
+      "payload": "mail residency papers by end of week",
+      "newId": "capture-mail-residency-papers-by-end-of-week"
+    },
+    {
+      "id": "curated-1113",
+      "line": 14072,
+      "text": "Capture verify dashboard figures against export data to ensure accuracy",
+      "start": 8,
+      "end": 71,
+      "payload": "verify dashboard figures against export data to ensure accuracy",
+      "newId": "capture-verify-dashboard-figures-again-02sxiee"
+    },
+    {
+      "id": "curated-1117",
+      "line": 14122,
+      "text": "Note that I should stretch those calf muscles after tomorrow's easy run for comfort",
+      "start": 19,
+      "end": 83,
+      "payload": "stretch those calf muscles after tomorrow's easy run for comfort",
+      "newId": "capture-stretch-those-calf-muscles-aft-1sdimh7"
+    },
+    {
+      "id": "curated-1122",
+      "line": 14191,
+      "text": "Remember to order printer paper post-lunch",
+      "start": 12,
+      "end": 42,
+      "payload": "order printer paper post-lunch",
+      "newId": "capture-order-printer-paper-post-lunch"
+    },
+    {
+      "id": "curated-1126",
+      "line": 14242,
+      "text": "Note that I should confirm delivery with Daniel when I get home",
+      "start": 19,
+      "end": 63,
+      "payload": "confirm delivery with Daniel when I get home",
+      "newId": "capture-confirm-delivery-with-daniel-w-1l0hwnn"
+    },
+    {
+      "id": "curated-1132",
+      "line": 14315,
+      "text": "Remember to test universal adapters before packing them in my luggage",
+      "start": 12,
+      "end": 69,
+      "payload": "test universal adapters before packing them in my luggage",
+      "newId": "capture-test-universal-adapters-before-1mzjvu7"
+    },
+    {
+      "id": "curated-1136",
+      "line": 14363,
+      "text": "Save for later photograph lost bike notice for the community board",
+      "start": 15,
+      "end": 66,
+      "payload": "photograph lost bike notice for the community board",
+      "newId": "capture-photograph-lost-bike-notice-fo-1jrn3zq"
+    },
+    {
+      "id": "curated-1141",
+      "line": 14426,
+      "text": "Capture ask landlord about heating during next break",
+      "start": 8,
+      "end": 52,
+      "payload": "ask landlord about heating during next break",
+      "newId": "capture-ask-landlord-about-heating-dur-0q2k616"
+    },
+    {
+      "id": "curated-1151",
+      "line": 14552,
+      "text": "Note that I should pack an extra charging cable for our weekend adventures",
+      "start": 19,
+      "end": 74,
+      "payload": "pack an extra charging cable for our weekend adventures",
+      "newId": "capture-pack-an-extra-charging-cable-f-18xou2e"
+    },
+    {
+      "id": "curated-1162",
+      "line": 14689,
+      "text": "Jot down compare two state machine approaches for a better understanding",
+      "start": 9,
+      "end": 72,
+      "payload": "compare two state machine approaches for a better understanding",
+      "newId": "capture-compare-two-state-machine-appr-17bcyik"
+    },
+    {
+      "id": "curated-1165",
+      "line": 14730,
+      "text": "Save for later schedule annual checkup before Friday",
+      "start": 15,
+      "end": 52,
+      "payload": "schedule annual checkup before Friday",
+      "newId": "capture-schedule-annual-checkup-before-friday"
+    },
+    {
+      "id": "curated-1197",
+      "line": 15144,
+      "text": "Write down return library books as soon as Maya confirms",
+      "start": 11,
+      "end": 56,
+      "payload": "return library books as soon as Maya confirms",
+      "newId": "capture-return-library-books-as-soon-a-1us64qh"
+    },
+    {
+      "id": "curated-1202",
+      "line": 15205,
+      "text": "Write down ask legal about new copy requirements before proceeding with publication",
+      "start": 11,
+      "end": 83,
+      "payload": "ask legal about new copy requirements before proceeding with publication",
+      "newId": "capture-ask-legal-about-new-copy-requi-1uyk4nr"
+    },
+    {
+      "id": "curated-1205",
+      "line": 15244,
+      "text": "Write down cancel unused subscription when I get home",
+      "start": 11,
+      "end": 53,
+      "payload": "cancel unused subscription when I get home",
+      "newId": "capture-cancel-unused-subscription-whe-1fehpz6"
+    },
+    {
+      "id": "curated-1210",
+      "line": 15308,
+      "text": "Jot down save three examples of top-notch onboarding copy to reference later",
+      "start": 9,
+      "end": 76,
+      "payload": "save three examples of top-notch onboarding copy to reference later",
+      "newId": "capture-save-three-examples-of-top-not-18zxo2j"
+    },
+    {
+      "id": "curated-1249",
+      "line": 15809,
+      "text": "Note that I should save three compelling examples of excellent onboarding content in our folder",
+      "start": 19,
+      "end": 95,
+      "payload": "save three compelling examples of excellent onboarding content in our folder",
+      "newId": "capture-save-three-compelling-examples-1lps999"
+    },
+    {
+      "id": "curated-1256",
+      "line": 15901,
+      "text": "Remember to reserve table for dinner during next break",
+      "start": 12,
+      "end": 54,
+      "payload": "reserve table for dinner during next break",
+      "newId": "capture-reserve-table-for-dinner-durin-0emkx15"
+    },
+    {
+      "id": "curated-1262",
+      "line": 15978,
+      "text": "Jot down organize travel receipts by Friday",
+      "start": 9,
+      "end": 43,
+      "payload": "organize travel receipts by Friday",
+      "newId": "capture-organize-travel-receipts-by-friday"
+    },
+    {
+      "id": "curated-1264",
+      "line": 16005,
+      "text": "Jot down fix loose button on jacket during next break",
+      "start": 9,
+      "end": 53,
+      "payload": "fix loose button on jacket during next break",
+      "newId": "capture-fix-loose-button-on-jacket-dur-0v4mkx3"
+    },
+    {
+      "id": "curated-1266",
+      "line": 16029,
+      "text": "Write down check the dosage instructions one last time with my pharmacist",
+      "start": 11,
+      "end": 73,
+      "payload": "check the dosage instructions one last time with my pharmacist",
+      "newId": "capture-check-the-dosage-instructions-12tqvqc"
+    },
+    {
+      "id": "curated-1267",
+      "line": 16041,
+      "text": "Write down pick up repaired shoes when I get back",
+      "start": 11,
+      "end": 49,
+      "payload": "pick up repaired shoes when I get back",
+      "newId": "capture-pick-up-repaired-shoes-when-i-get-back"
+    },
+    {
+      "id": "curated-1272",
+      "line": 16104,
+      "text": "Write down i need to replace water filter once Maya gets back",
+      "start": 11,
+      "end": 61,
+      "payload": "i need to replace water filter once Maya gets back",
+      "newId": "capture-i-need-to-replace-water-filter-0qkxi3e"
+    },
+    {
+      "id": "curated-1283",
+      "line": 16244,
+      "text": "Note that I should remember don't forget the map before you head out",
+      "start": 19,
+      "end": 68,
+      "payload": "remember don't forget the map before you head out",
+      "newId": "capture-remember-don-t-forget-the-map-1crsv9s"
+    },
+    {
+      "id": "curated-1289",
+      "line": 16319,
+      "text": "Jot down find a dataset that'll help with mapping",
+      "start": 9,
+      "end": 49,
+      "payload": "find a dataset that'll help with mapping",
+      "newId": "capture-find-a-dataset-that-ll-help-wi-0obxhb0"
+    },
+    {
+      "id": "curated-1291",
+      "line": 16344,
+      "text": "Remember to grab your fountain pen it's almost time for the workshop",
+      "start": 12,
+      "end": 68,
+      "payload": "grab your fountain pen it's almost time for the workshop",
+      "newId": "capture-grab-your-fountain-pen-it-s-al-1ojw99x"
+    },
+    {
+      "id": "curated-1310",
+      "line": 16581,
+      "text": "Write down take a moment to thank Daniel for reviewing our contract",
+      "start": 11,
+      "end": 67,
+      "payload": "take a moment to thank Daniel for reviewing our contract",
+      "newId": "capture-take-a-moment-to-thank-daniel-070uu4n"
+    },
+    {
+      "id": "curated-1311",
+      "line": 16593,
+      "text": "Write down register for language course during next break",
+      "start": 11,
+      "end": 57,
+      "payload": "register for language course during next break",
+      "newId": "capture-register-for-language-course-d-1t4qoy9"
+    },
+    {
+      "id": "curated-1315",
+      "line": 16644,
+      "text": "Remember to collect dry cleaning before trip",
+      "start": 12,
+      "end": 44,
+      "payload": "collect dry cleaning before trip",
+      "newId": "capture-collect-dry-cleaning-before-trip"
+    },
+    {
+      "id": "curated-1320",
+      "line": 16708,
+      "text": "Write down book dentist appointment when Maya confirms",
+      "start": 11,
+      "end": 54,
+      "payload": "book dentist appointment when Maya confirms",
+      "newId": "capture-book-dentist-appointment-when-12g6i5m"
+    },
+    {
+      "id": "curated-1334",
+      "line": 16888,
+      "text": "Jot down update medical card post-lunch",
+      "start": 9,
+      "end": 39,
+      "payload": "update medical card post-lunch",
+      "newId": "capture-update-medical-card-post-lunch"
+    },
+    {
+      "id": "curated-1336",
+      "line": 16914,
+      "text": "Capture clean coffee grinder before trip",
+      "start": 8,
+      "end": 40,
+      "payload": "clean coffee grinder before trip",
+      "newId": "capture-clean-coffee-grinder-before-trip"
+    },
+    {
+      "id": "curated-1344",
+      "line": 17016,
+      "text": "Note that I should call apartment manager ahead of schedule",
+      "start": 19,
+      "end": 59,
+      "payload": "call apartment manager ahead of schedule",
+      "newId": "capture-call-apartment-manager-ahead-o-0y8nj98"
+    },
+    {
+      "id": "curated-1355",
+      "line": 17155,
+      "text": "Note that I should measure guest room dimensions once Maya gets back",
+      "start": 19,
+      "end": 68,
+      "payload": "measure guest room dimensions once Maya gets back",
+      "newId": "capture-measure-guest-room-dimensions-1opfmrn"
+    },
+    {
+      "id": "curated-1358",
+      "line": 17192,
+      "text": "Jot down call embassy before departure",
+      "start": 9,
+      "end": 38,
+      "payload": "call embassy before departure",
+      "newId": "capture-call-embassy-before-departure"
+    },
+    {
+      "id": "curated-1373",
+      "line": 17388,
+      "text": "Note that I should double-check your passport details",
+      "start": 19,
+      "end": 53,
+      "payload": "double-check your passport details",
+      "newId": "capture-double-check-your-passport-details"
+    },
+    {
+      "id": "curated-1390",
+      "line": 17608,
+      "text": "Capture refill prescription before departure",
+      "start": 8,
+      "end": 44,
+      "payload": "refill prescription before departure",
+      "newId": "capture-refill-prescription-before-departure"
+    },
+    {
+      "id": "curated-1392",
+      "line": 17632,
+      "text": "Jot down confirm Daniel's delivery before trip",
+      "start": 9,
+      "end": 46,
+      "payload": "confirm Daniel's delivery before trip",
+      "newId": "capture-confirm-daniel-s-delivery-before-trip"
+    },
+    {
+      "id": "curated-1404",
+      "line": 17780,
+      "text": "Jot down book dentist appointment ahead of schedule",
+      "start": 9,
+      "end": 51,
+      "payload": "book dentist appointment ahead of schedule",
+      "newId": "capture-book-dentist-appointment-ahead-0jeh2pm"
+    },
+    {
+      "id": "curated-1414",
+      "line": 17905,
+      "text": "Write down call embassy once Maya confirms",
+      "start": 11,
+      "end": 42,
+      "payload": "call embassy once Maya confirms",
+      "newId": "capture-call-embassy-once-maya-confirms"
+    },
+    {
+      "id": "curated-1417",
+      "line": 17944,
+      "text": "Save for later review embassy application materials when I get back",
+      "start": 15,
+      "end": 67,
+      "payload": "review embassy application materials when I get back",
+      "newId": "capture-review-embassy-application-mat-1g0dl28"
+    },
+    {
+      "id": "curated-1424",
+      "line": 18031,
+      "text": "Remember to bring those signed tenancy inventory sheets to hand over",
+      "start": 12,
+      "end": 68,
+      "payload": "bring those signed tenancy inventory sheets to hand over",
+      "newId": "capture-bring-those-signed-tenancy-inv-1ebvb9m"
+    },
+    {
+      "id": "curated-1436",
+      "line": 18190,
+      "text": "Jot down remember Jonas you should share that concert recording with him",
+      "start": 9,
+      "end": 72,
+      "payload": "remember Jonas you should share that concert recording with him",
+      "newId": "capture-remember-jonas-you-should-shar-0zqy39x"
+    },
+    {
+      "id": "curated-1441",
+      "line": 18254,
+      "text": "Note that I should passport renewal done as soon as I can",
+      "start": 19,
+      "end": 57,
+      "payload": "passport renewal done as soon as I can",
+      "newId": "capture-passport-renewal-done-as-soon-as-i-can"
+    },
+    {
+      "id": "curated-1444",
+      "line": 18293,
+      "text": "Capture double-check the weather forecast before we leave for our trip",
+      "start": 8,
+      "end": 70,
+      "payload": "double-check the weather forecast before we leave for our trip",
+      "newId": "capture-double-check-the-weather-forec-08wvgzo"
+    },
+    {
+      "id": "curated-1456",
+      "line": 18447,
+      "text": "Remember to file Maya's signed contract once she confirms",
+      "start": 12,
+      "end": 57,
+      "payload": "file Maya's signed contract once she confirms",
+      "newId": "capture-file-maya-s-signed-contract-on-0q66vd3"
+    },
+    {
+      "id": "curated-1458",
+      "line": 18473,
+      "text": "Note that I should reserve that table at the restaurant for dinner",
+      "start": 19,
+      "end": 66,
+      "payload": "reserve that table at the restaurant for dinner",
+      "newId": "capture-reserve-that-table-at-the-rest-15lbdvv"
+    },
+    {
+      "id": "curated-1462",
+      "line": 18523,
+      "text": "Write down it’s I need to practice drawing one object from observation",
+      "start": 11,
+      "end": 70,
+      "payload": "it’s I need to practice drawing one object from observation",
+      "newId": "capture-it-s-i-need-to-practice-drawin-0o3v1nj"
+    },
+    {
+      "id": "curated-1468",
+      "line": 18600,
+      "text": "Capture as soon as I walk in the door",
+      "start": 8,
+      "end": 37,
+      "payload": "as soon as I walk in the door",
+      "newId": "capture-as-soon-as-i-walk-in-the-door"
+    },
+    {
+      "id": "curated-1471",
+      "line": 18636,
+      "text": "Remember to make flashcards for the irregular verbs this week",
+      "start": 12,
+      "end": 61,
+      "payload": "make flashcards for the irregular verbs this week",
+      "newId": "capture-make-flashcards-for-the-irregu-1791pvy"
+    },
+    {
+      "id": "curated-1472",
+      "line": 18648,
+      "text": "Note that I should while I'm on my next break",
+      "start": 19,
+      "end": 45,
+      "payload": "while I'm on my next break",
+      "newId": "capture-while-i-m-on-my-next-break"
+    },
+    {
+      "id": "curated-1475",
+      "line": 18684,
+      "text": "Save for later give the apartment manager a quick call as soon as I get home from work today",
+      "start": 15,
+      "end": 92,
+      "payload": "give the apartment manager a quick call as soon as I get home from work today",
+      "newId": "capture-give-the-apartment-manager-a-q-1l1ccjo"
+    },
+    {
+      "id": "curated-1477",
+      "line": 18708,
+      "text": "Capture return those library books by Friday so they don't get fined",
+      "start": 8,
+      "end": 68,
+      "payload": "return those library books by Friday so they don't get fined",
+      "newId": "capture-return-those-library-books-by-0x6c07v"
+    },
+    {
+      "id": "curated-1486",
+      "line": 18826,
+      "text": "Write down reconcile your research budget before the finance review meeting",
+      "start": 11,
+      "end": 75,
+      "payload": "reconcile your research budget before the finance review meeting",
+      "newId": "capture-reconcile-your-research-budget-038gmpx"
+    },
+    {
+      "id": "curated-1494",
+      "line": 18926,
+      "text": "Write down write that thank-you note once Maya says she's ready to send it out",
+      "start": 11,
+      "end": 78,
+      "payload": "write that thank-you note once Maya says she's ready to send it out",
+      "newId": "capture-write-that-thank-you-note-once-0rade8x"
+    },
+    {
+      "id": "curated-1496",
+      "line": 18950,
+      "text": "Note that I should scan the signed contract before Friday",
+      "start": 19,
+      "end": 57,
+      "payload": "scan the signed contract before Friday",
+      "newId": "capture-scan-the-signed-contract-before-friday"
+    },
+    {
+      "id": "curated-1498",
+      "line": 18974,
+      "text": "Write down charge up the camera battery so I can take some shots tomorrow",
+      "start": 11,
+      "end": 73,
+      "payload": "charge up the camera battery so I can take some shots tomorrow",
+      "newId": "capture-charge-up-the-camera-battery-s-1qjrczg"
+    },
+    {
+      "id": "curated-1500",
+      "line": 18998,
+      "text": "Write down a reminder to reserve the rehearsal room before Friday",
+      "start": 11,
+      "end": 65,
+      "payload": "a reminder to reserve the rehearsal room before Friday",
+      "newId": "capture-a-reminder-to-reserve-the-rehe-15rkis0"
+    },
+    {
+      "id": "curated-1517",
+      "line": 19215,
+      "text": "Jot down pack that allergy card in your bag",
+      "start": 9,
+      "end": 43,
+      "payload": "pack that allergy card in your bag",
+      "newId": "capture-pack-that-allergy-card-in-your-bag"
+    },
+    {
+      "id": "curated-1525",
+      "line": 19316,
+      "text": "Save for later by the way don't forget to bring those name tags for the welcome dinner",
+      "start": 15,
+      "end": 86,
+      "payload": "by the way don't forget to bring those name tags for the welcome dinner",
+      "newId": "capture-by-the-way-don-t-forget-to-bri-1dti0fu"
+    },
+    {
+      "id": "curated-1527",
+      "line": 19340,
+      "text": "Capture in the reimbursement form as soon as I get home from work today",
+      "start": 8,
+      "end": 71,
+      "payload": "in the reimbursement form as soon as I get home from work today",
+      "newId": "capture-in-the-reimbursement-form-as-s-0f9d9ss"
+    },
+    {
+      "id": "curated-1528",
+      "line": 19352,
+      "text": "Jot down a heads up defrost the freezer before the grocery delivery",
+      "start": 9,
+      "end": 67,
+      "payload": "a heads up defrost the freezer before the grocery delivery",
+      "newId": "capture-a-heads-up-defrost-the-freezer-1oywtod"
+    },
+    {
+      "id": "curated-1529",
+      "line": 19364,
+      "text": "Jot down write that thank-you note during my next break",
+      "start": 9,
+      "end": 55,
+      "payload": "write that thank-you note during my next break",
+      "newId": "capture-write-that-thank-you-note-duri-15612qd"
+    },
+    {
+      "id": "curated-1542",
+      "line": 19536,
+      "text": "Note that I should printer paper once Maya confirms she has signed the contract",
+      "start": 19,
+      "end": 79,
+      "payload": "printer paper once Maya confirms she has signed the contract",
+      "newId": "capture-printer-paper-once-maya-confir-04ips3h"
+    },
+    {
+      "id": "curated-1545",
+      "line": 19572,
+      "text": "Jot down a reminder to charge the bicycle light when I get home today",
+      "start": 9,
+      "end": 69,
+      "payload": "a reminder to charge the bicycle light when I get home today",
+      "newId": "capture-a-reminder-to-charge-the-bicyc-02vkvkf"
+    },
+    {
+      "id": "curated-1548",
+      "line": 19612,
+      "text": "Remember to clean that coffee grinder after lunch so it smells fresh again",
+      "start": 12,
+      "end": 74,
+      "payload": "clean that coffee grinder after lunch so it smells fresh again",
+      "newId": "capture-clean-that-coffee-grinder-afte-1mf87cn"
+    },
+    {
+      "id": "curated-1554",
+      "line": 19684,
+      "text": "Jot down mail those residency papers once Maya says they're ready to go",
+      "start": 9,
+      "end": 71,
+      "payload": "mail those residency papers once Maya says they're ready to go",
+      "newId": "capture-mail-those-residency-papers-on-1mgr5qf"
+    },
+    {
+      "id": "curated-1561",
+      "line": 19774,
+      "text": "Capture renew my passport before Friday",
+      "start": 8,
+      "end": 39,
+      "payload": "renew my passport before Friday",
+      "newId": "capture-renew-my-passport-before-friday"
+    },
+    {
+      "id": "curated-1565",
+      "line": 19824,
+      "text": "Remember to congratulate Marta after her presentation",
+      "start": 12,
+      "end": 53,
+      "payload": "congratulate Marta after her presentation",
+      "newId": "capture-congratulate-marta-after-her-p-0no3sbw"
+    },
+    {
+      "id": "curated-1571",
+      "line": 19896,
+      "text": "Write down scan the signed contract before we leave for our trip so I have a copy",
+      "start": 11,
+      "end": 81,
+      "payload": "scan the signed contract before we leave for our trip so I have a copy",
+      "newId": "capture-scan-the-signed-contract-befor-03p3za2"
+    },
+    {
+      "id": "curated-1576",
+      "line": 19956,
+      "text": "Save for later swap out that smoke alarm battery before Friday",
+      "start": 15,
+      "end": 62,
+      "payload": "swap out that smoke alarm battery before Friday",
+      "newId": "capture-swap-out-that-smoke-alarm-batt-00ad0k3"
+    },
+    {
+      "id": "curated-1578",
+      "line": 19980,
+      "text": "Jot down return those library books by Friday so they don't get late fees",
+      "start": 9,
+      "end": 73,
+      "payload": "return those library books by Friday so they don't get late fees",
+      "newId": "capture-return-those-library-books-by-1kp140l"
+    },
+    {
+      "id": "curated-1580",
+      "line": 20005,
+      "text": "Note that I should book a quiet carriage on the night train",
+      "start": 19,
+      "end": 59,
+      "payload": "book a quiet carriage on the night train",
+      "newId": "capture-book-a-quiet-carriage-on-the-n-1d5n9uk"
+    },
+    {
+      "id": "curated-1589",
+      "line": 20113,
+      "text": "Save for later: print the return label once I get home from work today",
+      "start": 16,
+      "end": 70,
+      "payload": "print the return label once I get home from work today",
+      "newId": "capture-print-the-return-label-once-i-1kkurrg"
+    },
+    {
+      "id": "curated-1591",
+      "line": 20137,
+      "text": "Write down write up those meeting notes during my next break",
+      "start": 11,
+      "end": 60,
+      "payload": "write up those meeting notes during my next break",
+      "newId": "capture-write-up-those-meeting-notes-d-1q4n967"
+    },
+    {
+      "id": "curated-1594",
+      "line": 20173,
+      "text": "Save for later register for that language course once Maya confirms she's ready to start",
+      "start": 15,
+      "end": 88,
+      "payload": "register for that language course once Maya confirms she's ready to start",
+      "newId": "capture-register-for-that-language-cou-0ltrvd6"
+    },
+    {
+      "id": "curated-1597",
+      "line": 20211,
+      "text": "Remember to ask the landlord about that heating issue when I get home from work today",
+      "start": 12,
+      "end": 85,
+      "payload": "ask the landlord about that heating issue when I get home from work today",
+      "newId": "capture-ask-the-landlord-about-that-he-12vk23v"
+    },
+    {
+      "id": "curated-1600",
+      "line": 20250,
+      "text": "Save for later: compare the pharmacy receipts after lunch",
+      "start": 16,
+      "end": 57,
+      "payload": "compare the pharmacy receipts after lunch",
+      "newId": "capture-compare-the-pharmacy-receipts-0nuzzyc"
+    },
+    {
+      "id": "curated-1603",
+      "line": 20286,
+      "text": "Note that I should saturday's tailor alterations are waiting for you",
+      "start": 19,
+      "end": 68,
+      "payload": "saturday's tailor alterations are waiting for you",
+      "newId": "capture-saturday-s-tailor-alterations-15uhzok"
+    },
+    {
+      "id": "curated-1605",
+      "line": 20310,
+      "text": "Jot down take some time to revisit your portfolio narrative feedback",
+      "start": 9,
+      "end": 68,
+      "payload": "take some time to revisit your portfolio narrative feedback",
+      "newId": "capture-take-some-time-to-revisit-your-1v10mme"
+    },
+    {
+      "id": "curated-1607",
+      "line": 20334,
+      "text": "Note that I should find that blue notebook after lunch so we don't lose it",
+      "start": 19,
+      "end": 74,
+      "payload": "find that blue notebook after lunch so we don't lose it",
+      "newId": "capture-find-that-blue-notebook-after-1veiyh0"
+    },
+    {
+      "id": "curated-1614",
+      "line": 20426,
+      "text": "Write down a reminder to confirm the parcel number during my next break",
+      "start": 11,
+      "end": 71,
+      "payload": "a reminder to confirm the parcel number during my next break",
+      "newId": "capture-a-reminder-to-confirm-the-parc-0akfczr"
+    },
+    {
+      "id": "curated-1622",
+      "line": 20531,
+      "text": "Jot down review the electricity bill before our trip so I know what to expect",
+      "start": 9,
+      "end": 77,
+      "payload": "review the electricity bill before our trip so I know what to expect",
+      "newId": "capture-review-the-electricity-bill-be-123crx4"
+    },
+    {
+      "id": "curated-1626",
+      "line": 20582,
+      "text": "Capture in that reimbursement form once Maya says it's ready to go",
+      "start": 8,
+      "end": 66,
+      "payload": "in that reimbursement form once Maya says it's ready to go",
+      "newId": "capture-in-that-reimbursement-form-onc-0h2uey1"
+    },
+    {
+      "id": "curated-1630",
+      "line": 20636,
+      "text": "Jot down hugo that address for Saturday dinner",
+      "start": 9,
+      "end": 46,
+      "payload": "hugo that address for Saturday dinner",
+      "newId": "capture-hugo-that-address-for-saturday-dinner"
+    },
+    {
+      "id": "curated-1638",
+      "line": 20738,
+      "text": "Note that I should water the office fern after lunch",
+      "start": 19,
+      "end": 52,
+      "payload": "water the office fern after lunch",
+      "newId": "capture-water-the-office-fern-after-lunch"
+    },
+    {
+      "id": "curated-1641",
+      "line": 20774,
+      "text": "Note that I should replace the smoke alarm battery after lunch so we're good to go",
+      "start": 19,
+      "end": 82,
+      "payload": "replace the smoke alarm battery after lunch so we're good to go",
+      "newId": "capture-replace-the-smoke-alarm-batter-01a5vlw"
+    },
+    {
+      "id": "curated-1654",
+      "line": 20935,
+      "text": "Note that I should refill my prescription when I get home from work today",
+      "start": 19,
+      "end": 73,
+      "payload": "refill my prescription when I get home from work today",
+      "newId": "capture-refill-my-prescription-when-i-1h1rw3q"
+    },
+    {
+      "id": "curated-1663",
+      "line": 21047,
+      "text": "Remember to check those passport photos once I get home so they're up to date",
+      "start": 12,
+      "end": 77,
+      "payload": "check those passport photos once I get home so they're up to date",
+      "newId": "capture-check-those-passport-photos-on-0170vly"
+    },
+    {
+      "id": "curated-1670",
+      "line": 21138,
+      "text": "Remember to return that borrowed camera during my next break so it's free to use again",
+      "start": 12,
+      "end": 86,
+      "payload": "return that borrowed camera during my next break so it's free to use again",
+      "newId": "capture-return-that-borrowed-camera-du-0xjvjc4"
+    },
+    {
+      "id": "curated-1677",
+      "line": 21227,
+      "text": "Remember to a loose shelf bracket is just begging to be tightened",
+      "start": 12,
+      "end": 65,
+      "payload": "a loose shelf bracket is just begging to be tightened",
+      "newId": "capture-a-loose-shelf-bracket-is-just-1e7rbb4"
+    },
+    {
+      "id": "curated-1680",
+      "line": 21264,
+      "text": "Save for later reserve a table at the restaurant when I get home from work today",
+      "start": 15,
+      "end": 80,
+      "payload": "reserve a table at the restaurant when I get home from work today",
+      "newId": "capture-reserve-a-table-at-the-restaur-06t9snb"
+    },
+    {
+      "id": "curated-1685",
+      "line": 21325,
+      "text": "Jot down just a heads up check whether the hostel supplies towels",
+      "start": 9,
+      "end": 65,
+      "payload": "just a heads up check whether the hostel supplies towels",
+      "newId": "capture-just-a-heads-up-check-whether-1c1309j"
+    },
+    {
+      "id": "curated-1693",
+      "line": 21424,
+      "text": "Save for later thank those volunteers after the collection",
+      "start": 15,
+      "end": 58,
+      "payload": "thank those volunteers after the collection",
+      "newId": "capture-thank-those-volunteers-after-t-1b22dsb"
+    },
+    {
+      "id": "curated-1704",
+      "line": 21562,
+      "text": "Capture what's included in the museum ticket",
+      "start": 8,
+      "end": 44,
+      "payload": "what's included in the museum ticket",
+      "newId": "capture-what-s-included-in-the-museum-ticket"
+    },
+    {
+      "id": "curated-1706",
+      "line": 21588,
+      "text": "Write down refill that prescription during my next break",
+      "start": 11,
+      "end": 56,
+      "payload": "refill that prescription during my next break",
+      "newId": "capture-refill-that-prescription-durin-0rqebup"
+    },
+    {
+      "id": "curated-1712",
+      "line": 21667,
+      "text": "Remember to clean that bicycle chain before it gets any grime",
+      "start": 12,
+      "end": 61,
+      "payload": "clean that bicycle chain before it gets any grime",
+      "newId": "capture-clean-that-bicycle-chain-befor-1cop60g"
+    },
+    {
+      "id": "curated-1716",
+      "line": 21720,
+      "text": "Capture pack the travel adapter when I get home so we're ready for our trip",
+      "start": 8,
+      "end": 75,
+      "payload": "pack the travel adapter when I get home so we're ready for our trip",
+      "newId": "capture-pack-the-travel-adapter-when-i-02nik10"
+    },
+    {
+      "id": "curated-1718",
+      "line": 21744,
+      "text": "Jot down update my medical card before our trip so everything is current",
+      "start": 9,
+      "end": 72,
+      "payload": "update my medical card before our trip so everything is current",
+      "newId": "capture-update-my-medical-card-before-1dz300b"
+    },
+    {
+      "id": "curated-1739",
+      "line": 22007,
+      "text": "Remember to write that thank-you note and mail it before I leave",
+      "start": 12,
+      "end": 64,
+      "payload": "write that thank-you note and mail it before I leave",
+      "newId": "capture-write-that-thank-you-note-and-1blmcsu"
+    },
+    {
+      "id": "curated-1742",
+      "line": 22043,
+      "text": "Remember to replace the smoke alarm battery when you're done with your shift",
+      "start": 12,
+      "end": 76,
+      "payload": "replace the smoke alarm battery when you're done with your shift",
+      "newId": "capture-replace-the-smoke-alarm-batter-1icm6q7"
+    },
+    {
+      "id": "curated-1753",
+      "line": 22180,
+      "text": "Remember to remember to grab the umbrella once Maya says so",
+      "start": 12,
+      "end": 59,
+      "payload": "remember to grab the umbrella once Maya says so",
+      "newId": "capture-remember-to-grab-the-umbrella-0fg1ks7"
+    },
+    {
+      "id": "curated-1755",
+      "line": 22206,
+      "text": "Jot down complete that browser performance lab this weekend",
+      "start": 9,
+      "end": 59,
+      "payload": "complete that browser performance lab this weekend",
+      "newId": "capture-complete-that-browser-performa-13atafv"
+    },
+    {
+      "id": "curated-1757",
+      "line": 22230,
+      "text": "Capture finish the German listening exercise before class",
+      "start": 8,
+      "end": 57,
+      "payload": "finish the German listening exercise before class",
+      "newId": "capture-finish-the-german-listening-ex-1b9wtln"
+    },
+    {
+      "id": "curated-1766",
+      "line": 22344,
+      "text": "Write down i need to pick up those repaired shoes before Friday's workday ends",
+      "start": 11,
+      "end": 78,
+      "payload": "i need to pick up those repaired shoes before Friday's workday ends",
+      "newId": "capture-i-need-to-pick-up-those-repair-06l0pz8"
+    },
+    {
+      "id": "curated-1773",
+      "line": 22435,
+      "text": "Note that I should pick up oat milk on the way home from lunch today",
+      "start": 19,
+      "end": 68,
+      "payload": "pick up oat milk on the way home from lunch today",
+      "newId": "capture-pick-up-oat-milk-on-the-way-ho-0ofr4n7"
+    },
+    {
+      "id": "curated-1777",
+      "line": 22483,
+      "text": "Write down replace the water filter as soon as you walk in the door",
+      "start": 11,
+      "end": 67,
+      "payload": "replace the water filter as soon as you walk in the door",
+      "newId": "capture-replace-the-water-filter-as-so-0w28i8l"
+    },
+    {
+      "id": "curated-1785",
+      "line": 22584,
+      "text": "Save for later grab those concert tickets right after lunch",
+      "start": 15,
+      "end": 59,
+      "payload": "grab those concert tickets right after lunch",
+      "newId": "capture-grab-those-concert-tickets-rig-042slzt"
+    },
+    {
+      "id": "curated-1787",
+      "line": 22608,
+      "text": "Write down i promised Eva a small book",
+      "start": 11,
+      "end": 38,
+      "payload": "i promised Eva a small book",
+      "newId": "capture-i-promised-eva-a-small-book"
+    },
+    {
+      "id": "curated-1790",
+      "line": 22644,
+      "text": "Capture look up the museum hours and plan our visit ahead of time",
+      "start": 8,
+      "end": 65,
+      "payload": "look up the museum hours and plan our visit ahead of time",
+      "newId": "capture-look-up-the-museum-hours-and-p-12nk4ok"
+    },
+    {
+      "id": "curated-1798",
+      "line": 22747,
+      "text": "Save for later call that embassy when I get home from my shift",
+      "start": 15,
+      "end": 62,
+      "payload": "call that embassy when I get home from my shift",
+      "newId": "capture-call-that-embassy-when-i-get-h-0y91b2h"
+    },
+    {
+      "id": "curated-1802",
+      "line": 22796,
+      "text": "Jot down pick up those repaired shoes on your way out",
+      "start": 9,
+      "end": 53,
+      "payload": "pick up those repaired shoes on your way out",
+      "newId": "capture-pick-up-those-repaired-shoes-o-18kv2st"
+    },
+    {
+      "id": "curated-1809",
+      "line": 22885,
+      "text": "Jot down scan the warranty receipt for the coffee machine",
+      "start": 9,
+      "end": 57,
+      "payload": "scan the warranty receipt for the coffee machine",
+      "newId": "capture-scan-the-warranty-receipt-for-0fisfgj"
+    },
+    {
+      "id": "curated-1810",
+      "line": 22897,
+      "text": "Remember to remember to grab those repaired shoes right after lunch",
+      "start": 12,
+      "end": 67,
+      "payload": "remember to grab those repaired shoes right after lunch",
+      "newId": "capture-remember-to-grab-those-repaire-0j4luf8"
+    },
+    {
+      "id": "curated-1818",
+      "line": 23000,
+      "text": "Note that I should replace that bathroom light before you leave for the weekend",
+      "start": 19,
+      "end": 79,
+      "payload": "replace that bathroom light before you leave for the weekend",
+      "newId": "capture-replace-that-bathroom-light-be-02jy1fj"
+    },
+    {
+      "id": "curated-1825",
+      "line": 23095,
+      "text": "Write down i need to bring the umbrella today during my break",
+      "start": 11,
+      "end": 61,
+      "payload": "i need to bring the umbrella today during my break",
+      "newId": "capture-i-need-to-bring-the-umbrella-t-0p2avcm"
+    },
+    {
+      "id": "curated-1836",
+      "line": 23232,
+      "text": "Write down collect those concert tickets by Friday's workday end",
+      "start": 11,
+      "end": 64,
+      "payload": "collect those concert tickets by Friday's workday end",
+      "newId": "capture-collect-those-concert-tickets-0odcq10"
+    },
+    {
+      "id": "curated-1841",
+      "line": 23292,
+      "text": "Note that I should that reimbursement form over to my boss as soon as possible",
+      "start": 19,
+      "end": 78,
+      "payload": "that reimbursement form over to my boss as soon as possible",
+      "newId": "capture-that-reimbursement-form-over-t-0x82kaa"
+    },
+    {
+      "id": "curated-1845",
+      "line": 23340,
+      "text": "Remember to book that dentist appointment for after my next shift",
+      "start": 12,
+      "end": 65,
+      "payload": "book that dentist appointment for after my next shift",
+      "newId": "capture-book-that-dentist-appointment-1lhlv8l"
+    },
+    {
+      "id": "curated-1848",
+      "line": 23376,
+      "text": "Remember to double-check with the council about that park permit",
+      "start": 12,
+      "end": 64,
+      "payload": "double-check with the council about that park permit",
+      "newId": "capture-double-check-with-the-council-1r7f98n"
+    },
+    {
+      "id": "curated-1874",
+      "line": 23711,
+      "text": "Write down i need to mail those residency papers before our trip starts",
+      "start": 11,
+      "end": 71,
+      "payload": "i need to mail those residency papers before our trip starts",
+      "newId": "capture-i-need-to-mail-those-residency-1b0d2dd"
+    },
+    {
+      "id": "curated-1877",
+      "line": 23750,
+      "text": "Jot down measure the guest room when I get home and take notes",
+      "start": 9,
+      "end": 62,
+      "payload": "measure the guest room when I get home and take notes",
+      "newId": "capture-measure-the-guest-room-when-i-1tizuhg"
+    },
+    {
+      "id": "curated-1882",
+      "line": 23813,
+      "text": "Jot down register for that language course ahead of time before Friday",
+      "start": 9,
+      "end": 70,
+      "payload": "register for that language course ahead of time before Friday",
+      "newId": "capture-register-for-that-language-cou-0tud4gl"
+    },
+    {
+      "id": "curated-1884",
+      "line": 23837,
+      "text": "Capture water the balcony herbs today as soon as you finish your shift",
+      "start": 8,
+      "end": 70,
+      "payload": "water the balcony herbs today as soon as you finish your shift",
+      "newId": "capture-water-the-balcony-herbs-today-134mifx"
+    },
+    {
+      "id": "curated-1886",
+      "line": 23863,
+      "text": "Save for later organize those travel receipts once Maya gets back to work",
+      "start": 15,
+      "end": 73,
+      "payload": "organize those travel receipts once Maya gets back to work",
+      "newId": "capture-organize-those-travel-receipts-0l6ek1g"
+    },
+    {
+      "id": "curated-1892",
+      "line": 23937,
+      "text": "Write down check my passport photos for our trip today after lunch",
+      "start": 11,
+      "end": 66,
+      "payload": "check my passport photos for our trip today after lunch",
+      "newId": "capture-check-my-passport-photos-for-o-05bwmcm"
+    },
+    {
+      "id": "curated-1904",
+      "line": 24091,
+      "text": "Remember to replace that bicycle light before the weekend starts",
+      "start": 12,
+      "end": 64,
+      "payload": "replace that bicycle light before the weekend starts",
+      "newId": "capture-replace-that-bicycle-light-bef-1t9d6fe"
+    },
+    {
+      "id": "curated-1907",
+      "line": 24132,
+      "text": "Capture find that blue notebook on your way out before Friday",
+      "start": 8,
+      "end": 61,
+      "payload": "find that blue notebook on your way out before Friday",
+      "newId": "capture-find-that-blue-notebook-on-you-0glw95m"
+    },
+    {
+      "id": "curated-1912",
+      "line": 24192,
+      "text": "Save for later i need to buy oat milk during my next break for our trip",
+      "start": 15,
+      "end": 71,
+      "payload": "i need to buy oat milk during my next break for our trip",
+      "newId": "capture-i-need-to-buy-oat-milk-during-1gfrwqx"
+    },
+    {
+      "id": "curated-1918",
+      "line": 24272,
+      "text": "Save for later cancel that unused subscription right after lunch today",
+      "start": 15,
+      "end": 70,
+      "payload": "cancel that unused subscription right after lunch today",
+      "newId": "capture-cancel-that-unused-subscriptio-084v8zv"
+    },
+    {
+      "id": "curated-1927",
+      "line": 24382,
+      "text": "Save for later publish those meeting decisions in the project space",
+      "start": 15,
+      "end": 67,
+      "payload": "publish those meeting decisions in the project space",
+      "newId": "capture-publish-those-meeting-decision-0cdfotz"
+    },
+    {
+      "id": "curated-1930",
+      "line": 24418,
+      "text": "Capture print those boarding passes as soon as you can on your way home",
+      "start": 8,
+      "end": 71,
+      "payload": "print those boarding passes as soon as you can on your way home",
+      "newId": "capture-print-those-boarding-passes-as-0yknsvg"
+    },
+    {
+      "id": "curated-1931",
+      "line": 24430,
+      "text": "Note that I should repair the torn lining in your blue coat",
+      "start": 19,
+      "end": 59,
+      "payload": "repair the torn lining in your blue coat",
+      "newId": "capture-repair-the-torn-lining-in-your-1kalh53"
+    },
+    {
+      "id": "curated-1945",
+      "line": 24608,
+      "text": "Save for later pack the travel adapter and get it ready for our trip",
+      "start": 15,
+      "end": 68,
+      "payload": "pack the travel adapter and get it ready for our trip",
+      "newId": "capture-pack-the-travel-adapter-and-ge-1bun01x"
+    },
+    {
+      "id": "curated-1955",
+      "line": 24736,
+      "text": "Capture take a photo of that router serial number",
+      "start": 8,
+      "end": 49,
+      "payload": "take a photo of that router serial number",
+      "newId": "capture-take-a-photo-of-that-router-se-0e19gim"
+    },
+    {
+      "id": "curated-1957",
+      "line": 24760,
+      "text": "Jot down test that keyboard journey before the design critique",
+      "start": 9,
+      "end": 62,
+      "payload": "test that keyboard journey before the design critique",
+      "newId": "capture-test-that-keyboard-journey-bef-0zmjyxa"
+    },
+    {
+      "id": "curated-1959",
+      "line": 24784,
+      "text": "Capture cancel that storage locker after you've moved everything out",
+      "start": 8,
+      "end": 68,
+      "payload": "cancel that storage locker after you've moved everything out",
+      "newId": "capture-cancel-that-storage-locker-aft-01bew48"
+    },
+    {
+      "id": "curated-1962",
+      "line": 24823,
+      "text": "Remember to replace that water filter before Friday's workday ends",
+      "start": 12,
+      "end": 66,
+      "payload": "replace that water filter before Friday's workday ends",
+      "newId": "capture-replace-that-water-filter-befo-14b3fen"
+    },
+    {
+      "id": "curated-1968",
+      "line": 24898,
+      "text": "Note that I should bring that umbrella with me today during my break",
+      "start": 19,
+      "end": 68,
+      "payload": "bring that umbrella with me today during my break",
+      "newId": "capture-bring-that-umbrella-with-me-to-1bxyt2f"
+    },
+    {
+      "id": "curated-1976",
+      "line": 25000,
+      "text": "Capture look up those museum hours and plan ahead once you're done with your shift",
+      "start": 8,
+      "end": 82,
+      "payload": "look up those museum hours and plan ahead once you're done with your shift",
+      "newId": "capture-look-up-those-museum-hours-and-0lt0aww"
+    },
+    {
+      "id": "curated-1979",
+      "line": 25039,
+      "text": "Capture collect those seed packets for the garden exchange",
+      "start": 8,
+      "end": 58,
+      "payload": "collect those seed packets for the garden exchange",
+      "newId": "capture-collect-those-seed-packets-for-04t8bnx"
+    },
+    {
+      "id": "curated-1980",
+      "line": 25051,
+      "text": "Write down repair that loose button on your shirt after lunch today",
+      "start": 11,
+      "end": 67,
+      "payload": "repair that loose button on your shirt after lunch today",
+      "newId": "capture-repair-that-loose-button-on-yo-0d9g00x"
+    },
+    {
+      "id": "curated-1982",
+      "line": 25077,
+      "text": "Note that I should measure the guest room's size when you get home from work this afternoon",
+      "start": 19,
+      "end": 91,
+      "payload": "measure the guest room's size when you get home from work this afternoon",
+      "newId": "capture-measure-the-guest-room-s-size-0qg72wd"
+    },
+    {
+      "id": "curated-1985",
+      "line": 25115,
+      "text": "Remember to don't run out of contact lens solution",
+      "start": 12,
+      "end": 50,
+      "payload": "don't run out of contact lens solution",
+      "newId": "capture-don-t-run-out-of-contact-lens-solution"
+    },
+    {
+      "id": "curated-1987",
+      "line": 25141,
+      "text": "Capture i need to confirm that hotel transfer with Maya once she says so",
+      "start": 8,
+      "end": 72,
+      "payload": "i need to confirm that hotel transfer with Maya once she says so",
+      "newId": "capture-i-need-to-confirm-that-hotel-t-18od6nw"
+    },
+    {
+      "id": "curated-1991",
+      "line": 25192,
+      "text": "Write down reserve a table for dinner after our lunch meeting today",
+      "start": 11,
+      "end": 67,
+      "payload": "reserve a table for dinner after our lunch meeting today",
+      "newId": "capture-reserve-a-table-for-dinner-aft-0ka673k"
+    },
+    {
+      "id": "curated-2015",
+      "line": 25497,
+      "text": "Write down pick up those repaired shoes by Friday's workday end and make sure you have them",
+      "start": 11,
+      "end": 91,
+      "payload": "pick up those repaired shoes by Friday's workday end and make sure you have them",
+      "newId": "capture-pick-up-those-repaired-shoes-b-1gumu6j"
+    },
+    {
+      "id": "curated-2025",
+      "line": 25622,
+      "text": "Save for later order printer paper for tomorrow before Friday",
+      "start": 15,
+      "end": 61,
+      "payload": "order printer paper for tomorrow before Friday",
+      "newId": "capture-order-printer-paper-for-tomorr-0e8ppe5"
+    },
+    {
+      "id": "curated-2040",
+      "line": 25814,
+      "text": "Remember to review that electricity bill right after our shift ends",
+      "start": 12,
+      "end": 67,
+      "payload": "review that electricity bill right after our shift ends",
+      "newId": "capture-review-that-electricity-bill-r-1rjqwp0"
+    },
+    {
+      "id": "curated-2041",
+      "line": 25826,
+      "text": "Remember to ask the dentist to copy those x rays",
+      "start": 12,
+      "end": 48,
+      "payload": "ask the dentist to copy those x rays",
+      "newId": "capture-ask-the-dentist-to-copy-those-x-rays"
+    },
+    {
+      "id": "curated-2043",
+      "line": 25850,
+      "text": "Save for later check the train timetable once Maya replies to your email",
+      "start": 15,
+      "end": 72,
+      "payload": "check the train timetable once Maya replies to your email",
+      "newId": "capture-check-the-train-timetable-once-0ikt51z"
+    },
+    {
+      "id": "curated-2047",
+      "line": 25898,
+      "text": "Remember to summarize those usability findings for engineering",
+      "start": 12,
+      "end": 62,
+      "payload": "summarize those usability findings for engineering",
+      "newId": "capture-summarize-those-usability-find-1soql8e"
+    },
+    {
+      "id": "curated-2051",
+      "line": 25946,
+      "text": "Note that I should look up those train timetables and plan ahead once you're done with your shift",
+      "start": 19,
+      "end": 97,
+      "payload": "look up those train timetables and plan ahead once you're done with your shift",
+      "newId": "capture-look-up-those-train-timetables-0zt58gj"
+    },
+    {
+      "id": "curated-2053",
+      "line": 25970,
+      "text": "Note that I should call Nina before she leaves for the airport",
+      "start": 19,
+      "end": 62,
+      "payload": "call Nina before she leaves for the airport",
+      "newId": "capture-call-nina-before-she-leaves-fo-1f7ibt8"
+    },
+    {
+      "id": "curated-2061",
+      "line": 26072,
+      "text": "Jot down pack that travel adapter and make sure it's ready for our trip",
+      "start": 9,
+      "end": 71,
+      "payload": "pack that travel adapter and make sure it's ready for our trip",
+      "newId": "capture-pack-that-travel-adapter-and-m-14war21"
+    },
+    {
+      "id": "curated-2064",
+      "line": 26111,
+      "text": "Note that I should submit that course reflection by midnight",
+      "start": 19,
+      "end": 60,
+      "payload": "submit that course reflection by midnight",
+      "newId": "capture-submit-that-course-reflection-1j6ypu8"
+    },
+    {
+      "id": "curated-2081",
+      "line": 26321,
+      "text": "Jot down check the train timetable before heading out for the trip",
+      "start": 9,
+      "end": 66,
+      "payload": "check the train timetable before heading out for the trip",
+      "newId": "capture-check-the-train-timetable-befo-0ooga0m"
+    },
+    {
+      "id": "curated-2082",
+      "line": 26333,
+      "text": "Capture compare those two train passes before they change prices",
+      "start": 8,
+      "end": 64,
+      "payload": "compare those two train passes before they change prices",
+      "newId": "capture-compare-those-two-train-passes-0skky6n"
+    },
+    {
+      "id": "curated-2084",
+      "line": 26357,
+      "text": "Capture what you want to discuss with your mentor",
+      "start": 8,
+      "end": 49,
+      "payload": "what you want to discuss with your mentor",
+      "newId": "capture-what-you-want-to-discuss-with-0xwljd4"
+    },
+    {
+      "id": "curated-2090",
+      "line": 26430,
+      "text": "Save for later water those balcony herbs on Thursday or they'll die",
+      "start": 15,
+      "end": 67,
+      "payload": "water those balcony herbs on Thursday or they'll die",
+      "newId": "capture-water-those-balcony-herbs-on-t-0154f7o"
+    },
+    {
+      "id": "curated-2092",
+      "line": 26454,
+      "text": "Capture i need to print out my boarding passes before the trip",
+      "start": 8,
+      "end": 62,
+      "payload": "i need to print out my boarding passes before the trip",
+      "newId": "capture-i-need-to-print-out-my-boardin-14sm89o"
+    },
+    {
+      "id": "curated-2096",
+      "line": 26505,
+      "text": "Remember to don't forget the lab report",
+      "start": 12,
+      "end": 39,
+      "payload": "don't forget the lab report",
+      "newId": "capture-don-t-forget-the-lab-report"
+    },
+    {
+      "id": "curated-2099",
+      "line": 26543,
+      "text": "Remember to give the apartment manager a call during our next break",
+      "start": 12,
+      "end": 67,
+      "payload": "give the apartment manager a call during our next break",
+      "newId": "capture-give-the-apartment-manager-a-c-1otocib"
+    },
+    {
+      "id": "curated-2105",
+      "line": 26621,
+      "text": "Remember to clean that coffee grinder as soon as Maya gets back and we discuss plans",
+      "start": 12,
+      "end": 84,
+      "payload": "clean that coffee grinder as soon as Maya gets back and we discuss plans",
+      "newId": "capture-clean-that-coffee-grinder-as-s-19x36wj"
+    },
+    {
+      "id": "curated-2108",
+      "line": 26658,
+      "text": "Jot down calling the embassy on my next break is a priority",
+      "start": 9,
+      "end": 59,
+      "payload": "calling the embassy on my next break is a priority",
+      "newId": "capture-calling-the-embassy-on-my-next-12j6v85"
+    },
+    {
+      "id": "curated-2110",
+      "line": 26682,
+      "text": "Write down choosing the workshop materials on our next break will make things so much easier",
+      "start": 11,
+      "end": 92,
+      "payload": "choosing the workshop materials on our next break will make things so much easier",
+      "newId": "capture-choosing-the-workshop-material-1ts5zs2"
+    },
+    {
+      "id": "curated-2112",
+      "line": 26706,
+      "text": "Remember to request that school transcript during our next break",
+      "start": 12,
+      "end": 64,
+      "payload": "request that school transcript during our next break",
+      "newId": "capture-request-that-school-transcript-1u0aoiv"
+    },
+    {
+      "id": "curated-2122",
+      "line": 26834,
+      "text": "Save for later charge my camera battery as soon as I get home",
+      "start": 15,
+      "end": 61,
+      "payload": "charge my camera battery as soon as I get home",
+      "newId": "capture-charge-my-camera-battery-as-so-1tuv6zj"
+    },
+    {
+      "id": "curated-2124",
+      "line": 26858,
+      "text": "Jot down double checking the passport photos before the trip will save me some stress",
+      "start": 9,
+      "end": 85,
+      "payload": "double checking the passport photos before the trip will save me some stress",
+      "newId": "capture-double-checking-the-passport-p-1tlpczw"
+    },
+    {
+      "id": "curated-2131",
+      "line": 26945,
+      "text": "Capture choosing those workshop materials once Maya says yes is a relief",
+      "start": 8,
+      "end": 72,
+      "payload": "choosing those workshop materials once Maya says yes is a relief",
+      "newId": "capture-choosing-those-workshop-materi-1ajx03f"
+    },
+    {
+      "id": "curated-2139",
+      "line": 27052,
+      "text": "Jot down pick up that birthday present when I get home",
+      "start": 9,
+      "end": 54,
+      "payload": "pick up that birthday present when I get home",
+      "newId": "capture-pick-up-that-birthday-present-03w9yh4"
+    },
+    {
+      "id": "curated-2148",
+      "line": 27165,
+      "text": "Remember to measure that window carefully save the measurements so you don't have to redo it",
+      "start": 12,
+      "end": 92,
+      "payload": "measure that window carefully save the measurements so you don't have to redo it",
+      "newId": "capture-measure-that-window-carefully-1k1g5gu"
+    },
+    {
+      "id": "curated-2152",
+      "line": 27213,
+      "text": "Remember to out those meeting notes before we leave for the trip",
+      "start": 12,
+      "end": 64,
+      "payload": "out those meeting notes before we leave for the trip",
+      "newId": "capture-out-those-meeting-notes-before-08t21pu"
+    },
+    {
+      "id": "curated-2154",
+      "line": 27237,
+      "text": "Capture save the support team's contact info for our product retrospective this week",
+      "start": 8,
+      "end": 84,
+      "payload": "save the support team's contact info for our product retrospective this week",
+      "newId": "capture-save-the-support-team-s-contac-1ik903n"
+    },
+    {
+      "id": "curated-2160",
+      "line": 27309,
+      "text": "Capture comparing our insurance renewal plans after lunch will make things so clear",
+      "start": 8,
+      "end": 83,
+      "payload": "comparing our insurance renewal plans after lunch will make things so clear",
+      "newId": "capture-comparing-our-insurance-renewa-0soy0lo"
+    },
+    {
+      "id": "curated-2162",
+      "line": 27335,
+      "text": "Save for later confirming that hotel transfer after lunch will save us some cash",
+      "start": 15,
+      "end": 80,
+      "payload": "confirming that hotel transfer after lunch will save us some cash",
+      "newId": "capture-confirming-that-hotel-transfer-1c0fcwv"
+    },
+    {
+      "id": "curated-2163",
+      "line": 27347,
+      "text": "Capture the bank know your exact travel dates",
+      "start": 8,
+      "end": 45,
+      "payload": "the bank know your exact travel dates",
+      "newId": "capture-the-bank-know-your-exact-travel-dates"
+    },
+    {
+      "id": "curated-2167",
+      "line": 27396,
+      "text": "Remember to collecting the dry cleaning after lunch will get it back in time",
+      "start": 12,
+      "end": 76,
+      "payload": "collecting the dry cleaning after lunch will get it back in time",
+      "newId": "capture-collecting-the-dry-cleaning-af-0hs0u5l"
+    },
+    {
+      "id": "curated-2169",
+      "line": 27422,
+      "text": "Remember to confirming that hotel transfer before Friday is a must",
+      "start": 12,
+      "end": 66,
+      "payload": "confirming that hotel transfer before Friday is a must",
+      "newId": "capture-confirming-that-hotel-transfer-1etrxen"
+    },
+    {
+      "id": "curated-2178",
+      "line": 27538,
+      "text": "Remember to renewing my passport once Maya says yes is a priority",
+      "start": 12,
+      "end": 65,
+      "payload": "renewing my passport once Maya says yes is a priority",
+      "newId": "capture-renewing-my-passport-once-maya-10j8y96"
+    },
+    {
+      "id": "curated-2182",
+      "line": 27592,
+      "text": "Jot down checking those passport photos during our next break will make things easier",
+      "start": 9,
+      "end": 85,
+      "payload": "checking those passport photos during our next break will make things easier",
+      "newId": "capture-checking-those-passport-photos-1uqeif3"
+    },
+    {
+      "id": "curated-2192",
+      "line": 27719,
+      "text": "Remember to refill that prescription after lunch",
+      "start": 12,
+      "end": 48,
+      "payload": "refill that prescription after lunch",
+      "newId": "capture-refill-that-prescription-after-lunch"
+    },
+    {
+      "id": "curated-2199",
+      "line": 27808,
+      "text": "Save for later comparing our insurance renewal plans when I get home will give me some peace of mind",
+      "start": 15,
+      "end": 100,
+      "payload": "comparing our insurance renewal plans when I get home will give me some peace of mind",
+      "newId": "capture-comparing-our-insurance-renewa-04p32d0"
+    },
+    {
+      "id": "curated-2203",
+      "line": 27856,
+      "text": "Capture water those balcony herbs during our next break",
+      "start": 8,
+      "end": 55,
+      "payload": "water those balcony herbs during our next break",
+      "newId": "capture-water-those-balcony-herbs-duri-1npqz2n"
+    },
+    {
+      "id": "curated-2211",
+      "line": 27960,
+      "text": "Note that I should i need to check the passport photos before Friday",
+      "start": 19,
+      "end": 68,
+      "payload": "i need to check the passport photos before Friday",
+      "newId": "capture-i-need-to-check-the-passport-p-1cmbcal"
+    },
+    {
+      "id": "curated-2228",
+      "line": 28176,
+      "text": "Note that I should organize those travel receipts before the trip",
+      "start": 19,
+      "end": 65,
+      "payload": "organize those travel receipts before the trip",
+      "newId": "capture-organize-those-travel-receipts-0e3odr9"
+    },
+    {
+      "id": "curated-2248",
+      "line": 28428,
+      "text": "Note that I should downloading that tax statement after lunch will get it out of the way",
+      "start": 19,
+      "end": 88,
+      "payload": "downloading that tax statement after lunch will get it out of the way",
+      "newId": "capture-downloading-that-tax-statement-0crqdg2"
+    },
+    {
+      "id": "curated-2256",
+      "line": 28532,
+      "text": "Capture looking up the museum hours once Maya says yes is a relief",
+      "start": 8,
+      "end": 66,
+      "payload": "looking up the museum hours once Maya says yes is a relief",
+      "newId": "capture-looking-up-the-museum-hours-on-1t7b3ou"
+    },
+    {
+      "id": "curated-2263",
+      "line": 28619,
+      "text": "Save for later swap out that old yoga mat",
+      "start": 15,
+      "end": 41,
+      "payload": "swap out that old yoga mat",
+      "newId": "capture-swap-out-that-old-yoga-mat"
+    },
+    {
+      "id": "curated-2265",
+      "line": 28643,
+      "text": "Capture pack my travel adapter once Maya replies",
+      "start": 8,
+      "end": 48,
+      "payload": "pack my travel adapter once Maya replies",
+      "newId": "capture-pack-my-travel-adapter-once-ma-1jgy4r2"
+    },
+    {
+      "id": "curated-2267",
+      "line": 28667,
+      "text": "Jot down booking that dentist appointment when I get home",
+      "start": 9,
+      "end": 57,
+      "payload": "booking that dentist appointment when I get home",
+      "newId": "capture-booking-that-dentist-appointme-15pxtg0"
+    },
+    {
+      "id": "curated-2269",
+      "line": 28691,
+      "text": "Save for later downloading that tax statement before Friday is a must",
+      "start": 15,
+      "end": 69,
+      "payload": "downloading that tax statement before Friday is a must",
+      "newId": "capture-downloading-that-tax-statement-0kgc3w6"
+    },
+    {
+      "id": "curated-2271",
+      "line": 28717,
+      "text": "Capture elena needs a ride on Friday? Remind her to hop in with you",
+      "start": 8,
+      "end": 67,
+      "payload": "elena needs a ride on Friday? Remind her to hop in with you",
+      "newId": "capture-elena-needs-a-ride-on-friday-r-1r6j0wy"
+    },
+    {
+      "id": "curated-2275",
+      "line": 28768,
+      "text": "Remember to scanning that signed contract when I get home will make everything official",
+      "start": 12,
+      "end": 87,
+      "payload": "scanning that signed contract when I get home will make everything official",
+      "newId": "capture-scanning-that-signed-contract-1s0zak4"
+    },
+    {
+      "id": "curated-2277",
+      "line": 28793,
+      "text": "Note that I should donating those winter coats before Friday",
+      "start": 19,
+      "end": 60,
+      "payload": "donating those winter coats before Friday",
+      "newId": "capture-donating-those-winter-coats-be-0oskkko"
+    },
+    {
+      "id": "curated-2279",
+      "line": 28817,
+      "text": "Write down i need to send out those meeting notes after lunch",
+      "start": 11,
+      "end": 61,
+      "payload": "i need to send out those meeting notes after lunch",
+      "newId": "capture-i-need-to-send-out-those-meeti-0eqebcr"
+    },
+    {
+      "id": "curated-2283",
+      "line": 28865,
+      "text": "Capture compare my insurance renewal options once Maya says yes",
+      "start": 8,
+      "end": 63,
+      "payload": "compare my insurance renewal options once Maya says yes",
+      "newId": "capture-compare-my-insurance-renewal-o-0jt74v0"
+    },
+    {
+      "id": "curated-2295",
+      "line": 29017,
+      "text": "Write down i need to find the blue notebook when I get home",
+      "start": 11,
+      "end": 59,
+      "payload": "i need to find the blue notebook when I get home",
+      "newId": "capture-i-need-to-find-the-blue-notebo-1gd3vnw"
+    },
+    {
+      "id": "curated-2309",
+      "line": 29204,
+      "text": "Remember to download that tax statement before the trip",
+      "start": 12,
+      "end": 55,
+      "payload": "download that tax statement before the trip",
+      "newId": "capture-download-that-tax-statement-be-0qq2z5r"
+    },
+    {
+      "id": "curated-2313",
+      "line": 29256,
+      "text": "Save for later check those release notes before making any changes",
+      "start": 15,
+      "end": 66,
+      "payload": "check those release notes before making any changes",
+      "newId": "capture-check-those-release-notes-befo-11inlme"
+    },
+    {
+      "id": "curated-2314",
+      "line": 29268,
+      "text": "Remember to sending in that reimbursement form before Friday will get it out of the way",
+      "start": 12,
+      "end": 87,
+      "payload": "sending in that reimbursement form before Friday will get it out of the way",
+      "newId": "capture-sending-in-that-reimbursement-1359fqc"
+    },
+    {
+      "id": "curated-2318",
+      "line": 29319,
+      "text": "Jot down compare those incident timestamps",
+      "start": 9,
+      "end": 42,
+      "payload": "compare those incident timestamps",
+      "newId": "capture-compare-those-incident-timestamps"
+    },
+    {
+      "id": "curated-2321",
+      "line": 29355,
+      "text": "Write down choosing those workshop materials when I get home will make things so much easier",
+      "start": 11,
+      "end": 92,
+      "payload": "choosing those workshop materials when I get home will make things so much easier",
+      "newId": "capture-choosing-those-workshop-materi-0j11ea3"
+    },
+    {
+      "id": "curated-2323",
+      "line": 29379,
+      "text": "Remember to asking Maya about the proposal once she's free",
+      "start": 12,
+      "end": 58,
+      "payload": "asking Maya about the proposal once she's free",
+      "newId": "capture-asking-maya-about-the-proposal-0xygj0a"
+    },
+    {
+      "id": "curated-2329",
+      "line": 29457,
+      "text": "Jot down don't mix old and new batteries",
+      "start": 9,
+      "end": 40,
+      "payload": "don't mix old and new batteries",
+      "newId": "capture-don-t-mix-old-and-new-batteries"
+    },
+    {
+      "id": "curated-2337",
+      "line": 29556,
+      "text": "Save for later measuring that guest room before Friday will give me some peace of mind",
+      "start": 15,
+      "end": 86,
+      "payload": "measuring that guest room before Friday will give me some peace of mind",
+      "newId": "capture-measuring-that-guest-room-befo-13wpwk4"
+    },
+    {
+      "id": "curated-2348",
+      "line": 29700,
+      "text": "Jot down downloading that tax statement when I get home is a priority",
+      "start": 9,
+      "end": 69,
+      "payload": "downloading that tax statement when I get home is a priority",
+      "newId": "capture-downloading-that-tax-statement-073k6y7"
+    },
+    {
+      "id": "curated-2354",
+      "line": 29772,
+      "text": "Note that I should a confirmation slip for reimbursement before I leave town this weekend",
+      "start": 19,
+      "end": 89,
+      "payload": "a confirmation slip for reimbursement before I leave town this weekend",
+      "newId": "capture-a-confirmation-slip-for-reimbu-0kgc0ym"
+    },
+    {
+      "id": "curated-2358",
+      "line": 29820,
+      "text": "Remember to to pick up dry cleaning on my way home tomorrow",
+      "start": 12,
+      "end": 59,
+      "payload": "to pick up dry cleaning on my way home tomorrow",
+      "newId": "capture-to-pick-up-dry-cleaning-on-my-16xjw75"
+    },
+    {
+      "id": "curated-2379",
+      "line": 30084,
+      "text": "Remember to some clarity on that invoice",
+      "start": 12,
+      "end": 40,
+      "payload": "some clarity on that invoice",
+      "newId": "capture-some-clarity-on-that-invoice"
+    },
+    {
+      "id": "curated-2382",
+      "line": 30122,
+      "text": "Save for later find that blue notebook we need for the project",
+      "start": 15,
+      "end": 62,
+      "payload": "find that blue notebook we need for the project",
+      "newId": "capture-find-that-blue-notebook-we-nee-1rzege5"
+    },
+    {
+      "id": "curated-2394",
+      "line": 30272,
+      "text": "Remember to the hotel transfer details",
+      "start": 12,
+      "end": 38,
+      "payload": "the hotel transfer details",
+      "newId": "capture-the-hotel-transfer-details"
+    },
+    {
+      "id": "curated-2397",
+      "line": 30311,
+      "text": "Capture the school transcript info I'll need",
+      "start": 8,
+      "end": 44,
+      "payload": "the school transcript info I'll need",
+      "newId": "capture-the-school-transcript-info-i-ll-need"
+    },
+    {
+      "id": "curated-2399",
+      "line": 30335,
+      "text": "Save for later: put the frozen groceries away when I get back from shopping",
+      "start": 16,
+      "end": 75,
+      "payload": "put the frozen groceries away when I get back from shopping",
+      "newId": "capture-put-the-frozen-groceries-away-0xa5mcm"
+    },
+    {
+      "id": "curated-2411",
+      "line": 30480,
+      "text": "Note that I should pick out a birthday gift before our trip next weekend",
+      "start": 19,
+      "end": 72,
+      "payload": "pick out a birthday gift before our trip next weekend",
+      "newId": "capture-pick-out-a-birthday-gift-befor-10cd99t"
+    },
+    {
+      "id": "curated-2422",
+      "line": 30621,
+      "text": "Write down the tax statement download link",
+      "start": 11,
+      "end": 42,
+      "payload": "the tax statement download link",
+      "newId": "capture-the-tax-statement-download-link"
+    },
+    {
+      "id": "curated-2424",
+      "line": 30645,
+      "text": "Write down schedule my annual health checkup once Maya gives me the green light",
+      "start": 11,
+      "end": 79,
+      "payload": "schedule my annual health checkup once Maya gives me the green light",
+      "newId": "capture-schedule-my-annual-health-chec-01s9w9y"
+    },
+    {
+      "id": "curated-2426",
+      "line": 30669,
+      "text": "Note that I should grab the dry cleaning before our trip",
+      "start": 19,
+      "end": 56,
+      "payload": "grab the dry cleaning before our trip",
+      "newId": "capture-grab-the-dry-cleaning-before-our-trip"
+    },
+    {
+      "id": "curated-2436",
+      "line": 30791,
+      "text": "Capture over those meeting notes as soon as Maya says she's done",
+      "start": 8,
+      "end": 64,
+      "payload": "over those meeting notes as soon as Maya says she's done",
+      "newId": "capture-over-those-meeting-notes-as-so-09ifnan"
+    },
+    {
+      "id": "curated-2440",
+      "line": 30843,
+      "text": "Jot down a reminder to descale the kettle before we host dinner",
+      "start": 9,
+      "end": 63,
+      "payload": "a reminder to descale the kettle before we host dinner",
+      "newId": "capture-a-reminder-to-descale-the-kett-1j2wm8w"
+    },
+    {
+      "id": "curated-2442",
+      "line": 30867,
+      "text": "Note that I should double-check the insurance renewal before we leave on Friday",
+      "start": 19,
+      "end": 79,
+      "payload": "double-check the insurance renewal before we leave on Friday",
+      "newId": "capture-double-check-the-insurance-ren-11j9b18"
+    },
+    {
+      "id": "curated-2452",
+      "line": 30992,
+      "text": "Capture print out our boarding passes ahead of time to avoid rush hour",
+      "start": 8,
+      "end": 70,
+      "payload": "print out our boarding passes ahead of time to avoid rush hour",
+      "newId": "capture-print-out-our-boarding-passes-06xz9zb"
+    },
+    {
+      "id": "curated-2457",
+      "line": 31055,
+      "text": "Remember to mail those residency papers once lunch is over",
+      "start": 12,
+      "end": 58,
+      "payload": "mail those residency papers once lunch is over",
+      "newId": "capture-mail-those-residency-papers-on-0zna0pc"
+    },
+    {
+      "id": "curated-2469",
+      "line": 31206,
+      "text": "Save for later refill my prescription as soon as I get back from the store",
+      "start": 15,
+      "end": 74,
+      "payload": "refill my prescription as soon as I get back from the store",
+      "newId": "capture-refill-my-prescription-as-soon-0kkrs05"
+    },
+    {
+      "id": "curated-2474",
+      "line": 31269,
+      "text": "Capture reserve a table at dinner once Maya says she can make it",
+      "start": 8,
+      "end": 64,
+      "payload": "reserve a table at dinner once Maya says she can make it",
+      "newId": "capture-reserve-a-table-at-dinner-once-03itxv6"
+    },
+    {
+      "id": "curated-2475",
+      "line": 31281,
+      "text": "Note that I should what you want to know first",
+      "start": 19,
+      "end": 46,
+      "payload": "what you want to know first",
+      "newId": "capture-what-you-want-to-know-first"
+    },
+    {
+      "id": "curated-2482",
+      "line": 31372,
+      "text": "Note that I should call the embassy office during our break so I can ask questions",
+      "start": 19,
+      "end": 82,
+      "payload": "call the embassy office during our break so I can ask questions",
+      "newId": "capture-call-the-embassy-office-during-0vf0bh8"
+    },
+    {
+      "id": "curated-2486",
+      "line": 31425,
+      "text": "Jot down grab that typography book from the library",
+      "start": 9,
+      "end": 51,
+      "payload": "grab that typography book from the library",
+      "newId": "capture-grab-that-typography-book-from-1p6v86i"
+    },
+    {
+      "id": "curated-2488",
+      "line": 31449,
+      "text": "Write down return that borrowed camera to its owner after lunch today",
+      "start": 11,
+      "end": 69,
+      "payload": "return that borrowed camera to its owner after lunch today",
+      "newId": "capture-return-that-borrowed-camera-to-0i84u7f"
+    },
+    {
+      "id": "curated-2489",
+      "line": 31461,
+      "text": "Write down a quieter sleep study appointment? Ask about that when you schedule it",
+      "start": 11,
+      "end": 81,
+      "payload": "a quieter sleep study appointment? Ask about that when you schedule it",
+      "newId": "capture-a-quieter-sleep-study-appointm-0e3k4dn"
+    },
+    {
+      "id": "curated-2490",
+      "line": 31473,
+      "text": "Save for later ask Maya about the project proposal as soon as possible",
+      "start": 15,
+      "end": 70,
+      "payload": "ask Maya about the project proposal as soon as possible",
+      "newId": "capture-ask-maya-about-the-project-pro-1eezj30"
+    },
+    {
+      "id": "curated-2492",
+      "line": 31497,
+      "text": "Capture museum visit",
+      "start": 8,
+      "end": 20,
+      "payload": "museum visit",
+      "newId": "capture-museum-visit"
+    },
+    {
+      "id": "curated-2494",
+      "line": 31521,
+      "text": "Remember that address for later",
+      "start": 9,
+      "end": 31,
+      "payload": "that address for later",
+      "newId": "capture-that-address-for-later"
+    }
+  ]
+}

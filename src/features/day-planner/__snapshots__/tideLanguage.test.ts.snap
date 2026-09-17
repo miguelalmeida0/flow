@@ -1,0 +1,3226 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Add a fifteen minute buffer before the next meeting 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "position": "next",
+          "type": "position",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "durationMinutes": 15,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "add a fifteen minute buffer before the next meeting",
+  "transcript": "Add a fifteen minute buffer before the next meeting",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Add a forty minute walk after design review 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "design review",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "durationMinutes": 40,
+      "title": "walk",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "add a forty minute walk after design review",
+  "transcript": "Add a forty minute walk after design review",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Add a one hour reading block tomorrow afternoon 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "date": "tomorrow",
+        "part": "afternoon",
+        "type": "dayPart",
+      },
+      "durationMinutes": 60,
+      "title": "reading block",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "add a one hour reading block tomorrow afternoon",
+  "transcript": "Add a one hour reading block tomorrow afternoon",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Add a twenty minute buffer at four 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 960,
+        "type": "absolute",
+      },
+      "durationMinutes": 20,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "add a twenty minute buffer at four",
+  "transcript": "Add a twenty minute buffer at four",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Add a workout at five, protect it, and give ten minutes before it 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 1020,
+        "type": "absolute",
+      },
+      "durationMinutes": 30,
+      "title": "workout",
+      "type": "create",
+    },
+    {
+      "selector": {
+        "type": "anaphor",
+      },
+      "type": "protect",
+    },
+    {
+      "destination": {
+        "anchor": {
+          "type": "anaphor",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "durationMinutes": 10,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "add a workout at five, protect it, and give ten minutes before it",
+  "transcript": "Add a workout at five, protect it, and give ten minutes before it",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Add client label to interview 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "addLabels": [
+          "client",
+        ],
+      },
+      "selector": {
+        "query": "interview",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "add client label to interview",
+  "transcript": "Add client label to interview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Add lunch with Ana tomorrow at one 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "date": "tomorrow",
+        "minutes": 780,
+        "type": "absolute",
+      },
+      "durationMinutes": 30,
+      "title": "lunch with Ana",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "add lunch with ana tomorrow at one",
+  "transcript": "Add lunch with Ana tomorrow at one",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Add strategy and planning labels to roadmap 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "addLabels": [
+          "strategy",
+          "planning",
+        ],
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "add strategy and planning labels to roadmap",
+  "transcript": "Add strategy and planning labels to roadmap",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Anchor interview 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "mobility": "anchored",
+      },
+      "selector": {
+        "query": "interview",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "anchor interview",
+  "transcript": "Anchor interview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Apply the preview 1`] = `
+{
+  "actions": [
+    {
+      "type": "commitPreview",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "apply the preview",
+  "transcript": "Apply the preview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Batch all three admin tasks 1`] = `
+{
+  "actions": [
+    {
+      "expectedCount": 3,
+      "selector": {
+        "cardinality": "many",
+        "query": "admin",
+        "type": "filter",
+      },
+      "type": "merge",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "batch all three admin tasks",
+  "transcript": "Batch all three admin tasks",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Block seventy five minutes for planning at ten 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 600,
+        "type": "absolute",
+      },
+      "durationMinutes": 75,
+      "title": "planning",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "block seventy five minutes for planning at ten",
+  "transcript": "Block seventy five minutes for planning at ten",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Block thirty minutes for expenses at three 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 900,
+        "type": "absolute",
+      },
+      "durationMinutes": 30,
+      "title": "expenses",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "block thirty minutes for expenses at three",
+  "transcript": "Block thirty minutes for expenses at three",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Break planning into three twenty minute blocks 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        20,
+        20,
+        20,
+      ],
+      "selector": {
+        "query": "planning",
+        "type": "title",
+      },
+      "type": "split",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "break planning into three twenty minute blocks",
+  "transcript": "Break planning into three twenty minute blocks",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Break roadmap in half 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        0,
+        0,
+      ],
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "split",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "break roadmap in half",
+  "transcript": "Break roadmap in half",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Call the next meeting portfolio review 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "title": "portfolio review",
+      },
+      "selector": {
+        "position": "next",
+        "type": "position",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "call the next meeting portfolio review",
+  "transcript": "Call the next meeting portfolio review",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Cancel every red meeting 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "cardinality": "many",
+        "color": "red",
+        "type": "filter",
+      },
+      "type": "delete",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "cancel every red meeting",
+  "transcript": "Cancel every red meeting",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Cancel the preview 1`] = `
+{
+  "actions": [
+    {
+      "type": "cancelPreview",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "cancel the preview",
+  "transcript": "Cancel the preview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Change the meeting at 2 PM to half past four 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 990,
+        "type": "absolute",
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "change the meeting at 2 pm to half past four",
+  "transcript": "Change the meeting at 2 PM to half past four",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Clear my afternoon without moving dinner 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 720,
+        "type": "absolute",
+      },
+      "durationMinutes": 300,
+      "label": "Clear afternoon",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [
+    {
+      "selector": {
+        "query": "dinner",
+        "type": "title",
+      },
+      "type": "keep",
+    },
+  ],
+  "mode": "commit",
+  "normalized": "clear my afternoon without moving dinner",
+  "transcript": "Clear my afternoon without moving dinner",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Clear two to four without moving the interview 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 840,
+        "type": "absolute",
+      },
+      "durationMinutes": 120,
+      "label": "Clear time",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [
+    {
+      "selector": {
+        "query": "interview",
+        "type": "title",
+      },
+      "type": "keep",
+    },
+  ],
+  "mode": "commit",
+  "normalized": "clear two to four without moving the interview",
+  "transcript": "Clear two to four without moving the interview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Color deep work blue 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "blue",
+      },
+      "selector": {
+        "query": "deep work",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "color deep work blue",
+  "transcript": "Color deep work blue",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Combine deep work and email and call it admin batch 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "selectors": [
+          {
+            "query": "deep work",
+            "type": "title",
+          },
+          {
+            "query": "email",
+            "type": "title",
+          },
+        ],
+        "type": "multi",
+      },
+      "title": "admin batch",
+      "type": "merge",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "combine deep work and email and call it admin batch",
+  "transcript": "Combine deep work and email and call it admin batch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Combine email and roadmap 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "selectors": [
+          {
+            "query": "email",
+            "type": "title",
+          },
+          {
+            "query": "roadmap",
+            "type": "title",
+          },
+        ],
+        "type": "multi",
+      },
+      "type": "merge",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "combine email and roadmap",
+  "transcript": "Combine email and roadmap",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Combine email, roadmap, and workout 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "selectors": [
+          {
+            "query": "email",
+            "type": "title",
+          },
+          {
+            "query": "roadmap",
+            "type": "title",
+          },
+          {
+            "query": "workout",
+            "type": "title",
+          },
+        ],
+        "type": "multi",
+      },
+      "type": "merge",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "combine email, roadmap, and workout",
+  "transcript": "Combine email, roadmap, and workout",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Complete roadmap 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "complete",
+    },
+    {
+      "reason": "early-completion",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "complete roadmap",
+  "transcript": "Complete roadmap",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Confirm the 8 AM meeting 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "status": "confirmed",
+      },
+      "selector": {
+        "at": 480,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "confirm the 8 am meeting",
+  "transcript": "Confirm the 8 AM meeting",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Create a ten minute breathing room after email 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "email",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "durationMinutes": 10,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "create a ten minute breathing room after email",
+  "transcript": "Create a ten minute breathing room after email",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Create a thirty minute focus block at quarter past four 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 975,
+        "type": "absolute",
+      },
+      "durationMinutes": 30,
+      "title": "focus block",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "create a thirty minute focus block at quarter past four",
+  "transcript": "Create a thirty minute focus block at quarter past four",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Create breathing room from three to three thirty 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 900,
+        "type": "absolute",
+      },
+      "durationMinutes": 30,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "create breathing room from three to three thirty",
+  "transcript": "Create breathing room from three to three thirty",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Delete the event after lunch 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relativeEvent",
+      },
+      "type": "delete",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "delete the event after lunch",
+  "transcript": "Delete the event after lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Divide interview into two thirty minute sessions 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        30,
+        30,
+      ],
+      "selector": {
+        "query": "interview",
+        "type": "title",
+      },
+      "type": "split",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "divide interview into two thirty minute sessions",
+  "transcript": "Divide interview into two thirty minute sessions",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Divide the 2 PM block in half 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        0,
+        0,
+      ],
+      "selector": {
+        "at": 840,
+        "query": "block",
+        "type": "source",
+      },
+      "type": "split",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "divide the 2 pm block in half",
+  "transcript": "Divide the 2 PM block in half",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > End my day at half past five 1`] = `
+{
+  "actions": [
+    {
+      "endMinutes": 1050,
+      "type": "setDayBoundary",
+    },
+    {
+      "reason": "boundary",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "end my day at half past five",
+  "transcript": "End my day at half past five",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Extend roadmap by half an hour 1`] = `
+{
+  "actions": [
+    {
+      "minutes": 30,
+      "mode": "add",
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "extend roadmap by half an hour",
+  "transcript": "Extend roadmap by half an hour",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Extend the previous appointment by ten minutes 1`] = `
+{
+  "actions": [
+    {
+      "minutes": 10,
+      "mode": "add",
+      "selector": {
+        "position": "previous",
+        "type": "position",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "extend the previous appointment by ten minutes",
+  "transcript": "Extend the previous appointment by ten minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Finish by seven 1`] = `
+{
+  "actions": [
+    {
+      "endMinutes": 1140,
+      "type": "setDayBoundary",
+    },
+    {
+      "reason": "boundary",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "finish by seven",
+  "transcript": "Finish by seven",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Finish this early 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "type": "selected",
+      },
+      "type": "complete",
+    },
+    {
+      "reason": "early-completion",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "finish this early",
+  "transcript": "Finish this early",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Give interview another fifteen minutes 1`] = `
+{
+  "actions": [
+    {
+      "minutes": 15,
+      "mode": "add",
+      "selector": {
+        "query": "interview",
+        "type": "title",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "give interview another fifteen minutes",
+  "transcript": "Give interview another fifteen minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Give me thirty minutes after the 2 PM meeting 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "at": 840,
+          "query": "meeting",
+          "type": "source",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "durationMinutes": 30,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "give me thirty minutes after the 2 pm meeting",
+  "transcript": "Give me thirty minutes after the 2 PM meeting",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Give me twenty minutes before interview 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "interview",
+          "type": "title",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "durationMinutes": 20,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "give me twenty minutes before interview",
+  "transcript": "Give me twenty minutes before interview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > I am done at six today 1`] = `
+{
+  "actions": [
+    {
+      "endMinutes": 1080,
+      "type": "setDayBoundary",
+    },
+    {
+      "reason": "boundary",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "i am done at six today",
+  "transcript": "I am done at six today",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > I am thirty five minutes behind from now 1`] = `
+{
+  "actions": [
+    {
+      "assumedDelay": false,
+      "delayMinutes": 35,
+      "type": "recover",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "i am thirty five minutes behind from now",
+  "transcript": "I am thirty five minutes behind from now",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > I finished the current event 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "complete",
+    },
+    {
+      "reason": "early-completion",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "i finished the current event",
+  "transcript": "I finished the current event",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > I finished twenty minutes early 1`] = `
+{
+  "actions": [
+    {
+      "earlyByMinutes": 20,
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "complete",
+    },
+    {
+      "reason": "early-completion",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "i finished twenty minutes early",
+  "transcript": "I finished twenty minutes early",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > I need another 20 minutes on this 1`] = `
+{
+  "actions": [
+    {
+      "minutes": 20,
+      "mode": "add",
+      "selector": {
+        "type": "selected",
+      },
+      "type": "resize",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "i need another 20 minutes on this",
+  "transcript": "I need another 20 minutes on this",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Keep fifteen minutes free before dinner 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "dinner",
+          "type": "title",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "durationMinutes": 15,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "keep fifteen minutes free before dinner",
+  "transcript": "Keep fifteen minutes free before dinner",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Keep half an hour free after lunch 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "durationMinutes": 30,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "keep half an hour free after lunch",
+  "transcript": "Keep half an hour free after lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Label current event with focus 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "addLabels": [
+          "focus",
+        ],
+      },
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "label current event with focus",
+  "transcript": "Label current event with focus",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Label roadmap as strategy 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "addLabels": [
+          "strategy",
+        ],
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "label roadmap as strategy",
+  "transcript": "Label roadmap as strategy",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Label the 2 PM meeting client 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "addLabels": [
+          "client",
+        ],
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "label the 2 pm meeting client",
+  "transcript": "Label the 2 PM meeting client",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Label the previous appointment admin 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "addLabels": [
+          "admin",
+        ],
+      },
+      "selector": {
+        "position": "previous",
+        "type": "position",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "label the previous appointment admin",
+  "transcript": "Label the previous appointment admin",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Leave ten minutes free after current event 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "position": "current",
+          "type": "position",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "durationMinutes": 10,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "leave ten minutes free after current event",
+  "transcript": "Leave ten minutes free after current event",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Leave twenty five minutes free at five 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 1020,
+        "type": "absolute",
+      },
+      "durationMinutes": 25,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "leave twenty five minutes free at five",
+  "transcript": "Leave twenty five minutes free at five",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Let email flow 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "mobility": "fluid",
+      },
+      "selector": {
+        "query": "email",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "let email flow",
+  "transcript": "Let email flow",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Lock the next meeting 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "position": "next",
+        "type": "position",
+      },
+      "type": "protect",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "lock the next meeting",
+  "transcript": "Lock the next meeting",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make all yellow tasks blue 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "blue",
+      },
+      "selector": {
+        "cardinality": "many",
+        "color": "yellow",
+        "type": "filter",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make all yellow tasks blue",
+  "transcript": "Make all yellow tasks blue",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make current event orange and critical 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "orange",
+        "importance": "critical",
+      },
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make current event orange and critical",
+  "transcript": "Make current event orange and critical",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make dinner flexible again 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "query": "dinner",
+        "type": "title",
+      },
+      "type": "unprotect",
+    },
+    {
+      "patch": {
+        "mobility": "light",
+      },
+      "selector": {
+        "query": "dinner",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make dinner flexible again",
+  "transcript": "Make dinner flexible again",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make dinner light again 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "mobility": "light",
+      },
+      "selector": {
+        "query": "dinner",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make dinner light again",
+  "transcript": "Make dinner light again",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make dinner ninety minutes 1`] = `
+{
+  "actions": [
+    {
+      "minutes": 90,
+      "mode": "set",
+      "selector": {
+        "query": "dinner",
+        "type": "title",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make dinner ninety minutes",
+  "transcript": "Make dinner ninety minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make every red meeting neutral 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "neutral",
+      },
+      "selector": {
+        "cardinality": "many",
+        "color": "red",
+        "type": "filter",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make every red meeting neutral",
+  "transcript": "Make every red meeting neutral",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make focus one hour and fifteen minutes 1`] = `
+{
+  "actions": [
+    {
+      "minutes": 75,
+      "mode": "set",
+      "selector": {
+        "query": "focus",
+        "type": "title",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make focus one hour and fifteen minutes",
+  "transcript": "Make focus one hour and fifteen minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make interview blue and important 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "blue",
+        "importance": "important",
+      },
+      "selector": {
+        "query": "interview",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make interview blue and important",
+  "transcript": "Make interview blue and important",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make lunch heavy 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "mobility": "heavy",
+      },
+      "selector": {
+        "query": "lunch",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make lunch heavy",
+  "transcript": "Make lunch heavy",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make roadmap indigo 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "indigo",
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make roadmap indigo",
+  "transcript": "Make roadmap indigo",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make roadmap movable 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "mobility": "light",
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make roadmap movable",
+  "transcript": "Make roadmap movable",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make roadmap normal 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "importance": "normal",
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make roadmap normal",
+  "transcript": "Make roadmap normal",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make that one forty five minutes instead 1`] = `
+{
+  "actions": [
+    {
+      "durationMinutes": 45,
+      "type": "adjustPreview",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make that one forty five minutes instead",
+  "transcript": "Make that one forty five minutes instead",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the 2 PM meeting important and red 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "red",
+        "importance": "important",
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the 2 pm meeting important and red",
+  "transcript": "Make the 2 PM meeting important and red",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the 2 PM meeting important and red, give me 20 minutes before it, and move anything flexible out of the way 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "red",
+        "importance": "important",
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "update",
+    },
+    {
+      "destination": {
+        "anchor": {
+          "type": "anaphor",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "durationMinutes": 20,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "user",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the 2 pm meeting important and red, give me 20 minutes before it, and move anything flexible out of the way",
+  "transcript": "Make the 2 PM meeting important and red, give me 20 minutes before it, and move anything flexible out of the way",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the active event red 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "red",
+      },
+      "selector": {
+        "cardinality": "one",
+        "status": "active",
+        "type": "filter",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the active event red",
+  "transcript": "Make the active event red",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the current event heavy and important 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "importance": "important",
+        "mobility": "heavy",
+      },
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the current event heavy and important",
+  "transcript": "Make the current event heavy and important",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the event at 2 PM forty five minutes 1`] = `
+{
+  "actions": [
+    {
+      "minutes": 45,
+      "mode": "set",
+      "selector": {
+        "at": 840,
+        "query": "event",
+        "type": "source",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the event at 2 pm forty five minutes",
+  "transcript": "Make the event at 2 PM forty five minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the event covering 2:30 red 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "red",
+      },
+      "selector": {
+        "at": 870,
+        "query": "event",
+        "type": "source",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the event covering 2:30 red",
+  "transcript": "Make the event covering 2:30 red",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the last event yellow 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "yellow",
+      },
+      "selector": {
+        "position": "last",
+        "type": "position",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the last event yellow",
+  "transcript": "Make the last event yellow",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the next meeting green 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "green",
+      },
+      "selector": {
+        "position": "next",
+        "type": "position",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the next meeting green",
+  "transcript": "Make the next meeting green",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Make the selected event flexible 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "type": "selected",
+      },
+      "type": "unprotect",
+    },
+    {
+      "patch": {
+        "mobility": "light",
+      },
+      "selector": {
+        "type": "selected",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "make the selected event flexible",
+  "transcript": "Make the selected event flexible",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Mark roadmap critical 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "importance": "critical",
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "mark roadmap critical",
+  "transcript": "Mark roadmap critical",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Mark the 2 PM meeting done 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "complete",
+    },
+    {
+      "reason": "early-completion",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "mark the 2 pm meeting done",
+  "transcript": "Mark the 2 PM meeting done",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Merge email and deep work 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "selectors": [
+          {
+            "query": "email",
+            "type": "title",
+          },
+          {
+            "query": "deep work",
+            "type": "title",
+          },
+        ],
+        "type": "multi",
+      },
+      "type": "merge",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "merge email and deep work",
+  "transcript": "Merge email and deep work",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Merge lunch and dinner 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "selectors": [
+          {
+            "query": "lunch",
+            "type": "title",
+          },
+          {
+            "query": "dinner",
+            "type": "title",
+          },
+        ],
+        "type": "multi",
+      },
+      "type": "merge",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "merge lunch and dinner",
+  "transcript": "Merge lunch and dinner",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move anything flexible out of the way 1`] = `
+{
+  "actions": [
+    {
+      "reason": "user",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move anything flexible out of the way",
+  "transcript": "Move anything flexible out of the way",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move email before lunch 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "selector": {
+        "query": "email",
+        "type": "title",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move email before lunch",
+  "transcript": "Move email before lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move expenses to Friday morning 1`] = `
+{
+  "actions": [
+    {
+      "date": {
+        "dateKey": "2026-09-04",
+      },
+      "part": "morning",
+      "selector": {
+        "query": "expenses",
+        "type": "title",
+      },
+      "type": "defer",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move expenses to friday morning",
+  "transcript": "Move expenses to Friday morning",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move light work after lunch 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "selector": {
+        "cardinality": "many",
+        "mobility": "light",
+        "type": "filter",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move light work after lunch",
+  "transcript": "Move light work after lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move my next meeting after lunch 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "selector": {
+        "position": "next",
+        "type": "position",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move my next meeting after lunch",
+  "transcript": "Move my next meeting after lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move roadmap to the next free slot 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "type": "nextFree",
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move roadmap to the next free slot",
+  "transcript": "Move roadmap to the next free slot",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move the 2 PM meeting to four 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 960,
+        "type": "absolute",
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move the 2 pm meeting to four",
+  "transcript": "Move the 2 PM meeting to four",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move the 2 PM meeting to four and make it forty five minutes 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 960,
+        "type": "absolute",
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "move",
+    },
+    {
+      "minutes": 45,
+      "mode": "set",
+      "selector": {
+        "type": "anaphor",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move the 2 pm meeting to four and make it forty five minutes",
+  "transcript": "Move the 2 PM meeting to four and make it forty five minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move the current event after the interview 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "interview",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move the current event after the interview",
+  "transcript": "Move the current event after the interview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Move this after the interview 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "interview",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "selector": {
+        "type": "selected",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "move this after the interview",
+  "transcript": "Move this after the interview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Paint interview cyan 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "cyan",
+      },
+      "selector": {
+        "query": "interview",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "paint interview cyan",
+  "transcript": "Paint interview cyan",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Paint lunch neutral 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "neutral",
+      },
+      "selector": {
+        "query": "lunch",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "paint lunch neutral",
+  "transcript": "Paint lunch neutral",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Preview a twenty minute buffer before interview 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "interview",
+          "type": "title",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "durationMinutes": 20,
+      "label": "Breathing room",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "preview",
+  "normalized": "preview a twenty minute buffer before interview",
+  "transcript": "Preview a twenty minute buffer before interview",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Preview moving email after lunch 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "selector": {
+        "query": "email",
+        "type": "title",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "preview",
+  "normalized": "preview moving email after lunch",
+  "transcript": "Preview moving email after lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Protect all interviews 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "cardinality": "many",
+        "query": "interviews",
+        "type": "filter",
+      },
+      "type": "protect",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "protect all interviews",
+  "transcript": "Protect all interviews",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Protect lunch and clear two to four 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "query": "lunch",
+        "type": "title",
+      },
+      "type": "protect",
+    },
+    {
+      "destination": {
+        "minutes": 840,
+        "type": "absolute",
+      },
+      "durationMinutes": 120,
+      "label": "Clear time",
+      "protected": true,
+      "type": "createBreathingRoom",
+    },
+    {
+      "reason": "make-room",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "protect lunch and clear two to four",
+  "transcript": "Protect lunch and clear two to four",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Protect the 2 PM event 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "at": 840,
+        "query": "event",
+        "type": "source",
+      },
+      "type": "protect",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "protect the 2 pm event",
+  "transcript": "Protect the 2 PM event",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Protect the active event 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "cardinality": "one",
+        "status": "active",
+        "type": "filter",
+      },
+      "type": "protect",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "protect the active event",
+  "transcript": "Protect the active event",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Push everything after lunch back thirty minutes 1`] = `
+{
+  "actions": [
+    {
+      "deltaMinutes": 30,
+      "selector": {
+        "after": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "type": "all",
+      },
+      "type": "shift",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "push everything after lunch back thirty minutes",
+  "transcript": "Push everything after lunch back thirty minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Put roadmap on Thursday afternoon 1`] = `
+{
+  "actions": [
+    {
+      "date": {
+        "dateKey": "2026-09-03",
+      },
+      "part": "afternoon",
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "defer",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "put roadmap on thursday afternoon",
+  "transcript": "Put roadmap on Thursday afternoon",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Put the two PM meeting to quarter past four 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 975,
+        "type": "absolute",
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "put the two pm meeting to quarter past four",
+  "transcript": "Put the two PM meeting to quarter past four",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Rebalance the afternoon 1`] = `
+{
+  "actions": [
+    {
+      "reason": "user",
+      "type": "reflow",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "rebalance the afternoon",
+  "transcript": "Rebalance the afternoon",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Reduce the selected event by a quarter hour 1`] = `
+{
+  "actions": [
+    {
+      "minutes": -15,
+      "mode": "add",
+      "selector": {
+        "type": "selected",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "reduce the selected event by a quarter hour",
+  "transcript": "Reduce the selected event by a quarter hour",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Release the previous appointment 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "position": "previous",
+        "type": "position",
+      },
+      "type": "unprotect",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "release the previous appointment",
+  "transcript": "Release the previous appointment",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Remove client label from the 2 PM meeting 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "removeLabels": [
+          "client",
+        ],
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "remove client label from the 2 pm meeting",
+  "transcript": "Remove client label from the 2 PM meeting",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Remove planning label from roadmap 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "removeLabels": [
+          "planning",
+        ],
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "remove planning label from roadmap",
+  "transcript": "Remove planning label from roadmap",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Remove protection from dinner 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "query": "dinner",
+        "type": "title",
+      },
+      "type": "unprotect",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "remove protection from dinner",
+  "transcript": "Remove protection from dinner",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Remove the client label 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "removeLabels": [
+          "client",
+        ],
+      },
+      "selector": {
+        "type": "selected",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "remove the client label",
+  "transcript": "Remove the client label",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Rename current event to focused work 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "title": "focused work",
+      },
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "rename current event to focused work",
+  "transcript": "Rename current event to focused work",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Rename interview to hiring review and paint it blue 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "title": "hiring review",
+      },
+      "selector": {
+        "query": "interview",
+        "type": "title",
+      },
+      "type": "update",
+    },
+    {
+      "patch": {
+        "color": "blue",
+      },
+      "selector": {
+        "type": "anaphor",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "rename interview to hiring review and paint it blue",
+  "transcript": "Rename interview to hiring review and paint it blue",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Rename the 2 PM meeting to design review 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "title": "design review",
+      },
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "rename the 2 pm meeting to design review",
+  "transcript": "Rename the 2 PM meeting to design review",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Rename the event before lunch to prep 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "title": "prep",
+      },
+      "selector": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "before",
+        "type": "relativeEvent",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "rename the event before lunch to prep",
+  "transcript": "Rename the event before lunch to prep",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Reopen design review 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "query": "design review",
+        "type": "title",
+      },
+      "type": "reopen",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "reopen design review",
+  "transcript": "Reopen design review",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Reopen the 2 PM meeting 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "reopen",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "reopen the 2 pm meeting",
+  "transcript": "Reopen the 2 PM meeting",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Reopen the last event 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "position": "last",
+        "type": "position",
+      },
+      "type": "reopen",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "reopen the last event",
+  "transcript": "Reopen the last event",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Schedule a fifteen minute reset before lunch 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "durationMinutes": 15,
+      "title": "reset",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "schedule a fifteen minute reset before lunch",
+  "transcript": "Schedule a fifteen minute reset before lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Schedule a quick twenty five minute call tomorrow at eleven 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "date": "tomorrow",
+        "minutes": 660,
+        "type": "absolute",
+      },
+      "durationMinutes": 25,
+      "title": "call",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "schedule a quick twenty five minute call tomorrow at eleven",
+  "transcript": "Schedule a quick twenty five minute call tomorrow at eleven",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Schedule debrief at noon 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 720,
+        "type": "absolute",
+      },
+      "durationMinutes": 30,
+      "title": "debrief",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "schedule debrief at noon",
+  "transcript": "Schedule debrief at noon",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Schedule review next Thursday at half past three 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "date": {
+          "dateKey": "2026-09-03",
+        },
+        "minutes": 930,
+        "type": "absolute",
+      },
+      "durationMinutes": 30,
+      "title": "review",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "schedule review next thursday at half past three",
+  "transcript": "Schedule review next Thursday at half past three",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Send every normal admin task tomorrow 1`] = `
+{
+  "actions": [
+    {
+      "date": "tomorrow",
+      "selector": {
+        "cardinality": "many",
+        "importance": "normal",
+        "query": "admin",
+        "type": "filter",
+      },
+      "type": "defer",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "send every normal admin task tomorrow",
+  "transcript": "Send every normal admin task tomorrow",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Set lunch back to normal importance 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "importance": "normal",
+      },
+      "selector": {
+        "query": "lunch",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "set lunch back to normal importance",
+  "transcript": "Set lunch back to normal importance",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Shift the event at fourteen hundred back twenty minutes 1`] = `
+{
+  "actions": [
+    {
+      "deltaMinutes": 20,
+      "selector": {
+        "at": 840,
+        "query": "event",
+        "type": "source",
+      },
+      "type": "shift",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "shift the event at fourteen hundred back twenty minutes",
+  "transcript": "Shift the event at fourteen hundred back twenty minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Shorten current event by twenty minutes 1`] = `
+{
+  "actions": [
+    {
+      "minutes": -20,
+      "mode": "add",
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "shorten current event by twenty minutes",
+  "transcript": "Shorten current event by twenty minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Split current event into two fifteen minute sessions 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        15,
+        15,
+      ],
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "split",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "split current event into two fifteen minute sessions",
+  "transcript": "Split current event into two fifteen minute sessions",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Split deep work in half and put the second one after lunch 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        0,
+        0,
+      ],
+      "selector": {
+        "query": "deep work",
+        "type": "title",
+      },
+      "type": "split",
+    },
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "after",
+        "type": "relative",
+      },
+      "selector": {
+        "ordinal": 2,
+        "type": "anaphor",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "split deep work in half and put the second one after lunch",
+  "transcript": "Split deep work in half and put the second one after lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Split deep work into two 45-minute sessions and keep one before lunch 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        45,
+        45,
+      ],
+      "selector": {
+        "query": "deep work",
+        "type": "title",
+      },
+      "type": "split",
+    },
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "preserveIfSatisfied": true,
+        "relation": "before",
+        "type": "relative",
+      },
+      "selector": {
+        "ordinal": 1,
+        "type": "anaphor",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "split deep work into two 45-minute sessions and keep one before lunch",
+  "transcript": "Split deep work into two 45-minute sessions and keep one before lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Split deep work into two thirty minute sessions 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        30,
+        30,
+      ],
+      "selector": {
+        "query": "deep work",
+        "type": "title",
+      },
+      "type": "split",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "split deep work into two thirty minute sessions",
+  "transcript": "Split deep work into two thirty minute sessions",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Start roadmap 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "status": "active",
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "start roadmap",
+  "transcript": "Start roadmap",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Stretch the 2 PM meeting to ninety minutes 1`] = `
+{
+  "actions": [
+    {
+      "minutes": 90,
+      "mode": "set",
+      "selector": {
+        "at": 840,
+        "query": "meeting",
+        "type": "source",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "stretch the 2 pm meeting to ninety minutes",
+  "transcript": "Stretch the 2 PM meeting to ninety minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Suppose I move roadmap before lunch 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "anchor": {
+          "query": "lunch",
+          "type": "title",
+        },
+        "relation": "before",
+        "type": "relative",
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "preview",
+  "normalized": "suppose i move roadmap before lunch",
+  "transcript": "Suppose I move roadmap before lunch",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Suppose I split deep work in half 1`] = `
+{
+  "actions": [
+    {
+      "durations": [
+        0,
+        0,
+      ],
+      "selector": {
+        "query": "deep work",
+        "type": "title",
+      },
+      "type": "split",
+    },
+  ],
+  "constraints": [],
+  "mode": "preview",
+  "normalized": "suppose i split deep work in half",
+  "transcript": "Suppose I split deep work in half",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Trim the next meeting by ten minutes 1`] = `
+{
+  "actions": [
+    {
+      "minutes": -10,
+      "mode": "add",
+      "selector": {
+        "position": "next",
+        "type": "position",
+      },
+      "type": "resize",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "trim the next meeting by ten minutes",
+  "transcript": "Trim the next meeting by ten minutes",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Try six instead 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 1080,
+        "type": "absolute",
+      },
+      "type": "adjustPreview",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "try six instead",
+  "transcript": "Try six instead",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Unprotect dinner, make it light, and move it to eight 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "query": "dinner",
+        "type": "title",
+      },
+      "type": "unprotect",
+    },
+    {
+      "patch": {
+        "mobility": "light",
+      },
+      "selector": {
+        "type": "anaphor",
+      },
+      "type": "update",
+    },
+    {
+      "destination": {
+        "minutes": 1200,
+        "type": "absolute",
+      },
+      "selector": {
+        "type": "anaphor",
+      },
+      "type": "move",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "unprotect dinner, make it light, and move it to eight",
+  "transcript": "Unprotect dinner, make it light, and move it to eight",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > Unprotect the current event 1`] = `
+{
+  "actions": [
+    {
+      "selector": {
+        "position": "current",
+        "type": "position",
+      },
+      "type": "unprotect",
+    },
+  ],
+  "constraints": [],
+  "mode": "commit",
+  "normalized": "unprotect the current event",
+  "transcript": "Unprotect the current event",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > What if I add a workout at five 1`] = `
+{
+  "actions": [
+    {
+      "destination": {
+        "minutes": 1020,
+        "type": "absolute",
+      },
+      "durationMinutes": 30,
+      "title": "workout",
+      "type": "create",
+    },
+  ],
+  "constraints": [],
+  "mode": "preview",
+  "normalized": "what if i add a workout at five",
+  "transcript": "What if I add a workout at five",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > What if I make roadmap critical and blue 1`] = `
+{
+  "actions": [
+    {
+      "patch": {
+        "color": "blue",
+        "importance": "critical",
+      },
+      "selector": {
+        "query": "roadmap",
+        "type": "title",
+      },
+      "type": "update",
+    },
+  ],
+  "constraints": [],
+  "mode": "preview",
+  "normalized": "what if i make roadmap critical and blue",
+  "transcript": "What if I make roadmap critical and blue",
+}
+`;
+
+exports[`Tide natural-language corpus > covers 140 additional semantic outcomes > What if all red meetings move Thursday 1`] = `
+{
+  "actions": [
+    {
+      "date": {
+        "dateKey": "2026-09-03",
+      },
+      "selector": {
+        "cardinality": "many",
+        "color": "red",
+        "type": "filter",
+      },
+      "type": "defer",
+    },
+  ],
+  "constraints": [],
+  "mode": "preview",
+  "normalized": "what if all red meetings move thursday",
+  "transcript": "What if all red meetings move Thursday",
+}
+`;

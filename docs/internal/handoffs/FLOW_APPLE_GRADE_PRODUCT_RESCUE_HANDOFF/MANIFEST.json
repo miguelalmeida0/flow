@@ -1,0 +1,170 @@
+{
+  "name": "Flow Apple-grade Product Rescue Handoff",
+  "files": [
+    {
+      "path": "00_EXECUTIVE_MANDATE.md",
+      "bytes": 1822,
+      "sha256": "d6ac423f04959af7d6d942946bdc2a43dc8d3fc6e632fc38619a06f488296bde"
+    },
+    {
+      "path": "01_CURRENT_STATE_AUDIT.md",
+      "bytes": 2536,
+      "sha256": "228231e24e3441326a0fefdca85779fe35a3918c0ddfe6d9f4f109fc3ed6cfeb"
+    },
+    {
+      "path": "02_PRODUCT_MODEL.md",
+      "bytes": 2283,
+      "sha256": "1595053f8b56d2fb97af2d8d59bcbc058030a40577f25176bdf94b9dd3433986"
+    },
+    {
+      "path": "03_GLOBAL_VOICE_RUNTIME.md",
+      "bytes": 3306,
+      "sha256": "541086944b5704d57a3cb67bb6ca6206422801145bcf3ceb4ed59d8543aafbe1"
+    },
+    {
+      "path": "04_UNIFIED_DOMAIN_AND_ACTION_ENGINE.md",
+      "bytes": 3173,
+      "sha256": "02296151470f1989da03edff52d0e3205a3b478dff760cf0dd4ff43a41917d77"
+    },
+    {
+      "path": "05_PAGE_UTILITY_SPECS.md",
+      "bytes": 4157,
+      "sha256": "78e131fb7dba6481a339af5bbfc8bbaaeb98a6fb89fa268e7a20e7144b8ce0b0"
+    },
+    {
+      "path": "06_UX_AND_MOTION_RULES.md",
+      "bytes": 3255,
+      "sha256": "b4bc0cb92065fc605b0801b8b67aaa420b5eaf05aef83cd8a38d5f6ad883393a"
+    },
+    {
+      "path": "07_IMPLEMENTATION_BACKLOG.md",
+      "bytes": 12808,
+      "sha256": "9cdbdeb6f926229ae385191b4b5ad0615136102fcf4c9a82433d7bdb77d42f9d"
+    },
+    {
+      "path": "08_RELEASE_GATES.md",
+      "bytes": 3978,
+      "sha256": "0b74d487dfa84f725a28b36cf6fd6165539a3597ab02b7635e54d6134f0d3af1"
+    },
+    {
+      "path": "09_PORTFOLIO_DEMO.md",
+      "bytes": 1383,
+      "sha256": "96808567749c443ed75093eccf152c8c17a40c18c94d9d4bfc227a132b3f4c19"
+    },
+    {
+      "path": "10_NON_GOALS.md",
+      "bytes": 816,
+      "sha256": "7fbfa68f94093faa623b756d7319f25df3c22c3e00371d525dc45a0ed85ca890"
+    },
+    {
+      "path": "FLOW_PRODUCT_RESCUE_MASTER_PROMPT.md",
+      "bytes": 6228,
+      "sha256": "597059ae1ccab29fa204175ba6eb9ab25eb30299c62ac927692556742331de2e"
+    },
+    {
+      "path": "PASTE_THIS_IN_CODEX.txt",
+      "bytes": 2289,
+      "sha256": "47503cd33a810609deb6f732211e6eb4d8cc4f7e6344de2d21a0457002d623cb"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1680,
+      "sha256": "5ece48051087e0749016b9c59b1257a39784c4137419891d9e27e54081fc10e2"
+    },
+    {
+      "path": "assets/current-state/01-home-fragmented.png",
+      "bytes": 1002356,
+      "sha256": "7a73ad7200ad497cf44a86949cfd502506b2b48ef9c2e34a5be64d392cd9ac16"
+    },
+    {
+      "path": "assets/current-state/02-navigation-saved-as-data.png",
+      "bytes": 154140,
+      "sha256": "4619d25ba61cd5b0dcad080831efea255ac11522314e4f4e9decc88aa45d209b"
+    },
+    {
+      "path": "assets/current-state/03-calendar-local-parser-failure.png",
+      "bytes": 1033477,
+      "sha256": "47c838ca88013503fdc07496d610862c57e32240a0e2396a4cc132f1a4f68136"
+    },
+    {
+      "path": "assets/current-state/04-broken-reclaimed-time-motion.png",
+      "bytes": 50820,
+      "sha256": "c910f3c1ccb0d135c70eff63dd9a193853fc9c19257a73168e2861f9bdd38ecf"
+    },
+    {
+      "path": "assets/current-state/05-voice-confirmation-failure.png",
+      "bytes": 1005111,
+      "sha256": "ba803221d7aa0e7b12f58fbb8e048f7f40b520d7e03ad0245bcf1417785d9c3b"
+    },
+    {
+      "path": "assets/current-state/06-global-navigation-failure.png",
+      "bytes": 1000326,
+      "sha256": "ff89e92dd861bad0035d00c061ff0b42769a7511b4e99910b724167a0b4a85ac"
+    },
+    {
+      "path": "assets/current-state/07-cross-space-event-creation-failure.png",
+      "bytes": 916582,
+      "sha256": "a6ffa3745497996d0410e4dd130c4ccd53d2a3aebd2cd9223fc3772e7da4681c"
+    },
+    {
+      "path": "assets/current-state/08-now-dead-end.png",
+      "bytes": 963328,
+      "sha256": "c2c30c6b9784ea26b5d6e0573df326739c1f65cbfedaabdf0c3bfdc4d044156d"
+    },
+    {
+      "path": "assets/current-state/09-commitments-empty-taxonomy.png",
+      "bytes": 989170,
+      "sha256": "aa04b7b3b1af7f84f4960e6061a123915900e07b76233ffc6bc8eb2c7c51cbac"
+    },
+    {
+      "path": "assets/current-state/10-outcomes-empty.png",
+      "bytes": 930714,
+      "sha256": "25a0ed0952fb2c9b105ec6fceef8961c5c4957928b5e3f6a083f69a9e7f6a422"
+    },
+    {
+      "path": "assets/current-state/11-capture-empty.png",
+      "bytes": 944504,
+      "sha256": "347281575e046de5a55727985a99fc9a62b3d0fdcfd499d364b1b9849049db6e"
+    },
+    {
+      "path": "assets/target/01-living-home-direction.png",
+      "bytes": 1315596,
+      "sha256": "a2955042b73616bcc6925f5fc1ab0247a070f9dba8342d470b1a64a13c2bdcdc"
+    },
+    {
+      "path": "assets/target/02-today-direction.png",
+      "bytes": 1231581,
+      "sha256": "cc68e4c066bc544f67612a198536c27e653014d0c734e9376712d6fbf228c8ca"
+    },
+    {
+      "path": "assets/target/03-capture-direction.png",
+      "bytes": 1376640,
+      "sha256": "8289f16bd4fec9e20c77d6f6e8c7806fe7e08b800bd8243bd062ab9d7cc8d634"
+    },
+    {
+      "path": "assets/target/04-outcome-direction.png",
+      "bytes": 1166772,
+      "sha256": "7481e2b384925ff638da8b99d96aa0081585b754bc64352b462fc5d6f2368b11"
+    },
+    {
+      "path": "assets/target/05-commitments-direction.png",
+      "bytes": 1527847,
+      "sha256": "eb5ae1373a7b981e78b78445c125f504484bc9f784ebae63e971d32fd8b2ab57"
+    },
+    {
+      "path": "assets/target/06-now-embedded-direction.png",
+      "bytes": 1412812,
+      "sha256": "110cf1df8f63fb553cac80aad9db8f5a70aff12301e98e60ccd4be0c5b9d47d8"
+    },
+    {
+      "path": "reference/life-state.reference.ts",
+      "bytes": 2141,
+      "sha256": "db03d054362815eaa070c9e4d01cef687575e3f479e141d2a13b2910a270814f"
+    },
+    {
+      "path": "reference/voice-router.reference.ts",
+      "bytes": 1504,
+      "sha256": "c2fe59ea1d8eaff7c07c9ad040b106c0fb08f7641fd1c3e3e1ac2a0cc2f2bc3d"
+    }
+  ]
+}

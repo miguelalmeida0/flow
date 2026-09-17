@@ -1,0 +1,1107 @@
+{
+  "sourceSha256": "341a5f8cd4bc720cedee6c24c10167512c39da596d8db413dc4babba61397295",
+  "trimRows": [
+    [
+      "curated-0051",
+      622,
+      "Move the voice start one second later",
+      "in",
+      1000,
+      1000,
+      30000,
+      1
+    ],
+    [
+      "curated-0059",
+      721,
+      "Move the voice in one second earlier",
+      "in",
+      -1000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-0066",
+      812,
+      "Move the voice in 3 seconds later",
+      "in",
+      3000,
+      3000,
+      30000,
+      1
+    ],
+    [
+      "curated-0072",
+      889,
+      "Move the voice out one second later",
+      "out",
+      1000,
+      0,
+      31000,
+      1
+    ],
+    [
+      "curated-0095",
+      1177,
+      "Move the voice out 3 seconds earlier",
+      "out",
+      -3000,
+      0,
+      27000,
+      1
+    ],
+    [
+      "curated-0109",
+      1357,
+      "Move the voice in 3 seconds earlier",
+      "in",
+      -3000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-0210",
+      2643,
+      "Move the voice end 5 seconds later",
+      "out",
+      5000,
+      0,
+      35000,
+      1
+    ],
+    [
+      "curated-0212",
+      2669,
+      "Move the voice out 3 seconds later",
+      "out",
+      3000,
+      0,
+      33000,
+      1
+    ],
+    [
+      "curated-0234",
+      2948,
+      "Move the voice out 9 seconds later",
+      "out",
+      9000,
+      0,
+      39000,
+      1
+    ],
+    [
+      "curated-0259",
+      3266,
+      "Move the voice in one second later",
+      "in",
+      1000,
+      1000,
+      30000,
+      1
+    ],
+    [
+      "curated-0343",
+      4330,
+      "Move the voice in 9 seconds later",
+      "in",
+      9000,
+      9000,
+      30000,
+      1
+    ],
+    [
+      "curated-0348",
+      4392,
+      "Move the voice start 3 seconds later",
+      "in",
+      3000,
+      3000,
+      30000,
+      1
+    ],
+    [
+      "curated-0373",
+      4712,
+      "Move the voice end 2 seconds earlier",
+      "out",
+      -2000,
+      0,
+      28000,
+      1
+    ],
+    [
+      "curated-0394",
+      4981,
+      "Move the voice start 10 seconds earlier",
+      "in",
+      -10000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-0414",
+      5232,
+      "Move the voice out one second earlier",
+      "out",
+      -1000,
+      0,
+      29000,
+      1
+    ],
+    [
+      "curated-0449",
+      5692,
+      "Move the voice start 8 seconds later",
+      "in",
+      8000,
+      8000,
+      30000,
+      1
+    ],
+    [
+      "curated-0462",
+      5850,
+      "Move the voice out 5 seconds earlier",
+      "out",
+      -5000,
+      0,
+      25000,
+      1
+    ],
+    [
+      "curated-0474",
+      5999,
+      "Move the voice start 8 seconds earlier",
+      "in",
+      -8000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-0476",
+      6025,
+      "Move the voice end one second earlier",
+      "out",
+      -1000,
+      0,
+      29000,
+      1
+    ],
+    [
+      "curated-0479",
+      6063,
+      "Move the voice out 9 seconds earlier",
+      "out",
+      -9000,
+      0,
+      21000,
+      1
+    ],
+    [
+      "curated-0488",
+      6180,
+      "Move the voice out 10 seconds earlier",
+      "out",
+      -10000,
+      0,
+      20000,
+      1
+    ],
+    [
+      "curated-0545",
+      6904,
+      "Move the voice in 9 seconds earlier",
+      "in",
+      -9000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-0567",
+      7184,
+      "Move the voice out 7 seconds earlier",
+      "out",
+      -7000,
+      0,
+      23000,
+      1
+    ],
+    [
+      "curated-0575",
+      7285,
+      "Move the voice start 4 seconds later",
+      "in",
+      4000,
+      4000,
+      30000,
+      1
+    ],
+    [
+      "curated-0587",
+      7436,
+      "Move the voice in 10 seconds later",
+      "in",
+      10000,
+      10000,
+      30000,
+      1
+    ],
+    [
+      "curated-0627",
+      7929,
+      "Move the voice out 6 seconds earlier",
+      "out",
+      -6000,
+      0,
+      24000,
+      1
+    ],
+    [
+      "curated-0660",
+      8349,
+      "Move the voice start 9 seconds later",
+      "in",
+      9000,
+      9000,
+      30000,
+      1
+    ],
+    [
+      "curated-0669",
+      8470,
+      "Move the voice start 3 seconds earlier",
+      "in",
+      -3000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-0705",
+      8927,
+      "Move the voice out 4 seconds later",
+      "out",
+      4000,
+      0,
+      34000,
+      1
+    ],
+    [
+      "curated-0709",
+      8983,
+      "Move the voice end 7 seconds earlier",
+      "out",
+      -7000,
+      0,
+      23000,
+      1
+    ],
+    [
+      "curated-0772",
+      9791,
+      "Move the voice in 7 seconds earlier",
+      "in",
+      -7000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-0775",
+      9830,
+      "Move the voice end 8 seconds earlier",
+      "out",
+      -8000,
+      0,
+      22000,
+      1
+    ],
+    [
+      "curated-0816",
+      10349,
+      "Move the voice out 8 seconds later",
+      "out",
+      8000,
+      0,
+      38000,
+      1
+    ],
+    [
+      "curated-0892",
+      11287,
+      "Move the voice end 10 seconds earlier",
+      "out",
+      -10000,
+      0,
+      20000,
+      1
+    ],
+    [
+      "curated-0901",
+      11406,
+      "Move the voice in 6 seconds later",
+      "in",
+      6000,
+      6000,
+      30000,
+      1
+    ],
+    [
+      "curated-0905",
+      11456,
+      "Move the voice out 5 seconds later",
+      "out",
+      5000,
+      0,
+      35000,
+      1
+    ],
+    [
+      "curated-1007",
+      12739,
+      "Move the voice in 2 seconds earlier",
+      "in",
+      -2000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1041",
+      13167,
+      "Move the voice start 2 seconds later",
+      "in",
+      2000,
+      2000,
+      30000,
+      1
+    ],
+    [
+      "curated-1083",
+      13697,
+      "Move the voice out 2 seconds later",
+      "out",
+      2000,
+      0,
+      32000,
+      1
+    ],
+    [
+      "curated-1100",
+      13909,
+      "Move the voice start 9 seconds earlier",
+      "in",
+      -9000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1116",
+      14108,
+      "Move the voice start 5 seconds earlier",
+      "in",
+      -5000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1146",
+      14487,
+      "Move the voice end 4 seconds later",
+      "out",
+      4000,
+      0,
+      34000,
+      1
+    ],
+    [
+      "curated-1163",
+      14701,
+      "Move the voice end 10 seconds later",
+      "out",
+      10000,
+      0,
+      40000,
+      1
+    ],
+    [
+      "curated-1190",
+      15049,
+      "Move the voice in 10 seconds earlier",
+      "in",
+      -10000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1192",
+      15076,
+      "Move the voice out 8 seconds earlier",
+      "out",
+      -8000,
+      0,
+      22000,
+      1
+    ],
+    [
+      "curated-1211",
+      15320,
+      "Move the voice end one second later",
+      "out",
+      1000,
+      0,
+      31000,
+      1
+    ],
+    [
+      "curated-1220",
+      15439,
+      "Move the voice out 7 seconds later",
+      "out",
+      7000,
+      0,
+      37000,
+      1
+    ],
+    [
+      "curated-1280",
+      16203,
+      "Move the voice start one second earlier",
+      "in",
+      -1000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1325",
+      16771,
+      "Move the voice in 8 seconds earlier",
+      "in",
+      -8000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1343",
+      17002,
+      "Move the voice end 4 seconds earlier",
+      "out",
+      -4000,
+      0,
+      26000,
+      1
+    ],
+    [
+      "curated-1454",
+      18421,
+      "Move the voice start 2 seconds earlier",
+      "in",
+      -2000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1547",
+      19598,
+      "Move the voice start 10 seconds later",
+      "in",
+      10000,
+      10000,
+      30000,
+      1
+    ],
+    [
+      "curated-1608",
+      20346,
+      "Move the voice end 3 seconds earlier",
+      "out",
+      -3000,
+      0,
+      27000,
+      1
+    ],
+    [
+      "curated-1647",
+      20849,
+      "Move the voice out 2 seconds earlier",
+      "out",
+      -2000,
+      0,
+      28000,
+      1
+    ],
+    [
+      "curated-1746",
+      22092,
+      "Move the voice end 9 seconds earlier",
+      "out",
+      -9000,
+      0,
+      21000,
+      1
+    ],
+    [
+      "curated-1795",
+      22707,
+      "Move the voice end 3 seconds later",
+      "out",
+      3000,
+      0,
+      33000,
+      1
+    ],
+    [
+      "curated-1797",
+      22733,
+      "Move the voice end 6 seconds earlier",
+      "out",
+      -6000,
+      0,
+      24000,
+      1
+    ],
+    [
+      "curated-1811",
+      22909,
+      "Move the voice in 4 seconds earlier",
+      "in",
+      -4000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1829",
+      23143,
+      "Move the voice in 5 seconds earlier",
+      "in",
+      -5000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1856",
+      23479,
+      "Move the voice start 4 seconds earlier",
+      "in",
+      -4000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-1885",
+      23849,
+      "Move the voice end 8 seconds later",
+      "out",
+      8000,
+      0,
+      38000,
+      1
+    ],
+    [
+      "curated-1899",
+      24026,
+      "Move the voice end 9 seconds later",
+      "out",
+      9000,
+      0,
+      39000,
+      1
+    ],
+    [
+      "curated-1938",
+      24516,
+      "Move the voice end 6 seconds later",
+      "out",
+      6000,
+      0,
+      36000,
+      1
+    ],
+    [
+      "curated-1947",
+      24632,
+      "Move the voice end 2 seconds later",
+      "out",
+      2000,
+      0,
+      32000,
+      1
+    ],
+    [
+      "curated-2095",
+      26491,
+      "Move the voice in 8 seconds later",
+      "in",
+      8000,
+      8000,
+      30000,
+      1
+    ],
+    [
+      "curated-2130",
+      26931,
+      "Move the voice in 4 seconds later",
+      "in",
+      4000,
+      4000,
+      30000,
+      1
+    ],
+    [
+      "curated-2132",
+      26957,
+      "Move the voice start 6 seconds earlier",
+      "in",
+      -6000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-2140",
+      27064,
+      "Move the voice start 7 seconds later",
+      "in",
+      7000,
+      7000,
+      30000,
+      1
+    ],
+    [
+      "curated-2176",
+      27512,
+      "Move the voice in 7 seconds later",
+      "in",
+      7000,
+      7000,
+      30000,
+      1
+    ],
+    [
+      "curated-2193",
+      27731,
+      "Move the voice start 7 seconds earlier",
+      "in",
+      -7000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-2244",
+      28375,
+      "Move the voice start 6 seconds later",
+      "in",
+      6000,
+      6000,
+      30000,
+      1
+    ],
+    [
+      "curated-2273",
+      28741,
+      "Move the voice in 6 seconds earlier",
+      "in",
+      -6000,
+      0,
+      30000,
+      0
+    ],
+    [
+      "curated-2301",
+      29097,
+      "Move the voice end 7 seconds later",
+      "out",
+      7000,
+      0,
+      37000,
+      1
+    ],
+    [
+      "curated-2303",
+      29123,
+      "Move the voice in 5 seconds later",
+      "in",
+      5000,
+      5000,
+      30000,
+      1
+    ],
+    [
+      "curated-2362",
+      29868,
+      "Move the voice out 4 seconds earlier",
+      "out",
+      -4000,
+      0,
+      26000,
+      1
+    ],
+    [
+      "curated-2386",
+      30172,
+      "Move the voice out 10 seconds later",
+      "out",
+      10000,
+      0,
+      40000,
+      1
+    ],
+    [
+      "curated-2412",
+      30492,
+      "Move the voice end 5 seconds earlier",
+      "out",
+      -5000,
+      0,
+      25000,
+      1
+    ],
+    [
+      "curated-2415",
+      30535,
+      "Move the voice in 2 seconds later",
+      "in",
+      2000,
+      2000,
+      30000,
+      1
+    ],
+    [
+      "curated-2465",
+      31154,
+      "Move the voice out 6 seconds later",
+      "out",
+      6000,
+      0,
+      36000,
+      1
+    ],
+    [
+      "curated-2478",
+      31319,
+      "Move the voice start 5 seconds later",
+      "in",
+      5000,
+      5000,
+      30000,
+      1
+    ]
+  ],
+  "editRows": [
+    {
+      "id": "curated-0102",
+      "idLine": 1266,
+      "utterance": "Save memory",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-save"
+      },
+      "patch": {
+        "status": "saved"
+      },
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-0152",
+      "idLine": 1912,
+      "utterance": "Play",
+      "recipe": "PLAY",
+      "intent": {
+        "type": "memory-playback",
+        "mode": "play"
+      },
+      "historyDelta": 0
+    },
+    {
+      "id": "curated-0187",
+      "idLine": 2353,
+      "utterance": "Move up",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "textY",
+        "operation": "up"
+      },
+      "patch": {
+        "textOffset": {
+          "x": 0,
+          "y": -8
+        }
+      },
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-0333",
+      "idLine": 4206,
+      "utterance": "Remove photo",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "photo",
+        "operation": "hide"
+      },
+      "patch": {
+        "photoAssetId": "$ABSENT"
+      },
+      "historyDelta": 0,
+      "note": "Memory has no photo before; source photo remains."
+    },
+    {
+      "id": "curated-0676",
+      "idLine": 8559,
+      "utterance": "Use this photo",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-source",
+        "source": "photo"
+      },
+      "patch": {
+        "photoAssetId": "evaluation-photo"
+      },
+      "historyDelta": 1,
+      "note": "Exactly one linked-source photo, not arbitrary first of many."
+    },
+    {
+      "id": "curated-0744",
+      "idLine": 9434,
+      "utterance": "Move down",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "textY",
+        "operation": "down"
+      },
+      "patch": {
+        "textOffset": {
+          "x": 0,
+          "y": 8
+        }
+      },
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-0838",
+      "idLine": 10619,
+      "utterance": "Date in corner",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "dateCorner",
+        "operation": "show"
+      },
+      "patch": {
+        "showDate": true,
+        "datePlacement": "corner"
+      },
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-1026",
+      "idLine": 12976,
+      "utterance": "Hide the date",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "showDate",
+        "operation": "hide"
+      },
+      "patch": {
+        "showDate": false
+      },
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-1095",
+      "idLine": 13844,
+      "utterance": "Restore photo",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "photo",
+        "operation": "show"
+      },
+      "patch": {
+        "photoAssetId": "evaluation-photo"
+      },
+      "historyDelta": 1,
+      "note": "Exactly one linked-source photo; no bytes availability asserted."
+    },
+    {
+      "id": "curated-1138",
+      "idLine": 14388,
+      "utterance": "Use this bookmark",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-source",
+        "source": "bookmark"
+      },
+      "patch": {
+        "bookmarkId": "evaluation-bookmark",
+        "audioInMs": 15000,
+        "audioEnabled": true
+      },
+      "historyDelta": 1,
+      "note": "Exactly one linked-source bookmark; out stays30000, passage unchanged."
+    },
+    {
+      "id": "curated-1231",
+      "idLine": 15580,
+      "utterance": "Bigger",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "textScale",
+        "operation": "increase"
+      },
+      "patch": {
+        "textScale": 1.12
+      },
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-1363",
+      "idLine": 17259,
+      "utterance": "Smaller",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "textScale",
+        "operation": "decrease"
+      },
+      "patch": {
+        "textScale": 0.88
+      },
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-1405",
+      "idLine": 17792,
+      "utterance": "Remove the voice",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "audioEnabled",
+        "operation": "hide"
+      },
+      "patch": {
+        "audioEnabled": false
+      },
+      "historyDelta": 1,
+      "note": "Memory playback disabled only; source recording and clip bounds retained."
+    },
+    {
+      "id": "curated-1432",
+      "idLine": 18136,
+      "utterance": "Larger",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "textScale",
+        "operation": "increase"
+      },
+      "patch": {
+        "textScale": 1.12
+      },
+      "historyDelta": 1
+    },
+    {
+      "id": "curated-1893",
+      "idLine": 23949,
+      "utterance": "Show the date",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "showDate",
+        "operation": "show"
+      },
+      "patch": {
+        "showDate": true
+      },
+      "historyDelta": 0
+    },
+    {
+      "id": "curated-1924",
+      "idLine": 24344,
+      "utterance": "Date below words",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "dateCorner",
+        "operation": "hide"
+      },
+      "patch": {
+        "showDate": true,
+        "datePlacement": "inline"
+      },
+      "historyDelta": 0
+    },
+    {
+      "id": "curated-1998",
+      "idLine": 25285,
+      "utterance": "Use this passage",
+      "recipe": "ROOT_CLARIFICATION",
+      "intent": {
+        "type": "memory-source",
+        "source": "passage"
+      },
+      "historyDelta": 0,
+      "actions": [],
+      "noPending": true,
+      "noCreation": true,
+      "feedbackPhase": "clarification",
+      "note": "Supersedes auditor HOLD: root independently chose focused span clarification. No selected/recent span and visible Memory excerpt differs from linked Journal full text. Do not invent selection/full-text fallback; no mutation. Direct concrete choices can avoid mandatory pointer selection. Explicit stronger-contract migration from old broad execute expectation."
+    },
+    {
+      "id": "curated-2341",
+      "idLine": 29609,
+      "utterance": "Restart",
+      "recipe": "PLAY",
+      "intent": {
+        "type": "memory-playback",
+        "mode": "restart"
+      },
+      "historyDelta": 0
+    },
+    {
+      "id": "curated-2381",
+      "idLine": 30108,
+      "utterance": "Pause",
+      "recipe": "PLAY",
+      "intent": {
+        "type": "memory-playback",
+        "mode": "pause"
+      },
+      "historyDelta": 0
+    },
+    {
+      "id": "curated-2451",
+      "idLine": 30978,
+      "utterance": "Bring the voice back",
+      "recipe": "EDIT",
+      "intent": {
+        "type": "memory-update",
+        "property": "audioEnabled",
+        "operation": "show"
+      },
+      "patch": {
+        "audioEnabled": true
+      },
+      "historyDelta": 0
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "status":"ROOT_REVIEWED_STATIC_DECLARATIONS_NOT_EXECUTED_OR_ADMITTED",
+  "source":"src/features/voice-intelligence/curatedLanguageSeeds.json",
+  "sourceSha256":"341a5f8cd4bc720cedee6c24c10167512c39da596d8db413dc4babba61397295",
+  "columns":["suffix","idLine","exactUtterance","controllerBoundaryRoute","canonicalWorld","canonicalURL","peopleView","activeMode"],
+  "before":"Original populatedSeptember5/6/home/daySeptember5, clock12Z/Berlin14, initialpeopleViewdefault/no activeentity/pending/session side effects.",
+  "after":"CompleteLifeSnapshot document/calendar/maps/temporal/revision/past/future/lastTransaction unchanged. Onlyshellroute/context/URL/scrolltop changes. ReturnHome may push browserhistory, not businesshistory. No Journalentry/recording, Atmosphereplay orFocusstart from navigation. Deterministicfixtureproviders isolate unrelatedweather/exposure, not weaken comparison.",
+  "shared":{"intent":"navigate","feedback":"completed","history":0,"noPending":true,"noCreation":true},
+  "rows":[
+    ["0065",800,"Bring up good to know","good-to-know","good-to-know","/good-to-know","default","command"],
+    ["0315",3978,"Open my journal","journal","journal","/journal","default","journal-editing"],
+    ["0350",4420,"Open calendar","calendar","today","/today","default","command"],
+    ["0428",5420,"Return home","home","home","/","default","command"],
+    ["0501",6343,"Show weather","weather-outfit","weather-outfit","/weather-outfit","default","command"],
+    ["1096",13858,"What am I working toward","plans","outcomes","/outcomes","default","command"],
+    ["1172",14817,"Open commitments","people","people","/people?view=commitments","commitments","command"],
+    ["1403",17768,"Take me to focus","focus","focus","/focus","default","command"],
+    ["1812",22923,"Show memories","memories","memories","/memories","default","memory-editing"],
+    ["2012",25461,"Sound room","atmosphere","atmosphere","/atmosphere","default","atmosphere-editing"],
+    ["2093",26466,"Open capture","inbox","capture","/capture","default","command"],
+    ["2380",30096,"Go to people","people","people","/people","default","command"]
+  ],
+  "evaluatorFinding":"Freeze adapter route AND canonical realUI route separately. Do not derive expectedroute fromactual evaluatedintent or mistake legacyaliascalendar/inbox/plans for realUI today/capture/outcomes."
+}

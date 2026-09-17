@@ -1,0 +1,99 @@
+{
+  "status": "INDEPENDENT_STATIC_FIXTURE_NOT_EXECUTED_OR_ADMITTED",
+  "fixtureId": "LA",
+  "clock": "2026-09-05T12:00:00.000Z",
+  "nowMs": 1788609600000,
+  "context": {
+    "route": "atmosphere",
+    "topic": "atmosphere",
+    "activeMode": "command"
+  },
+  "preserveBase": "Literal populatedSep5/Sep6 entire Life state, revision0/past[]/future[]/temporaldaySep5, no invented selection. Preserve original ritual/defaults/preferences/environment/collections.",
+  "preset": {
+    "id": "atmosphere-sunday-evening",
+    "kind": "atmosphere",
+    "name": "Sunday evening",
+    "builtIn": true,
+    "masterVolume": 0.55,
+    "layers": [
+      {
+        "id": "texture",
+        "label": "Room",
+        "volume": 0.2,
+        "enabled": true,
+        "character": 0.42,
+        "rate": 1
+      },
+      {
+        "id": "rain",
+        "label": "Rain",
+        "volume": 0.32,
+        "enabled": true,
+        "character": 0.58,
+        "rate": 1
+      },
+      {
+        "id": "tone",
+        "label": "Tonal bed",
+        "volume": 0.18,
+        "enabled": true,
+        "character": 0.36,
+        "rate": 1
+      },
+      {
+        "id": "pulse",
+        "label": "Pulse",
+        "volume": 0.08,
+        "enabled": true,
+        "character": 0.28,
+        "rate": 0.72
+      }
+    ],
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  "active": {
+    "presetId": "atmosphere-sunday-evening",
+    "playing": true,
+    "muted": false,
+    "masterVolume": 0.55,
+    "layers": [
+      {
+        "id": "texture",
+        "label": "Room",
+        "volume": 0.2,
+        "enabled": true,
+        "character": 0.42,
+        "rate": 1
+      },
+      {
+        "id": "rain",
+        "label": "Rain",
+        "volume": 0.32,
+        "enabled": true,
+        "character": 0.58,
+        "rate": 1
+      },
+      {
+        "id": "tone",
+        "label": "Tonal bed",
+        "volume": 0.18,
+        "enabled": true,
+        "character": 0.36,
+        "rate": 1
+      },
+      {
+        "id": "pulse",
+        "label": "Pulse",
+        "volume": 0.08,
+        "enabled": true,
+        "character": 0.28,
+        "rate": 0.72
+      }
+    ]
+  },
+  "workspace": {
+    "minimized": [],
+    "quiet": false
+  }
+}

@@ -1,0 +1,892 @@
+{
+  "batch": "assisted-frozen-A",
+  "status": "pending-second-reader-review",
+  "sourceRoot": "artifacts/voice-control-rebuild-20260908/",
+  "sources": {
+    "A": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-001-120.md",
+      "sha256": "6d2e570449da5f92dc7e86d3ff39d6b5190b7273ea6cb2195bbd11480fa85800"
+    },
+    "B": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-121-300.md",
+      "sha256": "81efe8a1fb6f0ab7b001951cf1466bccf5b0b9bc1d2caee08a4978e6dae29050"
+    },
+    "C": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-601-640-REV-B.md",
+      "sha256": "6ab354dc5eb8647b1f904eb9e9a8074458525106a25c172225dae97fb0968717"
+    },
+    "D": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-681-720.md",
+      "sha256": "29bc8375a890bad4abcc5643d31e2f6e55931241fe75296c6b999ae21860f82b"
+    },
+    "E": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-801-840.md",
+      "sha256": "f99a64ccccb3a17acfc85c16c211d83db2939139c363e7f099d6107f9d5be25c"
+    }
+  },
+  "caseDefaults": {
+    "source": "editorial_product",
+    "provenance": {
+      "authoringMethod": "assisted-editorial",
+      "transformations": [],
+      "reviewStatus": "pending",
+      "contractVersion": "2026-09-08"
+    },
+    "editorial": {
+      "origin": "product-editorial-review",
+      "reviewScope": "Independently frozen against the named existing fixture before execution; assisted proposal awaiting root second-reader review."
+    }
+  },
+  "identityRule": "id=voice-rebuild-editorial-NNN; provenance.baseCaseId=language-audit-proposal-NNN; editorial.languageFeature=feature; family=family",
+  "semanticDefaults": {
+    "historyDelta": 0,
+    "feedbackPhase": "completed",
+    "actions": [],
+    "noCreation": true
+  },
+  "stateOracle": "Exact expectedDocument equality: all unlisted collections, fields, IDs, protection and media remain unchanged. journalChanges include only the named patch plus the oracle's declared updatedAt. H1 must pass exact global undo/redo. Context and temporal scope are not LifeDocument mutation.",
+  "fixtureGrounding": "Journal editing rows use existing J1 My Journey and exact declared train/walk/tomorrow text, not the earlier prose-only JE fixture. Rows060/061 use the existing journal-recording document; neither claims real recorder hardware. Navigation uses empty-home data with explicitly declared starting routes. No fixture data is changed.",
+  "cases": [
+    {
+      "id": 55,
+      "utterance": "Replace the last sentence with I can start again tomorrow",
+      "sourceLocator": {
+        "file": "A",
+        "row": 55,
+        "line": 89
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-content-edit",
+      "feature": "last-sentence replacement preserves preceding paragraph boundary",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "sentence",
+          "operation": "replace",
+          "value": "I can start again tomorrow"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nI can start again tomorrow"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nI can start again tomorrow"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 56,
+      "utterance": "Add a paragraph saying Go home and forget the argument",
+      "sourceLocator": {
+        "file": "A",
+        "row": 56,
+        "line": 90
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-content-edit",
+      "feature": "embedded navigation and conjunction remain literal paragraph content",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "paragraph",
+          "operation": "append",
+          "value": "Go home and forget the argument"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nTomorrow feels less daunting.\n\nGo home and forget the argument"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nTomorrow feels less daunting.\n\nGo home and forget the argument"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 57,
+      "utterance": "Change this paragraph to It wasn't perfect, but it was mine",
+      "sourceLocator": {
+        "file": "A",
+        "row": 57,
+        "line": 91
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {
+        "selectedJournalPassage": "Tomorrow feels less daunting."
+      },
+      "family": "journal-content-edit",
+      "feature": "selected last paragraph and contrastive but inside replacement value",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "paragraph",
+          "operation": "replace",
+          "value": "It wasn't perfect, but it was mine"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nIt wasn't perfect, but it was mine"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nIt wasn't perfect, but it was mine"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 58,
+      "utterance": "Rename this journal to Rain and thunder",
+      "sourceLocator": {
+        "file": "A",
+        "row": 58,
+        "line": 92
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-heading",
+      "feature": "unquoted conjunction remains heading content",
+      "expected": {
+        "intent": "journal-rename",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-rename",
+          "title": "Rain and thunder"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "title": "Rain and thunder"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "title": "Rain and thunder"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 59,
+      "utterance": "Call this entry Things I won't forget",
+      "sourceLocator": {
+        "file": "A",
+        "row": 59,
+        "line": 93
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-heading",
+      "feature": "first-person contraction remains exact heading text",
+      "expected": {
+        "intent": "journal-rename",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-rename",
+          "title": "Things I won't forget"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "title": "Things I won't forget"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "title": "Things I won't forget"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 60,
+      "utterance": "Delete the current journal entry",
+      "sourceLocator": {
+        "file": "A",
+        "row": 60,
+        "line": 94
+      },
+      "fixtureId": "journal-recording",
+      "contextOverrides": {},
+      "family": "journal-destructive-control",
+      "feature": "explicit entry deletion during long-form mode is a pending whole-entry action",
+      "expected": {
+        "intent": "journal-delete",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "intent": {
+          "type": "journal-delete"
+        },
+        "actions": [
+          {
+            "type": "journal.delete",
+            "entryId": "J1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 61,
+      "utterance": "Remove the journal I'm writing",
+      "sourceLocator": {
+        "file": "A",
+        "row": 61,
+        "line": 95
+      },
+      "fixtureId": "journal-recording",
+      "contextOverrides": {
+        "route": "home"
+      },
+      "family": "journal-destructive-control",
+      "feature": "active writing context identifies Journal off-route without Calendar fallback",
+      "expected": {
+        "intent": "journal-delete",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "confirmation",
+        "intent": {
+          "type": "journal-delete"
+        },
+        "actions": [
+          {
+            "type": "journal.delete",
+            "entryId": "J1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 63,
+      "utterance": "Delete the last sentence",
+      "sourceLocator": {
+        "file": "A",
+        "row": 63,
+        "line": 97
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-content-edit",
+      "feature": "bounded sentence edit uses existing immediate text-edit policy, not entry deletion",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "sentence",
+          "operation": "remove"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 616,
+      "utterance": "Change this entry's heading to 'Don't stop now'",
+      "sourceLocator": {
+        "file": "C",
+        "row": 616,
+        "line": 44
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-heading",
+      "feature": "quoted negative transport words are heading content",
+      "expected": {
+        "intent": "journal-rename",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-rename",
+          "title": "Don't stop now"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "title": "Don't stop now"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "title": "Don't stop now"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 619,
+      "utterance": "Name this journal 'Rain at noon'—sorry, 'Light at noon'",
+      "sourceLocator": {
+        "file": "C",
+        "row": 619,
+        "line": 47
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-heading-correction",
+      "feature": "self-correction outside quoted heading values replaces only the final value atomically",
+      "expected": {
+        "intent": "journal-rename",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-rename",
+          "title": "Light at noon"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "title": "Light at noon"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "title": "Light at noon"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 697,
+      "utterance": "Call this entry 'Yes, and then no'",
+      "sourceLocator": {
+        "file": "D",
+        "row": 697,
+        "line": 33
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-heading",
+      "feature": "quoted yes/no and compound markers do not become confirmation or clause boundaries",
+      "expected": {
+        "intent": "journal-rename",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-rename",
+          "title": "Yes, and then no"
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "title": "Yes, and then no"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "title": "Yes, and then no"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 808,
+      "utterance": "Replace the journal words with 'I said stop. They heard go.'",
+      "sourceLocator": {
+        "file": "E",
+        "row": 808,
+        "line": 22
+      },
+      "fixtureId": "journal-editing",
+      "contextOverrides": {},
+      "family": "journal-content-edit",
+      "feature": "whole text replacement preserves quoted sentence punctuation and transport words",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "text",
+          "operation": "replace",
+          "value": "I said stop. They heard go."
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "I said stop. They heard go."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "I said stop. They heard go."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 66,
+      "utterance": "Bring me back to the main screen",
+      "sourceLocator": {
+        "file": "A",
+        "row": 66,
+        "line": 100
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {
+        "route": "plans"
+      },
+      "family": "global-navigation",
+      "feature": "main-screen destination overrides browser-back wording",
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "home"
+        }
+      }
+    },
+    {
+      "id": 67,
+      "utterance": "Could you open my calendar for the entire week?",
+      "sourceLocator": {
+        "file": "A",
+        "row": 67,
+        "line": 101
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {
+        "weekStartsOn": 1
+      },
+      "family": "calendar-view-navigation",
+      "feature": "polite full-week calendar request applies route and Monday-to-Sunday scope without data",
+      "expected": {
+        "intent": "navigate-temporal",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate-temporal",
+          "route": "calendar",
+          "scope": {
+            "kind": "week",
+            "dateKey": "2026-09-07",
+            "endDateKey": "2026-09-13"
+          }
+        },
+        "scope": {
+          "kind": "week",
+          "dateKey": "2026-09-07",
+          "endDateKey": "2026-09-13"
+        }
+      }
+    },
+    {
+      "id": 68,
+      "utterance": "What's on my schedule tomorrow?",
+      "sourceLocator": {
+        "file": "A",
+        "row": 68,
+        "line": 102
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "calendar-view-navigation",
+      "feature": "schedule question selects tomorrow's visible calendar, not event creation",
+      "expected": {
+        "intent": "navigate-temporal",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate-temporal",
+          "route": "calendar",
+          "scope": {
+            "kind": "day",
+            "dateKey": "2026-09-09"
+          }
+        },
+        "scope": {
+          "kind": "day",
+          "dateKey": "2026-09-09"
+        }
+      }
+    },
+    {
+      "id": 69,
+      "utterance": "Take me over to the journal area",
+      "sourceLocator": {
+        "file": "A",
+        "row": 69,
+        "line": 103
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "global-navigation",
+      "feature": "conversational destination phrase opens Journal without starting or creating entry",
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "journal"
+        }
+      }
+    },
+    {
+      "id": 70,
+      "utterance": "I'd like to see my goals",
+      "sourceLocator": {
+        "file": "A",
+        "row": 70,
+        "line": 104
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "global-navigation",
+      "feature": "possessive goals names existing Outcomes view rather than new outcome intent",
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "plans"
+        }
+      }
+    },
+    {
+      "id": 71,
+      "utterance": "Show the start screen, please",
+      "sourceLocator": {
+        "file": "A",
+        "row": 71,
+        "line": 105
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {
+        "route": "people"
+      },
+      "family": "global-navigation",
+      "feature": "trailing politeness and start-screen Home synonym",
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "home"
+        }
+      }
+    },
+    {
+      "id": 89,
+      "utterance": "Open calendar for the full week, not a new outcome",
+      "sourceLocator": {
+        "file": "A",
+        "row": 89,
+        "line": 123
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {
+        "weekStartsOn": 1
+      },
+      "family": "calendar-view-navigation",
+      "feature": "negative cross-domain clause constrains navigation without creating Outcome",
+      "expected": {
+        "intent": "navigate-temporal",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate-temporal",
+          "route": "calendar",
+          "scope": {
+            "kind": "week",
+            "dateKey": "2026-09-07",
+            "endDateKey": "2026-09-13"
+          }
+        },
+        "scope": {
+          "kind": "week",
+          "dateKey": "2026-09-07",
+          "endDateKey": "2026-09-13"
+        }
+      }
+    },
+    {
+      "id": 214,
+      "utterance": "Show what is in Capture",
+      "sourceLocator": {
+        "file": "B",
+        "row": 214,
+        "line": 112
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "global-navigation",
+      "feature": "noun Capture as destination, not imperative save-content action",
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "inbox"
+        }
+      }
+    },
+    {
+      "id": 300,
+      "utterance": "Open my calendar, not Capture",
+      "sourceLocator": {
+        "file": "B",
+        "row": 300,
+        "line": 198
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "global-navigation",
+      "feature": "explicit excluded destination cannot override positive Calendar destination",
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "calendar"
+        }
+      }
+    },
+    {
+      "id": 90,
+      "utterance": "Call this one something",
+      "sourceLocator": {
+        "file": "A",
+        "row": 90,
+        "line": 124
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "missing-reference-clarification",
+      "feature": "deictic rename with no entity asks one target question, not contact creation",
+      "expected": {
+        "intent": "clarification",
+        "resolution": "clarify",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "clarification",
+        "intent": {
+          "type": "clarification"
+        }
+      }
+    },
+    {
+      "id": 220,
+      "utterance": "Save this for later",
+      "sourceLocator": {
+        "file": "B",
+        "row": 220,
+        "line": 118
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "missing-reference-clarification",
+      "feature": "deictic save without content asks what to save rather than empty Capture",
+      "expected": {
+        "intent": "clarification",
+        "resolution": "clarify",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "clarification",
+        "intent": {
+          "type": "clarification"
+        }
+      }
+    },
+    {
+      "id": 281,
+      "utterance": "The rain was louder when I left home",
+      "sourceLocator": {
+        "file": "B",
+        "row": 281,
+        "line": 179
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "narrative-command-confusion",
+      "feature": "past-tense weather and Home words are not Atmosphere or navigation controls",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 283,
+      "utterance": "Maybe I should make an outcome someday",
+      "sourceLocator": {
+        "file": "B",
+        "row": 283,
+        "line": 181
+      },
+      "fixtureId": "empty-home",
+      "contextOverrides": {},
+      "family": "implicit-creation-negative",
+      "feature": "tentative future reflection is not explicit Outcome creation authorization",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "home"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    }
+  ]
+}

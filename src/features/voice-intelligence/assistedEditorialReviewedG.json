@@ -1,0 +1,642 @@
+{
+  "batch": "new-assisted-881-900",
+  "source": "assisted-editorial",
+  "status": "pending-independent-review-and-execution",
+  "defaults": {
+    "contextOverrides": {},
+    "semantic": {
+      "historyDelta": 0,
+      "feedbackPhase": "completed",
+      "noCreation": true,
+      "actions": []
+    }
+  },
+  "qualifications": "Static collision bookkeeping only; no parser/test/browser execution.883 synthetic recording context is not physical microphone ownership.894 metadata reference is not bytes/image decode. Arrays replace; complete unchanged complements and H1 UndoRedo required.",
+  "cases": [
+    {
+      "id": 881,
+      "utterance": "I want the calendar view, not a new calendar item.",
+      "fixtureId": "empty-home",
+      "family": "navigation-versus-creation",
+      "feature": "explicit view noun and excluded item distinguish navigation from creation",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "calendar"
+        }
+      }
+    },
+    {
+      "id": 882,
+      "utterance": "Take me out of Outcomes and back to the Home screen.",
+      "fixtureId": "outcome-reference",
+      "family": "navigation-explicit-return",
+      "feature": "leaving named space and explicit Home destination do not pause or delete the plan",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "home"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "home"
+        }
+      }
+    },
+    {
+      "id": 883,
+      "utterance": "Show my captures while leaving this journal entry open.",
+      "fixtureId": "journal-recording",
+      "family": "navigation-preserves-journal",
+      "feature": "navigation from long-form context preserves entry identity and declared recording state",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "inbox"
+        }
+      }
+    },
+    {
+      "id": 884,
+      "utterance": "Switch from Commitments to Outcomes; don't add a plan.",
+      "fixtureId": "commitment-reference",
+      "family": "navigation-source-destination",
+      "feature": "source space is not destination and explicit creation exclusion preserves all promises",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "plans"
+        }
+      }
+    },
+    {
+      "id": 885,
+      "utterance": "It's the Journal screen I want, not a blank entry.",
+      "fixtureId": "empty-home",
+      "family": "navigation-versus-journal-create",
+      "feature": "cleft destination wording opens an empty screen without manufacturing an entry",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "journal"
+        }
+      }
+    },
+    {
+      "id": 886,
+      "utterance": "Let me view the current week without rebuilding my day.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-view-versus-reflow",
+      "feature": "view-week request cannot activate Tide or rewrite schedule data",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate-temporal",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate-temporal",
+          "route": "calendar",
+          "scope": {
+            "kind": "week",
+            "dateKey": "2026-09-07",
+            "endDateKey": "2026-09-13"
+          }
+        },
+        "scope": {
+          "kind": "week",
+          "dateKey": "2026-09-07",
+          "endDateKey": "2026-09-13"
+        }
+      }
+    },
+    {
+      "id": 887,
+      "utterance": "Could you take me to tomorrow's appointments and nothing else?",
+      "fixtureId": "empty-home",
+      "family": "calendar-date-navigation",
+      "feature": "possessive relative-day appointments is a scope request, not event creation",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "navigate-temporal",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate-temporal",
+          "route": "calendar",
+          "scope": {
+            "kind": "day",
+            "dateKey": "2026-09-09"
+          }
+        },
+        "scope": {
+          "kind": "day",
+          "dateKey": "2026-09-09"
+        }
+      }
+    },
+    {
+      "id": 888,
+      "utterance": "The phrase 'back home' is in the entry title, not a destination.",
+      "fixtureId": "journal-editing",
+      "family": "quoted-destination-negative",
+      "feature": "mentioned title text is neither a new title assignment nor navigation",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "unsupported"
+        },
+        "feedbackPhase": "error"
+      }
+    },
+    {
+      "id": 889,
+      "utterance": "Replace only the displayed words, using 'A pause, not an ending.'",
+      "fixtureId": "memory-source",
+      "family": "memory-words-replacement",
+      "feature": "only scopes edit to displayed passage and excludes quoted temporal/control interpretation",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "memory-edit",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-edit",
+          "property": "passage",
+          "value": "A pause, not an ending."
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "passage": "A pause, not an ending."
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "passage": "A pause, not an ending."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 890,
+      "utterance": "'Go home' is what I want this journal called.",
+      "fixtureId": "journal-editing",
+      "family": "journal-fronted-name",
+      "feature": "fronted quoted title followed by explicit called frame is rename, not navigation",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "journal-rename",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-rename",
+          "title": "Go home"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "title": "Go home"
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "title": "Go home"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 891,
+      "utterance": "The last sentence should read 'We can begin again tomorrow.'",
+      "fixtureId": "journal-editing",
+      "family": "journal-declarative-sentence-edit",
+      "feature": "should-read wording changes one bounded sentence and preserves literal final punctuation",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "sentence",
+          "operation": "replace",
+          "value": "We can begin again tomorrow."
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nWe can begin again tomorrow."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nWe can begin again tomorrow."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 892,
+      "utterance": "Keep the travel tag, but remove family from this entry.",
+      "fixtureId": "memory-source",
+      "family": "journal-label-preservation",
+      "feature": "named tag retention constrains removal of a different tag",
+      "contextOverrides": {
+        "route": "journal",
+        "topic": "journal",
+        "activeJournalEntryId": "J1",
+        "voiceMode": "command"
+      },
+      "expected": {
+        "intent": "journal-tags",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-tags",
+          "operation": "remove",
+          "tags": [
+            "family"
+          ]
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "tags": [
+                "travel"
+              ]
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "tags": [
+                "travel"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 893,
+      "utterance": "Append a paragraph that says 'Cancel is a word, not an instruction.'",
+      "fixtureId": "journal-editing",
+      "family": "journal-append-literal-control",
+      "feature": "append preserves existing text and quotes a control word as new paragraph content",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "paragraph",
+          "operation": "append",
+          "value": "Cancel is a word, not an instruction."
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nTomorrow feels less daunting.\n\nCancel is a word, not an instruction."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nTomorrow feels less daunting.\n\nCancel is a word, not an instruction."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 894,
+      "utterance": "Use photo number two from this entry for the memory, not a new upload.",
+      "fixtureId": "memory-source",
+      "family": "memory-existing-source-choice",
+      "feature": "photo-number ordering and explicit no-upload constraint bind existing P2 reference",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "studio-source-select",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "studio-source-select",
+          "source": "photo",
+          "ordinal": 2,
+          "operation": "select"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "photoAssetId": "P2"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "photoAssetId": "P2"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 895,
+      "utterance": "Make the words smaller, and keep the voice included.",
+      "fixtureId": "memory-source",
+      "family": "memory-size-audio-isolation",
+      "feature": "word-scale adjustment preserves already-enabled source audio",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "textScale",
+          "operation": "decrease"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textScale": 0.88
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textScale": 0.88
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 896,
+      "utterance": "The date belongs in the corner, and the words must not move.",
+      "fixtureId": "memory-source",
+      "family": "memory-position-isolation",
+      "feature": "date-placement declaration is distinct from protected passage offset",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "dateCorner",
+          "operation": "show"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "showDate": true,
+              "datePlacement": "corner"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "showDate": true,
+              "datePlacement": "corner"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 897,
+      "utterance": "Keep the rain audible; reduce the tone instead.",
+      "fixtureId": "atmosphere",
+      "family": "atmosphere-contrastive-layer-target",
+      "feature": "audible-rain preservation precedes another layer's level reduction",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "tone",
+          "property": "volume",
+          "operation": "decrease"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "tone",
+            "patch": {
+              "volume": 0.08
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "tone",
+            "patch": {
+              "volume": 0.08
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 898,
+      "utterance": "The pulse is too fast; reduce its pace a notch.",
+      "fixtureId": "atmosphere",
+      "family": "atmosphere-intra-turn-rate",
+      "feature": "named problem statement resolves following pronoun to pace, not volume",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "pulse",
+          "property": "rate",
+          "operation": "decrease"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "rate": 0.57
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "pulse",
+            "patch": {
+              "rate": 0.57
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 899,
+      "utterance": "I want the rain at ten percent, not ten times louder.",
+      "fixtureId": "atmosphere",
+      "family": "atmosphere-absolute-versus-relative",
+      "feature": "explicit percent disambiguates exact level from relative multiplier",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "atmosphere-set",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-set",
+          "layerId": "rain",
+          "property": "volume",
+          "value": 0.1
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "rain",
+            "patch": {
+              "volume": 0.1
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "rain",
+            "patch": {
+              "volume": 0.1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 900,
+      "utterance": "Please don't treat 'start a recording' in my notes as a voice command.",
+      "fixtureId": "journal-editing",
+      "family": "quoted-recording-negative",
+      "feature": "negated command interpretation protects recorder state despite embedded activation phrase",
+      "contextOverrides": {},
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "journal"
+      },
+      "semantic": {
+        "intent": {
+          "type": "unsupported"
+        },
+        "feedbackPhase": "error"
+      }
+    }
+  ]
+}

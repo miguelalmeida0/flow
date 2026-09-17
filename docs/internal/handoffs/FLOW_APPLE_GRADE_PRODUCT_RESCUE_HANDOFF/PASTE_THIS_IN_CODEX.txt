@@ -1,0 +1,48 @@
+Read repository AGENTS.md and docs/quality/VERIFICATION.md first.
+
+Then read every file under FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF in the exact order defined by FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/README.md.
+
+Inspect every current-state failure screenshot and target design reference included in the handoff.
+
+Then execute FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/FLOW_PRODUCT_RESCUE_MASTER_PROMPT.md completely.
+
+This is a stop-ship product rescue and implementation mission, not a design review.
+
+Implement the full P0 and P1 backlog and complete the P2 motion rescue before declaring the product portfolio-ready.
+
+Do not stop after planning, auditing, or scaffolding.
+Do not pin or change the Codex model.
+Do not add GPT or any paid LLM runtime.
+Do not add a backend, authentication, provider integrations, Three.js, WebGL, shaders, image generation, or mascot work.
+Do not weaken existing tests.
+Do not preserve broken route-local behavior for convenience.
+Do not allow unsupported speech or navigation commands to create data.
+
+The required product is one coherent world:
+
+Home + Today + Capture + Outcomes + Commitments
+
+with Now embedded in Home/Today, one global foreground Live Session, one global intent router, one unified LifeState, one typed LifeAction transaction engine, exact global undo/redo, complete page utility loops, and calm Tide/Anchor/Bloom motion.
+
+The current route must never prevent a valid global command.
+
+The following physical interaction journey is the final acceptance gate after automated tests:
+
+“Home.”
+“Book dinner at Pizzeria Roma tomorrow at eight.”
+“Make it red and important.”
+“I need to renew my passport before Senegal.”
+“The first step is check the requirements.”
+“Schedule it Thursday after work.”
+“I promised Maya the proposal by Friday.”
+“I am waiting for Daniel's contract confirmation.”
+“What needs me now?”
+“Move the two PM meeting to four.”
+“Undo.”
+“Redo.”
+“Home.”
+“Pause listening.”
+
+Only one microphone activation is allowed. No navigation phrase may become data. No valid command may fail because of the current route. No logical request may create more than one undo entry.
+
+Proceed now and do not return until the implementation and evidence-backed release assessment are complete.

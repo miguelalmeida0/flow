@@ -1,0 +1,1187 @@
+{
+  "batch": "assisted-frozen-D",
+  "status": "pending-second-reader-review",
+  "sourceRoot": "artifacts/voice-control-rebuild-20260908/",
+  "sources": {
+    "G": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-681-720.md",
+      "sha256": "29bc8375a890bad4abcc5643d31e2f6e55931241fe75296c6b999ae21860f82b"
+    },
+    "B": {
+      "file": "ASSISTED-EDITORIAL-PROPOSALS-121-300.md",
+      "sha256": "81efe8a1fb6f0ab7b001951cf1466bccf5b0b9bc1d2caee08a4978e6dae29050"
+    }
+  },
+  "caseDefaults": {
+    "source": "editorial_product",
+    "provenance": {
+      "authoringMethod": "assisted-editorial",
+      "transformations": [],
+      "reviewStatus": "pending",
+      "contractVersion": "2026-09-08"
+    },
+    "editorial": {
+      "origin": "product-editorial-review",
+      "reviewScope": "Independently frozen against the named existing fixture before execution; assisted proposal awaiting root second-reader review."
+    }
+  },
+  "identityRule": "id=voice-rebuild-editorial-NNN; provenance.baseCaseId=language-audit-proposal-NNN; editorial.languageFeature=feature; family=family",
+  "semanticDefaults": {
+    "historyDelta": 0,
+    "feedbackPhase": "completed",
+    "actions": [],
+    "noCreation": true
+  },
+  "stateOracle": "Exact expectedDocument equality: all unlisted collections, fields, IDs, protection and media remain unchanged. journalChanges include only the named patch plus the oracle's declared updatedAt. H1 must pass exact global undo/redo. Context and temporal scope are not LifeDocument mutation.",
+  "fixtureGrounding": "memory-source M1 still/photoP1/audioenabled/in2000/out12000/scale1/offset0/datefalseinline/draft. SourceJ1 photoP1/P2/bookmarksB1/B2at8400, media metadata only. Atmosphere texture.volume.20/rain.32/tone.18/pulse.08 all enabled/pulse.rate.72/master.55. Canonical volume step.10/clamp0. No fixture modification.",
+  "cases": [
+    {
+      "id": 701,
+      "utterance": "Show this memory as a page rather than a still",
+      "sourceLocator": {
+        "file": "G",
+        "row": 701,
+        "line": 37
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-composition",
+      "feature": "rather-than switches composition only and preserves selected sources",
+      "expected": {
+        "intent": "memory-composition",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-composition",
+          "composition": "page"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "composition": "page"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "composition": "page"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 702,
+      "utterance": "Use the second bookmarked moment for this memory's voice",
+      "sourceLocator": {
+        "file": "G",
+        "row": 702,
+        "line": 38
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-bookmark-source",
+      "feature": "ordinal refers to linked Journal bookmark ordering and preserves valid excerpt end",
+      "expected": {
+        "intent": "studio-source-select",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "studio-source-select",
+          "source": "bookmark",
+          "ordinal": 2,
+          "operation": "select"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "bookmarkId": "B2",
+              "audioInMs": 8400,
+              "audioEnabled": true
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "bookmarkId": "B2",
+              "audioInMs": 8400,
+              "audioEnabled": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 703,
+      "utterance": "Switch this memory to the second attached photograph",
+      "sourceLocator": {
+        "file": "G",
+        "row": 703,
+        "line": 39
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-photo-source",
+      "feature": "attached-photo ordinal changes existing reference, never opens picker or duplicates asset",
+      "expected": {
+        "intent": "studio-source-select",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "studio-source-select",
+          "source": "photo",
+          "ordinal": 2,
+          "operation": "select"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "photoAssetId": "P2"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "photoAssetId": "P2"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 705,
+      "utterance": "Replace the memory passage with 'Keep recording and say nothing'",
+      "sourceLocator": {
+        "file": "G",
+        "row": 705,
+        "line": 41
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-literal-passage",
+      "feature": "quoted recording commands and conjunction remain raw Memory words",
+      "expected": {
+        "intent": "memory-edit",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-edit",
+          "property": "passage",
+          "value": "Keep recording and say nothing"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "passage": "Keep recording and say nothing"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "passage": "Keep recording and say nothing"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 706,
+      "utterance": "Bring the start of the voice excerpt back by five seconds",
+      "sourceLocator": {
+        "file": "G",
+        "row": 706,
+        "line": 42
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-excerpt-trim",
+      "feature": "negative start offset clamps at source zero while preserving the end and source recording",
+      "expected": {
+        "intent": "memory-audio-trim",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-audio-trim",
+          "edge": "in",
+          "deltaMs": -5000
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "audioInMs": 0,
+              "audioOutMs": 12000
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "audioInMs": 0,
+              "audioOutMs": 12000
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 707,
+      "utterance": "End the voice excerpt two seconds sooner",
+      "sourceLocator": {
+        "file": "G",
+        "row": 707,
+        "line": 43
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-excerpt-trim",
+      "feature": "sooner end subtracts from excerpt out rather than shifting entire excerpt",
+      "expected": {
+        "intent": "memory-audio-trim",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-audio-trim",
+          "edge": "out",
+          "deltaMs": -2000
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "audioInMs": 2000,
+              "audioOutMs": 10000
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "audioInMs": 2000,
+              "audioOutMs": 10000
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 708,
+      "utterance": "Show the memory's date beneath the words",
+      "sourceLocator": {
+        "file": "G",
+        "row": 708,
+        "line": 44
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-date-placement",
+      "feature": "beneath words both reveals date and selects existing inline placement enum",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "dateCorner",
+          "operation": "hide"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "showDate": true,
+              "datePlacement": "inline"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "showDate": true,
+              "datePlacement": "inline"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 247,
+      "utterance": "Soften the tonal bed",
+      "sourceLocator": {
+        "file": "B",
+        "row": 247,
+        "line": 145
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-tone-volume",
+      "feature": "tonal-bed alias selects tone level rather than global master",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "tone",
+          "property": "volume",
+          "operation": "decrease"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "tone",
+            "patch": {
+              "volume": 0.08
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "tone",
+            "patch": {
+              "volume": 0.08
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 248,
+      "utterance": "Give the tone a little more presence",
+      "sourceLocator": {
+        "file": "B",
+        "row": 248,
+        "line": 146
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-tone-volume",
+      "feature": "more presence means canonical volume increase, not enabling or changing timbre",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "tone",
+          "property": "volume",
+          "operation": "increase"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "tone",
+            "patch": {
+              "volume": 0.28
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "tone",
+            "patch": {
+              "volume": 0.28
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 249,
+      "utterance": "Take the piano layer out",
+      "sourceLocator": {
+        "file": "B",
+        "row": 249,
+        "line": 147
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-alias",
+      "feature": "existing piano alias maps to tone enable toggle without deleting a layer",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "tone",
+          "property": "enabled",
+          "operation": "remove"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "tone",
+            "patch": {
+              "enabled": false
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "tone",
+            "patch": {
+              "enabled": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 253,
+      "utterance": "Lower the pulse, not the rain",
+      "sourceLocator": {
+        "file": "B",
+        "row": 253,
+        "line": 151
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-negative-scope",
+      "feature": "explicit excluded rain remains exact while pulse volume clamps at zero",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "pulse",
+          "property": "volume",
+          "operation": "decrease"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "volume": 0
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "pulse",
+            "patch": {
+              "volume": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 254,
+      "utterance": "Leave out the pulse entirely",
+      "sourceLocator": {
+        "file": "B",
+        "row": 254,
+        "line": 152
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-layer-disable",
+      "feature": "entirely omitted layer changes enabled only and retains its recoverable level/rate",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-adjust",
+          "layerId": "pulse",
+          "property": "enabled",
+          "operation": "remove"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "enabled": false
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "pulse",
+            "patch": {
+              "enabled": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 255,
+      "utterance": "Quiet all the layers a little",
+      "sourceLocator": {
+        "file": "B",
+        "row": 255,
+        "line": 153
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-atomic-mix",
+      "feature": "all-layer canonical attenuation clamps individually, preserves master and creates one history entry",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-adjust",
+          "property": "volume",
+          "operation": "decrease"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "texture",
+            "patch": {
+              "volume": 0.1
+            }
+          },
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          },
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "tone",
+            "patch": {
+              "volume": 0.08
+            }
+          },
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "volume": 0
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "texture",
+            "patch": {
+              "volume": 0.1
+            }
+          },
+          {
+            "id": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          },
+          {
+            "id": "tone",
+            "patch": {
+              "volume": 0.08
+            }
+          },
+          {
+            "id": "pulse",
+            "patch": {
+              "volume": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 289,
+      "utterance": "Delete the original Sunday evening preset",
+      "sourceLocator": {
+        "file": "B",
+        "row": 289,
+        "line": 187
+      },
+      "fixtureId": "atmosphere",
+      "contextOverrides": {},
+      "family": "atmosphere-built-in-protection",
+      "feature": "existing built-in preset guard explains protection without data loss or destructive pending action",
+      "expected": {
+        "intent": "atmosphere-save",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "intent": {
+          "type": "atmosphere-save",
+          "mode": "delete"
+        },
+        "actions": []
+      }
+    },
+    {
+      "id": 261,
+      "utterance": "Enlarge the words on this memory",
+      "sourceLocator": {
+        "file": "B",
+        "row": 261,
+        "line": 159
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-type-scale",
+      "feature": "enlarge targets displayed word scale rather than replacing passage content",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "textScale",
+          "operation": "increase"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textScale": 1.12
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textScale": 1.12
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 262,
+      "utterance": "The text should be a little smaller",
+      "sourceLocator": {
+        "file": "B",
+        "row": 262,
+        "line": 160
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-type-scale",
+      "feature": "declarative should-be edit uses active Memory context without Calendar selection",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "textScale",
+          "operation": "decrease"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textScale": 0.88
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textScale": 0.88
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 263,
+      "utterance": "Move the words down a bit",
+      "sourceLocator": {
+        "file": "B",
+        "row": 263,
+        "line": 161
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-text-position",
+      "feature": "active editor content noun maps move-down to text offset, not viewport or event movement",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "textY",
+          "operation": "down"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textOffset": {
+                "x": 0,
+                "y": 8
+              }
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textOffset": {
+                "x": 0,
+                "y": 8
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 264,
+      "utterance": "Raise the text slightly",
+      "sourceLocator": {
+        "file": "B",
+        "row": 264,
+        "line": 162
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-text-position",
+      "feature": "raise refers to vertical offset rather than font size or sound level",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "textY",
+          "operation": "up"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textOffset": {
+                "x": 0,
+                "y": -8
+              }
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textOffset": {
+                "x": 0,
+                "y": -8
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 267,
+      "utterance": "Place the date in the corner",
+      "sourceLocator": {
+        "file": "B",
+        "row": 267,
+        "line": 165
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-date-placement",
+      "feature": "placement request reveals currently hidden date and chooses corner placement",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "dateCorner",
+          "operation": "show"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "showDate": true,
+              "datePlacement": "corner"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "showDate": true,
+              "datePlacement": "corner"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 270,
+      "utterance": "Leave the voice out of this memory",
+      "sourceLocator": {
+        "file": "B",
+        "row": 270,
+        "line": 168
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-source-visibility",
+      "feature": "Memory audio toggle preserves original Journal audio and trim metadata",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-update",
+          "property": "audioEnabled",
+          "operation": "hide"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "audioEnabled": false
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "audioEnabled": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 274,
+      "utterance": "Cut two seconds from the beginning of the voice",
+      "sourceLocator": {
+        "file": "B",
+        "row": 274,
+        "line": 172
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-excerpt-trim",
+      "feature": "cut from beginning advances in-point without trimming or deleting source recording",
+      "expected": {
+        "intent": "memory-audio-trim",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-audio-trim",
+          "edge": "in",
+          "deltaMs": 2000
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "audioInMs": 4000,
+              "audioOutMs": 12000
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "audioInMs": 4000,
+              "audioOutMs": 12000
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 275,
+      "utterance": "Leave out the last second of audio",
+      "sourceLocator": {
+        "file": "B",
+        "row": 275,
+        "line": 173
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-excerpt-trim",
+      "feature": "last-second removal shortens only out-point while retaining in-point and audio reference",
+      "expected": {
+        "intent": "memory-audio-trim",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-audio-trim",
+          "edge": "out",
+          "deltaMs": -1000
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "audioInMs": 2000,
+              "audioOutMs": 11000
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "audioInMs": 2000,
+              "audioOutMs": 11000
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 276,
+      "utterance": "Start the voice excerpt one second sooner",
+      "sourceLocator": {
+        "file": "B",
+        "row": 276,
+        "line": 174
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-excerpt-trim",
+      "feature": "sooner start extends backward without changing excerpt end or enabling a new recording",
+      "expected": {
+        "intent": "memory-audio-trim",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-audio-trim",
+          "edge": "in",
+          "deltaMs": -1000
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "audioInMs": 1000,
+              "audioOutMs": 12000
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "audioInMs": 1000,
+              "audioOutMs": 12000
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 278,
+      "utterance": "Save the memory as it is",
+      "sourceLocator": {
+        "file": "B",
+        "row": 278,
+        "line": 176
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-save",
+      "feature": "saving draft changes status only, without exporting or altering composition",
+      "expected": {
+        "intent": "memory-save",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "memory-save"
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "status": "saved"
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "status": "saved"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 280,
+      "utterance": "Make the words bigger, but remove the voice",
+      "sourceLocator": {
+        "file": "B",
+        "row": 280,
+        "line": 178
+      },
+      "fixtureId": "memory-source",
+      "contextOverrides": {},
+      "family": "memory-atomic-edit",
+      "feature": "contrastive compound composes independent visible controls into one transaction and preserves source assets",
+      "expected": {
+        "intent": "studio-compound",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "intent": {
+          "type": "studio-compound",
+          "steps": [
+            {
+              "type": "memory-update",
+              "property": "textScale",
+              "operation": "increase"
+            },
+            {
+              "type": "memory-update",
+              "property": "audioEnabled",
+              "operation": "hide"
+            }
+          ]
+        },
+        "historyDelta": 1,
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textScale": 1.12
+            }
+          },
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "audioEnabled": false
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textScale": 1.12,
+              "audioEnabled": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

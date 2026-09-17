@@ -1,0 +1,864 @@
+{
+  "status": "PROPOSED_FULL_BEFORE_RECIPE_SCHEMA_PENDING_REVIEW_NOT_ADMITTED_NOT_EXECUTED",
+  "archive": {
+    "file": "static-editorial-20260908-0900.json",
+    "sha256": "bef38b6a777787aa35351db3240f549b24494d5fae65d7e193ae6b9f7a4751c1"
+  },
+  "fixture": {
+    "id": "calendar-representative",
+    "path": "src/features/voice-intelligence/representativeCalendarFixture.ts",
+    "sha256": "f216a5077611e41a5ae8141dac70a7c0ccba93c42b931158e8d831105d69267f",
+    "acceptanceDay": "2026-09-08",
+    "acceptanceClockLocal": "2026-09-08T10:00:00",
+    "contextOverrides": {}
+  },
+  "sourceFiles": {
+    "parser": {
+      "file": "src/features/day-planner/parser.test.ts",
+      "sha256": "ffd245ebbab53ea4a90ba8f6c966ae2b1bf863ca3cc9914c6d99f5decb46552c"
+    },
+    "tide": {
+      "file": "src/features/day-planner/tideLanguage.test.ts",
+      "sha256": "07f950d3659735b78966c90a8ff9e2eb6e02fab05a592fb885d13c36ef775e63"
+    }
+  },
+  "caseDefaults": {
+    "expected": {
+      "intent": "calendar",
+      "resolution": "execute",
+      "route": "calendar"
+    },
+    "semantic": {
+      "historyDelta": 1,
+      "feedbackPhase": "completed",
+      "intent": {
+        "type": "calendar"
+      }
+    },
+    "calendarRequestConstraints": [],
+    "normalExecuteRequiresNoPending": true,
+    "newEventDefaults": {
+      "kind": "flexible",
+      "priority": "medium",
+      "color": "neutral",
+      "labels": [],
+      "importance": "normal",
+      "mobility": "light",
+      "protected": false,
+      "status": "planned",
+      "bufferBeforeMinutes": 0,
+      "bufferAfterMinutes": 0
+    }
+  },
+  "recipeContract": "Each calendarActions array becomes ordered actions in ONE calendar.request LifeAction, constraints[]. newEvent declares a complete event by merging only envelope newEventDefaults and explicit row fields; append to declared date. datedEventChanges move the exact full BEFORE ID from source to destination with only declared patch/dateKey. Existing eventChanges patch only that ID. All omitted document fields and entities remain identical; all target-day events sorted start/id; active calendar remains2026-09-08 and mirrors its dated day. Empty newly required day MUST include dateKey,events:[],deferred:[],breathingRooms:[]. No parser/planner/actualAfter input. Pending rows have no event or calendar collection changes; pendingRequestConfirmed is future authorization scope, not confirmation already applied.",
+  "cases": [
+    {
+      "id": "repository-draft-0021",
+      "utterance": "Add a 30 minute walk at 5",
+      "source": {
+        "key": "parser",
+        "line": 62
+      },
+      "family": "calendar-create",
+      "feature": "numeric-duration-evening-destination",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "walk",
+          "durationMinutes": 30,
+          "destination": {
+            "type": "absolute",
+            "minutes": 1020
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "walk",
+        "title": "Walk",
+        "dateKey": "2026-09-08",
+        "start": 1020,
+        "end": 1050
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0022",
+      "utterance": "Schedule a 25 minute break between 3 and 5",
+      "source": {
+        "key": "parser",
+        "line": 63
+      },
+      "family": "calendar-create",
+      "feature": "window-bounded-first-fitting-slot",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "break",
+          "durationMinutes": 25,
+          "destination": {
+            "type": "window",
+            "start": 900,
+            "end": 1020
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "break",
+        "title": "Break",
+        "dateKey": "2026-09-08",
+        "start": 900,
+        "end": 925
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0023",
+      "utterance": "Block one hour for reading tomorrow morning",
+      "source": {
+        "key": "parser",
+        "line": 64
+      },
+      "family": "calendar-create",
+      "feature": "number-word-hour-next-day-morning",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "reading",
+          "durationMinutes": 60,
+          "destination": {
+            "type": "dayPart",
+            "date": "tomorrow",
+            "part": "morning"
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "reading",
+        "title": "Reading",
+        "dateKey": "2026-09-09",
+        "start": 540,
+        "end": 600
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0025",
+      "utterance": "Add gym tomorrow morning",
+      "source": {
+        "key": "parser",
+        "line": 66
+      },
+      "family": "calendar-create",
+      "feature": "declared-default-duration-next-day",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "gym",
+          "durationMinutes": 30,
+          "destination": {
+            "type": "dayPart",
+            "date": "tomorrow",
+            "part": "morning"
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "gym",
+        "title": "Gym",
+        "dateKey": "2026-09-09",
+        "start": 540,
+        "end": 570
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0026",
+      "utterance": "Schedule a twenty minute break before the interview",
+      "source": {
+        "key": "parser",
+        "line": 67
+      },
+      "family": "calendar-create",
+      "feature": "number-word-duration-before-fixed-anchor",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "break",
+          "durationMinutes": 20,
+          "destination": {
+            "type": "relative",
+            "relation": "before",
+            "anchor": {
+              "type": "title",
+              "query": "interview"
+            }
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "break",
+        "title": "Break",
+        "dateKey": "2026-09-08",
+        "start": 940,
+        "end": 960
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0027",
+      "utterance": "Find the next free 45 minute slot for study",
+      "source": {
+        "key": "parser",
+        "line": 68
+      },
+      "family": "calendar-fit",
+      "feature": "next-free-slot-longer-than-earlier-gaps",
+      "calendarActions": [
+        {
+          "type": "fit",
+          "title": "study",
+          "durationMinutes": 45,
+          "destination": {
+            "type": "nextFree"
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "study",
+        "title": "Study",
+        "dateKey": "2026-09-08",
+        "start": 600,
+        "end": 645
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0028",
+      "utterance": "Fit a 40 minute workout before dinner",
+      "source": {
+        "key": "parser",
+        "line": 69
+      },
+      "family": "calendar-fit",
+      "feature": "fit-existing-title-resize-and-place-no-duplicate",
+      "calendarActions": [
+        {
+          "type": "fit",
+          "title": "workout",
+          "durationMinutes": 40,
+          "destination": {
+            "type": "relative",
+            "relation": "before",
+            "anchor": {
+              "type": "title",
+              "query": "dinner"
+            }
+          }
+        }
+      ],
+      "eventChanges": [
+        {
+          "id": "R-Workout",
+          "patch": {
+            "start": 1100,
+            "end": 1140
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0029",
+      "utterance": "Make room for a 25 minute break between 3 and 5",
+      "source": {
+        "key": "parser",
+        "line": 71
+      },
+      "family": "calendar-fit",
+      "feature": "make-room-window-without-displacing-fixed-time",
+      "calendarActions": [
+        {
+          "type": "fit",
+          "title": "break",
+          "durationMinutes": 25,
+          "destination": {
+            "type": "window",
+            "start": 900,
+            "end": 1020
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "break",
+        "title": "Break",
+        "dateKey": "2026-09-08",
+        "start": 900,
+        "end": 925
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0030",
+      "utterance": "Block an hour for focus at 10 am",
+      "source": {
+        "key": "parser",
+        "line": 72
+      },
+      "family": "calendar-create",
+      "feature": "article-hour-explicit-am-touching-endpoints",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "focus",
+          "durationMinutes": 60,
+          "destination": {
+            "type": "absolute",
+            "minutes": 600
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "focus",
+        "title": "Focus",
+        "dateKey": "2026-09-08",
+        "start": 600,
+        "end": 660
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0032",
+      "utterance": "Create a tea break after lunch",
+      "source": {
+        "key": "parser",
+        "line": 74
+      },
+      "family": "calendar-create",
+      "feature": "multiword-title-relative-after-protected-anchor",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "tea break",
+          "durationMinutes": 30,
+          "destination": {
+            "type": "relative",
+            "relation": "after",
+            "anchor": {
+              "type": "title",
+              "query": "lunch"
+            }
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "tea-break",
+        "title": "Tea break",
+        "dateKey": "2026-09-08",
+        "start": 795,
+        "end": 825
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0034",
+      "utterance": "Add reading tomorrow afternoon",
+      "source": {
+        "key": "parser",
+        "line": 76
+      },
+      "family": "calendar-create",
+      "feature": "next-day-afternoon-default-duration",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "reading",
+          "durationMinutes": 30,
+          "destination": {
+            "type": "dayPart",
+            "date": "tomorrow",
+            "part": "afternoon"
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "reading",
+        "title": "Reading",
+        "dateKey": "2026-09-09",
+        "start": 840,
+        "end": 870
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0035",
+      "utterance": "Uh, can you fit a quick twenty minute walk before dinner?",
+      "source": {
+        "key": "parser",
+        "line": 77
+      },
+      "family": "calendar-fit",
+      "feature": "disfluency-politeness-quick-duration-before-anchor",
+      "calendarActions": [
+        {
+          "type": "fit",
+          "title": "walk",
+          "durationMinutes": 20,
+          "destination": {
+            "type": "relative",
+            "relation": "before",
+            "anchor": {
+              "type": "title",
+              "query": "dinner"
+            }
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "walk",
+        "title": "Walk",
+        "dateKey": "2026-09-08",
+        "start": 1120,
+        "end": 1140
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0100",
+      "utterance": "Schedule debrief at noon",
+      "source": {
+        "key": "tide",
+        "line": 38
+      },
+      "family": "calendar-create",
+      "feature": "noon-lexical-time-default-duration",
+      "calendarActions": [
+        {
+          "type": "create",
+          "title": "debrief",
+          "durationMinutes": 30,
+          "destination": {
+            "type": "absolute",
+            "minutes": 720
+          }
+        }
+      ],
+      "newEvent": {
+        "id": "debrief",
+        "title": "Debrief",
+        "dateKey": "2026-09-08",
+        "start": 720,
+        "end": 750
+      },
+      "noCreation": false
+    },
+    {
+      "id": "repository-draft-0066",
+      "utterance": "Move the roadmap to tomorrow morning",
+      "source": {
+        "key": "parser",
+        "line": 114
+      },
+      "family": "calendar-defer",
+      "feature": "stable-title-next-day-morning",
+      "calendarActions": [
+        {
+          "type": "defer",
+          "selector": {
+            "type": "title",
+            "query": "roadmap"
+          },
+          "date": "tomorrow",
+          "part": "morning"
+        }
+      ],
+      "datedEventChanges": [
+        {
+          "id": "R-Roadmap",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-09",
+          "patch": {
+            "start": 540,
+            "end": 600
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0067",
+      "utterance": "Defer low priority work until tomorrow",
+      "source": {
+        "key": "parser",
+        "line": 115
+      },
+      "family": "calendar-defer",
+      "feature": "priority-filter-until-next-day",
+      "calendarActions": [
+        {
+          "type": "defer",
+          "selector": {
+            "type": "all",
+            "priority": "low"
+          },
+          "date": "tomorrow"
+        }
+      ],
+      "datedEventChanges": [
+        {
+          "id": "R-Roadmap",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-09",
+          "patch": {
+            "start": 840,
+            "end": 900
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0068",
+      "utterance": "Defer low priority work",
+      "source": {
+        "key": "parser",
+        "line": 116
+      },
+      "family": "calendar-defer",
+      "feature": "priority-filter-declared-tomorrow-default",
+      "calendarActions": [
+        {
+          "type": "defer",
+          "selector": {
+            "type": "all",
+            "priority": "low"
+          },
+          "date": "tomorrow"
+        }
+      ],
+      "datedEventChanges": [
+        {
+          "id": "R-Roadmap",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-09",
+          "patch": {
+            "start": 840,
+            "end": 900
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0069",
+      "utterance": "Move email to tomorrow",
+      "source": {
+        "key": "parser",
+        "line": 117
+      },
+      "family": "calendar-defer",
+      "feature": "partial-title-preserve-clock-next-day",
+      "calendarActions": [
+        {
+          "type": "defer",
+          "selector": {
+            "type": "title",
+            "query": "email"
+          },
+          "date": "tomorrow"
+        }
+      ],
+      "datedEventChanges": [
+        {
+          "id": "R-Email",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-09",
+          "patch": {
+            "start": 660,
+            "end": 705
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0070",
+      "utterance": "Push low priority work to Friday",
+      "source": {
+        "key": "parser",
+        "line": 118
+      },
+      "family": "calendar-defer",
+      "feature": "weekday-resolution-priority-selector",
+      "calendarActions": [
+        {
+          "type": "defer",
+          "selector": {
+            "type": "all",
+            "priority": "low"
+          },
+          "date": {
+            "dateKey": "2026-09-11"
+          }
+        }
+      ],
+      "datedEventChanges": [
+        {
+          "id": "R-Roadmap",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-11",
+          "patch": {
+            "start": 840,
+            "end": 900
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0072",
+      "utterance": "Move everything flexible after lunch to tomorrow",
+      "source": {
+        "key": "parser",
+        "line": 120
+      },
+      "family": "calendar-defer",
+      "feature": "batch-mobility-relative-anchor-preserve-fixed-complement",
+      "calendarActions": [
+        {
+          "type": "defer",
+          "selector": {
+            "type": "all",
+            "mobility": "light",
+            "after": {
+              "type": "title",
+              "query": "lunch"
+            }
+          },
+          "date": "tomorrow"
+        }
+      ],
+      "datedEventChanges": [
+        {
+          "id": "R-Roadmap",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-09",
+          "patch": {
+            "start": 840,
+            "end": 900
+          }
+        },
+        {
+          "id": "R-Workout",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-09",
+          "patch": {
+            "start": 1050,
+            "end": 1110
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0076",
+      "utterance": "Defer roadmap until Monday",
+      "source": {
+        "key": "parser",
+        "line": 124
+      },
+      "family": "calendar-defer",
+      "feature": "next-week-monday-stable-identity",
+      "calendarActions": [
+        {
+          "type": "defer",
+          "selector": {
+            "type": "title",
+            "query": "roadmap"
+          },
+          "date": {
+            "dateKey": "2026-09-14"
+          }
+        }
+      ],
+      "datedEventChanges": [
+        {
+          "id": "R-Roadmap",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-14",
+          "patch": {
+            "start": 840,
+            "end": 900
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0091",
+      "utterance": "Put roadmap on Thursday afternoon",
+      "source": {
+        "key": "tide",
+        "line": 27
+      },
+      "family": "calendar-defer",
+      "feature": "weekday-afternoon-title-reference",
+      "calendarActions": [
+        {
+          "type": "defer",
+          "selector": {
+            "type": "title",
+            "query": "roadmap"
+          },
+          "date": {
+            "dateKey": "2026-09-10"
+          },
+          "part": "afternoon"
+        }
+      ],
+      "datedEventChanges": [
+        {
+          "id": "R-Roadmap",
+          "sourceDate": "2026-09-08",
+          "destinationDate": "2026-09-10",
+          "patch": {
+            "start": 840,
+            "end": 900
+          }
+        }
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0073",
+      "utterance": "Cancel the dentist appointment",
+      "source": {
+        "key": "parser",
+        "line": 121
+      },
+      "family": "calendar-delete",
+      "feature": "named-fixed-event-destruction-requires-confirmation",
+      "calendarActions": [
+        {
+          "type": "delete",
+          "selector": {
+            "type": "title",
+            "query": "dentist appointment"
+          }
+        }
+      ],
+      "semantic": {
+        "historyDelta": 0,
+        "feedbackPhase": "confirmation"
+      },
+      "pendingRequestConfirmed": "0:delete:R-Dentist",
+      "pendingScopeIds": [
+        "R-Dentist"
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0075",
+      "utterance": "Remove workout",
+      "source": {
+        "key": "parser",
+        "line": 123
+      },
+      "family": "calendar-delete",
+      "feature": "flexible-event-destruction-still-requires-confirmation",
+      "calendarActions": [
+        {
+          "type": "delete",
+          "selector": {
+            "type": "title",
+            "query": "workout"
+          }
+        }
+      ],
+      "semantic": {
+        "historyDelta": 0,
+        "feedbackPhase": "confirmation"
+      },
+      "pendingRequestConfirmed": "0:delete:R-Workout",
+      "pendingScopeIds": [
+        "R-Workout"
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0173",
+      "utterance": "Combine email and roadmap",
+      "source": {
+        "key": "tide",
+        "line": 117
+      },
+      "family": "calendar-merge",
+      "feature": "two-named-sources-merge-review-no-premature-mutation",
+      "calendarActions": [
+        {
+          "type": "merge",
+          "selector": {
+            "type": "multi",
+            "selectors": [
+              {
+                "type": "title",
+                "query": "email"
+              },
+              {
+                "type": "title",
+                "query": "roadmap"
+              }
+            ]
+          }
+        }
+      ],
+      "semantic": {
+        "historyDelta": 0,
+        "feedbackPhase": "confirmation"
+      },
+      "pendingRequestConfirmed": "0:merge:R-Email|0:merge:R-Roadmap",
+      "pendingScopeIds": [
+        "R-Email",
+        "R-Roadmap"
+      ],
+      "noCreation": true
+    },
+    {
+      "id": "repository-draft-0174",
+      "utterance": "Merge email and deep work",
+      "source": {
+        "key": "tide",
+        "line": 118
+      },
+      "family": "calendar-merge",
+      "feature": "multiword-title-merge-pending-whole-source-preservation",
+      "calendarActions": [
+        {
+          "type": "merge",
+          "selector": {
+            "type": "multi",
+            "selectors": [
+              {
+                "type": "title",
+                "query": "email"
+              },
+              {
+                "type": "title",
+                "query": "deep work"
+              }
+            ]
+          }
+        }
+      ],
+      "semantic": {
+        "historyDelta": 0,
+        "feedbackPhase": "confirmation"
+      },
+      "pendingRequestConfirmed": "0:merge:R-Email|0:merge:R-DeepWork",
+      "pendingScopeIds": [
+        "R-Email",
+        "R-DeepWork"
+      ],
+      "noCreation": true
+    }
+  ]
+}

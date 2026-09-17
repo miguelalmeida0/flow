@@ -1,0 +1,1735 @@
+{
+  "sourceSha256": "341a5f8cd4bc720cedee6c24c10167512c39da596d8db413dc4babba61397295",
+  "records": [
+    {
+      "id": "curated-0037",
+      "line": 445,
+      "text": "show Miguel",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-miguel",
+            "kind": "person",
+            "name": "Miguel",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Miguel",
+          "prepare": false
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-miguel"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-miguel"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Miguel",
+          "detail": "No open commitments."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-miguel",
+          "focusedEntityId": "evaluation-person-miguel",
+          "selected": {
+            "id": "evaluation-person-miguel",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-miguel",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-0197",
+      "line": 2475,
+      "text": "who needs me",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "relevant"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-0364",
+      "line": 4599,
+      "text": "prepare for Nina tomorrow",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-nina",
+            "kind": "person",
+            "name": "Nina",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Nina",
+          "prepare": true,
+          "dateKey": "2026-09-06"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-nina"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-nina"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Nina",
+          "detail": "No local preparation notes yet."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-nina",
+          "focusedEntityId": "evaluation-person-nina",
+          "selected": {
+            "id": "evaluation-person-nina",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-nina",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": {
+          "recipe": "TEMPORAL-VIEW-PROJECTION",
+          "dateKey": "2026-09-06",
+          "calendar": "EXACT_BEFORE.calendars.2026-09-06",
+          "preserve": "ALL original calendar entries and non-view fields; new empty date entry only when absent; original people unchanged",
+          "temporal": {
+            "todayDateKey": "2026-09-05",
+            "scope": {
+              "kind": "day",
+              "dateKey": "2026-09-06"
+            },
+            "previousScope": {
+              "kind": "day",
+              "dateKey": "2026-09-05"
+            }
+          },
+          "revisionDelta": 1
+        },
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-0438",
+      "line": 5550,
+      "text": "show Amir Friday",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-amir",
+            "kind": "person",
+            "name": "Amir",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Amir",
+          "prepare": false,
+          "dateKey": "2026-09-11"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-amir"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-amir"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Amir",
+          "detail": "No open commitments."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-amir",
+          "focusedEntityId": "evaluation-person-amir",
+          "selected": {
+            "id": "evaluation-person-amir",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-amir",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": {
+          "recipe": "TEMPORAL-VIEW-PROJECTION",
+          "dateKey": "2026-09-11",
+          "calendar": {
+            "dateKey": "2026-09-11",
+            "events": [],
+            "deferred": [],
+            "breathingRooms": []
+          },
+          "preserve": "ALL original calendar entries and non-view fields; new empty date entry only when absent; original people unchanged",
+          "temporal": {
+            "todayDateKey": "2026-09-05",
+            "scope": {
+              "kind": "day",
+              "dateKey": "2026-09-11"
+            },
+            "previousScope": {
+              "kind": "day",
+              "dateKey": "2026-09-05"
+            }
+          },
+          "revisionDelta": 1
+        },
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-0497",
+      "line": 6293,
+      "text": "show Noah Monday",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-noah",
+            "kind": "person",
+            "name": "Noah",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Noah",
+          "prepare": false,
+          "dateKey": "2026-09-07"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-noah"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-noah"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Noah",
+          "detail": "No open commitments."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-noah",
+          "focusedEntityId": "evaluation-person-noah",
+          "selected": {
+            "id": "evaluation-person-noah",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-noah",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": {
+          "recipe": "TEMPORAL-VIEW-PROJECTION",
+          "dateKey": "2026-09-07",
+          "calendar": {
+            "dateKey": "2026-09-07",
+            "events": [],
+            "deferred": [],
+            "breathingRooms": []
+          },
+          "preserve": "ALL original calendar entries and non-view fields; new empty date entry only when absent; original people unchanged",
+          "temporal": {
+            "todayDateKey": "2026-09-05",
+            "scope": {
+              "kind": "day",
+              "dateKey": "2026-09-07"
+            },
+            "previousScope": {
+              "kind": "day",
+              "dateKey": "2026-09-05"
+            }
+          },
+          "revisionDelta": 1
+        },
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-0870",
+      "line": 11012,
+      "text": "prepare for Elena Tuesday",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-elena",
+            "kind": "person",
+            "name": "Elena",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Elena",
+          "prepare": true,
+          "dateKey": "2026-09-08"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-elena"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-elena"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Elena",
+          "detail": "No local preparation notes yet."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-elena",
+          "focusedEntityId": "evaluation-person-elena",
+          "selected": {
+            "id": "evaluation-person-elena",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-elena",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": {
+          "recipe": "TEMPORAL-VIEW-PROJECTION",
+          "dateKey": "2026-09-08",
+          "calendar": {
+            "dateKey": "2026-09-08",
+            "events": [],
+            "deferred": [],
+            "breathingRooms": []
+          },
+          "preserve": "ALL original calendar entries and non-view fields; new empty date entry only when absent; original people unchanged",
+          "temporal": {
+            "todayDateKey": "2026-09-05",
+            "scope": {
+              "kind": "day",
+              "dateKey": "2026-09-08"
+            },
+            "previousScope": {
+              "kind": "day",
+              "dateKey": "2026-09-05"
+            }
+          },
+          "revisionDelta": 1
+        },
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1353",
+      "line": 17131,
+      "text": "what promises are at risk",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "at-risk"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1366",
+      "line": 17297,
+      "text": "show Jonas Wednesday",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-jonas",
+            "kind": "person",
+            "name": "Jonas",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Jonas",
+          "prepare": false,
+          "dateKey": "2026-09-09"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-jonas"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-jonas"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Jonas",
+          "detail": "No open commitments."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-jonas",
+          "focusedEntityId": "evaluation-person-jonas",
+          "selected": {
+            "id": "evaluation-person-jonas",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-jonas",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": {
+          "recipe": "TEMPORAL-VIEW-PROJECTION",
+          "dateKey": "2026-09-09",
+          "calendar": {
+            "dateKey": "2026-09-09",
+            "events": [],
+            "deferred": [],
+            "breathingRooms": []
+          },
+          "preserve": "ALL original calendar entries and non-view fields; new empty date entry only when absent; original people unchanged",
+          "temporal": {
+            "todayDateKey": "2026-09-05",
+            "scope": {
+              "kind": "day",
+              "dateKey": "2026-09-09"
+            },
+            "previousScope": {
+              "kind": "day",
+              "dateKey": "2026-09-05"
+            }
+          },
+          "revisionDelta": 1
+        },
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1505",
+      "line": 19065,
+      "text": "which promises are at risk",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "at-risk"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1683",
+      "line": 21300,
+      "text": "prepare for Priya",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-priya",
+            "kind": "person",
+            "name": "Priya",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Priya",
+          "prepare": true
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-priya"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-priya"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Priya",
+          "detail": "No local preparation notes yet."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-priya",
+          "focusedEntityId": "evaluation-person-priya",
+          "selected": {
+            "id": "evaluation-person-priya",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-priya",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1727",
+      "line": 21855,
+      "text": "what does Maya owe me",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "owed-by",
+          "person": "Maya"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1761",
+      "line": 22278,
+      "text": "prepare me for Sarah",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-sarah",
+            "kind": "person",
+            "name": "Sarah",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Sarah",
+          "prepare": true
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-sarah"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-sarah"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Sarah",
+          "detail": "No local preparation notes yet."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-sarah",
+          "focusedEntityId": "evaluation-person-sarah",
+          "selected": {
+            "id": "evaluation-person-sarah",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-sarah",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1774",
+      "line": 22447,
+      "text": "what am I waiting on",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "waiting"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1853",
+      "line": 23439,
+      "text": "show relevant people",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "relevant"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-1956",
+      "line": 24748,
+      "text": "who do I need to follow up with",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "relevant"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-2048",
+      "line": 25910,
+      "text": "prepare for Sofia Thursday",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-sofia",
+            "kind": "person",
+            "name": "Sofia",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Sofia",
+          "prepare": true,
+          "dateKey": "2026-09-10"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-sofia"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-sofia"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Sofia",
+          "detail": "No local preparation notes yet."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-sofia",
+          "focusedEntityId": "evaluation-person-sofia",
+          "selected": {
+            "id": "evaluation-person-sofia",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-sofia",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": {
+          "recipe": "TEMPORAL-VIEW-PROJECTION",
+          "dateKey": "2026-09-10",
+          "calendar": {
+            "dateKey": "2026-09-10",
+            "events": [],
+            "deferred": [],
+            "breathingRooms": []
+          },
+          "preserve": "ALL original calendar entries and non-view fields; new empty date entry only when absent; original people unchanged",
+          "temporal": {
+            "todayDateKey": "2026-09-05",
+            "scope": {
+              "kind": "day",
+              "dateKey": "2026-09-10"
+            },
+            "previousScope": {
+              "kind": "day",
+              "dateKey": "2026-09-05"
+            }
+          },
+          "revisionDelta": 1
+        },
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-2156",
+      "line": 27261,
+      "text": "show Ana tomorrow",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-ana",
+            "kind": "person",
+            "name": "Ana",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Ana",
+          "prepare": false,
+          "dateKey": "2026-09-06"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-ana"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-ana"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Ana",
+          "detail": "No open commitments."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-ana",
+          "focusedEntityId": "evaluation-person-ana",
+          "selected": {
+            "id": "evaluation-person-ana",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-ana",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": {
+          "recipe": "TEMPORAL-VIEW-PROJECTION",
+          "dateKey": "2026-09-06",
+          "calendar": "EXACT_BEFORE.calendars.2026-09-06",
+          "preserve": "ALL original calendar entries and non-view fields; new empty date entry only when absent; original people unchanged",
+          "temporal": {
+            "todayDateKey": "2026-09-05",
+            "scope": {
+              "kind": "day",
+              "dateKey": "2026-09-06"
+            },
+            "previousScope": {
+              "kind": "day",
+              "dateKey": "2026-09-05"
+            }
+          },
+          "revisionDelta": 1
+        },
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-2221",
+      "line": 28084,
+      "text": "who am I waiting on",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "waiting"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-2410",
+      "line": 30468,
+      "text": "what does Daniel owe me",
+      "before": {
+        "people": [],
+        "commitments": []
+      },
+      "expected": {
+        "intent": "people-query",
+        "resolution": "execute",
+        "slots": {
+          "mode": "owed-by",
+          "person": "Daniel"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [],
+        "results": {
+          "personIds": [],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "No matching commitments",
+          "detail": "Nothing was invented or changed."
+        },
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-2464",
+      "line": 31142,
+      "text": "prepare me for Luis Friday",
+      "before": {
+        "people": [
+          {
+            "id": "evaluation-person-luis",
+            "kind": "person",
+            "name": "Luis",
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "person-query",
+        "resolution": "execute",
+        "slots": {
+          "query": "Luis",
+          "prepare": true,
+          "dateKey": "2026-09-11"
+        },
+        "route": "people",
+        "actions": [],
+        "targetIds": [
+          "evaluation-person-luis"
+        ],
+        "results": {
+          "personIds": [
+            "evaluation-person-luis"
+          ],
+          "commitmentIds": []
+        },
+        "feedback": {
+          "phase": "completed",
+          "title": "Luis",
+          "detail": "No local preparation notes yet."
+        },
+        "contextAfter": {
+          "focusedPersonId": "evaluation-person-luis",
+          "focusedEntityId": "evaluation-person-luis",
+          "selected": {
+            "id": "evaluation-person-luis",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "lastReferenced": {
+            "id": "evaluation-person-luis",
+            "kind": "person",
+            "at": 1788609600000
+          },
+          "topic": "person"
+        },
+        "fullAfter": {
+          "recipe": "TEMPORAL-VIEW-PROJECTION",
+          "dateKey": "2026-09-11",
+          "calendar": {
+            "dateKey": "2026-09-11",
+            "events": [],
+            "deferred": [],
+            "breathingRooms": []
+          },
+          "preserve": "ALL original calendar entries and non-view fields; new empty date entry only when absent; original people unchanged",
+          "temporal": {
+            "todayDateKey": "2026-09-05",
+            "scope": {
+              "kind": "day",
+              "dateKey": "2026-09-11"
+            },
+            "previousScope": {
+              "kind": "day",
+              "dateKey": "2026-09-05"
+            }
+          },
+          "revisionDelta": 1
+        },
+        "historyDelta": 0,
+        "commitCount": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true
+      }
+    },
+    {
+      "id": "curated-0085",
+      "line": 1055,
+      "text": "show commands",
+      "before": {},
+      "expected": {
+        "intent": "help",
+        "resolution": "execute",
+        "slots": {},
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "Show supported local actions without creating anything."
+        }
+      }
+    },
+    {
+      "id": "curated-0473",
+      "line": 5987,
+      "text": "resume listening",
+      "before": {},
+      "expected": {
+        "intent": "session",
+        "resolution": "execute",
+        "slots": {
+          "mode": "start"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "Acknowledge session request, not unobserved microphone acquisition."
+        },
+        "runtimeRequests": [
+          {
+            "event": "flow-live-command",
+            "detail": "start"
+          }
+        ],
+        "runtimeResult": "REQUEST_DISPATCH_ONLY; no physical microphone activation/permission/acoustic claim."
+      }
+    },
+    {
+      "id": "curated-0508",
+      "line": 6435,
+      "text": "undo last change",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "undo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No undo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-0568",
+      "line": 7198,
+      "text": "show last change",
+      "before": {},
+      "expected": {
+        "intent": "what-changed",
+        "resolution": "execute",
+        "slots": {},
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No changes yet; starting life document."
+        }
+      }
+    },
+    {
+      "id": "curated-0591",
+      "line": 7486,
+      "text": "what just changed",
+      "before": {},
+      "expected": {
+        "intent": "what-changed",
+        "resolution": "execute",
+        "slots": {},
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No changes yet; starting life document."
+        }
+      }
+    },
+    {
+      "id": "curated-0611",
+      "line": 7734,
+      "text": "undo",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "undo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No undo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-0655",
+      "line": 8287,
+      "text": "undo that",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "undo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No undo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-0691",
+      "line": 8753,
+      "text": "stop listening",
+      "before": {},
+      "expected": {
+        "intent": "session",
+        "resolution": "execute",
+        "slots": {
+          "mode": "sleep"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "Acknowledge session request, not unobserved microphone acquisition."
+        },
+        "runtimeRequests": [
+          {
+            "event": "flow-live-command",
+            "detail": "sleep"
+          }
+        ],
+        "runtimeResult": "REQUEST_DISPATCH_ONLY; no physical microphone activation/permission/acoustic claim."
+      }
+    },
+    {
+      "id": "curated-0719",
+      "line": 9116,
+      "text": "yes please",
+      "before": {},
+      "expected": {
+        "intent": "confirm",
+        "resolution": "execute",
+        "slots": {},
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "Nothing is waiting for confirmation."
+        }
+      }
+    },
+    {
+      "id": "curated-0922",
+      "line": 11670,
+      "text": "do that again",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "redo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No redo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-1401",
+      "line": 17741,
+      "text": "what changed",
+      "before": {},
+      "expected": {
+        "intent": "what-changed",
+        "resolution": "execute",
+        "slots": {},
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No changes yet; starting life document."
+        }
+      }
+    },
+    {
+      "id": "curated-1410",
+      "line": 17856,
+      "text": "confirm",
+      "before": {},
+      "expected": {
+        "intent": "confirm",
+        "resolution": "execute",
+        "slots": {},
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "Nothing is waiting for confirmation."
+        }
+      }
+    },
+    {
+      "id": "curated-1569",
+      "line": 19872,
+      "text": "never mind",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "undo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No undo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-1574",
+      "line": 19932,
+      "text": "start listening",
+      "before": {},
+      "expected": {
+        "intent": "session",
+        "resolution": "execute",
+        "slots": {
+          "mode": "start"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "Acknowledge session request, not unobserved microphone acquisition."
+        },
+        "runtimeRequests": [
+          {
+            "event": "flow-live-command",
+            "detail": "start"
+          }
+        ],
+        "runtimeResult": "REQUEST_DISPATCH_ONLY; no physical microphone activation/permission/acoustic claim."
+      }
+    },
+    {
+      "id": "curated-1634",
+      "line": 20685,
+      "text": "redo that",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "redo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No redo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-1788",
+      "line": 22620,
+      "text": "redo last change",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "redo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No redo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-1851",
+      "line": 23412,
+      "text": "what can I say",
+      "before": {},
+      "expected": {
+        "intent": "help",
+        "resolution": "execute",
+        "slots": {},
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "Show supported local actions without creating anything."
+        }
+      }
+    },
+    {
+      "id": "curated-1880",
+      "line": 23789,
+      "text": "go back one change",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "undo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No undo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-2202",
+      "line": 27844,
+      "text": "redo",
+      "before": {},
+      "expected": {
+        "intent": "history",
+        "resolution": "execute",
+        "slots": {
+          "direction": "redo"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "No redo entry exists; explicitly say nothing changed."
+        }
+      }
+    },
+    {
+      "id": "curated-2230",
+      "line": 28200,
+      "text": "pause listening",
+      "before": {},
+      "expected": {
+        "intent": "session",
+        "resolution": "execute",
+        "slots": {
+          "mode": "sleep"
+        },
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "revisionDelta": 0,
+        "past": [],
+        "future": [],
+        "noPending": true,
+        "noCreation": true,
+        "feedback": {
+          "phase": "completed",
+          "meaning": "Acknowledge session request, not unobserved microphone acquisition."
+        },
+        "runtimeRequests": [
+          {
+            "event": "flow-live-command",
+            "detail": "sleep"
+          }
+        ],
+        "runtimeResult": "REQUEST_DISPATCH_ONLY; no physical microphone activation/permission/acoustic claim."
+      }
+    }
+  ]
+}
+

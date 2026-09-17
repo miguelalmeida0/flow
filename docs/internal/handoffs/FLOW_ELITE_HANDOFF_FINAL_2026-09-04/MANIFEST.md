@@ -1,0 +1,29 @@
+# Package Manifest
+
+- `00_START_HERE.md`
+- `01_PRODUCT_MANDATE.md`
+- `02_FINAL_DESIGN_LOCK.md`
+- `03_UX_BEHAVIOR_SPEC.md`
+- `13_RUNBOOK.md`
+- `14_COPY_GUIDE.md`
+- `15_ANTI_GOALS.md`
+- `FLOW_MASTER_HANDOFF.md`
+- `MANIFEST.md`
+- `agents/AGENT_PROMPTS.md`
+- `design/COMPONENT_CONTRACTS.md`
+- `design/DESIGN_SYSTEM.md`
+- `design/FLOW_FINAL_LOCKED_REFERENCE.png`
+- `design/FLOW_FINAL_LOCKED_REFERENCE.sha256`
+- `design/RESPONSIVE_SPEC.md`
+- `design/tailwind.flow.tokens.ts`
+- `design/tokens.css`
+- `design/tokens.json`
+- `engineering/ARCHITECTURE.md`
+- `engineering/COST_AND_RELIABILITY.md`
+- `engineering/IMPLEMENTATION_SEQUENCE.md`
+- `product/FUTURE_WORLD_ROADMAP.md`
+- `product/MASCOT_BEHAVIOR.md`
+- `product/SENSES_AND_INSTINCTS.md`
+- `product/TIME_TRAVEL_WEATHER_OUTFIT.md`
+- `qa/ACCEPTANCE_AND_QA.md`
+- `reference/flow_radical_product_bets_deep_research.json`

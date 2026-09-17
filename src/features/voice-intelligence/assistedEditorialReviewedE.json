@@ -1,0 +1,754 @@
+{
+  "batch": "new-assisted-841-860",
+  "source": "assisted-editorial",
+  "status": "pending-independent-review-and-execution",
+  "contractVersion": "2026-09-08",
+  "defaults": {
+    "contextOverrides": {},
+    "semantic": {
+      "historyDelta": 0,
+      "feedbackPhase": "completed",
+      "noCreation": true,
+      "actions": []
+    }
+  },
+  "expansion": "Merge contextOverrides over named BEFORE fixture context; semantic defaults merge, arrays replace. collectionChanges clones the named COMPLETE BEFORE collection then applies only stable-ID patches and updatedAt=fixture clock to explicitly edited records. Supply complete array as semantic.collections. Never derive from actualAfter/parser. All unlisted document fields unchanged. H1 exact Undo/Redo.",
+  "staticCheck": "Auditor reports zero normalized/editorialFingerprint/conservative-normalization collisions against4082 extracted archival rows. This is bookkeeping, not admission, acceptance, human provenance or ASR evidence.",
+  "cases": [
+    {
+      "id": 841,
+      "utterance": "For this appointment, use the name 'Research & Development: round two'.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-literal-name",
+      "feature": "fronted target frame and quoted ampersand/colon value",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "title": "Research & Development: round two"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 842,
+      "utterance": "The name is fine; just color this one orange.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-metadata-isolation",
+      "feature": "preservation statement precedes the one authorized color edit",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "color": "orange"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 843,
+      "utterance": "Tag this meeting 'Board prep', and leave the title alone.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-label-isolation",
+      "feature": "quoted multiword label plus explicit unchanged-title constraint",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "labels": [
+                "Board prep"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 844,
+      "utterance": "Treat the interview as critical, without moving its time.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-fixed-metadata",
+      "feature": "named fixed event receives importance edit without movement authorization",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E3",
+            "patch": {
+              "importance": "critical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 845,
+      "utterance": "Let this meeting float; don't treat it as anchored.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-mobility",
+      "feature": "explicit floating mobility changes setting, not immediate time geometry",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "update"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "mobility": "fluid"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 846,
+      "utterance": "Keep Shareholders exactly where it is when you rearrange the rest.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-protection",
+      "feature": "future reflow condition establishes protection, not an unsolicited immediate reflow",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "protect"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "protected": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 847,
+      "utterance": "Release dinner's protection, but don't reschedule it.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-unprotect",
+      "feature": "release protection boolean while preserving time and existing kind/mobility metadata",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "unprotect"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E4",
+            "patch": {
+              "protected": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 848,
+      "utterance": "Move Deep Work to four, then bring Shareholders forward to eleven.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-atomic-multi-target",
+      "feature": "two distinct named moves with forward-to absolute-clock phrasing",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar"
+        },
+        "calendarActionTypes": [
+          "move",
+          "move"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E2",
+            "patch": {
+              "start": 960,
+              "end": 1020
+            }
+          },
+          {
+            "id": "E1",
+            "patch": {
+              "start": 660,
+              "end": 690
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 849,
+      "utterance": "Let Deep Work finish at three thirty; keep its start where it is.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-explicit-end",
+      "feature": "finish clock alters end only under explicit fixed-start constraint",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "resize",
+                "mode": "end",
+                "minutes": 930
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "resize"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E2",
+            "patch": {
+              "end": 930
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 850,
+      "utterance": "Make this fifteen minutes shorter and shift it half an hour later.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-atomic-duration-shift",
+      "feature": "comparative duration and relative placement compose on one stable target",
+      "expected": {
+        "intent": "calendar",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "calendar",
+          "request": {
+            "actions": [
+              {
+                "type": "resize",
+                "mode": "add",
+                "minutes": -15
+              },
+              {
+                "type": "shift",
+                "deltaMinutes": 30
+              }
+            ]
+          }
+        },
+        "calendarActionTypes": [
+          "resize",
+          "shift"
+        ],
+        "actions": [
+          {
+            "type": "calendar.request",
+            "selectedId": "E1"
+          }
+        ],
+        "eventChanges": [
+          {
+            "id": "E1",
+            "patch": {
+              "start": 720,
+              "end": 735
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 851,
+      "utterance": "Don't interpret 'remove dinner' as a request; I'm quoting the message.",
+      "fixtureId": "calendar-reference",
+      "family": "quoted-destructive-negative",
+      "feature": "explicit quotation disclaimer defeats inner destructive words",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 852,
+      "utterance": "I've selected it to read it, not to delete it.",
+      "fixtureId": "calendar-reference",
+      "family": "selection-is-not-authorization",
+      "feature": "selection context alone cannot authorize negated destructive language",
+      "expected": {
+        "intent": "unsupported",
+        "resolution": "unsupported",
+        "route": "calendar"
+      },
+      "semantic": {
+        "feedbackPhase": "error",
+        "intent": {
+          "type": "unsupported"
+        }
+      }
+    },
+    {
+      "id": 853,
+      "utterance": "Leave the schedule untouched and show me Capture.",
+      "fixtureId": "calendar-reference",
+      "family": "global-navigation-no-data",
+      "feature": "positive navigation follows explicit schedule-preservation clause",
+      "expected": {
+        "intent": "navigate",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate",
+          "route": "inbox"
+        }
+      }
+    },
+    {
+      "id": 854,
+      "utterance": "Keep every appointment, just show this week's calendar.",
+      "fixtureId": "calendar-reference",
+      "family": "calendar-week-view",
+      "feature": "all existing events retained while changing only visible week scope",
+      "expected": {
+        "intent": "navigate-temporal",
+        "resolution": "execute",
+        "route": "calendar"
+      },
+      "semantic": {
+        "intent": {
+          "type": "navigate-temporal",
+          "route": "calendar",
+          "scope": {
+            "kind": "week",
+            "dateKey": "2026-09-07",
+            "endDateKey": "2026-09-13"
+          }
+        },
+        "scope": {
+          "kind": "week",
+          "dateKey": "2026-09-07",
+          "endDateKey": "2026-09-13"
+        }
+      }
+    },
+    {
+      "id": 855,
+      "utterance": "Use this as the new paragraph: 'No, I am not cancelling anything.'",
+      "fixtureId": "journal-editing",
+      "family": "journal-paragraph-value",
+      "feature": "fronted replacement-value introduction preserves literal negative cancellation text",
+      "expected": {
+        "intent": "journal-text-edit",
+        "resolution": "execute",
+        "route": "journal"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "journal-text-edit",
+          "unit": "paragraph",
+          "operation": "replace",
+          "value": "No, I am not cancelling anything."
+        },
+        "actions": [
+          {
+            "type": "journal.update",
+            "entryId": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nNo, I am not cancelling anything."
+            }
+          }
+        ],
+        "journalChanges": [
+          {
+            "id": "J1",
+            "patch": {
+              "text": "The train was late. I still enjoyed the walk.\n\nNo, I am not cancelling anything."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 856,
+      "utterance": "The note we just mentioned needs to read 'Check both boxes: warranty and labour'.",
+      "fixtureId": "capture-reference",
+      "family": "capture-conversational-value",
+      "feature": "fresh mentioned-note reference plus literal colon/conjunction text",
+      "expected": {
+        "intent": "capture-edit",
+        "resolution": "execute",
+        "route": "inbox"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "capture-edit",
+          "title": "Check both boxes: warranty and labour"
+        },
+        "actions": [
+          {
+            "type": "capture.update",
+            "captureId": "C1",
+            "title": "Check both boxes: warranty and labour"
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "captures",
+          "id": "C1",
+          "patch": {
+            "title": "Check both boxes: warranty and labour"
+          }
+        }
+      ]
+    },
+    {
+      "id": 857,
+      "utterance": "Pause work on Home library, but leave its steps intact.",
+      "fixtureId": "outcome-reference",
+      "family": "outcome-status-isolation",
+      "feature": "pause plan work means plan status, not Live Session or step deletion",
+      "expected": {
+        "intent": "plan-status",
+        "resolution": "execute",
+        "route": "plans"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "plan-status",
+          "status": "paused"
+        },
+        "actions": [
+          {
+            "type": "plan.update",
+            "planId": "O1",
+            "patch": {
+              "status": "paused"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "plans",
+          "id": "O1",
+          "patch": {
+            "status": "paused"
+          }
+        }
+      ]
+    },
+    {
+      "id": 858,
+      "utterance": "Daniel's delivery confirmation is still open; defer it until Thursday.",
+      "fixtureId": "commitment-reference",
+      "family": "commitment-intra-turn-reference",
+      "feature": "explicit promise identification establishes within-turn it despite different recent target",
+      "expected": {
+        "intent": "commitment-defer",
+        "resolution": "execute",
+        "route": "people"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "commitment-defer",
+          "dateKey": "2026-09-10"
+        },
+        "actions": [
+          {
+            "type": "commitment.update",
+            "commitmentId": "K2",
+            "patch": {
+              "status": "deferred",
+              "deferredUntil": "2026-09-10"
+            }
+          }
+        ]
+      },
+      "collectionChanges": [
+        {
+          "collection": "commitments",
+          "id": "K2",
+          "patch": {
+            "status": "deferred",
+            "deferredUntil": "2026-09-10"
+          }
+        }
+      ]
+    },
+    {
+      "id": 859,
+      "utterance": "Only the lettering should move up; keep the photograph where it is.",
+      "fixtureId": "memory-source",
+      "family": "memory-control-isolation",
+      "feature": "text position and image position disambiguated explicitly",
+      "expected": {
+        "intent": "memory-update",
+        "resolution": "execute",
+        "route": "memories"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "memory-update",
+          "property": "textY",
+          "operation": "up"
+        },
+        "actions": [
+          {
+            "type": "memory.update",
+            "memoryId": "M1",
+            "patch": {
+              "textOffset": {
+                "x": 0,
+                "y": -8
+              }
+            }
+          }
+        ],
+        "memoryChanges": [
+          {
+            "id": "M1",
+            "patch": {
+              "textOffset": {
+                "x": 0,
+                "y": -8
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 860,
+      "utterance": "Lower every layer by one notch without touching the master level.",
+      "fixtureId": "atmosphere",
+      "family": "atmosphere-all-layer-scope",
+      "feature": "every layer moves one canonical step while explicit master exclusion stays exact",
+      "expected": {
+        "intent": "atmosphere-adjust",
+        "resolution": "execute",
+        "route": "atmosphere"
+      },
+      "semantic": {
+        "historyDelta": 1,
+        "intent": {
+          "type": "atmosphere-adjust",
+          "property": "volume",
+          "operation": "decrease"
+        },
+        "actions": [
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "texture",
+            "patch": {
+              "volume": 0.1
+            }
+          },
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          },
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "tone",
+            "patch": {
+              "volume": 0.08
+            }
+          },
+          {
+            "type": "atmosphere.layer.update",
+            "layerId": "pulse",
+            "patch": {
+              "volume": 0
+            }
+          }
+        ],
+        "layerChanges": [
+          {
+            "id": "texture",
+            "patch": {
+              "volume": 0.1
+            }
+          },
+          {
+            "id": "rain",
+            "patch": {
+              "volume": 0.22
+            }
+          },
+          {
+            "id": "tone",
+            "patch": {
+              "volume": 0.08
+            }
+          },
+          {
+            "id": "pulse",
+            "patch": {
+              "volume": 0
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,2000 @@
+{
+  "records": [
+    {
+      "id": "curated-0268",
+      "line": 3385,
+      "text": "what is the weather",
+      "before": {},
+      "expected": {
+        "intent": "weather-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "weather": null,
+          "temperatureC": null,
+          "sunset": null,
+          "umbrella": "unknown"
+        },
+        "feedbackMeaning": "Forecast unavailable; distinguish neutral clothing suggestions from a live forecast."
+      }
+    },
+    {
+      "id": "curated-0310",
+      "line": 3915,
+      "text": "I need forty minutes",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "evaluation focus",
+            "outcome": "Ready: evaluation focus",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 40,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 40,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 40
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 40 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-0362",
+      "line": 4572,
+      "text": "focus on planning for half an hour",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "planning",
+            "outcome": "Ready: planning",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 30,
+              "status": "active",
+              "subjectId": "evaluation-plan",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [
+          "evaluation-plan"
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 30,
+                "status": "active",
+                "subjectId": "evaluation-plan",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 30,
+          "subjectQuery": "planning"
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 30 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-0391",
+      "line": 4942,
+      "text": "give me twenty minutes",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "evaluation focus",
+            "outcome": "Ready: evaluation focus",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 20,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 20,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 20
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 20 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-0420",
+      "line": 5313,
+      "text": "do that",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-act",
+        "resolution": "execute",
+        "route": "good-to-know",
+        "actions": [
+          {
+            "type": "instinct.act",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          },
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 25,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": {
+          "clone": "EXACT_POST_EXPOSURE",
+          "replace": {
+            "instinctState.actedOnAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            },
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 25,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          }
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "instinctId": "clear-focus-window"
+        },
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Started25-minute focus in current flexible block; one user transaction, no new Calendar event.",
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "contextAfter": {
+          "selectedInsightId": "clear-focus-window",
+          "pendingIntent": "absent"
+        }
+      }
+    },
+    {
+      "id": "curated-0585",
+      "line": 7412,
+      "text": "can I walk before sunset",
+      "before": {},
+      "expected": {
+        "intent": "daylight-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "weather": null,
+          "temperatureC": null,
+          "sunset": null,
+          "umbrella": "unknown"
+        },
+        "feedbackMeaning": "Daylight data unavailable; no sunset/walk safety claim."
+      }
+    },
+    {
+      "id": "curated-0616",
+      "line": 7795,
+      "text": "how do you know",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-why",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": "EXACT_POST_EXPOSURE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Explain usable time in the current flexible Roadmap block, not free time until Interview."
+      }
+    },
+    {
+      "id": "curated-0694",
+      "line": 8789,
+      "text": "how much clear time do I have",
+      "before": {},
+      "expected": {
+        "intent": "focus-availability",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "minutes": 60,
+          "start": 840,
+          "end": 900,
+          "sourceEventId": "roadmap",
+          "nextFixedAnchorId": "interview",
+          "nextFixedAnchorStart": 1020
+        },
+        "feedbackMeaning": "60 minutes usable in the current flexible Roadmap block, until3PM; not60empty minutes before the5PM Interview."
+      }
+    },
+    {
+      "id": "curated-0842",
+      "line": 10670,
+      "text": "what's next",
+      "before": {},
+      "expected": {
+        "intent": "next-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [
+          "workout"
+        ],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "queryKind": "event"
+        },
+        "results": {
+          "eventId": "workout",
+          "title": "Workout",
+          "start": 930,
+          "end": 990,
+          "dateKey": "2026-09-05"
+        },
+        "feedbackMeaning": "Workout, 930–990 local minutes; next means not-yet-started. Current Roadmap is not next."
+      }
+    },
+    {
+      "id": "curated-0850",
+      "line": 10769,
+      "text": "anything I should know",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": "EXACT_POST_EXPOSURE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": false,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Describe the usable current flexible block and offer a25-minute focus proposal without starting it.",
+        "pendingActions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 25,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "pending": {
+          "summary": "Start 25 minutes of focus?",
+          "confirmLabel": "Do it",
+          "requiresAffirmativeUserResponse": true
+        },
+        "contextAfter": {
+          "selectedInsightId": "clear-focus-window",
+          "topic": "recommendation"
+        }
+      }
+    },
+    {
+      "id": "curated-0852",
+      "line": 10793,
+      "text": "what fits right now",
+      "before": {},
+      "expected": {
+        "intent": "query-now",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "excluded": []
+        },
+        "results": [],
+        "nowWindow": {
+          "dateKey": "2026-09-05",
+          "start": 840,
+          "end": 900,
+          "minutes": 0,
+          "currentEventId": "roadmap"
+        },
+        "feedbackMeaning": "Nothing ready fits during the occupied current Roadmap block. Do not recommend invented entities."
+      }
+    },
+    {
+      "id": "curated-0969",
+      "line": 12271,
+      "text": "what needs me now",
+      "before": {},
+      "expected": {
+        "intent": "query-now",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "excluded": []
+        },
+        "results": [],
+        "nowWindow": {
+          "dateKey": "2026-09-05",
+          "start": 840,
+          "end": 900,
+          "minutes": 0,
+          "currentEventId": "roadmap"
+        },
+        "feedbackMeaning": "Nothing ready fits during the occupied current Roadmap block. Do not recommend invented entities."
+      }
+    },
+    {
+      "id": "curated-1124",
+      "line": 14218,
+      "text": "what can I do right now",
+      "before": {},
+      "expected": {
+        "intent": "query-now",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "excluded": []
+        },
+        "results": [],
+        "nowWindow": {
+          "dateKey": "2026-09-05",
+          "start": 840,
+          "end": 900,
+          "minutes": 0,
+          "currentEventId": "roadmap"
+        },
+        "feedbackMeaning": "Nothing ready fits during the occupied current Roadmap block. Do not recommend invented entities."
+      }
+    },
+    {
+      "id": "curated-1140",
+      "line": 14414,
+      "text": "what needs my attention",
+      "before": {},
+      "expected": {
+        "intent": "query-now",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "excluded": []
+        },
+        "results": [],
+        "nowWindow": {
+          "dateKey": "2026-09-05",
+          "start": 840,
+          "end": 900,
+          "minutes": 0,
+          "currentEventId": "roadmap"
+        },
+        "feedbackMeaning": "Nothing ready fits during the occupied current Roadmap block. Do not recommend invented entities."
+      }
+    },
+    {
+      "id": "curated-1143",
+      "line": 14450,
+      "text": "not now",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-dismiss",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "instinct.dismiss",
+            "instinctId": "clear-focus-window",
+            "until": "2026-09-05T16:00:00.000Z"
+          }
+        ],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": {
+          "clone": "EXACT_POST_EXPOSURE",
+          "replace": {
+            "instinctState.dismissedUntil": {
+              "clear-focus-window": "2026-09-05T16:00:00.000Z"
+            }
+          }
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Insight set aside for four hours; Calendar unchanged."
+      }
+    },
+    {
+      "id": "curated-1170",
+      "line": 14793,
+      "text": "why this",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-why",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": "EXACT_POST_EXPOSURE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Explain usable time in the current flexible Roadmap block, not free time until Interview."
+      }
+    },
+    {
+      "id": "curated-1214",
+      "line": 15361,
+      "text": "give me fifteen minutes",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "evaluation focus",
+            "outcome": "Ready: evaluation focus",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 15,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 15,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 15
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 15 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-1279",
+      "line": 16191,
+      "text": "start a fifty minute focus",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "evaluation focus",
+            "outcome": "Ready: evaluation focus",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 50,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 50,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 50
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 50 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-1321",
+      "line": 16720,
+      "text": "dismiss that",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-dismiss",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "instinct.dismiss",
+            "instinctId": "clear-focus-window",
+            "until": "2026-09-05T16:00:00.000Z"
+          }
+        ],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": {
+          "clone": "EXACT_POST_EXPOSURE",
+          "replace": {
+            "instinctState.dismissedUntil": {
+              "clear-focus-window": "2026-09-05T16:00:00.000Z"
+            }
+          }
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Insight set aside for four hours; Calendar unchanged."
+      }
+    },
+    {
+      "id": "curated-1328",
+      "line": 16811,
+      "text": "put this in motion",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-act",
+        "resolution": "execute",
+        "route": "good-to-know",
+        "actions": [
+          {
+            "type": "instinct.act",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          },
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 25,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": {
+          "clone": "EXACT_POST_EXPOSURE",
+          "replace": {
+            "instinctState.actedOnAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            },
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 25,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          }
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "instinctId": "clear-focus-window"
+        },
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Started25-minute focus in current flexible block; one user transaction, no new Calendar event.",
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "contextAfter": {
+          "selectedInsightId": "clear-focus-window",
+          "pendingIntent": "absent"
+        }
+      }
+    },
+    {
+      "id": "curated-1384",
+      "line": 17529,
+      "text": "start that",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-act",
+        "resolution": "execute",
+        "route": "good-to-know",
+        "actions": [
+          {
+            "type": "instinct.act",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          },
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 25,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": {
+          "clone": "EXACT_POST_EXPOSURE",
+          "replace": {
+            "instinctState.actedOnAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            },
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 25,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          }
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "instinctId": "clear-focus-window"
+        },
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Started25-minute focus in current flexible block; one user transaction, no new Calendar event.",
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "contextAfter": {
+          "selectedInsightId": "clear-focus-window",
+          "pendingIntent": "absent"
+        }
+      }
+    },
+    {
+      "id": "curated-1531",
+      "line": 19390,
+      "text": "what is my next meeting",
+      "before": {},
+      "expected": {
+        "intent": "next-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [
+          "interview"
+        ],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "queryKind": "meeting"
+        },
+        "results": {
+          "eventId": "interview",
+          "title": "Interview",
+          "start": 1020,
+          "end": 1080,
+          "dateKey": "2026-09-05"
+        },
+        "feedbackMeaning": "Interview, 1020–1080 local minutes; next means not-yet-started. Current Roadmap is not next."
+      }
+    },
+    {
+      "id": "curated-1648",
+      "line": 20863,
+      "text": "what should I wear",
+      "before": {},
+      "expected": {
+        "intent": "outfit-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "weather": null,
+          "temperatureC": null,
+          "sunset": null,
+          "umbrella": "unknown"
+        },
+        "feedbackMeaning": "Forecast unavailable; distinguish neutral clothing suggestions from a live forecast."
+      }
+    },
+    {
+      "id": "curated-1676",
+      "line": 21215,
+      "text": "how much time do I have",
+      "before": {},
+      "expected": {
+        "intent": "focus-availability",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "minutes": 60,
+          "start": 840,
+          "end": 900,
+          "sourceEventId": "roadmap",
+          "nextFixedAnchorId": "interview",
+          "nextFixedAnchorStart": 1020
+        },
+        "feedbackMeaning": "60 minutes usable in the current flexible Roadmap block, until3PM; not60empty minutes before the5PM Interview."
+      }
+    },
+    {
+      "id": "curated-1688",
+      "line": 21363,
+      "text": "give me thirty minutes",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "evaluation focus",
+            "outcome": "Ready: evaluation focus",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 30,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 30,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 30
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 30 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-1799",
+      "line": 22759,
+      "text": "can I get forty five minutes",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "evaluation focus",
+            "outcome": "Ready: evaluation focus",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 45,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 45,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 45
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 45 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-1815",
+      "line": 22961,
+      "text": "how much focus time do I have",
+      "before": {},
+      "expected": {
+        "intent": "focus-availability",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "minutes": 60,
+          "start": 840,
+          "end": 900,
+          "sourceEventId": "roadmap",
+          "nextFixedAnchorId": "interview",
+          "nextFixedAnchorStart": 1020
+        },
+        "feedbackMeaning": "60 minutes usable in the current flexible Roadmap block, until3PM; not60empty minutes before the5PM Interview."
+      }
+    },
+    {
+      "id": "curated-1821",
+      "line": 23039,
+      "text": "show my next anchor",
+      "before": {},
+      "expected": {
+        "intent": "next-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [
+          "interview"
+        ],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "queryKind": "anchor"
+        },
+        "results": {
+          "eventId": "interview",
+          "title": "Interview",
+          "start": 1020,
+          "end": 1080,
+          "dateKey": "2026-09-05"
+        },
+        "feedbackMeaning": "Interview, 1020–1080 local minutes; next means not-yet-started. Current Roadmap is not next."
+      }
+    },
+    {
+      "id": "curated-1842",
+      "line": 23304,
+      "text": "what should I know",
+      "before": {},
+      "ambient": {
+        "actions": [
+          {
+            "type": "instinct.shown",
+            "instinctId": "clear-focus-window",
+            "at": "2026-09-05T12:00:00.000Z"
+          }
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "instinctState.lastShownAt": {
+              "clear-focus-window": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        },
+        "revisionDelta": 1,
+        "historyDelta": 0,
+        "commitCount": 0
+      },
+      "expected": {
+        "intent": "instinct-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [
+          "clear-focus-window"
+        ],
+        "fullAfter": "EXACT_POST_EXPOSURE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": false,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "id": "clear-focus-window",
+          "title": "Great window for deep work",
+          "start": 840,
+          "end": 900,
+          "minutes": 60,
+          "sourceEventId": "roadmap"
+        },
+        "feedbackMeaning": "Describe the usable current flexible block and offer a25-minute focus proposal without starting it.",
+        "pendingActions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 25,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "pending": {
+          "summary": "Start 25 minutes of focus?",
+          "confirmLabel": "Do it",
+          "requiresAffirmativeUserResponse": true
+        },
+        "contextAfter": {
+          "selectedInsightId": "clear-focus-window",
+          "topic": "recommendation"
+        }
+      }
+    },
+    {
+      "id": "curated-1929",
+      "line": 24406,
+      "text": "something under half an hour",
+      "before": {},
+      "expected": {
+        "intent": "query-now",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "excluded": [],
+          "maxMinutes": 29
+        },
+        "results": [],
+        "nowWindow": {
+          "dateKey": "2026-09-05",
+          "start": 840,
+          "end": 900,
+          "minutes": 0,
+          "currentEventId": "roadmap"
+        },
+        "feedbackMeaning": "Nothing ready fits during the occupied current Roadmap block. Do not recommend invented entities.",
+        "boundaryMeaning": "Under half an hour is strict <30 minutes. With integer-minute estimates, maximum29; do not silently turn under into <=30."
+      }
+    },
+    {
+      "id": "curated-1946",
+      "line": 24620,
+      "text": "what time is sunset",
+      "before": {},
+      "expected": {
+        "intent": "daylight-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "weather": null,
+          "temperatureC": null,
+          "sunset": null,
+          "umbrella": "unknown"
+        },
+        "feedbackMeaning": "Daylight data unavailable; no sunset/walk safety claim."
+      }
+    },
+    {
+      "id": "curated-1989",
+      "line": 25168,
+      "text": "what is next",
+      "before": {},
+      "expected": {
+        "intent": "next-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [
+          "workout"
+        ],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "queryKind": "event"
+        },
+        "results": {
+          "eventId": "workout",
+          "title": "Workout",
+          "start": 930,
+          "end": 990,
+          "dateKey": "2026-09-05"
+        },
+        "feedbackMeaning": "Workout, 930–990 local minutes; next means not-yet-started. Current Roadmap is not next."
+      }
+    },
+    {
+      "id": "curated-2067",
+      "line": 26147,
+      "text": "do I need an umbrella",
+      "before": {},
+      "expected": {
+        "intent": "umbrella-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "weather": null,
+          "temperatureC": null,
+          "sunset": null,
+          "umbrella": "unknown"
+        },
+        "feedbackMeaning": "Rain detail unavailable; do not guess whether an umbrella is needed."
+      }
+    },
+    {
+      "id": "curated-2144",
+      "line": 27114,
+      "text": "focus on writing for twenty minutes",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "writing",
+            "outcome": "Ready: writing",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 20,
+              "status": "active",
+              "subjectId": "evaluation-plan",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [
+          "evaluation-plan"
+        ],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 20,
+                "status": "active",
+                "subjectId": "evaluation-plan",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 20,
+          "subjectQuery": "writing"
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 20 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-2159",
+      "line": 27297,
+      "text": "what fits before the next meeting",
+      "before": {},
+      "expected": {
+        "intent": "query-now",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "excluded": []
+        },
+        "results": [],
+        "nowWindow": {
+          "dateKey": "2026-09-05",
+          "start": 840,
+          "end": 900,
+          "minutes": 0,
+          "currentEventId": "roadmap"
+        },
+        "feedbackMeaning": "Nothing ready fits during the occupied current Roadmap block. Do not recommend invented entities."
+      }
+    },
+    {
+      "id": "curated-2225",
+      "line": 28135,
+      "text": "give me twenty five minutes",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "evaluation focus",
+            "outcome": "Ready: evaluation focus",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 25,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 25,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 25
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 25 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-2238",
+      "line": 28300,
+      "text": "what am I forgetting",
+      "before": {},
+      "expected": {
+        "intent": "query-now",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "excluded": []
+        },
+        "results": [],
+        "nowWindow": {
+          "dateKey": "2026-09-05",
+          "start": 840,
+          "end": 900,
+          "minutes": 0,
+          "currentEventId": "roadmap"
+        },
+        "feedbackMeaning": "Nothing ready fits during the occupied current Roadmap block. Do not recommend invented entities."
+      }
+    },
+    {
+      "id": "curated-2330",
+      "line": 29469,
+      "text": "I need thirty five minutes",
+      "before": {
+        "plans": [
+          {
+            "id": "evaluation-plan",
+            "kind": "plan",
+            "title": "evaluation focus",
+            "outcome": "Ready: evaluation focus",
+            "status": "active",
+            "stepIds": [],
+            "createdAt": "2026-09-05T12:00:00.000Z",
+            "updatedAt": "2026-09-05T12:00:00.000Z"
+          }
+        ]
+      },
+      "expected": {
+        "intent": "focus-request",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [
+          {
+            "type": "focus.start",
+            "session": {
+              "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+              "dateKey": "2026-09-05",
+              "startMinutes": 840,
+              "durationMinutes": 35,
+              "status": "active",
+              "startedAt": "2026-09-05T12:00:00.000Z"
+            }
+          }
+        ],
+        "targetIds": [],
+        "fullAfter": {
+          "clone": "EXACT_BEFORE",
+          "replace": {
+            "focus": {
+              "active": {
+                "id": "focus-2026-09-05-2026-09-05t12-00-00-000z",
+                "dateKey": "2026-09-05",
+                "startMinutes": 840,
+                "durationMinutes": 35,
+                "status": "active",
+                "startedAt": "2026-09-05T12:00:00.000Z"
+              }
+            }
+          },
+          "unchanged": "ALL OTHER FIELDS; no Calendar event or link added/moved"
+        },
+        "historyDelta": 1,
+        "commitCount": 1,
+        "noPending": true,
+        "noCreation": false,
+        "feedbackPhase": "completed",
+        "slots": {
+          "minutes": 35
+        },
+        "createdEntities": [
+          {
+            "kind": "focus-session",
+            "id": "focus-2026-09-05-2026-09-05t12-00-00-000z"
+          }
+        ],
+        "feedbackMeaning": "Started 35 minutes inside the current flexible Roadmap block; do not call this empty Calendar time."
+      }
+    },
+    {
+      "id": "curated-2357",
+      "line": 29808,
+      "text": "I have twenty minutes what fits",
+      "before": {},
+      "expected": {
+        "intent": "query-now",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {
+          "excluded": [],
+          "maxMinutes": 20
+        },
+        "results": [],
+        "nowWindow": {
+          "dateKey": "2026-09-05",
+          "start": 840,
+          "end": 900,
+          "minutes": 0,
+          "currentEventId": "roadmap"
+        },
+        "feedbackMeaning": "Nothing ready fits during the occupied current Roadmap block. Do not recommend invented entities."
+      }
+    },
+    {
+      "id": "curated-2460",
+      "line": 31091,
+      "text": "when does the sun set",
+      "before": {},
+      "expected": {
+        "intent": "daylight-query",
+        "resolution": "execute",
+        "route": "home",
+        "actions": [],
+        "targetIds": [],
+        "fullAfter": "EXACT_BEFORE",
+        "historyDelta": 0,
+        "commitCount": 0,
+        "noPending": true,
+        "noCreation": true,
+        "feedbackPhase": "completed",
+        "slots": {},
+        "results": {
+          "weather": null,
+          "temperatureC": null,
+          "sunset": null,
+          "umbrella": "unknown"
+        },
+        "feedbackMeaning": "Daylight data unavailable; no sunset/walk safety claim."
+      }
+    }
+  ]
+}
+
