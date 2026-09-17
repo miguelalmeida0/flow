@@ -1,5 +1,7 @@
 # Flow
 
+
+[Live Flow ↗](https://miguelalmeida0.github.io/flow/) *(external — leaves GitHub)*
 **Voice-first personal computing where conversation directly changes calendars, journals, people, and memories.**
 
 ## Conversation as interface
