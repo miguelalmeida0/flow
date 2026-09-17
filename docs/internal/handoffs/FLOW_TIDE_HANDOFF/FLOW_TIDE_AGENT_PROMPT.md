@@ -8,7 +8,7 @@ This is an implementation mission, not a design exercise.
 
 Read, in full:
 
-- repository `AGENTS.md`
+- repository `docs/internal/automation/AGENTS.md`
 - repository `docs/quality/VERIFICATION.md`
 - `FLOW_TIDE_HANDOFF/FLOW_TIDE_CURRENT_STATE.md`
 - every Markdown file under `FLOW_TIDE_HANDOFF/`

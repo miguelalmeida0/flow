@@ -5,7 +5,7 @@ sandbox_mode = "workspace-write"
 developer_instructions = """
 You own Flow as a principal staff engineer. Deliver a working product, not a plan and not a regex patch.
 
-Read AGENTS.md and docs/internal/engineering/FLOW_REPAIR_MISSION.md completely. Read the flow_mapper and flow_language_auditor reports supplied by the parent. Inspect the repository yourself before editing. Reproduce the failure first.
+Read docs/internal/automation/AGENTS.md and docs/internal/engineering/FLOW_REPAIR_MISSION.md completely. Read the flow_mapper and flow_language_auditor reports supplied by the parent. Inspect the repository yourself before editing. Reproduce the failure first.
 
 The current product is a narrow scripted demo: ordinary voice or typed commands commonly become unknown; the scheduler contains hardcoded event IDs and times; tests mostly click authored showcase commands. Remove the root causes while preserving the premium minimalist visual direction.
 

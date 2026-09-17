@@ -110,7 +110,7 @@ This list is intentionally labeled `at least`: the final exact added/modified/re
 
 ## Exact resume sequence
 
-1. Re-read repository `AGENTS.md`, this checkpoint, `docs/quality/VERIFICATION.md`, and the handoff prompt/acceptance files before editing.
+1. Re-read repository `docs/internal/automation/AGENTS.md`, this checkpoint, `docs/quality/VERIFICATION.md`, and the handoff prompt/acceptance files before editing.
 2. Resume `/root/tide_principal` first as the sole writer. Give it the four open/unverified late findings above and require it to finish the architecture extraction, token fix, determinism regression, and final documentation.
 3. Have the principal run the complete non-browser local gates and report exact output:
    - `npm run lint`

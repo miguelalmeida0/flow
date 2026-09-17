@@ -1,6 +1,6 @@
 P0 STOP-SHIP: repair Flow's global Live Session before any mascot work.
 
-Read repository AGENTS.md and docs/quality/VERIFICATION.md first.
+Read repository docs/internal/automation/AGENTS.md and docs/quality/VERIFICATION.md first.
 
 Then read every file under FLOW_ALWAYS_ON_VOICE_P0_HANDOFF in the exact order listed in FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/README.md.
 

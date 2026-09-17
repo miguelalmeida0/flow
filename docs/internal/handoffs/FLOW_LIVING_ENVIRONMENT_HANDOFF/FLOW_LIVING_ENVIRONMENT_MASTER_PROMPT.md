@@ -16,7 +16,7 @@ The product must feel calm, immediate, and inevitable—not like a dashboard, a 
 
 Before changing production code:
 
-1. Read repository `AGENTS.md` and `docs/quality/VERIFICATION.md`.
+1. Read repository `docs/internal/automation/AGENTS.md` and `docs/quality/VERIFICATION.md`.
 2. Read every file in this handoff.
 3. Inspect all screen and motion assets.
 4. Run the current lint, tests, build, and available browser release gate.

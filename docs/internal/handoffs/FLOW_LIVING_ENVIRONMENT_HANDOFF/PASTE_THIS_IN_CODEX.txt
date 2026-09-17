@@ -1,4 +1,4 @@
-Read the repository AGENTS.md and docs/quality/VERIFICATION.md first.
+Read the repository docs/internal/automation/AGENTS.md and docs/quality/VERIFICATION.md first.
 
 Then read every file under FLOW_LIVING_ENVIRONMENT_HANDOFF in the exact order listed in FLOW_LIVING_ENVIRONMENT_HANDOFF/README.md.
 

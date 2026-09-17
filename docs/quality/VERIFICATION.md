@@ -507,7 +507,7 @@ Synthetic voice result: **PASS**. Physical microphone result: **NOT RUN**.
 No usable repository revision is exposed in this workspace, so the release manifest records `repositoryRevision: unavailable`; no commit is fabricated. The files owned by this visual-reward mission are:
 
 ```text
-AGENTS.md
+docs/internal/automation/AGENTS.md
 README.md
 docs/quality/VERIFICATION.md
 docs/quality/design-qa.md
@@ -1110,7 +1110,7 @@ Do not reuse or manually combine files from the current pre-isolation canonical 
 
 ## September 8 critical voice-control rebuild — IN PROGRESS, NOT RELEASE-APPROVED
 
-Current request: `~/.codex/attachments/41200741-2058-475f-8a61-aad7ddda9e51/pasted-text.txt`.
+Current request: `~/docs/internal/automation/codex/attachments/41200741-2058-475f-8a61-aad7ddda9e51/pasted-text.txt`.
 The historical results above do not validate the changed September8 source. The active checkpoint and requirement ledger are in `artifacts/voice-control-rebuild-20260908/RESUME.md` and `RELEASE-ASSESSMENT.md`.
 
 Both required read-only audits completed; `voice_rebuild_principal` remains the sole production/test writer. Independent `flow_qa` has **not** started for this candidate. Root owns checkpoint/evidence consolidation and targeted manual browser review.

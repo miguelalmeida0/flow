@@ -2,7 +2,7 @@
 
 Saved: 2026-09-05, Europe/Berlin
 Workspace: `~/Downloads/flow-voice-calendar`
-Mission source: `~/.codex/attachments/dfdc18a0-5cb6-4525-a653-fa8f5f615d61/pasted-text.txt`
+Mission source: `~/docs/internal/automation/codex/attachments/dfdc18a0-5cb6-4525-a653-fa8f5f615d61/pasted-text.txt`
 
 ## Stop state
 

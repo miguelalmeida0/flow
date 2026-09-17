@@ -6,7 +6,7 @@ This is a stop-ship rescue mission. Do not stop after planning, auditing, or sca
 
 ## Read first
 
-1. Repository `AGENTS.md`
+1. Repository `docs/internal/automation/AGENTS.md`
 2. Repository `docs/quality/VERIFICATION.md`
 3. Every file in `FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF` in README order
 4. Every failure screenshot in `assets/current-state`

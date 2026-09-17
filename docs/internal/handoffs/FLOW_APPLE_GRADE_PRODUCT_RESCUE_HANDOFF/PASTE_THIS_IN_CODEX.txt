@@ -1,4 +1,4 @@
-Read repository AGENTS.md and docs/quality/VERIFICATION.md first.
+Read repository docs/internal/automation/AGENTS.md and docs/quality/VERIFICATION.md first.
 
 Then read every file under FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF in the exact order defined by FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/README.md.
 

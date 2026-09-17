@@ -74,7 +74,7 @@ The same final transcript string must follow the same pipeline as typed text.
 
 Remove all seed-specific logic. Scheduling must operate on event properties and selectors rather than IDs such as `roadmap`, `interview`, `deep-work`, or `email`.
 
-Implement general, pure transformations for the required command families in `AGENTS.md`.
+Implement general, pure transformations for the required command families in `docs/internal/automation/AGENTS.md`.
 
 At minimum:
 
@@ -307,7 +307,7 @@ Also provide:
 - one screenshot of a clarification state,
 - one screenshot of destructive confirmation,
 - a command-support matrix in the README,
-- updated `AGENTS.md` architecture and extension guidance,
+- updated `docs/internal/automation/AGENTS.md` architecture and extension guidance,
 - a concise `docs/quality/VERIFICATION.md` containing environment, commands, pass/fail status, and honest untested areas.
 
 ## Definition of done

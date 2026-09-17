@@ -8,7 +8,7 @@ mv agents.md docs/internal/agents/agents.legacy.md 2>/dev/null || true
 unzip -o ~/Downloads/flow-codex-principal-agent-kit.zip -d .
 ```
 
-The rename matters on default macOS case-insensitive filesystems because Codex's project instruction filename is `AGENTS.md`.
+The rename matters on default macOS case-insensitive filesystems because Codex's project instruction filename is `docs/internal/automation/AGENTS.md`.
 
 Then open a fresh Codex chat for this repository and paste:
 
