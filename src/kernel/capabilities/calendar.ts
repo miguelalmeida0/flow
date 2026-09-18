@@ -263,7 +263,16 @@ export const calendarMove: Capability<CalendarMoveArgs> = {
       actions: [{ type: "move", selector: selectorFor({ eventId: event.id }), destination }],
       constraints: [],
     };
-    const outcome = runRequest(ctx, request);
+    // runRequest's underlying multi-day world normalization can throw on a
+    // cross-day identity collision (see life-calendar-world.ts) rather than
+    // returning a typed failure — a capability must never let that escape as
+    // an uncaught exception, so convert it into an ordinary CapabilityFailure.
+    let outcome: ReturnType<typeof runRequest>;
+    try {
+      outcome = runRequest(ctx, request);
+    } catch (error) {
+      return fail("calendar-move-failed", error instanceof Error ? error.message : "That move could not be completed.");
+    }
     if (outcome.kind === "failed") return fail("calendar-move-failed", outcome.message);
     return ok(
       `Moved ${event.title} from ${formatMinutes(event.start)} to ${formatMinutes(args.startMinutes)}.`,

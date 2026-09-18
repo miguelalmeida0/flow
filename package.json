@@ -17,6 +17,7 @@
     "check": "npm run lint && npm run test:run && npm run build",
     "test:e2e": "TMPDIR=${TMPDIR:-$PWD/node_modules/.tmp} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/node_modules/.cache/ms-playwright} node scripts/run-e2e.mjs",
     "test:e2e:dev": "TMPDIR=${TMPDIR:-$PWD/node_modules/.tmp} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/node_modules/.cache/ms-playwright} node scripts/run-e2e.mjs --dev",
+    "companion:dev": "node server/desktop-bridge/index.mjs",
     "qa:release": "node scripts/qa-release.mjs",
     "qa:design-migration": "node scripts/qa-design-migration.mjs",
     "qa:motion": "node scripts/qa-motion.mjs"

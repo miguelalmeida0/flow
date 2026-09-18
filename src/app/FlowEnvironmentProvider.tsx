@@ -53,6 +53,10 @@ import { calendarReferenceScope, calendarRequestSourceDate } from "./calendarCom
 import { initialCommitmentView, commitmentViewCommands, type CommitmentViewState } from "../features/people/commitmentView";
 import { entityViewDescription, type EntityEditor, type EntityViewIntent } from "../features/entity-navigation/entityView";
 import { initialCommandPresentation, type CommandPresentation, type PresentationIntent } from "../shared/command/presentationCapability";
+import { runKernelTurn, createBridgeSession, fileReference, recentFileToReference, type RecentFileMeta } from "../kernel/productionBridge";
+import { rememberSearchResults } from "../kernel/referents";
+import { referenceFromLegacyContext, legacyContextPatchFromReference } from "./kernelReferentBridge";
+import { desktopBridgeEvents } from "../kernel/lib/desktopBridgeClient";
 
 interface EnvironmentValue {
   snapshot: LifeSnapshot;
@@ -325,6 +329,17 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
   });
   const conversationRef = useRef(conversationContext);
   const processedCommandIds = useRef<string[]>([]);
+  // The kernel bridge (see productionBridge.ts) claims a narrow, growing
+  // slice of the real conversation — memory, universal recall, Earmark
+  // playback, the desktop companion, and a buffer-aware calendar move — and
+  // falls through unchanged to the legacy interpreter below for everything
+  // else. One persistent session for the provider's lifetime so
+  // "yes"/"undo"/"open the second one" resolve against the SAME latest
+  // kernel state across turns, exactly like the legacy pending/confirmation
+  // state already does. Its `referents` (see kernel/session.ts) are the
+  // ONE authoritative referent store for both legacy and kernel-recognized
+  // commands — see kernelReferentBridge.ts for the two-way translation.
+  const kernelSessionRef = useRef(createBridgeSession());
   const activeCommandId = useRef<string | undefined>(undefined);
   const nativeFeedbackEpoch = useRef(0);
   const activeCommandSource = useRef<TransactionSource | undefined>(undefined);
@@ -343,6 +358,34 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     const unsubscribe = rewardDirector.subscribe(setReward);
     return () => { unsubscribe(); rewardDirector.dispose(); };
   }, [rewardDirector]);
+  useEffect(() => {
+    // A desktop capability's execute() is synchronous by kernel design (see
+    // desktopBridgeClient.ts) — it returns an immediate "pending" message,
+    // and the real success/failure from the local companion arrives here,
+    // asynchronously, as the small transient external-action acknowledgement
+    // Part 11 asks for ("Opening VS Code" -> done), not a permanent card.
+    //
+    // This is also the one place the REAL file the companion touched
+    // becomes a referent: runKernelTurn can only record the optimistic
+    // "pending" response (see productionBridge.ts), since the actual path/
+    // file list only exists once this promise resolves — without this,
+    // "Open my latest PDF" -> "Show it in Finder" would have nothing real
+    // to point "it" at.
+    return desktopBridgeEvents.on((event) => {
+      if (event.status === "pending") return;
+      setFeedback({ phase: event.status === "ok" ? "completed" : "error", title: event.message });
+      if (event.status !== "ok") return;
+      if (event.capabilityId === "desktop.openFile" || event.capabilityId === "desktop.revealInFinder") {
+        const opened = (event.data as { opened?: string } | undefined)?.opened;
+        if (opened) kernelSessionRef.current = rememberSearchResults(kernelSessionRef.current, [fileReference(opened, opened.split("/").pop() ?? opened)], now().getTime());
+      }
+      if (event.capabilityId === "desktop.listRecentFiles") {
+        const files = (event.data as { files?: RecentFileMeta[] } | undefined)?.files;
+        if (files) kernelSessionRef.current = rememberSearchResults(kernelSessionRef.current, files.map(recentFileToReference), now().getTime());
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     reconcileVoiceWorld(feedback.phase, flowLiveStatus);
   // Each result completes its own presentation, including two consecutive
@@ -1104,8 +1147,123 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       },
     });
   }
+  /**
+   * The real merge point between the kernel bridge (productionBridge.ts)
+   * and the legacy voice/text interpreter. Every transcript — spoken or
+   * typed, since both paths call runCommandExactlyOnce — passes through
+   * here first. If the bridge claims it (memory, universal recall, Earmark
+   * playback, the desktop companion, or the buffer-aware calendar move),
+   * this handles it fully using the SAME real dispatchLife/commit pipeline,
+   * feedback dock and navigation the legacy path uses, and returns true so
+   * the caller skips the legacy machinery entirely. Anything unclaimed
+   * returns false and falls through unchanged — there is exactly one
+   * conversational brain here, not two running in parallel.
+   */
+  function tryKernelBridge(transcript: string, source: TransactionSource): boolean {
+    const document = snapshotRef.current.document;
+
+    // Legacy -> kernel: whichever referent legacy most recently established
+    // (selected/lastReferenced/lastChanged/lastCreated — see
+    // conversationContext.ts) becomes visible to the kernel's OWN resolver
+    // if it's newer than what the kernel already has, so a kernel-recognized
+    // follow-up ("bookmark it" after legacy opened a journal entry) resolves
+    // it. There is one referent contract (kernel/session.ts's
+    // EntityReference); this is the translation at the boundary, not a
+    // second store — see kernelReferentBridge.ts.
+    const legacyRef = referenceFromLegacyContext(conversationRef.current);
+    const kernelRef = kernelSessionRef.current.referents.lastMentioned;
+    if (legacyRef && (legacyRef.at ?? 0) > (kernelRef?.at ?? -1)) {
+      kernelSessionRef.current = rememberSearchResults(kernelSessionRef.current, [legacyRef], legacyRef.at ?? now().getTime());
+    }
+
+    const result = runKernelTurn(
+      transcript,
+      document,
+      document.personalMemoryFacts ?? [],
+      kernelSessionRef.current,
+      now,
+      { dispatchLife: (actions, summary, t) => { dispatchLife(actions, summary, t, source); } },
+    );
+    kernelSessionRef.current = result.session;
+    if (!result.recognized) return false;
+
+    // Every legacy-handled command updates lastTranscript generically
+    // (see createLifeCommandRunner's own options.setLastTranscript call) —
+    // match that for every kernel-claimed utterance too, not just some
+    // branches, since UI (and tests) key off this attribute to know a
+    // command has been processed at all.
+    setLastTranscript(transcript);
+
+    // Mirrors exactly how the legacy voice/text "undo"/"redo" command
+    // invokes applyUndo/applyRedo (see resolveGlobalCommand's "history"
+    // intent, handled inside lifeCommandController.ts) — queued through the
+    // same mutationCoordinator with a fresh syncFromStorage() first, so it
+    // serializes correctly against any other in-flight command instead of
+    // racing it.
+    // These three delegate straight to the app's own history/feedback
+    // functions rather than going through legacy's resolveGlobalCommand, so
+    // they'd otherwise never stamp the dev command trace the way every
+    // other command (kernel- or legacy-handled) does — beginCommandTrace is
+    // dev/test-only tooling (see commandTrace.ts), not user-visible behavior.
+    if (result.delegateToApp === "undo") { beginCommandTrace(transcript, { type: "history-undo" }, conversationRef.current); void mutationCoordinator.run(() => { syncFromStorage(); applyUndo(transcript); }); return true; }
+    if (result.delegateToApp === "redo") { beginCommandTrace(transcript, { type: "history-redo" }, conversationRef.current); void mutationCoordinator.run(() => { syncFromStorage(); applyRedo(transcript); }); return true; }
+    if (result.delegateToApp === "whatChanged") {
+      beginCommandTrace(transcript, { type: "history-what-changed" }, conversationRef.current);
+      setFeedback({ phase: "completed", title: snapshotRef.current.lastTransaction?.summary ?? "Nothing has changed yet.", transcript });
+      return true;
+    }
+
+    if (result.openReferent) {
+      const ref = result.openReferent;
+      switch (ref.domain) {
+        case "journal":
+          navigate("journal"); setFocusedEntityId(ref.id); break;
+        case "plans":
+          navigate("outcomes"); setFocusedEntityId(ref.id); break;
+        case "people":
+        case "commitments":
+          navigate("people"); setFocusedEntityId(ref.personIds?.[0] ?? ref.id); break;
+        case "calendar":
+          navigate("today"); setSelectedCalendarEventId(ref.id); break;
+        default:
+          break;
+      }
+    }
+
+    // Kernel -> legacy: the inverse translation, so a LEGACY follow-up
+    // ("bookmark it") can resolve a referent the kernel just established
+    // (e.g. a recall result the user opened). Desktop files/raw search hits
+    // have no LifeEntityId and legacyContextPatchFromReference correctly
+    // returns undefined for them — legacy has no slot for those, which is
+    // fine since the kernel already owns them.
+    const currentRef = kernelSessionRef.current.referents.lastMentioned;
+    if (currentRef) {
+      const patch = legacyContextPatchFromReference(currentRef, now().getTime());
+      if (patch && conversationRef.current.focusedEntityId !== patch.focusedEntityId) {
+        const next = { ...conversationRef.current, ...patch };
+        conversationRef.current = next;
+        setConversationContext(next);
+        setFocusedEntityId(patch.focusedEntityId);
+      }
+    }
+
+    const phaseToFeedback: Record<string, CommandFeedback["phase"]> = {
+      listening: "clarification", thinking: "understanding", checking: "understanding",
+      "needs-clarification": "clarification", "ready-to-act": "confirmation", done: "completed",
+    };
+    setFeedback({ phase: result.outcome.status === "error" ? "error" : (phaseToFeedback[result.phase] ?? "completed"), title: result.message, transcript });
+    return true;
+  }
+
   function runCommandExactlyOnce(transcript: string, source: TransactionSource = "type", commandId = `${source}-${Date.now()}-${Math.random().toString(36).slice(2)}`, captured?: CapturedCommandContext) {
     if (processedCommandIds.current.includes(commandId)) return;
+    processedCommandIds.current = [...processedCommandIds.current.slice(-127), commandId];
+    // Never let the kernel bridge intercept dictation — someone narrating a
+    // journal entry who happens to say "remember to call mom" means that
+    // literally as journal content, not a command to Flow.
+    const activeVoiceMode = captured?.context.voiceMode ?? conversationRef.current.voiceMode;
+    const isDictating = activeVoiceMode === "dictation" || activeVoiceMode === "journal-longform" || activeVoiceMode === "voice-note-longform";
+    if (!isDictating && tryKernelBridge(transcript, source)) return;
     // Typed submission has the same acquisition boundary as final speech.
     // Freeze references/authority, never the document: execution still reads
     // the latest snapshot inside the durable CAS coordinator.
@@ -1118,7 +1276,6 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     };
     const inputSequence = ++commandInputSequence.current;
     nativeFeedbackEpoch.current += 1;
-    processedCommandIds.current = [...processedCommandIds.current.slice(-127), commandId];
     if (source === "voice" && (captured?.context.voiceMode === "journal-longform" || captured?.context.voiceMode === "voice-note-longform") && captured.finalSegments && captured.finalSegments.length > 1) {
       const current = snapshotRef.current.document;
       const partition = partitionJournalFinals(captured.finalSegments, (segment) => resolveGlobalCommand(segment, captured.context, snapshotRef.current.temporal?.todayDateKey ?? current.calendar.dateKey, current.steps, current.preferences.workdayEndMinutes, calendarReferenceScope(current, captured.scope), current.people, current.friends?.groups).segment?.classification ?? "AMBIGUOUS");

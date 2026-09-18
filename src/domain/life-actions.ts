@@ -2,6 +2,8 @@ import type { CalendarRequest, DayPlan } from "../features/day-planner/model";
 import type { FriendsAction } from "./friends-actions";
 import type { Capture, Commitment, EntityLink, FocusSession, Person, Plan, PlanStep, WeatherObservation } from "./life-model";
 import type { ActiveAtmosphere, AtmosphereLayerId, AtmospherePreset, JournalBookmark, JournalDrawingStroke, JournalEntry, JournalTranscriptSegment, MemoryArtifact, RitualDefinition, StudioMediaAsset, WorkspaceSurfaceState } from "./studio-model";
+import type { PersonalMemoryFact } from "../kernel/types";
+import type { SourceRecording, DerivedItem } from "../kernel/earmark";
 
 export type LifeAction =
   | FriendsAction
@@ -59,4 +61,10 @@ export type LifeAction =
   | { type: "workspace.update"; patch: Partial<WorkspaceSurfaceState> }
   | { type: "ritual.create"; ritual: RitualDefinition }
   | { type: "ritual.update"; ritualId: string; patch: Partial<Pick<RitualDefinition, "name" | "enabled" | "steps">> }
-  | { type: "ritual.delete"; ritualId: string };
+  | { type: "ritual.delete"; ritualId: string }
+  | { type: "memory.fact.create"; fact: PersonalMemoryFact }
+  | { type: "memory.fact.delete"; factId: string }
+  | { type: "earmark.recording.add"; recording: SourceRecording }
+  | { type: "earmark.items.add"; items: DerivedItem[] }
+  | { type: "earmark.item.promote"; itemId: string; capabilityId: string; entityId: string }
+  | { type: "earmark.item.dismiss"; itemId: string };

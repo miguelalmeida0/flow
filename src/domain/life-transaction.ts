@@ -373,6 +373,26 @@ function applyAction(draft: LifeDocument, action: LifeAction, now: string): Life
     if (!draft.studio.memories.some(({ id }) => id === action.memoryId)) return { status: "conflict", title: "Memory not found", detail: "Nothing changed." };
     draft.studio.memories = draft.studio.memories.filter(({ id }) => id !== action.memoryId);
   }
+  if (action.type === "memory.fact.create") {
+    draft.personalMemoryFacts = [...(draft.personalMemoryFacts ?? []), action.fact];
+  }
+  if (action.type === "memory.fact.delete") {
+    if (!(draft.personalMemoryFacts ?? []).some(({ id }) => id === action.factId)) return { status: "conflict", title: "Nothing remembered like that", detail: "Nothing changed." };
+    draft.personalMemoryFacts = (draft.personalMemoryFacts ?? []).filter(({ id }) => id !== action.factId);
+  }
+  if (action.type === "earmark.recording.add") {
+    draft.earmarkRecordings = [...(draft.earmarkRecordings ?? []), action.recording];
+  }
+  if (action.type === "earmark.items.add") {
+    draft.earmarkItems = [...(draft.earmarkItems ?? []), ...action.items];
+  }
+  if (action.type === "earmark.item.promote") {
+    if (!(draft.earmarkItems ?? []).some(({ id }) => id === action.itemId)) return { status: "conflict", title: "That moment is no longer available", detail: "Nothing changed." };
+    draft.earmarkItems = (draft.earmarkItems ?? []).map((item) => item.id === action.itemId ? { ...item, promotedCapabilityId: action.capabilityId, promotedEntityId: action.entityId } : item);
+  }
+  if (action.type === "earmark.item.dismiss") {
+    draft.earmarkItems = (draft.earmarkItems ?? []).filter(({ id }) => id !== action.itemId);
+  }
   if (action.type === "workspace.update") {
     draft.studio.workspace = { ...draft.studio.workspace, ...action.patch };
     draft.studio.workspace.minimized = [...new Set(draft.studio.workspace.minimized)];
@@ -444,5 +464,10 @@ function summarizeActions(actions: LifeAction[]) {
   if (actions.some(({ type }) => type === "memory.update")) return "Memory updated.";
   if (actions.some(({ type }) => type === "workspace.update")) return "Studio rearranged.";
   if (actions.some(({ type }) => type === "ritual.update" || type === "ritual.create")) return "Ritual updated.";
+  if (actions.some(({ type }) => type === "memory.fact.create")) return "Remembered.";
+  if (actions.some(({ type }) => type === "memory.fact.delete")) return "Forgotten.";
+  if (actions.some(({ type }) => type === "earmark.recording.add" || type === "earmark.items.add")) return "Earmark processed the recording.";
+  if (actions.some(({ type }) => type === "earmark.item.promote")) return "Turned into a real item.";
+  if (actions.some(({ type }) => type === "earmark.item.dismiss")) return "Dismissed.";
   return "Flow updated your life plan.";
 }
