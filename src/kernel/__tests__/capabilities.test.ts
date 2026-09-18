@@ -10,7 +10,7 @@ function contextFor(document = emptyDocument()): CapabilityContext {
 describe("capability registry", () => {
   it("registers every domain the sprint requires", () => {
     const registry = createDefaultRegistry();
-    expect(registry.domains().sort()).toEqual(["calendar", "friends", "journal", "memory", "navigation", "plans", "system"]);
+    expect(registry.domains().sort()).toEqual(["calendar", "desktop", "friends", "journal", "memory", "navigation", "plans", "recall", "system"]);
   });
 
   it("returns undefined for an unknown capability id", () => {
@@ -184,6 +184,52 @@ describe("plans, friends, and memory capabilities", () => {
   it("does not create a memory fact unless memory.store/friends.remember is explicitly called", () => {
     const ctx = contextFor();
     expect(ctx.memory).toEqual([]);
+  });
+
+  it("forgets a remembered fact by explicit intent, and no other", () => {
+    let ctx = contextFor();
+    const store = registry.get("memory.store")!;
+    const first = store.execute({ text: "Sofia is vegetarian" }, ctx);
+    expect(first.status).toBe("ok");
+    if (first.status !== "ok") return;
+    ctx = { ...ctx, memory: first.mutation.memory! };
+    const second = store.execute({ text: "Daniel works at Stripe" }, ctx);
+    expect(second.status).toBe("ok");
+    if (second.status !== "ok") return;
+    ctx = { ...ctx, memory: second.mutation.memory! };
+    expect(ctx.memory).toHaveLength(2);
+
+    const forget = registry.get("memory.forget")!;
+    const forgotten = forget.execute({ query: "vegetarian" }, ctx);
+    expect(forgotten.status).toBe("ok");
+    if (forgotten.status !== "ok") return;
+    ctx = { ...ctx, memory: forgotten.mutation.memory! };
+    expect(ctx.memory).toHaveLength(1);
+    expect(ctx.memory[0]?.text).toBe("Daniel works at Stripe");
+  });
+
+  it("refuses to forget an ambiguous query rather than guessing", () => {
+    let ctx = contextFor();
+    const store = registry.get("memory.store")!;
+    const first = store.execute({ text: "Sofia likes jazz" }, ctx);
+    if (first.status !== "ok") throw new Error("setup failed");
+    ctx = { ...ctx, memory: first.mutation.memory! };
+    const second = store.execute({ text: "Sofia is vegetarian" }, ctx);
+    if (second.status !== "ok") throw new Error("setup failed");
+    ctx = { ...ctx, memory: second.mutation.memory! };
+
+    const forget = registry.get("memory.forget")!;
+    const result = forget.execute({ query: "Sofia" }, ctx);
+    expect(result.status).toBe("error");
+    if (result.status !== "error") return;
+    expect(result.code).toBe("ambiguous");
+  });
+
+  it("fails clearly when asked to forget something never remembered", () => {
+    const ctx = contextFor();
+    const forget = registry.get("memory.forget")!;
+    const result = forget.execute({ query: "nothing" }, ctx);
+    expect(result.status).toBe("error");
   });
 
   it("looks up a person by alias", () => {

@@ -1,4 +1,4 @@
-import { createPersonalMemoryFact, searchPersonalMemory } from "../memoryStore";
+import { createPersonalMemoryFact, findPersonalMemoryToForget, searchPersonalMemory } from "../memoryStore";
 import { fail, ok, type Capability, type CapabilityResult } from "../types";
 
 export interface MemoryStoreArgs {
@@ -60,4 +60,26 @@ export const memoryRecall: Capability<MemoryRecallArgs> = {
   },
 };
 
-export const memoryCapabilities = [memoryStore, memorySearch, memoryRecall];
+export interface MemoryForgetArgs {
+  query: string;
+}
+
+export const memoryForget: Capability<MemoryForgetArgs> = {
+  id: "memory.forget",
+  domain: "memory",
+  description: "Delete a durable personal fact.",
+  mutates: true,
+  undoable: true,
+  riskLevel: "low",
+  requiresConfirmation: () => false,
+  validate: (args) => (!args.query ? "Say what to forget." : null),
+  execute: (args, ctx): CapabilityResult => {
+    const matches = findPersonalMemoryToForget(ctx.memory, args.query);
+    if (matches.length === 0) return fail("not_found", `Nothing remembered about "${args.query}".`);
+    if (matches.length > 1) return fail("ambiguous", `Multiple memories match "${args.query}": ${matches.map((fact) => `"${fact.text}"`).join(", ")}. Be more specific.`);
+    const [fact] = matches;
+    return ok(`Forgot: ${fact!.text}`, { memory: ctx.memory.filter((existing) => existing.id !== fact!.id) }, { entityId: fact!.id });
+  },
+};
+
+export const memoryCapabilities = [memoryStore, memorySearch, memoryRecall, memoryForget];

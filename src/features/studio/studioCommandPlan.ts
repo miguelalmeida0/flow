@@ -152,7 +152,7 @@ function planOne(intent: StudioIntent, document: LifeDocument, context: LifeCont
     if (positionMs !== undefined && (positionMs < 0 || positionMs > entry.recordingDurationMs)) return { status: "clarification", title: "That position is outside this recording.", detail: `Choose a position from zero to ${entry.recordingDurationMs / 1000} seconds.` };
     return { status: "ready", actions: [], summary: "Journal playback requested.", navigateTo: "journal", focusId: entry.id, runtimeCommands: [{ target: "journal-playback", mode: intent.mode, entryId: entry.id, ...(positionMs !== undefined ? { positionMs } : {}) }], contextPatch: { activeJournalEntryId: entry.id, topic: "journal", ...(bookmark ? { selectedBookmarkId: bookmark.id } : {}), ...(positionMs !== undefined ? { journalPositionMs: positionMs } : {}) } };
   }
-  if (intent.type === "studio-select" || intent.type === "studio-source-select") return planStudioSelection(intent, document, context, activeJournal(document, context), activeMemory(document, context));
+  if (intent.type === "studio-select" || intent.type === "studio-source-select") return planStudioSelection(intent, document, context, now.getTime(), activeJournal(document, context), activeMemory(document, context));
   if (intent.type === "journal-tags" || intent.type === "journal-clear-drawing") {
     const entry = activeJournal(document, context);
     if (!entry) return { status: "clarification", title: "Which Journal entry should I edit?", detail: "Open or name the entry. Nothing changed." };

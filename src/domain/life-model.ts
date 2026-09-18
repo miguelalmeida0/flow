@@ -2,6 +2,8 @@ import type { ChangeRecord, DayPlan, TransactionSource } from "../features/day-p
 import type { StudioState } from "./studio-model";
 import type { CalendarCreationContinuation } from "../shared/command/calendarCreationContext";
 import type { FriendsState } from "./friends-model";
+import type { PersonalMemoryFact } from "../kernel/types";
+import type { SourceRecording, DerivedItem } from "../kernel/earmark";
 
 export type LifeEntityId = string;
 export type WorldDestination = "home" | "today" | "focus" | "weather-outfit" | "people" | "good-to-know" | "capture" | "outcomes" | "journal" | "atmosphere" | "memories";
@@ -175,6 +177,13 @@ export interface LifeDocument {
   /** Optional at the pre-v6 compatibility boundary; hydration always supplies it. */
   friends?: FriendsState;
   preferences: { workdayEndMinutes: number; firstName: string; weekStartsOn: 0 | 1 };
+  /** Explicitly-saved personal facts ("remember Sofia is vegetarian"). Never
+   * populated by silently persisting conversation; only by an explicit save
+   * intent. Optional for pre-existing documents; readers default to []. */
+  personalMemoryFacts?: PersonalMemoryFact[];
+  /** Earmark: recordings that have been segmented into derived items. */
+  earmarkRecordings?: SourceRecording[];
+  earmarkItems?: DerivedItem[];
 }
 
 export interface LifeTransactionRecord {

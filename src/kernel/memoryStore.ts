@@ -34,3 +34,11 @@ export function searchPersonalMemory(facts: PersonalMemoryFact[], query: string)
 export function personalMemoryAbout(facts: PersonalMemoryFact[], personId: string): PersonalMemoryFact[] {
   return facts.filter((fact) => fact.subjectPersonId === personId);
 }
+
+/** Explicit forget, matched the same deterministic way as recall: a
+ * case-insensitive substring of the fact's text. Ambiguous matches (more
+ * than one fact contains the phrase) are returned for the caller to
+ * disambiguate rather than guessing which one to delete. */
+export function findPersonalMemoryToForget(facts: PersonalMemoryFact[], query: string): PersonalMemoryFact[] {
+  return searchPersonalMemory(facts, query);
+}

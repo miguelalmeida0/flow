@@ -1,9 +1,10 @@
 import type { LifeContext, LifeDocument } from "../../domain/life-model";
 import type { JournalEntry, MemoryArtifact } from "../../domain/studio-model";
+import { referenceFor } from "../../app/conversationContext";
 import type { StudioSelectionIntent } from "./interpretation/studioSelection";
 import type { StudioCommandPlan } from "./studioCommandPlan";
 
-export function planStudioSelection(intent: StudioSelectionIntent, document: LifeDocument, context: LifeContext, entry?: JournalEntry, memory?: MemoryArtifact): StudioCommandPlan {
+export function planStudioSelection(intent: StudioSelectionIntent, document: LifeDocument, context: LifeContext, atMs: number, entry?: JournalEntry, memory?: MemoryArtifact): StudioCommandPlan {
   if (intent.type === "studio-select") {
     const collection = [...(intent.collection === "journal" ? document.studio.journalEntries : document.studio.memories)].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
     const selector = intent.selector;
@@ -20,7 +21,13 @@ export function planStudioSelection(intent: StudioSelectionIntent, document: Lif
       return { status: "clarification", title: matches.length ? "Which one should I open?" : "I couldn't find that item.", detail: (matches.length ? matches : collection).slice(0, 3).map(({ title }) => title).join(" · ") || "Nothing was created or changed." };
     }
     const item = matches[0]!;
-    return { status: "ready", actions: [], summary: `Opened ${item.title}.`, navigateTo: intent.collection, focusId: item.id, runtimeCommands: [], contextPatch: intent.collection === "journal" ? { activeJournalEntryId: item.id, topic: "journal", voiceMode: "command" } : { activeMemoryId: item.id, topic: "memory", voiceMode: "command" } };
+    // Selecting a Journal entry/memory is legacy's own "open X" mechanism —
+    // it must also stamp the shared selected/lastReferenced referent (the
+    // same fields navigateConversation/restoreConversationFromTransaction
+    // already read) so a kernel follow-up like "bookmark it" can resolve the
+    // entry the user just opened, without a second bridge-local store.
+    const reference = referenceFor(document, item.id, atMs);
+    return { status: "ready", actions: [], summary: `Opened ${item.title}.`, navigateTo: intent.collection, focusId: item.id, runtimeCommands: [], contextPatch: { ...(intent.collection === "journal" ? { activeJournalEntryId: item.id, topic: "journal", voiceMode: "command" } : { activeMemoryId: item.id, topic: "memory", voiceMode: "command" }), ...(reference ? { selected: reference, lastReferenced: reference } : {}) } };
   }
   const useInMemory = Boolean(memory && (context.route === "memories" || context.topic === "memory"));
   // A Memory's source controls refer to its linked entry, not whichever

@@ -3,12 +3,36 @@ import type { Plan } from "./planner";
 import type { ClarificationRequest } from "./clarification";
 import type { Proposal } from "./proposals";
 
-/** A reference to something the conversation has talked about — the entity
- * "it"/"that"/"her" can resolve to. */
+/**
+ * A reference to something the conversation has talked about — the entity
+ * "it"/"that"/"her" can resolve to. This is Flow's ONE authoritative referent
+ * shape: legacy's own conversation context (ConversationEntityReference in
+ * life-model.ts) and the kernel's recall/desktop results both normalize into
+ * this same structure at the app-layer boundary (see
+ * src/app/kernelReferentBridge.ts) rather than keeping separate stores that
+ * can drift.
+ *
+ * `id`/`kind` cover a real domain entity (a LifeEntityId + LifeEntityKind,
+ * the case legacy already understands). `kind` additionally allows
+ * "desktop-file" and "search-hit" for referents that have no LifeEntityId at
+ * all (an opened file, an Earmark/memory-fact recall result) — legacy has no
+ * slot for those and simply won't resolve pronouns pointing at them, which
+ * is correct rather than a gap: the kernel is the only side that understands
+ * them.
+ */
 export interface EntityReference {
-  id: LifeEntityId;
-  kind: LifeEntityKind;
+  id: string;
+  kind: LifeEntityKind | "desktop-file" | "search-hit";
   label?: string;
+  /** Epoch ms this referent became current — comparable with legacy's
+   * ConversationEntityReference.at, so whichever side acted most recently
+   * wins when the two are merged. */
+  at?: number;
+  /** Recall's SearchDomain, when this referent came from search.ts. */
+  domain?: string;
+  audioTimestamp?: { recordingId: string; atMs: number; endAtMs?: number; confidence?: "exact" | "estimated" };
+  desktopPath?: string;
+  personIds?: LifeEntityId[];
 }
 
 export interface RecentResult {
