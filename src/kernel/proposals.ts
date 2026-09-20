@@ -71,7 +71,9 @@ export type ReplyIntent = "approve" | "reject" | "cancel" | "undo" | "redo" | "w
  * parser — it only recognizes the fixed vocabulary conversation control
  * requires. */
 export function classifyReply(reply: string): ReplyIntent {
-  const normalized = reply.trim().toLowerCase().replace(/[.!]+$/, "");
+  // STT punctuation is irrelevant only when matching this closed vocabulary.
+  // Keep the original reply and all punctuation inside freeform content intact.
+  const normalized = reply.trim().toLowerCase().replace(/[.!?,]+$/, "");
   if (UNDO_WORDS.has(normalized)) return "undo";
   if (REDO_WORDS.has(normalized)) return "redo";
   if (CANCEL_WORDS.has(normalized)) return "cancel";

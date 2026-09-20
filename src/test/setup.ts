@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
+import { resetBridgeIdempotencyStoreForTests } from "../kernel/productionBridge";
 
 const values = new Map<string, string>();
 const memoryStorage: Storage = {
@@ -28,3 +29,9 @@ Object.defineProperty(window, "matchMedia", {
 });
 Object.defineProperty(window, "scrollTo", { configurable: true, value: () => undefined });
 afterEach(cleanup);
+// The production idempotency store (kernel/idempotency.ts) is a real
+// process-lifetime singleton by design (see productionBridge.ts) — but two
+// unrelated tests in the same file submitting the same capability+args
+// would otherwise make the second look like a duplicate of the first, so
+// every test starts with a clean one.
+afterEach(resetBridgeIdempotencyStoreForTests);

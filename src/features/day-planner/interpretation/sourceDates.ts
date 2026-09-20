@@ -38,7 +38,7 @@ export function sourceDateKey(date: SourceDate, today: string, visibleWeekStart?
   const current = new Date(`${today}T12:00:00`).getDay();
   const forward = (date.weekday - current + 7) % 7;
   if (date.relation === "last") return dateKeyAfter(today, forward - 7);
-  if (date.relation === "this") return dateKeyAfter(today, date.weekday - current);
+  if (date.relation === "this") return dateKeyAfter(today, (date.weekday + 6) % 7 - (current + 6) % 7);
   return dateKeyAfter(today, date.relation === "next" && !forward ? 7 : forward);
 }
 

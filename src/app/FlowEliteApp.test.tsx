@@ -39,7 +39,7 @@ describe("Flow Elite north-star release path", () => {
     expect(initial.past).toHaveLength(0);
 
     command("Tomorrow.");
-    await waitFor(() => expect(screen.getByText(/Friday, September 4/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/^Friday, September 4$/i)).toBeInTheDocument());
     expect(screen.getByTestId("elite-today-lens")).toHaveTextContent("Creative Review");
     expect(screen.getByTestId("elite-focus-lens")).toHaveTextContent("28");
     expect(snapshot().past).toHaveLength(0);

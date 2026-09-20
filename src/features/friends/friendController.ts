@@ -196,7 +196,10 @@ export function runFriendCommand(intent: FriendIntent, options: ControllerOption
   if (intent.type === "friend-person" && intent.operation === "create") {
     if (!intent.query.trim()) return feedback("What is their name?", "Add the name you use for this person.", "clarification");
     const person = canonicalPerson({ id: `person-${commandId}`, kind: "person", name: intent.query, createdAt: at, updatedAt: at });
-    if (options.commit([{ type: "person.create", person }], transcript, source, `Added ${personLabel(person)} to Friends`)) openPerson(person.id);
+    if (options.commit([{ type: "person.create", person }], transcript, source, `Added ${personLabel(person)} to Friends`)) {
+      openPerson(person.id);
+      feedback(`Added ${personLabel(person)} to Friends`, "One undo restores the exact previous state.");
+    }
     return;
   }
   const query = intent.type === "friend-person" ? intent.query : intent.type === "friend-message" || intent.type === "friend-calendar" || intent.type === "friend-voice" ? intent.recipientQuery : undefined;

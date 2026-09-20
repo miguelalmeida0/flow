@@ -1,0 +1,9 @@
+.venv/
+constraints.txt
+__pycache__/
+*.pyc
+build/
+*.egg-info/
+.venv-kokoro/
+.venv-tts/
+.hf-cache/

@@ -21,6 +21,14 @@ export const memoryStore: Capability<MemoryStoreArgs> = {
   mutates: true,
   undoable: true,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: {
+      text: { type: "string", minLength: 1, maxLength: 400, description: "The fact to remember, verbatim." },
+      subjectPersonId: { type: "string", description: "Id of the person this fact is about, only if already resolved from context." },
+    },
+    required: ["text"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.text ? "Say what to remember." : null),
   execute: (args, ctx): CapabilityResult => {
@@ -36,6 +44,11 @@ export const memorySearch: Capability<MemorySearchArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: { query: { type: "string", minLength: 1, maxLength: 200, description: "Free-text search query." } },
+    required: ["query"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.query ? "Say what to search for." : null),
   execute: (args, ctx): CapabilityResult => {
@@ -51,6 +64,11 @@ export const memoryRecall: Capability<MemoryRecallArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: { subjectPersonId: { type: "string", description: "Id of the person to recall memories about, only if already resolved from context." } },
+    required: [],
+  },
   requiresConfirmation: () => false,
   validate: () => null,
   execute: (args, ctx): CapabilityResult => {
@@ -71,6 +89,11 @@ export const memoryForget: Capability<MemoryForgetArgs> = {
   mutates: true,
   undoable: true,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: { query: { type: "string", minLength: 1, maxLength: 200, description: "Text identifying which remembered fact to delete." } },
+    required: ["query"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.query ? "Say what to forget." : null),
   execute: (args, ctx): CapabilityResult => {

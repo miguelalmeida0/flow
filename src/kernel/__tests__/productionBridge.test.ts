@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { recognizeIntent, runKernelTurn, createBridgeSession, persistKernelMutation, fileReference, recentFileToReference, type RecognizedIntent } from "../productionBridge";
+import { beforeEach, describe, expect, it } from "vitest";
+import { recognizeIntent, runKernelTurn, createBridgeSession, persistKernelMutation, fileReference, recentFileToReference, resetBridgeIdempotencyStoreForTests, type RecognizedIntent } from "../productionBridge";
 import { rememberSearchResults } from "../referents";
 import { createSession, type ConversationSession, type EntityReference } from "../session";
 import { emptyDocument, AT } from "./fixtures";
@@ -7,6 +7,12 @@ import type { PersonalMemoryFact } from "../types";
 import type { PlanStepInput } from "../planner";
 
 const NOW = () => new Date(AT);
+
+// runKernelTurn (unlike testEnvironment) uses the real production
+// idempotency singleton (see productionBridge.ts) — reset it between tests
+// so two unrelated tests submitting the same capability+args don't make the
+// second look like a duplicate of the first.
+beforeEach(() => { resetBridgeIdempotencyStoreForTests(); });
 
 /** A fresh session, optionally with a pre-populated result set — mirrors
  * how a real recall/desktop-list turn leaves session.referents, without
@@ -21,6 +27,14 @@ function step0(recognized: RecognizedIntent | null): PlanStepInput | undefined {
 }
 
 describe("recognizeIntent", () => {
+  it.each(["add new friend called Anita", "add a new friend named Anita", "add Anita as a friend"])("routes %s through one real friends.create capability", utterance => {
+    const document = emptyDocument();
+    expect(step0(recognizeIntent(utterance, document, createSession()))).toMatchObject({ capabilityId: "friends.create", args: { name: "Anita" } });
+    const result = runKernelTurn(utterance, document, [], createSession(), NOW);
+    expect(result.outcome.status).toBe("executed");
+    expect(result.env.document.people).toEqual([expect.objectContaining({ name: "Anita", avatar: { initials: "A", tone: "tide" } })]);
+    expect(result.openReferent).toMatchObject({ domain: "people", label: "Anita" });
+  });
   it("recognizes an explicit remember about a known person as friends.remember", () => {
     const document = emptyDocument();
     document.people.push({ id: "p-sofia", kind: "person", name: "Sofia", createdAt: AT, updatedAt: AT });
@@ -44,6 +58,18 @@ describe("recognizeIntent", () => {
       const recognized = recognizeIntent(utterance, emptyDocument(), createSession());
       expect(step0(recognized)).toMatchObject({ capabilityId: "recall.search", args: { query: "Lisbon" } });
     }
+  });
+
+  it("recognizes day-summary phrasing as calendar.query, deterministically (no reasoner needed) — physical-test repair", () => {
+    for (const utterance of ["What's my day looking like?", "What does my day look like", "How's my day looking?", "What's on my calendar today?", "What do I have today?", "What's on my calendar?"]) {
+      const recognized = recognizeIntent(utterance, emptyDocument(), createSession());
+      expect(step0(recognized)).toMatchObject({ capabilityId: "calendar.query" });
+    }
+  });
+
+  it("resolves an explicit 'tomorrow' day-summary to the next dateKey", () => {
+    const recognized = recognizeIntent("What's on my calendar tomorrow?", emptyDocument("2026-09-17"), createSession());
+    expect(step0(recognized)).toMatchObject({ capabilityId: "calendar.query", args: { dateKey: "2026-09-18" } });
   });
 
   it("recognizes what-did-I-promise for a known person as recall.commitments", () => {

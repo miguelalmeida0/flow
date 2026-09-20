@@ -122,6 +122,27 @@ export function fail(code: string, message: string): CapabilityFailure {
   return { status: "error", code, message };
 }
 
+/**
+ * Deliberately small subset of JSON Schema — just enough to constrain and
+ * document a capability's args for structured model output (Ollama's
+ * `format` field understands this shape directly). Not a general-purpose
+ * schema library: no $ref, no oneOf/anyOf, no composition. If a capability's
+ * args ever need more than this, that's a sign it shouldn't be offered to
+ * the model directly.
+ */
+export interface JsonSchema {
+  type: "object" | "string" | "number" | "integer" | "boolean" | "array" | "null";
+  description?: string;
+  properties?: Record<string, JsonSchema>;
+  required?: string[];
+  enum?: string[];
+  items?: JsonSchema;
+  minimum?: number;
+  maximum?: number;
+  minLength?: number;
+  maxLength?: number;
+}
+
 export interface Capability<Args = Record<string, unknown>> {
   id: string;
   domain: string;
@@ -131,6 +152,18 @@ export interface Capability<Args = Record<string, unknown>> {
   /** Whether a successful mutation can be reverted by system.undo. */
   undoable: boolean;
   riskLevel: RiskLevel;
+  /**
+   * A minimal JSON-Schema-subset description of `Args`, authored once here
+   * alongside the capability it describes rather than in a second
+   * hand-maintained catalogue. Its presence is also the signal that this
+   * capability may be offered to the local conversational model —
+   * `describeCapabilitiesForModel` (src/kernel/llm/capabilityModel.ts)
+   * derives the model's whole tool list straight from `registry.list()`
+   * filtered to capabilities that define this field. Omitting it keeps a
+   * capability reachable only from deterministic recognizers, never from
+   * model-proposed plans.
+   */
+  argsSchema?: JsonSchema;
   /** Static confirmation requirement independent of preflight, e.g. destructive deletes. */
   requiresConfirmation: (args: Args, ctx: CapabilityContext) => boolean;
   /** Returns an error message if arguments are structurally invalid/incomplete, else null. */

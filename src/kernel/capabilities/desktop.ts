@@ -65,6 +65,7 @@ export const desktopGetFrontmostApp: Capability<DesktopGetFrontmostAppArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "low",
+  argsSchema: { type: "object", properties: {}, required: [] },
   requiresConfirmation: () => false,
   validate: () => null,
   execute: (): CapabilityResult => {
@@ -86,6 +87,11 @@ export const desktopOpenApp: Capability<DesktopOpenAppArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "medium",
+  argsSchema: {
+    type: "object",
+    properties: { app: { type: "string", enum: [...DESKTOP_ALLOWED_APPS], description: "Exact application name — only an app from this exact list can be opened." } },
+    required: ["app"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => {
     if (typeof args.app !== "string" || args.app.length === 0) return "Say which app to open.";
@@ -118,6 +124,11 @@ export const desktopOpenFile: Capability<DesktopOpenFileArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "medium",
+  argsSchema: {
+    type: "object",
+    properties: { path: { type: "string", minLength: 1, description: "Exact file path — only one already seen in a desktop.listRecentFiles result this turn, never invented or guessed." } },
+    required: ["path"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (typeof args.path !== "string" || args.path.length === 0 ? "Say which file to open." : null),
   execute: (args): CapabilityResult => {
@@ -144,6 +155,11 @@ export const desktopRevealInFinder: Capability<DesktopRevealInFinderArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "medium",
+  argsSchema: {
+    type: "object",
+    properties: { path: { type: "string", minLength: 1, description: "Exact file path — only one already seen in a desktop.listRecentFiles result this turn, never invented or guessed." } },
+    required: ["path"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (typeof args.path !== "string" || args.path.length === 0 ? "Say which file to reveal." : null),
   execute: (args): CapabilityResult => {
@@ -170,6 +186,11 @@ export const desktopOpenUrl: Capability<DesktopOpenUrlArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "medium",
+  argsSchema: {
+    type: "object",
+    properties: { url: { type: "string", minLength: 1, description: "A complete http:// or https:// URL." } },
+    required: ["url"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => {
     if (typeof args.url !== "string" || args.url.length === 0) return "Say which URL to open.";
@@ -211,10 +232,18 @@ export interface DesktopRecentFile {
 export const desktopListRecentFiles: Capability<DesktopListRecentFilesArgs> = {
   id: "desktop.listRecentFiles",
   domain: "desktop",
-  description: "List recently modified files from an allowlisted local directory via the desktop companion.",
+  description: "List recently modified files from an allowlisted local directory via the desktop companion. NOTE: this returns immediately with a pending status, not the real file list, in the same turn — if you don't already have a confirmed real file path from an earlier turn's result, ask the user which file rather than guessing or inventing one.",
   mutates: false,
   undoable: false,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: {
+      dir: { type: "string", minLength: 1, description: "Directory to list, only from an allowlisted location already known — omit to use the default." },
+      limit: { type: "integer", minimum: 1, maximum: 50, description: "Max files to list." },
+    },
+    required: [],
+  },
   requiresConfirmation: () => false,
   validate: (args) => {
     if (args.limit !== undefined && (typeof args.limit !== "number" || !Number.isFinite(args.limit) || args.limit <= 0)) {

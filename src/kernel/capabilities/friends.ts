@@ -1,5 +1,7 @@
 import { applyLifeTransaction } from "../../domain/life-transaction";
 import type { Person } from "../../domain/life-model";
+import { uniqueLifeId } from "../../domain/life-factories";
+import { canonicalPerson, personKey } from "../../features/friends/people";
 import { createPersonalMemoryFact } from "../memoryStore";
 import { fail, ok, type Capability, type CapabilityResult } from "../types";
 
@@ -39,6 +41,11 @@ export const friendsLookup: Capability<FriendsLookupArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: { name: { type: "string", minLength: 1, maxLength: 80, description: "Name (or partial name) to look up." } },
+    required: ["name"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.name ? "Say a name." : null),
   execute: (args, ctx): CapabilityResult => {
@@ -72,6 +79,14 @@ export const friendsRemember: Capability<FriendsRememberArgs> = {
   mutates: true,
   undoable: true,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: {
+      name: { type: "string", minLength: 1, maxLength: 80, description: "The person's name, verbatim (capitalization preserved)." },
+      fact: { type: "string", minLength: 1, maxLength: 400, description: "The fact to remember about them, verbatim." },
+    },
+    required: ["name", "fact"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.name ? "Say who." : !args.fact ? "Say what to remember." : null),
   execute: (args, ctx): CapabilityResult => {
@@ -91,4 +106,21 @@ export const friendsRemember: Capability<FriendsRememberArgs> = {
   },
 };
 
-export const friendsCapabilities = [friendsLookup, friendsOpen, friendsRemember];
+export const friendsCreate: Capability<FriendsLookupArgs> = {
+  id: "friends.create", domain: "friends", description: "Create a local friend profile with the stated name.",
+  mutates: true, undoable: true, riskLevel: "low",
+  argsSchema: friendsLookup.argsSchema,
+  requiresConfirmation: () => false,
+  validate: args => !args.name?.trim() ? "Say the person's name." : null,
+  execute: (args, ctx) => {
+    const name = args.name.trim();
+    const existing = ctx.document.people.find(person => personKey(person.name) === personKey(name));
+    if (existing) return ok(`${existing.name} is already in Friends.`, {}, { entityId: existing.id, entityKind: "person" });
+    const at = ctx.clock.now().toISOString();
+    const person = canonicalPerson({ id: uniqueLifeId(ctx.document, "person", name), kind: "person", name, createdAt: at, updatedAt: at });
+    const result = applyLifeTransaction(ctx.document, [{ type: "person.create", person }], ctx.clock.now);
+    return result.status === "success" ? ok(`Added ${name} to Friends.`, { document: result.document }, { entityId: person.id, entityKind: "person" }) : fail("friend-create-failed", result.detail);
+  },
+};
+
+export const friendsCapabilities = [friendsLookup, friendsOpen, friendsRemember, friendsCreate];

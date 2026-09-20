@@ -1,0 +1,10 @@
+# STT worker environment (Kyutai STT via moshi_mlx). Install with:
+#   uv venv .venv-stt && uv pip install -p .venv-stt/bin/python -r requirements-stt.txt --override overrides-stt.txt
+moshi_mlx==0.2.12
+huggingface_hub
+numpy
+rustymimi
+sentencepiece
+sounddevice
+sphn
+websockets

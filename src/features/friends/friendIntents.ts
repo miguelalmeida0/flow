@@ -69,7 +69,15 @@ export function parseFriendIntent(transcript: string, context: LifeContext, peop
       : /^(?:send it|send the note|send this note)[.!]?$/i.test(text) && !context.friendPending ? "send" : undefined;
     if (operation) return { type: "friend-voice", operation, noteId: context.activeVoiceNoteId };
   }
-  const add = text.match(/^(?:add|create|save)\s+(?:(?:a|new)\s+)?(?:friend|contact|person)\s+(?:named\s+)?(.+?)[.!]?$/i) ?? text.match(/^add\s+(.+?)\s+(?:as|to)\s+(?:a\s+)?(?:friend|contact|friends)[.!]?$/i);
+  // "called" and "named" are equally common ways to introduce a name here
+  // ("add a friend called Anita" / "add a new friend named Anita") — only
+  // "named" was recognized before, so "called" silently became part of the
+  // captured name itself ("called Anita" as the display name, initials
+  // "CA" — see FINAL REPORT's physical-test repair E). Also fixed in the
+  // same pass: the article group only ever allowed "a" OR "new", never "a
+  // new" together, so "add A NEW friend named Anita" (a form the repair
+  // brief explicitly requires) matched nothing at all before this change.
+  const add = text.match(/^(?:add|create|save)\s+(?:a\s+)?(?:new\s+)?(?:friend|contact|person)\s+(?:(?:named|called)[,.:;]?\s+)?(.+?)[.!]?$/i) ?? text.match(/^add[,.]?\s+(.+?)\s+(?:as|to)\s+(?:a\s+)?(?:friend|contact|friends)[.!]?$/i);
   if (add) return { type: "friend-person", operation: "create", query: literal(add[1]!) };
   const alias = !/^remember to\b/i.test(text) && text.match(/^(?:call|remember)\s+(.+?)\s+(?:as|also as)\s+(.+?)[.!]?$/i);
   if (alias) return { type: "friend-person", operation: "alias", query: literal(alias[1]!), alias: literal(alias[2]!) };
