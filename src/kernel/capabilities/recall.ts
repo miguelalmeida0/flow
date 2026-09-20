@@ -19,6 +19,12 @@ export const recallSearch: Capability<RecallSearchArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    description: "Use this for any personal-recall question about what the user said, decided, or did — e.g. \"What did I decide about Lisbon?\"",
+    properties: { query: { type: "string", minLength: 1, maxLength: 200, description: "The topic or keywords to search for, taken from the user's question." } },
+    required: ["query"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.query ? "Say what to look for." : null),
   execute: (args, ctx): CapabilityResult => {
@@ -35,6 +41,11 @@ export const recallCommitments: Capability<RecallCommitmentsArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: { personId: { type: "string", description: "Exact person id, only from a lookup result already in context — never invented from a spoken name." } },
+    required: ["personId"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.personId ? "Say who." : null),
   execute: (args, ctx): CapabilityResult => {

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { createServer, ALLOWED_APPS } from "./index.mjs";
+import { createServer, ALLOWED_APPS, OLLAMA_BASE_URL, ALLOWED_MODELS } from "./index.mjs";
 
 const ORIGIN = "http://localhost:5173";
 const TOKEN = "test-session-token";
@@ -22,9 +22,22 @@ function makeFakeExecFile(impl) {
   return fn;
 }
 
+/** Records every fetch invocation and returns a scripted response instead of
+ * touching the network. */
+function makeFakeFetch(impl) {
+  const calls = [];
+  const fn = async (url, init) => {
+    calls.push([url, init]);
+    return impl(url, init);
+  };
+  fn.calls = calls;
+  return fn;
+}
+
 let server;
 let baseUrl;
 let execFileImpl;
+let fetchImpl;
 let allowedDir;
 let tmpRoot;
 
@@ -33,12 +46,16 @@ beforeEach(async () => {
   allowedDir = path.join(tmpRoot, "allowed");
   fs.mkdirSync(allowedDir);
   execFileImpl = makeFakeExecFile();
+  fetchImpl = makeFakeFetch(async () => {
+    throw new Error("fetchImpl not stubbed for this test");
+  });
 
   const created = createServer({
     token: TOKEN,
     allowedOrigins: [ORIGIN],
     allowedDirs: [fs.realpathSync(allowedDir)],
     execFileImpl,
+    fetchImpl: (url, init) => fetchImpl(url, init),
   });
   server = created.server;
   server._testHandle = created;
@@ -330,5 +347,133 @@ describe("CORS preflight", () => {
       headers: { Origin: "https://evil.example.com" },
     });
     expect(res.status).toBe(403);
+  });
+});
+
+describe("ai.interpretTurn", () => {
+  const schema = { type: "object", properties: { intent: { type: "string" } }, required: ["intent"] };
+
+  it("calls the hardcoded loopback Ollama endpoint with the allowlisted model and returns the model's content", async () => {
+    fetchImpl = makeFakeFetch(async () => ({
+      ok: true,
+      json: async () => ({ message: { content: '{"intent":"move_event"}' }, total_duration: 123000000, load_duration: 4000000, eval_count: 12 }),
+    }));
+    const res = await post("/capability", {
+      capability: "ai.interpretTurn",
+      args: { system: "You are Flow's interpreter.", user: "Move dinner to eight.", schema },
+    });
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json).toEqual({ content: '{"intent":"move_event"}', model: ALLOWED_MODELS[0], totalDurationMs: 123, loadDurationMs: 4, evalCount: 12 });
+    expect(fetchImpl.calls).toHaveLength(1);
+    const [url, init] = fetchImpl.calls[0];
+    expect(url).toBe(`${OLLAMA_BASE_URL}/api/chat`);
+    const body = JSON.parse(init.body);
+    expect(body.model).toBe(ALLOWED_MODELS[0]);
+    expect(body.format).toEqual(schema);
+    // A hybrid-thinking model (qwen3.5:4b/9b) defaults to emitting a hidden
+    // reasoning pass before its answer — verified directly against Ollama's
+    // own /api/chat this session: 80s+ for a trivial prompt with thinking
+    // on, sub-second with it off. Flow never reads `message.thinking` and
+    // never displays chain-of-thought, so this must always be off.
+    expect(body.think).toBe(false);
+    expect(body.messages).toEqual([
+      { role: "system", content: "You are Flow's interpreter." },
+      { role: "user", content: "Move dinner to eight." },
+    ]);
+  });
+
+  it("rejects a model name that isn't on the allowlist instead of forwarding it", async () => {
+    fetchImpl = makeFakeFetch(async () => ({ ok: true, json: async () => ({ message: { content: "{}" } }) }));
+    const res = await post("/capability", {
+      capability: "ai.interpretTurn",
+      args: { system: "s", user: "u", schema, model: "gpt-4o" },
+    });
+    expect(res.status).toBe(400);
+    expect(fetchImpl.calls).toHaveLength(0);
+  });
+
+  it("rejects an oversized prompt without calling the model", async () => {
+    // Exceeds MAX_AI_TEXT_CHARS (16000 — see its own doc comment for why it
+    // was raised from 8000: a real capability-derived system prompt now
+    // measures just over 8000 chars on its own).
+    const res = await post("/capability", {
+      capability: "ai.interpretTurn",
+      args: { system: "s".repeat(16001), user: "u", schema },
+    });
+    expect(res.status).toBe(400);
+    expect(fetchImpl.calls).toHaveLength(0);
+  });
+
+  it("returns 503 (not a raw error) when the local model is unreachable", async () => {
+    fetchImpl = makeFakeFetch(async () => {
+      throw new Error("ECONNREFUSED");
+    });
+    const res = await post("/capability", { capability: "ai.interpretTurn", args: { system: "s", user: "u", schema } });
+    expect(res.status).toBe(503);
+    const json = await res.json();
+    expect(json.error).toBe("Local model is unavailable.");
+  });
+});
+
+describe("ai.status", () => {
+  it("reports available:true (and defaultModelInstalled:true) when the DEFAULT model is installed", async () => {
+    fetchImpl = makeFakeFetch(async () => ({ ok: true, json: async () => ({ models: [{ name: ALLOWED_MODELS[0] }, { name: "qwen3:0.6b" }] }) }));
+    const res = await post("/capability", { capability: "ai.status", args: {} });
+    expect(res.status).toBe(200);
+    // liveProbeOk stays null when not explicitly requested (see the
+    // liveProbeOk:true test below) — an ordinary status check never pays
+    // for a real inference call unless the caller opts in.
+    expect(await res.json()).toEqual({ available: true, model: ALLOWED_MODELS[0], defaultModel: ALLOWED_MODELS[0], defaultModelInstalled: true, liveProbeOk: null });
+  });
+
+  it("reports available:false when only a NON-default allowlisted model is installed — never silently substitutes it", async () => {
+    fetchImpl = makeFakeFetch(async () => ({ ok: true, json: async () => ({ models: [{ name: ALLOWED_MODELS[1] }] }) }));
+    const res = await post("/capability", { capability: "ai.status", args: {} });
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ available: false, model: null, defaultModel: ALLOWED_MODELS[0], defaultModelInstalled: false, liveProbeOk: null });
+  });
+
+  it("reports available:false without throwing when Ollama isn't running", async () => {
+    fetchImpl = makeFakeFetch(async () => {
+      throw new Error("ECONNREFUSED");
+    });
+    const res = await post("/capability", { capability: "ai.status", args: {} });
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ available: false, model: null, defaultModel: ALLOWED_MODELS[0], defaultModelInstalled: false, liveProbeOk: false });
+  });
+
+  it("liveProbe:true actually calls the model, not just /api/tags — proves a bounded, harmless real request works", async () => {
+    let calls = 0;
+    fetchImpl = makeFakeFetch(async (url) => {
+      calls += 1;
+      if (String(url).endsWith("/api/tags")) return { ok: true, json: async () => ({ models: [{ name: ALLOWED_MODELS[0] }] }) };
+      return { ok: true, json: async () => ({ message: { content: '{"ok":true}' } }) };
+    });
+    const res = await post("/capability", { capability: "ai.status", args: { liveProbe: true } });
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ available: true, model: ALLOWED_MODELS[0], defaultModel: ALLOWED_MODELS[0], defaultModelInstalled: true, liveProbeOk: true });
+    expect(calls).toBe(2); // /api/tags, then the real chat probe.
+  });
+
+  it("liveProbe:true reports available:false when the model is installed but genuinely doesn't respond", async () => {
+    fetchImpl = makeFakeFetch(async (url) => {
+      if (String(url).endsWith("/api/tags")) return { ok: true, json: async () => ({ models: [{ name: ALLOWED_MODELS[0] }] }) };
+      throw new Error("model stuck loading");
+    });
+    const res = await post("/capability", { capability: "ai.status", args: { liveProbe: true } });
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ available: false, model: ALLOWED_MODELS[0], defaultModel: ALLOWED_MODELS[0], defaultModelInstalled: true, liveProbeOk: false });
+  });
+
+  it("does not run the live probe when the default model isn't even installed — nothing to probe", async () => {
+    let calls = 0;
+    fetchImpl = makeFakeFetch(async () => {
+      calls += 1;
+      return { ok: true, json: async () => ({ models: [] }) };
+    });
+    const res = await post("/capability", { capability: "ai.status", args: { liveProbe: true } });
+    expect(res.status).toBe(200);
+    expect(calls).toBe(1); // only /api/tags — no wasted probe call.
   });
 });

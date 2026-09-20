@@ -27,6 +27,14 @@ async function setup(mode: "typed" | "voice", promptSpeechAdapter?: PromptSpeech
   return { command, adapter, view };
 }
 for (const mode of ["typed", "voice"] as const) describe(`Friends through ${mode} command dock`, () => {
+  it("opens the persisted person profile after kernel creation", async () => {
+    const { command } = await setup(mode);
+    await command("Add new friend called Anita");
+    const person = read().document.people.find(({ name }) => name === "Anita")!;
+    expect(person).toBeDefined();
+    await waitFor(() => expect(document.querySelector(`[data-task-entity-id="${person.id}"]`)).not.toBeNull());
+    expect(screen.getByLabelText("Message to Anita")).toBeInTheDocument();
+  });
   it("coordinates a changed meeting time and Tell him without duplicating the linked event", async () => {
     const { command } = await setup(mode);
     await command("Add friend John"); await command("Tell John I booked a meeting Thursday at ten"); await command("yes"); await waitFor(() => expect(deliveryReceipts()).toHaveLength(1));

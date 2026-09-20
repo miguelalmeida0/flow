@@ -18,6 +18,7 @@ import { voiceDebug } from "../../features/day-planner/voice/voiceDebug";
 import { calendarReferenceScope } from "../../app/calendarCommandScope";
 import { BrowserPromptSpeech, PromptSpeechCoordinator, type PromptSpeechAdapter } from "../../features/voice/promptSpeech";
 import { beginRecordingUtterance, sampleRecordingUtterance, finishRecordingUtterance, discardRecordingUtterance } from "../../features/studio/journalRuntimeClock";
+import { getVoiceCompanionToken } from "../../kernel/voice/voiceCompanionClient";
 
 const VOICE_PERMISSION_MARKER = "flow.voice.permission-granted.v1";
 
@@ -69,6 +70,23 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
       setDraft(text); setEditing(false);
       const captured: CapturedCommandContext = { context: { ...environment.conversationContext, route: environment.route, focusedEntityId: environment.focusedEntityId, activePlanId: environment.activePlanId }, scope: environment.temporalScope, selectedCalendarEventId: environment.selectedCalendarEventId, recommendations: structuredClone(environment.nowCandidates), finalSegments: boundary?.assembly?.selectedFinalSegments, confirmationAuthority: environment.confirmationAuthority };
       const dispatch = (value: string) => environment.runCommand(value, "voice", commandId, captured);
+      // Ownership boundary (see src/kernel/voice/voiceOwnership.ts): once the
+      // local Kyutai pipeline is available, it — not this browser
+      // SpeechRecognition path — owns the ACTIVE conversational turn. This
+      // recognizer keeps running for wake-word spotting only (the
+      // isCompleteNavigationAtNativeEnd bypass below fires BEFORE wake, when
+      // Kyutai's own mic is provably not yet capturing anything, so it is
+      // intentionally NOT gated here) — every dispatch call site reached
+      // once the conversation is already awake goes through this instead of
+      // `dispatch` directly, so it becomes a no-op rather than a second,
+      // competing kernel call for the same physical utterance.
+      const dispatchIfOwned = (value: string) => {
+        if (environment.voiceInputOwner === "kyutai-local") {
+          voiceDebug("wake.suppressedBrowserDispatch", { text: value, commandId });
+          return;
+        }
+        dispatch(value);
+      };
       const envelope = readWakeEnvelope(text);
       voiceDebug("wake.transcript", { text, envelope, entrance: entranceRef.current });
       if (entranceRef.current === "wake-armed") {
@@ -88,7 +106,7 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
         flushSync(() => environment.wakeVoiceHome(text));
         if (envelope.kind === "wake-command") {
           stayOpen();
-          window.setTimeout(() => dispatch(text), reducedMotion ? 0 : 90);
+          window.setTimeout(() => dispatchIfOwned(text), reducedMotion ? 0 : 90);
         }
         return;
       }
@@ -102,14 +120,14 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
         }
         entranceRef.current = "active";
         environment.activateVoiceHome(text);
-        dispatch(text);
+        dispatchIfOwned(text);
         return;
       }
       if (envelope.kind === "wake") {
         flushSync(() => environment.wakeVoiceHome(text));
         return;
       }
-      dispatch(text);
+      dispatchIfOwned(text);
     },
     (text) => { if (promptSpeech.interim(text) === "echo") return; setHeardInterim(text); sampleRecordingUtterance(text); environment.setListeningFeedback(text); },
     phrases,
@@ -134,16 +152,34 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
   );
   const promptText = ["clarification", "confirmation"].includes(environment.feedback.phase) ? `${environment.feedback.title}. ${environment.feedback.detail ?? ""}` : undefined;
   useEffect(() => {
-    if (!promptText || !voice.active) return;
+    // Voice ownership (see src/kernel/voice/voiceOwnership.ts) applies to
+    // SPEAKING too, not just listening: once Kyutai owns the session, it
+    // already speaks this exact feedback itself (FlowEnvironmentProvider's
+    // own speak() effect) through a barge-in-aware TTS pipeline. Without
+    // this gate, the browser's speechSynthesis would ALSO speak the same
+    // confirmation at the same time, and a user saying "confirm" while
+    // EITHER one is still talking would hit this file's own
+    // PromptSpeechCoordinator.assess(), which deliberately treats a
+    // confirmation word heard during overlap as too ambiguous to trust
+    // (see promptSpeech.ts's "reask" branch) — exactly the reported "That
+    // answer overlapped playback" bug (see FINAL REPORT's physical-test
+    // repair C). Kyutai's own barge-in has no such special-casing: it
+    // cancels TTS immediately and the next utterance goes through the same
+    // production reply-handling any typed "confirm" already uses.
+    if (!promptText || !voice.active || environment.voiceInputOwner === "kyutai-local") return;
     let current = true;
     setPromptIssue(undefined);
     void promptSpeech.speak(promptText, effectiveLocale).catch((error: unknown) => { if (current) setPromptIssue(error instanceof Error ? error.message : "Spoken prompts are unavailable. The question is visible."); });
     return () => { current = false; promptSpeech.cancel(); };
-  }, [effectiveLocale, promptSpeech, promptText, environment.pending?.baseRevision, environment.feedback.speechKey, voice.active]);
+  }, [effectiveLocale, promptSpeech, promptText, environment.pending?.baseRevision, environment.feedback.speechKey, voice.active, environment.voiceInputOwner]);
   useEffect(() => () => promptSpeech.cancel(), [promptSpeech]);
   useEffect(() => { setFlowLiveStatus(voice.status); }, [setFlowLiveStatus, voice.status]);
   useEffect(() => {
     voiceDebug("dock.mount", { supported: voice.supported, entrance: entranceRef.current });
+    // A paired local voice installation owns capture even during warm-up
+    // and reconnect. Starting Chrome recognition here creates a competing
+    // microphone and silently falls back to cloud STT on local failure.
+    if (!recognitionAdapter && getVoiceCompanionToken()) return;
     if (!voice.supported) {
       voiceDebug("recognition.start.blocked", { reason: "adapter-unavailable" });
       environment.disableVoiceWakeGate();

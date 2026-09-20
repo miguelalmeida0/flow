@@ -35,13 +35,13 @@ import { resolveEventReference } from "../features/day-planner/scheduling/resolu
 import { allCalendarEvents, projectCalendarDate } from "../domain/life-calendar-world";
 import { createOpenMeteoProvider, type WeatherProvider } from "../features/elite/weather";
 import { dateKeyAfter } from "../features/day-planner/interpretation/temporal";
-import { beginCommandTrace, recordCommandOutcome, patchCommandTrace } from "./commandTrace";
+import { beginCommandTrace, completeCommandTrace, recordCommandOutcome, patchCommandTrace } from "./commandTrace";
 import { recordingCommandId } from "../features/studio/recordingRequest";
 import { deriveRewardFacts } from "../core/rewards/derive-reward-facts";
 import { RewardDirector } from "../core/rewards/reward-director";
 import { readRewardPreferences, writeRewardPreferences } from "../core/rewards/reward-preferences";
 import type { RewardFact, RewardPreferences, RewardRuntimeSnapshot } from "../core/rewards/reward-types";
-import { resolveGlobalCommand, type GlobalIntent } from "../shared/command/globalInterpreter";
+import { resolveGlobalCommand, TERMINAL_FALLBACK_DETAILS, type GlobalIntent } from "../shared/command/globalInterpreter";
 import { loadVisualRewardDemo } from "../core/rewards/reward-demo";
 import { useReducedMotionPreference } from "../shared/motion/useReducedMotionPreference";
 import { projectResolvedCommand, type VoiceWorldSnapshot } from "../features/voice-home/voiceWorld";
@@ -53,10 +53,18 @@ import { calendarReferenceScope, calendarRequestSourceDate } from "./calendarCom
 import { initialCommitmentView, commitmentViewCommands, type CommitmentViewState } from "../features/people/commitmentView";
 import { entityViewDescription, type EntityEditor, type EntityViewIntent } from "../features/entity-navigation/entityView";
 import { initialCommandPresentation, type CommandPresentation, type PresentationIntent } from "../shared/command/presentationCapability";
-import { runKernelTurn, createBridgeSession, fileReference, recentFileToReference, type RecentFileMeta } from "../kernel/productionBridge";
+import { runKernelTurn, createBridgeSession, fileReference, recentFileToReference, getBridgeRegistry, getBridgeIdempotencyStore, persistKernelMutation, type RecentFileMeta } from "../kernel/productionBridge";
 import { rememberSearchResults } from "../kernel/referents";
 import { referenceFromLegacyContext, legacyContextPatchFromReference } from "./kernelReferentBridge";
 import { desktopBridgeEvents } from "../kernel/lib/desktopBridgeClient";
+import { createEnvironment } from "../kernel/kernel";
+import { assessComplexity } from "../kernel/llm/complexityGate";
+import { runConversationTurn } from "../kernel/llm/conversationCoordinator";
+import { correctedTranscript } from "../shared/command/selfCorrection";
+import type { ReferentSummary, RecentTurn } from "../kernel/llm/promptBuilder";
+import { useKyutaiVoiceSession } from "../features/voice/useKyutaiVoiceSession";
+import { voiceDebug } from "../features/day-planner/voice/voiceDebug";
+import { deriveVoiceInputOwner, type VoiceInputOwner } from "../kernel/voice/voiceOwnership";
 
 interface EnvironmentValue {
   snapshot: LifeSnapshot;
@@ -81,6 +89,11 @@ interface EnvironmentValue {
   nowExplanationOpen: boolean;
   flowLiveStatus: FlowLiveStatus;
   voiceWorld: VoiceWorldSnapshot;
+  /** Exactly one authoritative voice-input owner at a time — see
+   * src/kernel/voice/voiceOwnership.ts. GlobalCommandDock reads this to
+   * decide whether the legacy browser SpeechRecognition path is allowed to
+   * dispatch a transcript into the kernel; it never is while Kyutai owns. */
+  voiceInputOwner: VoiceInputOwner;
   reward: RewardRuntimeSnapshot;
   rewardPreferences: RewardPreferences;
   conversationContext: LifeContext;
@@ -340,6 +353,28 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
   // ONE authoritative referent store for both legacy and kernel-recognized
   // commands — see kernelReferentBridge.ts for the two-way translation.
   const kernelSessionRef = useRef(createBridgeSession());
+  // Conversational-intelligence layer (src/kernel/llm/): a small ring buffer
+  // of recent turns for prompt context (never the whole Journal/document —
+  // see PromptContext's doc), an AbortController for the in-flight model
+  // call so a new utterance (including the user just saying "stop"/"never
+  // mind") immediately invalidates a stale response before it can execute,
+  // and the one open model-issued clarification question, which is NOT
+  // bound to a kernel plan step (see conversationCoordinator.ts's doc on
+  // ConversationTurnResult.conversationalClarification) so it's tracked
+  // here instead, with the same 2-minute TTL the legacy pending-intent
+  // continuation already uses.
+  const recentConversationTurnsRef = useRef<RecentTurn[]>([]);
+  const conversationalAbortRef = useRef<AbortController | undefined>(undefined);
+  // True only while a conversational-tier model call is genuinely
+  // in-flight (set at the start of tryConversationalBridge, cleared in its
+  // `finally` — see there for why a plain `conversationalAbortRef.current`
+  // truthiness check can't tell "still thinking" apart from "already
+  // finished"). Read by the Escape handler below so cancel works even when
+  // there is no legacy `pending`/`calendarPreview` to cancel — otherwise
+  // Escape is a no-op while the local model is thinking, with no other way
+  // to interrupt it short of speaking a brand-new utterance.
+  const conversationalPendingRef = useRef(false);
+  const pendingConversationalClarificationRef = useRef<{ question: string; choices: string[]; askedAtMs: number } | undefined>(undefined);
   const activeCommandId = useRef<string | undefined>(undefined);
   const nativeFeedbackEpoch = useRef(0);
   const activeCommandSource = useRef<TransactionSource | undefined>(undefined);
@@ -585,7 +620,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     setPending(undefined); setCalendarPreview(undefined); setSelectedCalendarEventId(undefined);
     const context = { ...conversationRef.current, currentTimeScope: scope, nowMs: now().getTime(), turn: (conversationRef.current.turn ?? 0) + 1 };
     conversationRef.current = context; setConversationContext(context);
-    setFeedback({ phase: "completed", title: scope.kind === "week" ? "This week" : "Day changed", detail: "Today, Focus, Weather, People, and Good to know moved together.", ...(transcript ? { transcript } : {}) });
+    setFeedback({ phase: "completed", title: scope.kind === "week" ? "This week" : `Showing ${new Intl.DateTimeFormat("en", { dateStyle: "full" }).format(new Date(`${scope.dateKey}T12:00:00`))}`, detail: "Today, Focus, Weather, People, and Good to know moved together.", ...(transcript ? { transcript } : {}) });
     const commandSource = activeCommandSource.current;
     acknowledgeActiveVoice();
     rewardDirector.emit({ type: "time-scope-changed", id: `scope-${now().getTime()}-${scope.kind}-${scope.dateKey}`, at: now().getTime(), from: previousScope, to: scope, source: commandSource === "voice" ? "voice" : commandSource === "type" ? "typed" : "pointer" });
@@ -622,9 +657,24 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     function escape(event: KeyboardEvent) {
       if (event.key !== "Escape") return;
       const hasPresentation = rewardDirector.getSnapshot().active;
-      if (!pending && !calendarPreview && !hasPresentation) return;
+      // Immediate local cancel path for the conversational tier (Rule #2/
+      // #8/#11): without this, Escape is a no-op while the local model is
+      // thinking and there's no pre-existing legacy pending/preview to
+      // cancel — the ONLY way to interrupt it would otherwise be speaking a
+      // brand-new utterance, which just incidentally aborts the old one as
+      // a side effect of routing a different turn, not a real cancel.
+      const hasConversationalTurn = conversationalPendingRef.current;
+      if (!pending && !calendarPreview && !hasPresentation && !hasConversationalTurn) return;
       event.preventDefault(); cancelTransition(); rewardDirector.cancel("cancelled");
-      if (!pending && !calendarPreview) return;
+      if (hasConversationalTurn) {
+        conversationalAbortRef.current?.abort();
+        conversationalPendingRef.current = false;
+        pendingConversationalClarificationRef.current = undefined;
+      }
+      if (!pending && !calendarPreview) {
+        if (hasConversationalTurn) setFeedback({ phase: "completed", title: "Cancelled", detail: "Nothing changed." });
+        return;
+      }
       const hadPreview = Boolean(calendarPreview);
       pendingRef.current = undefined; calendarPreviewRef.current = undefined;
       setPending(undefined); setCalendarPreview(undefined); setCalendarFeedback(calendarReady);
@@ -965,6 +1015,17 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     nativeFeedbackEpoch.current += 1;
     const hadPreview = Boolean(calendarPreviewRef.current);
     pendingRef.current = undefined; calendarPreviewRef.current = undefined;
+    // Immediate local stop/mute/cancel path for the conversational tier
+    // (Rule #2/#8): aborts any in-flight local-model call so a response
+    // that arrives after this point is discarded by tryConversationalBridge's
+    // own superseded-controller check, and drops the one-shot conversational
+    // clarification so a stale "yes" can't resume it.
+    conversationalAbortRef.current?.abort();
+    pendingConversationalClarificationRef.current = undefined;
+    // Stops any in-progress Kyutai TTS playback immediately and returns the
+    // voice state machine to LISTENING — the same "never mind"/Escape
+    // cancel path barge-in itself uses (see useKyutaiVoiceSession's cancel).
+    kyutaiVoiceRef.current?.cancel();
     setPending(undefined); setCalendarPreview(undefined); cancelTransition(); rewardDirector.cancel("cancelled"); setFeedback({ phase: "completed", title: hadPreview ? "Preview cancelled" : "Cancelled", detail: "Nothing changed." });
   }
   function applyPendingSelection(choiceId: string, choiceTranscript?: string) {
@@ -1161,6 +1222,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
    */
   function tryKernelBridge(transcript: string, source: TransactionSource): boolean {
     const document = snapshotRef.current.document;
+    const priorTransactionId = snapshotRef.current.lastTransaction?.id;
 
     // Legacy -> kernel: whichever referent legacy most recently established
     // (selected/lastReferenced/lastChanged/lastCreated — see
@@ -1186,6 +1248,11 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     );
     kernelSessionRef.current = result.session;
     if (!result.recognized) return false;
+    voiceDebug("voice.kernelDispatch", { sessionId: result.session.id, turnId: result.session.turn,
+      planId: result.session.pendingPlan?.id ?? result.session.recentResults.at(-1)?.planId, proposalId: result.session.activeProposal?.id,
+      stepId: result.session.recentResults.at(-1)?.stepId,
+      status: result.outcome.status, transcript,
+      executionId: snapshotRef.current.lastTransaction?.id !== priorTransactionId ? snapshotRef.current.lastTransaction?.id : undefined });
 
     // Every legacy-handled command updates lastTranscript generically
     // (see createLifeCommandRunner's own options.setLastTranscript call) —
@@ -1221,6 +1288,11 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
         case "plans":
           navigate("outcomes"); setFocusedEntityId(ref.id); break;
         case "people":
+          navigate("people", undefined, false, "default");
+          setFocusedEntityId(ref.personIds?.[0] ?? ref.id);
+          conversationRef.current = { ...conversationRef.current, focusedPersonId: ref.personIds?.[0] ?? ref.id, focusedGroupId: undefined, topic: "person" };
+          setConversationContext(conversationRef.current);
+          break;
         case "commitments":
           navigate("people"); setFocusedEntityId(ref.personIds?.[0] ?? ref.id); break;
         case "calendar":
@@ -1255,6 +1327,144 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     return true;
   }
 
+  const CONVERSATIONAL_CLARIFICATION_TTL_MS = 120_000; // Matches legacy's own pendingIntent continuation TTL (lifeCommandController.ts).
+
+  function activeConversationalClarification(): { question: string; choices: string[] } | undefined {
+    const pending = pendingConversationalClarificationRef.current;
+    if (!pending) return undefined;
+    if (now().getTime() - pending.askedAtMs > CONVERSATIONAL_CLARIFICATION_TTL_MS) {
+      pendingConversationalClarificationRef.current = undefined;
+      return undefined;
+    }
+    return { question: pending.question, choices: pending.choices };
+  }
+
+  /**
+   * The conversational-intelligence tier (src/kernel/llm/). Reached from
+   * `runCommandExactlyOnce` in exactly two mutually exclusive situations
+   * (see that function): (1) a cheap linguistic gate flags the utterance as
+   * too complex for the deterministic recognizers to safely auto-execute
+   * (a condition/exclusion clause, a hypothetical, an explanatory question,
+   * ...), routed here BEFORE either deterministic recognizer runs, or (2)
+   * both the kernel bridge and the legacy interpreter already declined the
+   * turn. The legacy interpreter and this model tier never both act on the
+   * same turn — see assessComplexity's module doc.
+   *
+   * Mirrors tryKernelBridge's own tail (persist mutation, two-way referent
+   * sync, feedback mapping) so a model-produced result reaches the exact
+   * same UI/state surface as any other kernel-recognized command — no
+   * second chat surface, no separate status card (Rule #9).
+   */
+  async function tryConversationalBridge(transcript: string, source: TransactionSource): Promise<void> {
+    conversationalAbortRef.current?.abort();
+    const controller = new AbortController();
+    conversationalAbortRef.current = controller;
+    conversationalPendingRef.current = true;
+    try {
+      await tryConversationalBridgeBody(transcript, source, controller);
+    } finally {
+      // Only clear the flag if a NEWER call hasn't already superseded this
+      // one (that newer call owns the flag now, and will clear it itself).
+      if (conversationalAbortRef.current === controller) conversationalPendingRef.current = false;
+    }
+  }
+
+  async function tryConversationalBridgeBody(transcript: string, source: TransactionSource, controller: AbortController): Promise<void> {
+    // Stamp the same dev command trace every other turn stamps (see the
+    // undo/redo/whatChanged delegation just above tryKernelBridge for the
+    // identical pattern) — this tier is reached either before the
+    // deterministic recognizers run at all, or after legacy's own
+    // "unsupported" branch would otherwise have stamped it itself
+    // (lifeCommandController.ts), so without this call a model-handled turn
+    // would never mark window.__FLOW_COMMAND_TRACE__, breaking any
+    // trace-driven observability/tests that every other command satisfies.
+    beginCommandTrace(transcript, { type: "conversational" }, conversationRef.current);
+
+    const beforeDocument = snapshotRef.current.document;
+    const beforeMemory = beforeDocument.personalMemoryFacts ?? [];
+
+    const legacyRef = referenceFromLegacyContext(conversationRef.current);
+    const kernelRef = kernelSessionRef.current.referents.lastMentioned;
+    if (legacyRef && (legacyRef.at ?? 0) > (kernelRef?.at ?? -1)) {
+      kernelSessionRef.current = rememberSearchResults(kernelSessionRef.current, [legacyRef], legacyRef.at ?? now().getTime());
+    }
+
+    const env = { ...createEnvironment(getBridgeRegistry(), beforeDocument, { route: routeRef.current }, { now }, getBridgeIdempotencyStore()), memory: beforeMemory };
+    const referentEntries = Object.entries(kernelSessionRef.current.referents).filter(([key]) => key !== "lastSearchResults") as [ReferentSummary["key"], { id: string; kind: string; label?: string } | undefined][];
+    const referents: ReferentSummary[] = referentEntries
+      .filter((entry): entry is [ReferentSummary["key"], { id: string; kind: string; label?: string }] => entry[1] !== undefined)
+      .map(([key, ref]) => ({ key, label: ref.label ?? ref.id, kind: ref.kind }));
+
+    const clarification = activeConversationalClarification();
+
+    const result = await runConversationTurn({
+      rawTranscript: transcript,
+      normalizedTranscript: correctedTranscript(transcript),
+      env,
+      session: kernelSessionRef.current,
+      recentTurns: recentConversationTurnsRef.current,
+      referents,
+      activeClarificationQuestion: clarification?.question,
+      signal: controller.signal,
+    });
+
+    // A newer utterance (including the user saying "stop"/"never mind")
+    // superseded this turn while the model was thinking — a late response
+    // from an interrupted turn must never execute or update visible state.
+    if (conversationalAbortRef.current !== controller) return;
+
+    kernelSessionRef.current = result.session;
+
+    if (result.conversationalClarification) {
+      pendingConversationalClarificationRef.current = { ...result.conversationalClarification, askedAtMs: now().getTime() };
+    } else {
+      pendingConversationalClarificationRef.current = undefined;
+    }
+
+    const persistedActions = result.outcome.status === "executed" && result.primaryCapabilityId
+      ? persistKernelMutation(result.primaryCapabilityId, beforeDocument, beforeMemory, result.env.document, result.env.memory, undefined)
+      : [];
+    if (persistedActions.length > 0) dispatchLife(persistedActions, result.message, transcript, source);
+
+    const currentRef = kernelSessionRef.current.referents.lastMentioned;
+    if (currentRef) {
+      const patch = legacyContextPatchFromReference(currentRef, now().getTime());
+      if (patch && conversationRef.current.focusedEntityId !== patch.focusedEntityId) {
+        const next = { ...conversationRef.current, ...patch };
+        conversationRef.current = next;
+        setConversationContext(next);
+        setFocusedEntityId(patch.focusedEntityId);
+      }
+    }
+
+    setLastTranscript(transcript);
+    recentConversationTurnsRef.current = [...recentConversationTurnsRef.current.slice(-5), { transcript, response: result.message }];
+
+    const phaseToFeedback: Record<string, CommandFeedback["phase"]> = {
+      listening: "clarification", thinking: "understanding", checking: "understanding",
+      "needs-clarification": "clarification", "ready-to-act": "confirmation", done: "completed",
+    };
+    // result.message already carries the cause-specific truthful text (see
+    // conversationCoordinator.ts's modelUnavailableMessage — not-configured
+    // vs. offline vs. unauthorized vs. a genuinely unresponsive model are
+    // different problems with different fixes, so they no longer collapse
+    // into one generic "isn't available" string here).
+    const declineMessage = result.message;
+    completeCommandTrace(persistedActions, [], result.outcome.status === "executed" ? undefined : declineMessage);
+    // A decline is exactly legacy's own "unsupported" shape (title "Nothing
+    // changed" + a specific detail, see lifeCommandController.ts) — nothing
+    // mutated, and the reason (model unavailable, deadline, cancelled, ...)
+    // belongs in the detail, not a bespoke title, so this tier never grows a
+    // second status-card convention (Rule #9) and always honestly discloses
+    // a local-model/companion-unavailable state instead of quietly acting
+    // like nothing was asked.
+    setFeedback(
+      result.declineReason
+        ? { phase: "error", title: "Nothing changed", detail: declineMessage, transcript }
+        : { phase: result.outcome.status === "error" ? "error" : (phaseToFeedback[result.phase] ?? "completed"), title: result.message, transcript },
+    );
+  }
+
   function runCommandExactlyOnce(transcript: string, source: TransactionSource = "type", commandId = `${source}-${Date.now()}-${Math.random().toString(36).slice(2)}`, captured?: CapturedCommandContext) {
     if (processedCommandIds.current.includes(commandId)) return;
     processedCommandIds.current = [...processedCommandIds.current.slice(-127), commandId];
@@ -1263,6 +1473,32 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     // literally as journal content, not a command to Flow.
     const activeVoiceMode = captured?.context.voiceMode ?? conversationRef.current.voiceMode;
     const isDictating = activeVoiceMode === "dictation" || activeVoiceMode === "journal-longform" || activeVoiceMode === "voice-note-longform";
+
+    // Conversational-intelligence pre-gate (src/kernel/llm/complexityGate.ts):
+    // an utterance with a condition/exclusion clause, hypothetical framing,
+    // a negated action, a quoted instruction, or an explanatory question is
+    // routed straight to the local model BEFORE either deterministic
+    // recognizer runs — never after, and never both (see
+    // tryConversationalBridge's doc). Skipped while a kernel proposal or
+    // clarification is already pending (so a short deterministic reply, "the
+    // second one", isn't hijacked) OR while LEGACY has its own pending
+    // continuation open — a friend-message draft awaiting a refinement, or a
+    // calendar what-if preview awaiting confirm/cancel — since those already
+    // correctly treat a quoted/conditional-looking follow-up as literal
+    // continuation data, not a fresh instruction (see FlowFriends's "Add
+    // '<quoted text>'" draft-refinement tests). An open CONVERSATIONAL
+    // clarification (a different, model-owned pending state) still takes the
+    // very next utterance as its answer regardless of the gate.
+    if (!isDictating) {
+      const hasKernelPendingContext = Boolean(kernelSessionRef.current.activeProposal || kernelSessionRef.current.pendingClarification);
+      const hasLegacyPendingContext = Boolean(pendingRef.current || calendarPreviewRef.current);
+      const continuesConversation = Boolean(activeConversationalClarification());
+      if (!hasKernelPendingContext && !hasLegacyPendingContext && (continuesConversation || assessComplexity(transcript).flagged)) {
+        void mutationCoordinator.run(() => tryConversationalBridge(transcript, source));
+        return;
+      }
+    }
+
     if (!isDictating && tryKernelBridge(transcript, source)) return;
     // Typed submission has the same acquisition boundary as final speech.
     // Freeze references/authority, never the document: execution still reads
@@ -1314,6 +1550,25 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
         if (captured && ["confirm", "pending-choice", "cancel", "capture-answer", "friend-draft", "friend-marker-answer"].includes(resolution.intent.type)
           && captured.confirmationAuthority !== (calendarPreviewRef.current ?? pendingRef.current ?? null)) {
           resolution = { intent: { type: "clarification", title: "The pending request changed while you were speaking.", detail: "Review the current request, then confirm or cancel it again. Nothing changed." }, candidates: [] };
+        }
+        // Last-resort conversational tier: the legacy interpreter's own
+        // "unsupported" fallback took no action and mutated nothing, so
+        // handing the SAME utterance to the model here cannot double-execute
+        // anything the legacy path already did (see complexityGate.ts's
+        // module doc for why this ordering, not the reverse, is required).
+        // This is what lets an unrecognized-but-understood request ("My
+        // dentist appointment is Tuesday at three, put it in my calendar")
+        // get a real interpretation instead of a bare "Nothing changed" —
+        // but ONLY when legacy found genuinely nothing at all (its detail is
+        // one of the two TRUE terminal-fallback strings). An "unsupported"
+        // intent with a SPECIFIC detail ("That time is outside a valid
+        // 24-hour clock.") means legacy already recognized the attempt and
+        // gave a correct, deterministic answer — rerouting that through an
+        // async model round-trip would replace a good synchronous answer
+        // with a worse (and slower) one for no benefit.
+        if (!isDictating && !captured?.boundaryClarification && resolution.intent.type === "unsupported"
+          && (TERMINAL_FALLBACK_DETAILS as readonly string[]).includes(resolution.intent.detail)) {
+          return tryConversationalBridge(transcript.trim(), source);
         }
         const isView = ["commitment-view", "entity-view", "editor-close", "command-surface", "sensory-preference", "voice-retry"].includes(resolution.intent.type);
         const supersededView = () => isView && inputSequence < latestCommitmentViewSequence.current;
@@ -1495,11 +1750,67 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     voiceWorldController.preview(projectResolvedCommand(resolution, currentDocument, currentContext, interim, "voice", "voice-interim-preview"));
   }, [flowLiveStatus, now, voiceWorldController]);
 
+  // Local Kyutai transcripts own wake detection and conversational input.
+  // Finals enter the same command coordinator as typed input, and resulting
+  // feedback drives local TTS (voice-companion/docs/VOICE_COMPANION.md).
+  const kyutaiAwaitingResponseRef = useRef(false);
+  const kyutaiVoice = useKyutaiVoiceSession({
+    dictationActive: ["dictation", "journal-longform", "voice-note-longform"].includes(conversationContext.voiceMode ?? "command"),
+    getUtteranceAuthority: () => calendarPreviewRef.current ?? pendingRef.current ?? kernelSessionRef.current.activeProposal ?? null,
+    onAuthorityChanged: () => {
+      kyutaiAwaitingResponseRef.current = true;
+      setFeedback({ phase: "clarification", title: "The pending request changed while you were speaking.", detail: "Review the current request, then confirm or cancel it again. Nothing changed." });
+    },
+    onFinalTranscript: (transcript) => {
+      voiceDebug("voice.finalTranscriptToKernel", { transcript });
+      kyutaiAwaitingResponseRef.current = !["dictation", "journal-longform", "voice-note-longform"].includes(conversationRef.current.voiceMode ?? "command");
+      voiceWorldController.activate("listening");
+      runCommandExactlyOnce(transcript, "voice");
+    },
+  });
+  const kyutaiVoiceRef = useRef(kyutaiVoice);
+  kyutaiVoiceRef.current = kyutaiVoice;
+  // The one authoritative ownership signal (see voiceOwnership.ts) —
+  // GlobalCommandDock reads this off the environment to decide whether its
+  // own (legacy browser SpeechRecognition) transcript is allowed to reach
+  // the kernel. Derived fresh every render from `available`, so a
+  // disconnect/reconnect flips ownership with no overlap window: the very
+  // next transcript on either side sees the updated value.
+  const voiceInputOwner: VoiceInputOwner = deriveVoiceInputOwner(kyutaiVoice.available);
+
+  useEffect(() => {
+    voiceDebug("voice.available", { available: kyutaiVoice.available, voiceInputOwner });
+  }, [kyutaiVoice.available, voiceInputOwner]);
+
+  useEffect(() => {
+    voiceDebug("voice.feedback", { phase: feedback.phase, title: feedback.title, awaiting: kyutaiAwaitingResponseRef.current });
+    if (!kyutaiAwaitingResponseRef.current) return;
+    if (feedback.phase === "understanding" || feedback.phase === "listening" || feedback.phase === "ready") return;
+    kyutaiAwaitingResponseRef.current = false;
+    // Speech presentation (Rule: concise, never JSON/chain-of-thought) —
+    // `feedback.title` is already the short, spoken-appropriate summary
+    // every other command result uses for its primary UI text. For a
+    // confirmation or clarification specifically, `detail` is also spoken:
+    // that's where the resolved date/time actually lives (see
+    // confirmation.ts's destructive-removal detail, e.g. "Dentist
+    // Appointment · Thursday, Sep 17, 4:00–5:00pm...") — a destructive
+    // confirmation must say the full resolved date aloud (see FINAL
+    // REPORT's physical-test repair F/G), not just show it in small visual
+    // text the user has to read. Every other phase stays title-only.
+    if (feedback.title) {
+      const speakDetail = feedback.phase === "confirmation" || feedback.phase === "clarification" || feedback.phase === "error";
+      const summary = speakDetail && feedback.detail ? `${feedback.title} ${feedback.detail}` : feedback.title;
+      const text = feedback.phase === "confirmation" ? `${summary} Say confirm to continue, or cancel.` : summary;
+      voiceDebug("voice.speakFeedback", { title: feedback.title, text, phase: feedback.phase, spokeDetail: speakDetail });
+      kyutaiVoiceRef.current.speak(text);
+    }
+  }, [feedback]);
+
   const value = useMemo<EnvironmentValue>(() => ({
     snapshot, document: snapshot.document, route, peopleView, commitmentView, entityEditor, commandPresentation, activePlanId, focusedEntityId, selectedCalendarEventId, feedback, calendarFeedback, conversationContext,
     pageNavigation, temporalScope, todayDateKey: snapshot.temporal?.todayDateKey ?? dateKey, currentTime: clockTime, setTemporalScope, recordInstinctExposure,
     renderedCalendar: calendarPreview?.proposed.calendar ?? snapshot.document.calendar, calendarPreview: Boolean(calendarPreview),
-    lastTranscript, pending, nowCandidates, nowQuery, nowExplanationOpen, flowLiveStatus, voiceWorld: voiceWorldController.snapshot, reward, rewardPreferences, canUndo: snapshot.past.length > 0, canRedo: snapshot.future.length > 0,
+    lastTranscript, pending, nowCandidates, nowQuery, nowExplanationOpen, flowLiveStatus, voiceWorld: voiceWorldController.snapshot, voiceInputOwner, reward, rewardPreferences, canUndo: snapshot.past.length > 0, canRedo: snapshot.future.length > 0,
     // Public pointer navigation supersedes pending native playback. The
     // controller's internal navigate function belongs to its current command
     // and must not invalidate that command's own target-ready handoff.
@@ -1577,7 +1888,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       conversationRef.current = next; setConversationContext(next);
     },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [snapshot, route, peopleView, commitmentView, entityEditor, commandPresentation, activePlanId, focusedEntityId, selectedCalendarEventId, feedback, calendarFeedback, lastTranscript, pending, nowCandidates, nowQuery, nowExplanationOpen, flowLiveStatus, voiceWorldController.snapshot, voiceWorldController.wake, voiceWorldController.waitForWake, voiceWorldController.activate, voiceWorldController.disableWakeGate, reward, rewardPreferences, rewardDirector, navigate, calendarPreview, conversationContext, syncFromStorage, temporalScope, dateKey, clockTime, now, setTemporalScope, setListeningFeedback]);
+  }), [snapshot, route, peopleView, commitmentView, entityEditor, commandPresentation, activePlanId, focusedEntityId, selectedCalendarEventId, feedback, calendarFeedback, lastTranscript, pending, nowCandidates, nowQuery, nowExplanationOpen, flowLiveStatus, voiceWorldController.snapshot, voiceInputOwner, voiceWorldController.wake, voiceWorldController.waitForWake, voiceWorldController.activate, voiceWorldController.disableWakeGate, reward, rewardPreferences, rewardDirector, navigate, calendarPreview, conversationContext, syncFromStorage, temporalScope, dateKey, clockTime, now, setTemporalScope, setListeningFeedback]);
 
   return <EnvironmentContext.Provider value={value}>
     <TransitionContext.Provider value={transition}>{children}</TransitionContext.Provider>

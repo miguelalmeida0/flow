@@ -1,0 +1,11 @@
+# TTS worker environment (Kokoro-82M via mlx-audio — see FINAL REPORT's
+# fallback decision: Kyutai TTS measured real-time-factor < 1.0x even warm
+# and 4-bit quantized, so this uses the pre-authorized Kokoro fallback
+# instead). Install with:
+#   uv venv .venv-tts --python 3.12 && uv pip install -p .venv-tts/bin/python -r requirements-tts.txt
+# Then separately (uv-managed venvs have no `pip` shim, so `spacy download`
+# silently no-ops — install the model wheel directly instead):
+#   uv pip install -p .venv-tts/bin/python "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
+mlx-audio>=0.5.0
+misaki[en]
+websockets

@@ -39,7 +39,10 @@ import type { PlanStepInput } from "./planner";
 import { searchEverything, type SearchHit } from "./search";
 import { classifyReply, matchProposalAlternative } from "./proposals";
 import { DEMO_RESET_PHRASE, buildDemoSeedActions } from "./demoSeed";
+import { dateKeyAfter } from "../features/day-planner/interpretation/temporal";
+import { parseFriendIntent } from "../features/friends/friendIntents";
 import type { PersonalMemoryFact } from "./types";
+import { createIdempotencyStore, type IdempotencyStore } from "./idempotency";
 
 let registrySingleton: CapabilityRegistry | undefined;
 /** One registry for the process lifetime — CapabilityRegistry#register
@@ -47,6 +50,30 @@ let registrySingleton: CapabilityRegistry | undefined;
 export function getBridgeRegistry(): CapabilityRegistry {
   registrySingleton ??= createDefaultRegistry();
   return registrySingleton;
+}
+
+let idempotencyStoreSingleton: IdempotencyStore | undefined;
+/** One idempotency store for the process lifetime (one real browser tab),
+ * shared by every production kernel environment (both this file's own
+ * `runKernelTurn` and the conversational tier's `tryConversationalBridge`)
+ * — a duplicate must be caught no matter which path recognized the turn.
+ * Deliberately NOT wired into test fixtures (see
+ * kernel/__tests__/fixtures.ts's `testEnvironment`), which pass no store
+ * and get no duplicate-mutation protection by default. */
+export function getBridgeIdempotencyStore(): IdempotencyStore {
+  idempotencyStoreSingleton ??= createIdempotencyStore();
+  return idempotencyStoreSingleton;
+}
+
+/** Test-only: this file's OWN `runKernelTurn` (unlike the fixtures above)
+ * does use the shared singleton directly, since it's exercising the real
+ * production call site — so tests in the same file that happen to submit
+ * the same capability+args (e.g. two different "remember X" cases) need a
+ * fresh store between them or the second looks like a duplicate of the
+ * first. Call from `beforeEach` in any test file that calls `runKernelTurn`
+ * more than once with content that could collide. */
+export function resetBridgeIdempotencyStoreForTests(): void {
+  idempotencyStoreSingleton = createIdempotencyStore();
 }
 
 export function createBridgeSession(id?: string): ConversationSession {
@@ -137,6 +164,8 @@ export type RecognizedIntent =
 export function recognizeIntent(utterance: string, document: LifeDocument, session: ConversationSession): RecognizedIntent | null {
   const text = utterance.trim();
   const lower = text.toLowerCase();
+  const friend = parseFriendIntent(text, { route: "people" }, document.people);
+  if (friend?.type === "friend-person" && friend.operation === "create") return { kind: "capability", steps: [{ capabilityId: "friends.create", args: { name: friend.query }, utterance: text }], label: `Add ${friend.query} to Friends` };
 
   if (DEMO_RESET_PHRASE.test(text)) return { kind: "demo-reset" };
 
@@ -191,6 +220,31 @@ export function recognizeIntent(utterance: string, document: LifeDocument, sessi
   for (const pattern of recallPatterns) {
     const match = text.match(pattern);
     if (match) return { kind: "capability", steps: [{ capabilityId: "recall.search", args: { query: match[1] }, utterance: text }], label: `Recall: ${match[1]}` };
+  }
+
+  // Deterministic day-summary read ("what's my day looking like?", "what's
+  // on my calendar today?") — routed to the real calendar.query capability
+  // so this ordinary, non-mutating question keeps working even when the
+  // local reasoner/companion is down (see FINAL REPORT's physical-test
+  // repair: a reasoner outage must not unnecessarily break a question this
+  // deterministic and this common). Never fabricates data — calendar.query
+  // reads the actual loaded LifeDocument and truthfully reports "Nothing
+  // scheduled on <date>" when there is nothing, never implying knowledge of
+  // some other, disconnected calendar.
+  const daySummaryPatterns: { pattern: RegExp; dayGroup?: number }[] = [
+    { pattern: /^what'?s my day looking like\??$/i },
+    { pattern: /^what does my day look like\??$/i },
+    { pattern: /^how'?s my day looking\??$/i },
+    { pattern: /^what'?s (today|tomorrow) looking like\??$/i, dayGroup: 1 },
+    { pattern: /^what'?s on (?:my calendar|the calendar)(?:\s+(today|tomorrow))?\??$/i, dayGroup: 1 },
+    { pattern: /^what do i have(?: on my calendar)?(?:\s+(today|tomorrow))?\??$/i, dayGroup: 1 },
+  ];
+  for (const { pattern, dayGroup } of daySummaryPatterns) {
+    const match = lower.match(pattern);
+    if (!match) continue;
+    const day = dayGroup ? match[dayGroup] : undefined;
+    const dateKey = day === "tomorrow" ? dateKeyAfter(document.calendar.dateKey, 1) : undefined;
+    return { kind: "capability", steps: [{ capabilityId: "calendar.query", args: dateKey ? { dateKey } : {}, utterance: text }], label: "Day summary" };
   }
 
   const playPart = lower.match(/^play (?:the part|that part)(?: where i mentioned (.+?))?\??$/i);
@@ -322,7 +376,11 @@ export interface KernelTurnResult {
   delegateToApp?: "undo" | "redo" | "whatChanged";
 }
 
-function messageFor(outcome: KernelOutcome): string {
+/** Exported so the conversational LLM coordinator (src/kernel/llm/) can
+ * render its own submit()-produced KernelOutcome with the exact same wording
+ * rules as every other kernel-recognized turn, instead of a second
+ * hand-maintained copy of this switch. */
+export function messageFor(outcome: KernelOutcome): string {
   switch (outcome.status) {
     case "executed":
       return outcome.descriptions.join(" ");
@@ -367,7 +425,7 @@ export function runKernelTurn(
   deps: KernelBridgeDeps = {},
 ): KernelTurnResult {
   const registry = getBridgeRegistry();
-  const env: KernelEnvironment = { ...createEnvironment(registry, document, { route: "home" }, { now }), memory: memoryFacts };
+  const env: KernelEnvironment = { ...createEnvironment(registry, document, { route: "home" }, { now }, getBridgeIdempotencyStore()), memory: memoryFacts };
   const hasPendingContext = Boolean(session.activeProposal || session.pendingClarification);
   const replyIntent = classifyReply(utterance);
 
@@ -490,7 +548,10 @@ export function runKernelTurn(
 
     const step = submit(env, session, utterance, recognized.steps);
     if (step.outcome.status === "executed") persist(recognized.steps[0]?.capabilityId, step.env, messageFor(step.outcome));
-    return { env: step.env, session: step.session, outcome: step.outcome, phase: phaseFor(step.outcome), message: messageFor(step.outcome), recognized: true };
+    const createdName = recognized.steps[0]?.capabilityId === "friends.create" ? (recognized.steps[0].args as { name: string }).name : undefined;
+    const person = createdName && step.outcome.status === "executed" ? step.env.document.people.find(p => p.name === createdName) : undefined;
+    const openReferent: EntityReference | undefined = person ? { id: person.id, kind: "person", domain: "people", label: person.name, personIds: [person.id] } : undefined;
+    return { env: step.env, session: step.session, outcome: step.outcome, phase: phaseFor(step.outcome), message: messageFor(step.outcome), recognized: true, ...(openReferent ? { openReferent } : {}) };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Something went wrong handling that.";
     return { env, session, outcome: { status: "error", message }, phase: "listening", message: `Flow couldn't complete that: ${message}`, recognized: true };
@@ -524,6 +585,11 @@ export function persistKernelMutation(
     actions.push({ type: "memory.fact.delete", factId: entityId });
   }
 
+  if (capabilityId === "friends.create") {
+    const addedPerson = after.people.find(person => !before.people.some(existing => existing.id === person.id));
+    if (addedPerson) actions.push({ type: "person.create", person: addedPerson });
+  }
+
   if (capabilityId === "friends.remember") {
     const addedPerson = after.people.find((person) => !before.people.some((existing) => existing.id === person.id));
     if (addedPerson) actions.push({ type: "person.ensure", person: addedPerson });
@@ -539,7 +605,17 @@ export function persistKernelMutation(
     }
   }
 
-  if (capabilityId === "calendar.move") {
+  // journal.create's own capability.execute() already applies its mutation
+  // through applyLifeTransaction against the KERNEL's env.document (see
+  // src/kernel/capabilities/journal.ts) — this branch re-plays the same
+  // "journal.create" action against the app's OWN document/storage so the
+  // two stay in sync, exactly like every other capability here.
+  if (capabilityId === "journal.create") {
+    const addedEntry = after.studio.journalEntries.find((entry) => !before.studio.journalEntries.some((existing) => existing.id === entry.id));
+    if (addedEntry) actions.push({ type: "journal.create", entry: addedEntry });
+  }
+
+  if (capabilityId === "calendar.move" || capabilityId === "calendar.create") {
     for (const [dateKey, plan] of Object.entries(after.calendars)) {
       if (before.calendars[dateKey] !== plan) actions.push({ type: "calendar.replace", plan });
     }

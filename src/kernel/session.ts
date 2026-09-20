@@ -36,6 +36,8 @@ export interface EntityReference {
 }
 
 export interface RecentResult {
+  planId?: string;
+  stepId?: string;
   description: string;
   entityId?: LifeEntityId;
   entityKind?: LifeEntityKind;

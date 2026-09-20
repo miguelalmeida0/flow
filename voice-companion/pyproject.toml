@@ -1,0 +1,13 @@
+[project]
+name = "flow-voice-companion"
+version = "0.1.0"
+requires-python = ">=3.12"
+# This project deliberately has NO single dependency list — see
+# requirements-stt.txt / requirements-tts.txt and docs/VOICE_COMPANION.md's
+# "Why two virtual environments" section. moshi_mlx (STT) hard-requires
+# mlx<0.27; mlx-audio (TTS, running Kokoro — see the fallback decision in
+# FINAL REPORT) hard-requires mlx>=0.31.1. There is no version of mlx that
+# satisfies both, so the two model runtimes run as separate subprocesses in
+# separate venvs, coordinated by server.py (which itself only needs
+# `websockets` and can run under either venv's Python).
+dependencies = []

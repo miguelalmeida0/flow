@@ -870,7 +870,13 @@ describe("Flow living environment", () => {
     expect(await screen.findByTestId("inbox-space")).toBeInTheDocument();
     const before = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
     command("Someday the moon may remember this sentence");
-    expect(screen.getByText("Nothing changed")).toBeInTheDocument();
+    // Genuinely unrecognized prose now gets one real (async) pass through
+    // the conversational tier as a last resort (see FlowEnvironmentProvider's
+    // "last-resort conversational tier") instead of a synchronous bare
+    // fallback — still zero mutation, still an honest "Nothing changed" when
+    // that tier has nothing better to say (no companion/model configured in
+    // this test), just no longer synchronous.
+    expect(await screen.findByText("Nothing changed")).toBeInTheDocument();
     command("Move the meeting");
     const after = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
     expect(after.document).toEqual(before.document); expect(after.past).toEqual(before.past);

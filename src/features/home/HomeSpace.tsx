@@ -75,7 +75,17 @@ export function HomeSpace() {
   >
     <header className="relative z-20 flex items-start justify-between gap-4">
       <div><p className="font-serif text-[42px] italic leading-none tracking-[-0.045em]">Flow</p><p className={`mt-2 text-sm ${activeHome ? "text-[#736F68]" : "text-inherit"}`}>A calmer, smarter you.</p></div>
-      <div className={`text-right text-[11px] font-medium uppercase tracking-[0.14em] ${activeHome ? "text-[#736F68]" : "text-inherit"}`}><p>{model.dateLabel}</p><p className="mt-2 normal-case tracking-normal">{flowLiveStatus === "listening" ? "Live voice ready" : flowLiveStatus === "unavailable" ? "Typed control ready" : "Wake-aware session"}</p></div>
+      <div className={`text-right text-[11px] font-medium uppercase tracking-[0.14em] ${activeHome ? "text-[#736F68]" : "text-inherit"}`}><p>{model.dateLabel}</p><p className="mt-2 normal-case tracking-normal">{
+                    // This reflects ONLY microphone/wake-listening state —
+                    // never the local reasoner's own health, which is a
+                    // separate, independent concern (see FINAL REPORT's
+                    // physical-test repair: a confusing "ready" label shown
+                    // at the same time as a "model unavailable" response is
+                    // two different readiness signals, not a contradiction —
+                    // this label is deliberately narrowed in wording so it
+                    // doesn't imply the broader claim it never actually made).
+                    flowLiveStatus === "listening" ? "Listening" : flowLiveStatus === "unavailable" ? "Typed control ready" : "Wake-aware session"
+                  }</p></div>
     </header>
 
     <div className={`relative z-10 mx-auto flex min-h-0 w-full max-w-[1840px] flex-1 flex-col ${activeHome ? "" : "justify-center"}`}>

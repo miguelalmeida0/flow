@@ -4,6 +4,7 @@ import { parseExplicitCapture } from "./capturePayload";
 import type { CalendarAction, CalendarRequest, DayPlan, EventSelector, EventClarificationRequest } from "../../features/day-planner/model";
 import { normalizeTranscript } from "../../features/day-planner/interpretation/normalize";
 import { dateKeyAfter, parseDurationExpression } from "../../features/day-planner/interpretation/temporal";
+import { sourceDateKey } from "../../features/day-planner/interpretation/sourceDates";
 import { parseSourceEventReference } from "../../features/day-planner/interpretation/references";
 import { resolveEventReference } from "../../features/day-planner/scheduling/resolution";
 import type { LifeContext, LifeRoute, Person, PlanStep, TemporalScope } from "../../domain/life-model";
@@ -531,6 +532,20 @@ function planFeatureProposals(transcript: string, context: LifeContext, dateKey:
   return proposals;
 }
 
+/**
+ * The two TRUE terminal-fallback messages: legacy found no recognizable
+ * action, domain, or navigation target at all — as opposed to an
+ * "unsupported" intent whose `detail` names a SPECIFIC reason a real,
+ * recognized attempt was rejected (an invalid clock time, an ambiguous
+ * selector, ...), which stays exactly as informative and deterministic as
+ * before. Exported so callers (see FlowEnvironmentProvider.tsx's
+ * "last-resort conversational tier") can tell "legacy understood nothing at
+ * all — worth a real language model's attention" apart from "legacy already
+ * gave a specific, correct answer" without re-deriving this classification
+ * a second time or guessing from string shape.
+ */
+export const TERMINAL_FALLBACK_DETAILS = ["Which place should I open? Nothing was captured.", "What would you like to change? Name an action or say “Capture…” explicitly."] as const;
+
 function fallbackFeatureProposal(transcript: string, dateKey: string): GlobalIntent {
   const normalized = normalizeTranscript(transcript);
   if (/^add\s+.+/.test(normalized)) return { type: "clarification", title: "Should I capture that in Inbox or schedule it?", detail: "Say “Capture…” or include a duration and time." };
@@ -539,7 +554,7 @@ function fallbackFeatureProposal(transcript: string, dateKey: string): GlobalInt
   if (calendar.status === "unsupported" && !/couldn't resolve an action from/i.test(calendar.detail)) {
     return { type: "unsupported", title: "Nothing changed", detail: calendar.detail };
   }
-  return { type: "unsupported", title: "Nothing changed", detail: /^(?:open|show|go|take|bring|pull|switch|change|jump|head|navigate|enter|visit|display|launch|let me see|i want to see|i would like to see)\b/.test(normalized) ? "Which place should I open? Nothing was captured." : "What would you like to change? Name an action or say “Capture…” explicitly." };
+  return { type: "unsupported", title: "Nothing changed", detail: /^(?:open|show|go|take|bring|pull|switch|change|jump|head|navigate|enter|visit|display|launch|let me see|i want to see|i would like to see)\b/.test(normalized) ? TERMINAL_FALLBACK_DETAILS[0] : TERMINAL_FALLBACK_DETAILS[1] };
 }
 
 type ProductionFeature = "system" | "attention" | "commitment" | "capture" | "plan" | "fallback";
@@ -628,7 +643,7 @@ function temporalScopeFromText(normalized: string, context: LifeContext): Tempor
     .replace(/^see (?:the )?week in today$/, "whole week")
     .replace(/^see full day$/, "today")
     .replace(/^(?:what do i have|what is happening|what's happening|what is on|what's on)\s+/, "")
-    .replace(/^(?:open|show(?: me)?|take me to|go to|bring up|switch to|jump to|head to|return to)\s+/, "")
+    .replace(/^(?:open|show(?: me)?|take me to|go to|bring up|switch to|jump to|head to|return to)[,]?\s+/, "")
     .replace(/^(?:my|the)\s+/, "")
     .replace(/^(?:calendar|schedule|agenda)(?:\s+(?:for|on))?\s+/, "")
     .replace(/^(?:my|the)\s+/, "")
@@ -646,8 +661,8 @@ function temporalScopeFromText(normalized: string, context: LifeContext): Tempor
   if (/^(?:previous|last) week$/.test(text)) return shiftedWeek(today, -1, weekStartsOn);
   if (/^this weekend$/.test(text)) return weekendScope(dateKeyAfter(today, -1));
   if (/^next weekend$/.test(text)) return weekendScope(today);
-  const weekday = text.match(/^(?:(this|next)\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)(?:\s+(?:morning|afternoon|evening))?$/);
-  if (weekday) return { kind: "day", dateKey: nearestWeekday(today, weekdayIndex[weekday[2]!]!, weekday[1] === "next") };
+  const weekday = text.match(/^(?:(this|next|last)\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)(?:\s+(?:morning|afternoon|evening))?$/);
+  if (weekday) return { kind: "day", dateKey: sourceDateKey({ weekday: weekdayIndex[weekday[2]!]!, relation: (weekday[1] ?? "named") as "this" | "next" | "last" | "named" }, today) };
   return null;
 }
 

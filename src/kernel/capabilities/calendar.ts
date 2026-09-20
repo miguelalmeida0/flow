@@ -188,6 +188,17 @@ export const calendarCreate: Capability<CalendarCreateArgs> = {
   mutates: true,
   undoable: true,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: {
+      title: { type: "string", minLength: 1, maxLength: 120, description: "Just the event/task name itself (e.g. \"Interview practice\", \"Dentist\") — extract it from the user's words exactly as they said that specific phrase (never paraphrased or lowercased), but never the user's entire sentence/request, and never include time words like \"tomorrow\"/\"at eight\"." },
+      startMinutes: { type: "integer", minimum: 0, maximum: 1439, description: "Start time as minutes since midnight." },
+      durationMinutes: { type: "integer", minimum: 1, maximum: 720, description: "Duration in minutes." },
+      dateKey: { type: "string", description: "Date as YYYY-MM-DD, if not today." },
+      protect: { type: "boolean", description: "True only if the user explicitly asked to protect/block this time." },
+    },
+    required: ["title", "startMinutes", "durationMinutes"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.title ? "Needs a title." : args.durationMinutes <= 0 ? "Duration must be positive." : null),
   preflight: (args, ctx): PreflightResult => {
@@ -222,6 +233,17 @@ export const calendarMove: Capability<CalendarMoveArgs> = {
   mutates: true,
   undoable: true,
   riskLevel: "medium",
+  argsSchema: {
+    type: "object",
+    description: "Move an existing event. Identify it by eventId if known, otherwise by title.",
+    properties: {
+      eventId: { type: "string", description: "Exact id of the event, only if already known from context — never invent one." },
+      title: { type: "string", description: "Just the event's own name or a short distinctive word from it (e.g. \"dinner\", \"call with Daniel\") — NEVER the user's whole sentence/request. When eventId is unknown." },
+      startMinutes: { type: "integer", minimum: 0, maximum: 1439, description: "New start time as minutes since midnight (e.g. 9:30am = 570)." },
+      dateKey: { type: "string", description: "Target date as YYYY-MM-DD, only if the event is moving to a different day." },
+    },
+    required: ["startMinutes"],
+  },
   requiresConfirmation: () => false,
   validate: (args) => (!args.eventId && !args.title ? "Say which event to move." : args.startMinutes == null ? "Say what time to move it to." : null),
   preflight: (args, ctx): PreflightResult => {
@@ -360,17 +382,24 @@ export const calendarQuery: Capability<CalendarQueryArgs> = {
   mutates: false,
   undoable: false,
   riskLevel: "low",
+  argsSchema: {
+    type: "object",
+    properties: { dateKey: { type: "string", description: "Date as YYYY-MM-DD; defaults to today when omitted." } },
+    required: [],
+  },
   requiresConfirmation: () => false,
   validate: () => null,
   execute: (args, ctx): CapabilityResult => {
     const dateKey = args.dateKey ?? ctx.document.calendar.dateKey;
+    const isToday = dateKey === ctx.document.calendar.dateKey;
     const day = dayPlanFor(ctx.document, dateKey);
     const events = day?.events ?? [];
-    return ok(
-      events.length === 0 ? `Nothing scheduled on ${dateKey}.` : `${events.length} event${events.length === 1 ? "" : "s"} on ${dateKey}.`,
-      {},
-      { data: events },
-    );
+    // Always speaks from the actual loaded Flow calendar, never implies
+    // knowledge of some other, disconnected calendar (see FINAL REPORT's
+    // physical-test repair on honest degraded-state messaging).
+    const empty = isToday ? "I don't see any events in your Flow calendar today." : `I don't see any events in your Flow calendar on ${dateKey}.`;
+    const summary = `${events.length} event${events.length === 1 ? "" : "s"} in your Flow calendar ${isToday ? "today" : `on ${dateKey}`}.`;
+    return ok(events.length === 0 ? empty : summary, {}, { data: events });
   },
 };
 

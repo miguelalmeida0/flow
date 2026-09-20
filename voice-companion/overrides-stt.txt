@@ -1,0 +1,6 @@
+# moshi_mlx==0.2.12 hard-pins sentencepiece==0.2, an old version with no
+# prebuilt wheel for this Python/platform (requires cmake to build from
+# source, which this Mac doesn't have). sentencepiece 0.2.2 has a prebuilt
+# wheel and is source-compatible with moshi_mlx's actual usage (verified by
+# installing it and importing moshi_mlx.models directly).
+sentencepiece>=0.2.2

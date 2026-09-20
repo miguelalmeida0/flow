@@ -75,7 +75,7 @@ export function confirmationResult(request: CalendarRequest, scope: Confirmation
     return {
       status: "confirmation", request, authorizationKey: scope.key,
       title: `Remove ${destructiveNames.join(", ")}?`,
-      detail: `${scope.destructive.map((event) => `${event.title} · ${eventDateLabel(event.dateKey)}, ${formatTime(event.start)}–${formatTime(event.end)}`).join("; ")}. Only these events and their linked Breathing Room will be removed. Other dates stay unchanged.`,
+      detail: `${scope.destructive.map((event) => `${event.title} · ${eventDateLabel(event.dateKey)}, ${event.dateKey.slice(0, 4)}, ${formatTime(event.start)}–${formatTime(event.end)}`).join("; ")}. Only these events and their linked Breathing Room will be removed from your Flow calendar. This does not cancel bookings with a provider. Other dates stay unchanged.`,
       confirmLabel: "Confirm removal",
     };
   }

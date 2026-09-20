@@ -9,18 +9,22 @@
   },
   "scripts": {
     "dev": "vite",
+    "start:local": "node scripts/start-flow-local.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "TMPDIR=$PWD/node_modules/.tmp vitest",
     "test:run": "TMPDIR=$PWD/node_modules/.tmp vitest run --maxWorkers=1",
-    "check": "npm run lint && npm run test:run && npm run build",
+    "test:server": "TMPDIR=$PWD/node_modules/.tmp vitest run --config vitest.server.config.ts",
+    "check": "npm run lint && npm run test:run && npm run test:server && npm run build",
+    "test:real-model": "TMPDIR=$PWD/node_modules/.tmp vitest run --config vitest.realmodel.config.ts",
     "test:e2e": "TMPDIR=${TMPDIR:-$PWD/node_modules/.tmp} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/node_modules/.cache/ms-playwright} node scripts/run-e2e.mjs",
     "test:e2e:dev": "TMPDIR=${TMPDIR:-$PWD/node_modules/.tmp} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/node_modules/.cache/ms-playwright} node scripts/run-e2e.mjs --dev",
     "companion:dev": "node server/desktop-bridge/index.mjs",
     "qa:release": "node scripts/qa-release.mjs",
     "qa:design-migration": "node scripts/qa-design-migration.mjs",
-    "qa:motion": "node scripts/qa-motion.mjs"
+    "qa:motion": "node scripts/qa-motion.mjs",
+    "test:voice:autopilot": "node scripts/voice-autopilot/run.mjs"
   },
   "dependencies": {
     "motion": "^12.23.12",

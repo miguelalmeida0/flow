@@ -1,4 +1,4 @@
-import type { LifeDocument } from "../domain/life-model";
+import type { LifeDocument, LifeEntityKind } from "../domain/life-model";
 import type { CapabilityRegistry } from "./registry";
 import { emptyPreflight, type CapabilityContext, type CapabilityMutation, type KernelClock, type NavigationState, type PersonalMemoryFact } from "./types";
 import { buildPlan, nextPendingStep, type Plan, type PlanStepInput } from "./planner";
@@ -7,6 +7,7 @@ import { createProposal, invalidateProposal, approveProposal, classifyReply, mat
 import { resolveArgReferents } from "./referents";
 import { createSession, rememberResult, clearInFlight, type ConversationSession } from "./session";
 import { emptyHistory, recordMutation, undo as undoHistory, redo as redoHistory, whatChanged as describeChanges, captureState, type HistoryState } from "./history";
+import { computeStepIdempotencyKey, type IdempotencyStore } from "./idempotency";
 
 export { createSession };
 
@@ -17,6 +18,11 @@ export interface KernelEnvironment {
   memory: PersonalMemoryFact[];
   history: HistoryState;
   clock: KernelClock;
+  /** Optional — when absent, every step executes normally with no
+   * duplicate-mutation protection (this is the default for tests/fixtures
+   * that don't care about it). Production call sites supply a shared,
+   * long-lived store — see productionBridge.ts's `getBridgeIdempotencyStore`. */
+  idempotency?: IdempotencyStore;
 }
 
 export function createEnvironment(
@@ -24,8 +30,9 @@ export function createEnvironment(
   document: LifeDocument,
   navigation: NavigationState,
   clock: KernelClock = { now: () => new Date() },
+  idempotency?: IdempotencyStore,
 ): KernelEnvironment {
-  return { registry, document, navigation, memory: [], history: emptyHistory(), clock };
+  return { registry, document, navigation, memory: [], history: emptyHistory(), clock, idempotency };
 }
 
 function contextOf(env: KernelEnvironment): CapabilityContext {
@@ -82,25 +89,56 @@ function executeStep(env: KernelEnvironment, session: ConversationSession, plan:
   if (!step) return fail(env, session, `Unknown plan step: ${stepId}`);
   const capability = env.registry.get(step.capabilityId);
   if (!capability) return fail(env, session, `Unknown capability: ${step.capabilityId}`);
-  const before = captureState(contextOf(env));
-  const result = capability.execute(args, contextOf(env));
-  if (result.status === "error") {
-    return fail(env, session, result.message);
+
+  // Idempotency boundary (see idempotency.ts's module doc): a brand-new
+  // submit()/approve() call — a duplicate final transcript, an HTTP/model
+  // retry, a rerender, a companion reconnect, a doubled "yes" — has no
+  // memory of a PRIOR call already completing this exact mutation, unlike
+  // `nextPendingStep` skipping already-`executed` steps WITHIN one Plan
+  // object. Only applies to mutating capabilities; read-only ones have no
+  // side effect to duplicate. A step whose args differ even slightly (a
+  // corrected time, a different title) computes a different key and
+  // executes normally — this is content identity, not request identity.
+  const idempotencyKey = capability.mutates && env.idempotency ? computeStepIdempotencyKey(step.capabilityId, args) : undefined;
+  const priorCompletion = idempotencyKey ? env.idempotency!.get(idempotencyKey) : undefined;
+
+  let nextEnv = env;
+  let resultDescription: string;
+  let resultEntityId: string | undefined;
+  let resultEntityKind: LifeEntityKind | undefined;
+
+  if (priorCompletion) {
+    resultDescription = priorCompletion.description;
+    resultEntityId = priorCompletion.entityId;
+    resultEntityKind = priorCompletion.entityKind;
+  } else {
+    const before = captureState(contextOf(env));
+    const result = capability.execute(args, contextOf(env));
+    if (result.status === "error") {
+      return fail(env, session, result.message);
+    }
+    nextEnv = applyMutation(env, result.mutation);
+    const after = captureState(contextOf(nextEnv));
+    if (capability.mutates && capability.undoable) {
+      nextEnv = { ...nextEnv, history: recordMutation(nextEnv.history, capability.id, result.description, env.clock.now().toISOString(), before, after) };
+    }
+    resultDescription = result.description;
+    resultEntityId = result.entityId;
+    resultEntityKind = result.entityKind;
+    if (idempotencyKey) env.idempotency!.set(idempotencyKey, { description: result.description, entityId: result.entityId, entityKind: result.entityKind });
   }
-  let nextEnv = applyMutation(env, result.mutation);
-  const after = captureState(contextOf(nextEnv));
-  if (capability.mutates && capability.undoable) {
-    nextEnv = { ...nextEnv, history: recordMutation(nextEnv.history, capability.id, result.description, env.clock.now().toISOString(), before, after) };
-  }
+
   const nextSession = rememberResult(session, {
-    description: result.description,
-    entityId: result.entityId,
-    entityKind: result.entityKind,
+    planId: plan.id,
+    stepId: step.id,
+    description: resultDescription,
+    entityId: resultEntityId,
+    entityKind: resultEntityKind,
     capabilityId: capability.id,
     timestamp: env.clock.now().toISOString(),
   });
   const updatedPlan: Plan = { ...plan, steps: plan.steps.map((candidate) => (candidate.id === step.id ? { ...candidate, executionState: "executed" } : candidate)) };
-  return continuePlan(nextEnv, nextSession, updatedPlan, [result.description]);
+  return continuePlan(nextEnv, nextSession, updatedPlan, [resultDescription]);
 }
 
 /** Advances a plan step by step until it needs a proposal, a clarification,
