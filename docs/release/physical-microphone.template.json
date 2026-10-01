@@ -1,0 +1,18 @@
+{
+  "status": "NOT PERFORMED",
+  "gitSha": "",
+  "artifactHash": "",
+  "tester": "",
+  "testedAt": "",
+  "mac": "",
+  "microphone": "",
+  "browser": "",
+  "origin": "",
+  "checks": {
+    "wake": "NOT PERFORMED", "calendar": "NOT PERFORMED", "short": "NOT PERFORMED",
+    "ambiguity": "NOT PERFORMED", "destructive": "NOT PERFORMED", "interruption": "NOT PERFORMED",
+    "cancel": "NOT PERFORMED", "two-tabs": "NOT PERFORMED", "deny": "NOT PERFORMED",
+    "recover": "NOT PERFORMED", "persistence": "NOT PERFORMED", "undo-redo": "NOT PERFORMED",
+    "consecutive-turns": "NOT PERFORMED", "decoder-reset": "NOT PERFORMED", "reconnect": "NOT PERFORMED"
+  }
+}

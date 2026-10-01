@@ -246,8 +246,8 @@ const tests = proceed ? await runCommand("tests", ["run", "test:run"]) : { exitC
 commands.tests = { command: "npm run test:run", exitCode: tests.exitCode, log: "artifacts/release-qa/tests.log" };
 proceed = proceed && tests.exitCode === 0;
 
-const build = proceed ? await runCommand("build", ["run", "build"]) : { exitCode: -1, output: "" };
-commands.build = { command: "npm run build", exitCode: build.exitCode, log: "artifacts/release-qa/build.log" };
+const build = proceed ? await runCommand("build", ["run", process.env.FLOW_PREBUILT_ARTIFACT_HASH ? "build:verify" : "build"]) : { exitCode: -1, output: "" };
+commands.build = { command: process.env.FLOW_PREBUILT_ARTIFACT_HASH ? "npm run build:verify" : "npm run build", exitCode: build.exitCode, log: "artifacts/release-qa/build.log" };
 proceed = proceed && build.exitCode === 0;
 
 const designMigration = proceed ? await runCommand("design-migration", ["run", "qa:design-migration"]) : { exitCode: -1, output: "" };
@@ -429,7 +429,7 @@ const results = {
   testCounts: { unitFiles: testCounts(tests.output).files, unitTests: testCounts(tests.output).tests, chromiumTests: chromiumTestCount },
   semanticUtterances: semanticCorpus.total,
   semanticBreakdown: semanticCorpus,
-  build: build.exitCode === 0 ? "PASS — strict TypeScript and Vite production build completed" : build.exitCode === -1 ? "NOT RUN" : `FAIL — exit ${build.exitCode}`,
+  build: build.exitCode === 0 ? (process.env.FLOW_PREBUILT_ARTIFACT_HASH ? "PASS — prebuilt production artifact verified against its exact hash" : "PASS — strict TypeScript and Vite production build completed") : build.exitCode === -1 ? "NOT RUN" : `FAIL — exit ${build.exitCode}`,
   designMigration: designMigration.exitCode === 0 ? "PASS — reachable production graph contains no legacy dark-shell or permanent-navigation residue" : designMigration.exitCode === -1 ? "NOT RUN" : `FAIL — exit ${designMigration.exitCode}`,
   visualRewardMotion: visualRewardResults.verdict === "PASS" ? `PASS — ${visualRewardResults.visualFrames.actual} signature frames inspected, performance audit green, and portfolio recording captured` : motionQa.exitCode === -1 ? "NOT RUN" : `FAIL — inspect artifacts/visual-reward-qa/results.json`,
   visualRewardEvidence: existsSync(visualRewardResultsPath) ? "artifacts/visual-reward-qa/results.json" : "MISSING",

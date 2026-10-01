@@ -118,7 +118,7 @@ def main():
     try:
         bundle = load_model()
     except Exception as exc:  # noqa: BLE001
-        emit({"type": "stt.error", "message": f"model load failed: {exc}"})
+        emit({"type": "stt.error", "message": "Local STT model failed to load"})
         sys.exit(1)
     emit({"type": "worker.ready"})
 
@@ -239,7 +239,7 @@ def main():
                 # collecting only while gen=None loses the endpoint's silence.
                 preroll.append(block)
             except Exception as exc:  # noqa: BLE001
-                event("stt.error", message=str(exc))
+                event("stt.error", message="Local STT inference failed")
                 listening = False
                 gen = None
                 break

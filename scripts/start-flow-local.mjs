@@ -78,7 +78,7 @@ process.on("SIGINT", () => {
 log("checking Ollama...");
 let ollamaOk = await httpJson("http://127.0.0.1:11434/api/tags");
 if (!ollamaOk) {
-  spawnTracked("ollama", "ollama", ["serve"], { stdio: "ignore" });
+  spawnTracked("ollama", "ollama", ["serve"], { stdio: "ignore", env: { ...process.env, OLLAMA_HOST: "127.0.0.1:11434", OLLAMA_NO_CLOUD: "1" } });
   ollamaOk = await waitFor(() => httpJson("http://127.0.0.1:11434/api/tags"), 15_000, "Ollama");
 }
 if (ollamaOk) log("Ollama: reachable, reused if already running");
@@ -172,7 +172,9 @@ try {
   frontendReachable = false;
 }
 if (!frontendReachable) {
-  spawnTracked("frontend", "npm", ["run", "dev"]);
+  spawnTracked("frontend", "npm", process.env.FLOW_FRONTEND_MODE === "production"
+    ? ["run", "preview", "--", "--host", "127.0.0.1", "--port", "5173", "--strictPort"]
+    : ["run", "dev", "--", "--host", "127.0.0.1", "--port", "5173", "--strictPort"]);
   await waitFor(async () => {
     try {
       await fetch("http://127.0.0.1:5173", { signal: AbortSignal.timeout(1500) });

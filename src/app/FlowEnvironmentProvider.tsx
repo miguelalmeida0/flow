@@ -155,7 +155,9 @@ function canonicalRoute(route: LifeRoute): WorldDestination {
 }
 
 function routeFromPath(pathname: string, search = window.location.search): { route: WorldDestination; planId?: string; peopleView: PeopleView; alias: boolean; personId?: string; groupId?: string; noteId?: string } {
-  const parts = pathname.split("/").filter(Boolean);
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const appPath = base && (pathname === base || pathname.startsWith(`${base}/`)) ? pathname.slice(base.length) : pathname;
+  const parts = appPath.split("/").filter(Boolean);
   const head = parts[0] ?? "";
   const peopleView: PeopleView = new URLSearchParams(search).get("view") === "commitments" || head === "commitments" ? "commitments" : "default";
   if (head === "today" || head === "calendar" || head === "now") return { route: "today", peopleView: "default", alias: head !== "today" };
@@ -173,10 +175,11 @@ function routeFromPath(pathname: string, search = window.location.search): { rou
 
 function pathForRoute(route: LifeRoute, planId?: string, peopleView: PeopleView = "default") {
   const canonical = canonicalRoute(route);
-  if (canonical === "home") return "/";
-  if (canonical === "outcomes") return planId ? `/outcomes/${planId}` : "/outcomes";
-  if (canonical === "people" && peopleView === "commitments") return "/people?view=commitments";
-  return `/${canonical}`;
+  const base = import.meta.env.BASE_URL;
+  if (canonical === "home") return base;
+  if (canonical === "outcomes") return planId ? `${base}outcomes/${encodeURIComponent(planId)}` : `${base}outcomes`;
+  if (canonical === "people" && peopleView === "commitments") return `${base}people?view=commitments`;
+  return `${base}${canonical}`;
 }
 
 function changedCalendarIds(before: DayPlan, after: DayPlan) {
@@ -450,7 +453,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     if (route !== "people" || peopleView !== "default") return;
     const recipient = conversationContext.focusedGroupId ? `group/${encodeURIComponent(conversationContext.focusedGroupId)}` : conversationContext.focusedPersonId ? `person/${encodeURIComponent(conversationContext.focusedPersonId)}` : "";
     const note = recipient && conversationContext.activeVoiceNoteId ? `/note/${encodeURIComponent(conversationContext.activeVoiceNoteId)}` : "";
-    const path = `/people${recipient ? `/${recipient}${note}` : ""}`;
+    const path = `${import.meta.env.BASE_URL}people${recipient ? `/${recipient}${note}` : ""}`;
     if (window.location.pathname !== path) window.history.replaceState(window.history.state, "", path);
   }, [route, peopleView, conversationContext]);
   useEffect(() => {

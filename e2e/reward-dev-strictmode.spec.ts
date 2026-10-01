@@ -26,7 +26,7 @@ for (const mode of ["full", "reduced"] as const) for (const signature of signatu
     page.on("requestfailed", (request) => { if (request.url().startsWith("http://127.0.0.1:5174") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) failedRequests.push(request.url()); });
     await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"daily":{"time":[]}}' }));
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto("/");
+    await page.goto("./");
     await page.evaluate((motion) => {
       localStorage.clear(); sessionStorage.clear();
       localStorage.setItem("flow:reward-preferences:v1", JSON.stringify({ motion, sound: false, mascot: "minimal" }));

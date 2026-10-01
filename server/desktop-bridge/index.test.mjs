@@ -477,3 +477,24 @@ describe("ai.status", () => {
     expect(calls).toBe(1); // only /api/tags — no wasted probe call.
   });
 });
+
+
+describe("release security boundaries", () => {
+  it("never retains sensitive values or unknown capability identifiers in audit records", async () => {
+    await post("/capability", { capability: "private-secret", args: { token: "sensitive-token", url: "https://example.com/?key=secret", prompt: "private words" } });
+    const res = await get("/audit"); const data = JSON.stringify(await res.json());
+    for (const value of ["private-secret", "sensitive-token", "key=secret", "private words"]) expect(data).not.toContain(value);
+    expect(data).toContain("unknown-capability");
+  });
+  it("refuses executable scripts in an allowed directory before invoking the OS", async () => {
+    const file = path.join(allowedDir, "unsafe.command"); fs.writeFileSync(file, "exit 0", { mode: 0o700 });
+    const res = await post("/capability", { capability: "desktop.openFile", args: { path: file } });
+    expect(res.status).toBe(400); expect(execFileImpl.calls).toEqual([]);
+  });
+  it("does not list metadata through a symlink escaping the allowed directory", async () => {
+    const file = path.join(tmpRoot, "private.txt"); fs.writeFileSync(file, "private");
+    fs.symlinkSync(file, path.join(allowedDir, "escape.txt"));
+    const res = await post("/capability", { capability: "desktop.listRecentFiles", args: { dir: allowedDir } });
+    expect(res.status).toBe(200); expect((await res.json()).files).toEqual([]);
+  });
+});

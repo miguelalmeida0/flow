@@ -37,7 +37,7 @@ test.afterAll(() => {
 
 test("01 wake composition stays separated at all required desktop widths and reduced heights", async ({ page }) => {
   test.setTimeout(90_000);
-  await page.goto("/");
+  await page.goto("./");
   const sizes = new Map([...acceptanceViewports, ...[1280, 1440, 1512, 1728, 1920].flatMap((w) => [768, 800, 900, 982].map((h) => [w, h] as const))].map(([w, h]) => [`${w}x${h}`, { width: w, height: h }]));
   const geometry = [];
   for (const [name, viewport] of sizes) {
@@ -86,7 +86,7 @@ test("03 Home final navigation commits a real route after an interim, without wr
 });
 
 test("04 explicit adjectival time and called-name create one correctly scoped event through typing", async ({ page }) => {
-  await page.goto("/today");
+  await page.goto("./today");
   await typedCommand(page, "Show tomorrow");
   const before = await lifeSnapshot(page);
   const visibleDate = before.temporal!.scope.dateKey;
@@ -208,7 +208,7 @@ test("07 prose identity distinguishes duplicate delivery from intentional repeat
 });
 
 test("08 typed Journal controls bookmark and navigate as one atomic cross-space request", async ({ page }) => {
-  await page.goto("/journal");
+  await page.goto("./journal");
   await typedCommand(page, "Journal this A clear thought worth keeping.");
   const before = await lifeSnapshot(page);
   await typedCommand(page, "bookmark that and go home");
@@ -281,7 +281,7 @@ test("11 secondary Atmosphere and voice are reserved outside the editable worksp
 
 test("12 Home and Calendar share one temporal scope through navigation and reload", async ({ page }) => {
   test.setTimeout(90_000);
-  await page.goto("/today");
+  await page.goto("./today");
   await typedCommand(page, "Show tomorrow");
   const before = await lifeSnapshot(page);
   const date = before.temporal!.scope.dateKey;

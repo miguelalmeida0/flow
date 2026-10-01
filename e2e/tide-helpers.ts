@@ -33,7 +33,7 @@ export async function fresh(page: Page) {
   } finally {
     await session.detach();
   }
-  await page.goto("/calendar");
+  await page.goto("./calendar");
   await expect(page.getByRole("heading", { name: "Breathing Day" })).toBeVisible();
   await expect(page.locator('button[data-event-id]')).toHaveCount(8);
 }

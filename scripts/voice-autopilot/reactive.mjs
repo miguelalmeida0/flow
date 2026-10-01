@@ -27,7 +27,7 @@ export async function reactive(def, services, out) {
     const launch = await browserContext(services); browser = launch.browser;
     await launch.context.addInitScript(installAudioInput);
     page = await launch.context.newPage(); observe(page, s);
-    await page.goto('http://localhost:5173/?flowVoiceDebug=1');
+    await page.goto(`${process.env.FLOW_VOICE_APP_URL ?? 'http://localhost:5173/'}?flowVoiceDebug=1`);
     s.failureStage = 'reactive mic live';
     await until(() => event(s, 'voice.micLive'), s.failureStage);
     const play = async (text, trailing = 2) => {

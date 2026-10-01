@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite",
     "start:local": "node scripts/start-flow-local.mjs",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/finalize-pages-build.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "TMPDIR=$PWD/node_modules/.tmp vitest",
@@ -24,7 +24,11 @@
     "qa:release": "node scripts/qa-release.mjs",
     "qa:design-migration": "node scripts/qa-design-migration.mjs",
     "qa:motion": "node scripts/qa-motion.mjs",
-    "test:voice:autopilot": "node scripts/voice-autopilot/run.mjs"
+    "test:voice:autopilot": "node scripts/voice-autopilot/run.mjs",
+    "build:verify": "node scripts/verify-pages-build.mjs",
+    "qa:production": "node scripts/qa-production.mjs",
+    "test:release-policy": "node --test scripts/release-policy.test.mjs",
+    "test:production-smoke": "node scripts/production-smoke.mjs"
   },
   "dependencies": {
     "motion": "^12.23.12",

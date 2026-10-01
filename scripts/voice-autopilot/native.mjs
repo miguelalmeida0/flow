@@ -82,7 +82,7 @@ export async function native(def, services, out) {
     });
     page = await context.newPage(); observe(page, s);
     await page.clock.setFixedTime(new Date('2026-09-20T12:00:00+02:00'));
-    await page.goto('http://localhost:5173/?flowVoiceDebug=1');
+    await page.goto(`${process.env.FLOW_VOICE_APP_URL ?? 'http://localhost:5173/'}?flowVoiceDebug=1`);
     const boundary = async name => { s.failureStage = name; await until(() => event(s, name), name); pass(s, name); };
     await boundary('voice.micLive');
     assert(event(s, 'voice.micLive').state.tracks.every(t => t.readyState === 'live'));
@@ -115,7 +115,7 @@ export async function native(def, services, out) {
         s.kernelExecutionId = state.lastTransaction.id;
         s.safety = { duplicateMutations: 0, fabricatedSuccess: 0 };
         await until(() => page.locator(`[data-task-entity-id="${s.person.id}"]`).count(), 'person profile rendered');
-        assert.equal(new URL(page.url()).pathname, `/people/person/${s.person.id}`);
+        assert.equal(new URL(page.url()).pathname, `${new URL(process.env.FLOW_VOICE_APP_URL ?? "http://localhost:5173/").pathname}people/person/${s.person.id}`);
         pass(s, 'correct profile URL and rendered identity');
       }
       if (def.date) {

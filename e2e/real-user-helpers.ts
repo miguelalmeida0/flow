@@ -34,7 +34,7 @@ export async function installAcceptanceRecognition(page: Page) {
 }
 
 export async function startAcceptance(page: Page, path = "/") {
-  await page.goto(path);
+  await page.goto(`.${path}`);
   const mic = page.getByLabel("Start Flow Live", { exact: true });
   if (await mic.count()) await mic.click();
   await expect.poll(() => page.evaluate(() => Boolean((window as Window & { __acceptanceReady?: boolean }).__acceptanceReady))).toBe(true);

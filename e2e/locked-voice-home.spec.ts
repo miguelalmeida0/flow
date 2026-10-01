@@ -37,7 +37,7 @@ async function installGrantedRecognition(page: Page) {
 
 async function fresh(page: Page) {
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"daily":{"time":[]}}' }));
-  await page.goto("/");
+  await page.goto("./");
   await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "wake-armed");
   await expect.poll(() => page.evaluate(() => Boolean((window as Window & { __lockedReady?: boolean }).__lockedReady))).toBe(true);
 }
@@ -317,6 +317,7 @@ async function sampleTargetMotion(page: Page, transcript: string) {
       const bounds = element.getBoundingClientRect();
       return { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height };
     };
+    const destinationPath = new URL("today", window.location.href).pathname;
     const emittedAt = performance.now();
     const samples: TargetMotionSample[] = [];
     let settledFrames = 0;
@@ -376,7 +377,7 @@ async function sampleTargetMotion(page: Page, transcript: string) {
       });
       const currentGeometry = samples.at(-1)?.continuity;
       const priorGeometry = samples.at(-2)?.continuity;
-      const destinationStable = window.location.pathname === "/today" && currentGeometry && priorGeometry
+      const destinationStable = window.location.pathname === destinationPath && currentGeometry && priorGeometry
         && ["x", "y", "width", "height"].every((key) => Math.abs(currentGeometry[key as keyof typeof currentGeometry] - priorGeometry[key as keyof typeof priorGeometry]) < 0.25);
       settledFrames = destinationStable ? settledFrames + 1 : 0;
       if (targetStartedAt !== undefined && elapsed >= 900 && settledFrames >= 3) resolve({
@@ -555,7 +556,7 @@ test("speech interrupts wake reward and the locked compound commits and rewinds 
   await observeNextCompoundAcknowledgement(page);
   await speak(page, "Open my journal and leave Sunday evening playing");
   const acknowledgement = await page.evaluate(() => (window as Window & { __lockedCompoundAck?: unknown }).__lockedCompoundAck);
-  expect(acknowledgement).toEqual({ text: "“Open my journal and leave Sunday evening playing”", domain: "journal", route: "/", past: 0 });
+  expect(acknowledgement).toEqual({ text: "“Open my journal and leave Sunday evening playing”", domain: "journal", route: new URL(test.info().project.use.baseURL!).pathname, past: 0 });
   console.info("LOCKED_COMPOUND_ACK", JSON.stringify(acknowledgement));
   await expect(page).toHaveURL(/\/journal$/);
   const committed = await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!));

@@ -146,7 +146,7 @@ export class BrowserRecognitionAdapter implements RecognitionAdapter {
   private completedCycle?: number;
   private static nextAdapterId = 0;
   private readonly adapterId = ++BrowserRecognitionAdapter.nextAdapterId;
-  readonly supported = Boolean(window.SpeechRecognition ?? window.webkitSpeechRecognition);
+  readonly supported = ["localhost", "127.0.0.1"].includes(window.location.hostname) && Boolean(window.SpeechRecognition ?? window.webkitSpeechRecognition);
 
   constructor(readonly language: VoiceLocale = DEFAULT_VOICE_LOCALE) {}
 
@@ -167,7 +167,7 @@ export class BrowserRecognitionAdapter implements RecognitionAdapter {
     allowPhraseRetry: boolean,
   ) {
     const Constructor = window.SpeechRecognition ?? window.webkitSpeechRecognition;
-    if (!Constructor) {
+    if (!this.supported || !Constructor) {
       handlers.onError("unavailable");
       return;
     }

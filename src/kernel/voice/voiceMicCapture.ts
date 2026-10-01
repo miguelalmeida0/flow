@@ -13,7 +13,7 @@
 
 import { voiceDebug } from "../../features/day-planner/voice/voiceDebug";
 const MIC_SAMPLE_RATE = 24000; // Kyutai STT's expected input rate.
-const WORKLET_URL = "/voice-pcm-worklet.js";
+const WORKLET_URL = `${import.meta.env.BASE_URL}voice-pcm-worklet.js`;
 const WORKLET_NAME = "voice-pcm-worklet";
 
 export interface VoiceMicCapture {

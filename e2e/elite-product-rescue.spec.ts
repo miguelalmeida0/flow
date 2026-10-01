@@ -108,7 +108,7 @@ test.afterAll(() => writeFileSync(`${evidenceDir}/single-session-evidence.json`,
 test("event inspection, contextual follow-up, proposal refinement, and alternative safety use the real shell", async ({ page }) => {
   await page.clock.install({ time: new Date("2026-09-04T10:32:00") });
   await installRecognition(page);
-  await page.goto("/");
+  await page.goto("./");
   await page.evaluate(() => {
     const snapshot = JSON.parse(localStorage.getItem("flow.life.v3")!);
     snapshot.document.people.push({ id: "person-sarah", kind: "person", name: "Sarah", createdAt: "2026-09-04T09:00:00.000Z", updatedAt: "2026-09-04T09:00:00.000Z" });
@@ -155,7 +155,7 @@ test("exact 24-step product rescue journey uses one persistent global voice sess
   const session = await page.context().newCDPSession(page);
   try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
   finally { await session.detach(); }
-  await page.goto("/");
+  await page.goto("./");
   await expect(page.getByTestId("home-space")).toBeVisible();
 
   // Sarah and the Tomorrow meeting are ordinary fixture entities. The router

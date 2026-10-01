@@ -1,0 +1,22 @@
+{
+  "main": {
+    "strict": true,
+    "requiredCheck": "Deterministic gates",
+    "enforceAdmins": true,
+    "allowForcePushes": false,
+    "allowDeletions": false
+  },
+  "test": {
+    "strict": true,
+    "requiredCheck": "Deterministic gates",
+    "enforceAdmins": true,
+    "allowForcePushes": false,
+    "allowDeletions": false
+  },
+  "pages": {
+    "build_type": "legacy",
+    "branch": "gh-pages",
+    "path": "/"
+  },
+  "recordedAt": "2026-10-01T13:53:00Z"
+}

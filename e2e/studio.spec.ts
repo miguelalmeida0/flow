@@ -43,7 +43,7 @@ async function fresh(page: Page, path = "/") {
   } finally {
     await session.detach();
   }
-  await page.goto(path);
+  await page.goto(`.${path}`);
 }
 
 async function command(page: Page, transcript: string) {

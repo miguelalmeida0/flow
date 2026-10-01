@@ -17,7 +17,7 @@ async function clearAndOpen(page: Page, path = "/") {
   try {
     await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" });
   } finally { await session.detach(); }
-  await page.goto(path);
+  await page.goto(`.${path}`);
   await page.evaluate(() => window.scrollTo({ left: 0, top: 0, behavior: "auto" }));
   const shell = page.locator("main > [data-space-shell]");
   await expect(shell).toHaveCount(1);

@@ -11,7 +11,7 @@ const failedRequests: string[] = [];
 const rewardPreferencesKey = "flow:reward-preferences:v1";
 
 async function prepare(page: Page) {
-  await page.goto("/today");
+  await page.goto("./today");
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload();
   await page.waitForFunction(() => document.readyState === "complete" && document.fonts.status === "loaded");
@@ -31,7 +31,7 @@ async function prepareSignatureMode(page: Page, mode: StressMode) {
   const reduced = mode.startsWith("reduced");
   const minimal = reduced || mode === "full-throttled";
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto("/today");
+  await page.goto("./today");
   await page.evaluate(({ key, motion, mascot }) => {
     localStorage.clear(); sessionStorage.clear();
     localStorage.setItem(key, JSON.stringify({ motion, sound: false, mascot }));

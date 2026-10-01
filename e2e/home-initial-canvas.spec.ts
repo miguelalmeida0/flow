@@ -11,7 +11,7 @@ const viewports = [
 ] as const;
 
 async function inspect(page: Page) {
-  await page.goto("/");
+  await page.goto("./");
   const home = page.getByTestId("home-space");
   await expect(home).toBeVisible();
 

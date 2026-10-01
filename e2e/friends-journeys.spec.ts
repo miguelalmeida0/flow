@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
 for (const width of [430, 1440]) test(`real command field: draft, group plan, marker privacy and reload at ${width}px`, async ({ page }, info) => {
   const errors: string[] = []; page.on("pageerror", (error) => errors.push(error.message)); page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
   await page.setViewportSize({ width, height: 900 }); if (width === 430) await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/people"); await expect(page.getByTestId("friends-space")).toBeVisible();
+  await page.goto("./people"); await expect(page.getByTestId("friends-space")).toBeVisible();
   await typedCommand(page, "Text Sarah that I can come, actually cancel lunch");
   await expect.poll(async () => (await lifeSnapshot(page)).document.friends?.messages[0]?.body).toBe("I can come, actually cancel lunch");
   await typedCommand(page, "Add 'are you free this weekend?'"); await typedCommand(page, "yes");

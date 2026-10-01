@@ -56,7 +56,7 @@ async function fresh(page: Page, path = "/") {
   const session = await page.context().newCDPSession(page);
   try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "all" }); }
   finally { await session.detach(); }
-  await page.goto(path);
+  await page.goto(`.${path}`);
 }
 
 async function command(page: Page, transcript: string) {

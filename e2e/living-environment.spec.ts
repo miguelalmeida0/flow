@@ -11,7 +11,7 @@ async function fresh(page: Page, path = "/") {
   const session = await page.context().newCDPSession(page);
   try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
   finally { await session.detach(); }
-  await page.goto(path);
+  await page.goto(`.${path}`);
   if (path === "/") {
     await command(page, "Home");
     await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "active");
@@ -125,7 +125,7 @@ test("all living projections navigate by Today pointer, command, deep link, and 
   await page.getByRole("button", { name: "Open Flow home" }).click();
   await command(page, "Inbox"); await expect(page.getByTestId("inbox-space")).toBeVisible();
   await command(page, "Go back"); await expect(page.getByTestId("home-space")).toBeVisible();
-  await page.goto("/people"); await expect(page.getByTestId("people-space")).toBeVisible();
+  await page.goto("./people"); await expect(page.getByTestId("people-space")).toBeVisible();
 });
 
 test("locked Home lenses and global command support keyboard entry without legacy card shells", async ({ page }) => {

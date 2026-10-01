@@ -8,7 +8,7 @@ companion (server/desktop-bridge/index.mjs):
 
   - binds to 127.0.0.1 only, never reachable from the network
   - a session bearer token, generated fresh per process start, persisted to
-    ~/.flow-companion/voice-token (mode 0600) and printed to stdout, checked
+    ~/.flow-companion/voice-token (mode 0600), never printed, checked
     with a constant-time compare
   - Origin header must be present and in the allowlist
     (http://localhost:5173, http://127.0.0.1:5173) or the connection is
@@ -26,7 +26,7 @@ browser's WebSocket connection. See framing.py for the wire format used on
 both the worker pipes.
 
 Protocol (see docs/VOICE_COMPANION.md for the full reference):
-  Client connects to ws://127.0.0.1:<port>/voice?token=<token>
+  Client connects to ws://127.0.0.1:<port>/voice, then sends a bounded authenticate message.
   Client -> server: binary frames are raw PCM16LE mono 24kHz microphone
     audio; JSON text frames are control messages
       {"type": "session.start"}
@@ -68,13 +68,14 @@ import stat
 import sys
 import uuid
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import urlparse
 
 import websockets
 from websockets.datastructures import Headers
 from websockets.http11 import Response
 
 from framing import FRAME_AUDIO, FRAME_JSON, read_frame_async, write_frame
+from auth import authenticate
 
 logging.basicConfig(level=os.environ.get("FLOW_VOICE_LOG_LEVEL", "INFO"), format="[voice-companion] %(message)s")
 log = logging.getLogger("flow-voice-companion")
@@ -137,11 +138,14 @@ class Worker:
 
     async def _log_stderr(self):
         assert self.process and self.process.stderr
+        reported = False
         try:
             async for line in self.process.stderr:
-                text = line.decode("utf-8", errors="replace").rstrip()
-                if text:
-                    log.info(f"[{self.name}] {text}")
+                # Dependency diagnostics can contain prompts or signed model URLs.
+                # Drain the pipe; worker readiness/error events carry safe status.
+                if line.strip() and not reported:
+                    log.info("[%s] worker diagnostics received (content redacted)", self.name)
+                    reported = True
         except Exception:  # noqa: BLE001
             pass
 
@@ -149,11 +153,13 @@ class Worker:
         if not self.process or not self.process.stdin or self.process.stdin.is_closing():
             return
         write_frame(_SyncStdinAdapter(self.process.stdin), FRAME_JSON, json.dumps(payload).encode("utf-8"))
+        await self.process.stdin.drain()
 
     async def send_audio(self, data: bytes):
         if not self.process or not self.process.stdin or self.process.stdin.is_closing():
             return
         write_frame(_SyncStdinAdapter(self.process.stdin), FRAME_AUDIO, data)
+        await self.process.stdin.drain()
 
     def is_alive(self) -> bool:
         return self.process is not None and self.process.returncode is None
@@ -310,6 +316,8 @@ async def handle_connection(ws, companion: VoiceCompanion):
                 control = json.loads(message)
             except json.JSONDecodeError:
                 continue
+            if not isinstance(control, dict):
+                continue
             msg_type = control.get("type")
             if msg_type == "session.start":
                 await companion.stt.send_json({"cmd": "start", "sessionId": session_id})
@@ -322,7 +330,7 @@ async def handle_connection(ws, companion: VoiceCompanion):
             elif msg_type == "tts.cancel":
                 await companion.tts.send_json({"cmd": "cancel"})
     except Exception:  # noqa: BLE001
-        log.exception("connection error")
+        log.warning("connection error")
     finally:
         if companion.current_ws is ws:
             companion.current_ws = None
@@ -358,21 +366,23 @@ async def main():
         # open WebSocket connection at all.
         origin = request.headers.get("Origin")
         if origin not in DEFAULT_ORIGINS:
-            log.warning(f"rejected connection: origin not allowed ({origin!r})")
+            log.warning("rejected connection: origin not allowed")
             return json_response(403, "Forbidden", {"error": "Origin not allowed."})
 
-        # (b) Bearer token, constant-time compare, read from the query
-        # string (a browser WebSocket client can't set a custom
-        # Authorization header on the upgrade request).
-        query = parse_qs(urlparse(request.path).query)
-        provided_token = (query.get("token") or [""])[0]
-        if not provided_token or not safe_token_equals(provided_token, token):
-            log.warning("rejected connection: bad token")
-            return json_response(401, "Unauthorized", {"error": "Unauthorized."})
-
-        return None  # Authorized — proceed with the handshake.
+        if request.path != "/voice":
+            return json_response(404, "Not Found", {"error": "Not found."})
+        return None
 
     async def handler(ws):
+        # Authentication happens before worker ownership, audio, or readiness.
+        # URLs never contain reusable credentials. Failed sessions have no access.
+        try:
+            authorized = await authenticate(ws, token)
+        except websockets.ConnectionClosed:
+            return
+        if not authorized:
+            await ws.close(code=4401, reason="Unauthorized")
+            return
         await handle_connection(ws, companion)
 
     log.info("starting STT and TTS worker subprocesses (this takes a few seconds while models warm up)...")

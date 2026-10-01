@@ -192,6 +192,7 @@ export class LiveOwnershipCoordinator {
     };
     this.pending = lease; this.persistWinner(lease); this.transport.publish({ type: "claim", lease });
     await this.wait(this.settleMs);
+    if (this.destroyed) return { granted: false, priorRelease: "not-needed" };
     const winner = this.stored();
     if (this.pending?.claimId !== lease.claimId || !winner || compareLiveClaims(winner, lease) > 0) {
       if (this.pending?.claimId === lease.claimId) this.pending = undefined;

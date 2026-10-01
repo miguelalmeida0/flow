@@ -24,7 +24,7 @@ export default defineConfig({
   outputDir: `${motionEvidence.relativePath}/playwright-results`,
   use: {
     ...devices["Desktop Chrome"],
-    baseURL: origin,
+    baseURL: `${origin}/flow/`,
     ...(executablePath ? { launchOptions: { executablePath } } : {}),
     trace: "on",
     screenshot: "only-on-failure",
@@ -35,7 +35,7 @@ export default defineConfig({
   },
   webServer: {
     command: "npm run preview -- --host 127.0.0.1 --port 5176 --strictPort",
-    url: origin,
+    url: `${origin}/flow/`,
     reuseExistingServer: false,
   },
   projects: [

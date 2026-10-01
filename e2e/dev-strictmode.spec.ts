@@ -68,7 +68,7 @@ test.afterAll(() => writeFileSync(`${evidenceDir}/dev-browser-evidence.json`, `$
 
 test("a single development tab acquires Flow Live after the StrictMode effect probe", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/");
+  await page.goto("./");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
 

@@ -1,0 +1,27 @@
+{
+  "main": {
+    "numTotalTestSuites": 235,
+    "numPassedTestSuites": 195,
+    "numFailedTestSuites": 40,
+    "numPendingTestSuites": 0,
+    "numTotalTests": 4988,
+    "numPassedTests": 4525,
+    "numFailedTests": 463,
+    "numPendingTests": 0,
+    "numTodoTests": 0
+  },
+  "test": {
+    "numTotalTestSuites": 300,
+    "numPassedTestSuites": 260,
+    "numFailedTestSuites": 40,
+    "numPendingTestSuites": 0,
+    "numTotalTests": 5254,
+    "numPassedTests": 4791,
+    "numFailedTests": 463,
+    "numPendingTests": 0,
+    "numTodoTests": 0
+  },
+  "shared": 462,
+  "introduced": [],
+  "resolved": []
+}

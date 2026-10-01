@@ -1,0 +1,91 @@
+name: Flow guarded Pages release
+on:
+  workflow_dispatch:
+    inputs:
+      release_sha:
+        description: Exact already verified candidate commit
+        required: true
+      candidate_run_id:
+        description: Successful Flow release CI push run for that commit
+        required: true
+      gate_manifest:
+        description: Complete release-machine manifest with physical microphone PASS
+        required: true
+# Dispatch is deliberately explicit. No arbitrary feature branch or red test auto-deploy.
+permissions:
+  contents: read
+concurrency:
+  group: flow-production-pages
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test' || github.ref == 'refs/heads/release/safe-production'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      sha: ${{ steps.identity.outputs.sha }}
+    steps:
+      - name: Validate input before checkout
+        id: identity
+        env:
+          RELEASE_SHA: ${{ inputs.release_sha }}
+          RUN_ID: ${{ inputs.candidate_run_id }}
+        run: |
+          [[ "$RELEASE_SHA" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$RUN_ID" =~ ^[0-9]+$ ]]
+          echo "sha=$RELEASE_SHA" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.release_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: flow-candidate-${{ inputs.release_sha }}
+          path: dist
+          run-id: ${{ inputs.candidate_run_id }}
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: flow-evidence-${{ inputs.release_sha }}
+          path: candidate-evidence-bundle
+          run-id: ${{ inputs.candidate_run_id }}
+          github-token: ${{ github.token }}
+      - name: Verify Tier A provenance, release-machine gates and human microphone acceptance
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.candidate_run_id }}
+          FLOW_RELEASE_SHA: ${{ inputs.release_sha }}
+          FLOW_GATE_MANIFEST: ${{ inputs.gate_manifest }}
+          FLOW_PREVIOUS_MAIN: 87d95fd35535073010ab49a08094cdad616f0492
+          FLOW_PREVIOUS_PAGES: e47028bab78231714df2853bfae935959b75bcc3
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" > candidate-run.json
+          mkdir candidate-evidence
+          cp candidate-evidence-bundle/production/release-manifest.json candidate-evidence/release-manifest.json
+          node scripts/verify-deployment.mjs
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: dist
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: deployed-provenance-${{ inputs.release_sha }}
+          path: deployment-manifest.json
+          retention-days: 90
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish the verified artifact without rebuilding
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

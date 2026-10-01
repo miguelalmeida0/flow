@@ -13,15 +13,16 @@
  * be sure this test is exercising the exact same code path a user's
  * `npm run companion:dev` does, unaffected by the test runner's own globals.
  *
- * A CI environment without Ollama running skips this outright (and says so
- * via a visible console warning), rather than failing the whole suite or
- * silently reporting a pass.
+ * This release-only suite fails when the required local model is unavailable.
+ * Ordinary PR CI does not run this hardware/runtime tier.
  *
  * Run explicitly with: npm run test:real-model (or npx vitest run --config vitest.realmodel.config.ts)
  */
 import { describe, it, expect, afterAll } from "vitest";
 import { spawn } from "node:child_process";
 import path from "node:path";
+import os from "node:os";
+import fs from "node:fs";
 import { createSession } from "../kernel";
 import { journeyDocument, testEnvironment, fixedClock } from "../__tests__/fixtures";
 import { runConversationTurn } from "./conversationCoordinator";
@@ -43,6 +44,7 @@ function waitForLine(child: ReturnType<typeof spawn>, pattern: RegExp, timeoutMs
   });
 }
 
+const configDir = fs.mkdtempSync(path.join(os.tmpdir(), "flow-real-model-"));
 let child: ReturnType<typeof spawn> | undefined;
 let baseUrl = "";
 let modelAvailable = false;
@@ -61,14 +63,14 @@ try {
   const port = 20000 + Math.floor(Math.random() * 10000);
   child = spawn("node", ["server/desktop-bridge/index.mjs"], {
     cwd: REPO_ROOT,
-    env: { ...process.env, FLOW_COMPANION_PORT: String(port) },
+    env: { ...process.env, FLOW_COMPANION_PORT: String(port), FLOW_COMPANION_CONFIG_DIR: configDir },
     stdio: ["ignore", "pipe", "pipe"],
   });
-  const token = await waitForLine(child, /session token: (\S+)/, 10_000);
+  await waitForLine(child, /listening on (http:\/\/127\.0\.0\.1:\d+)/, 10_000);
+  const token = fs.readFileSync(path.join(configDir, "token"), "utf8").trim();
   baseUrl = `http://127.0.0.1:${port}`;
   localStorage.setItem(DESKTOP_COMPANION_TOKEN_KEY, token);
   localStorage.setItem(DESKTOP_COMPANION_BASE_URL_KEY, baseUrl);
-  console.log("[realModel.e2e] captured token:", JSON.stringify(token), "stored:", localStorage.getItem(DESKTOP_COMPANION_TOKEN_KEY));
 
   const response = await fetch(`${baseUrl}/capability`, {
     method: "POST",
@@ -85,9 +87,10 @@ console.log(`[realModel.e2e] real companion + local model (${MODEL_ID}) availabl
 
 afterAll(() => {
   child?.kill();
+  fs.rmSync(configDir, { recursive: true, force: true });
 });
 
-describe.runIf(modelAvailable)("real local model, real companion process (Tier B)", () => {
+describe("real local model, real companion process (Tier B)", () => {
   it("produces a real spoken answer for an unfamiliar explanatory question, with no action taken", async () => {
     const env = testEnvironment(journeyDocument(), fixedClock());
     const session = createSession();
@@ -137,9 +140,9 @@ describe.runIf(modelAvailable)("real local model, real companion process (Tier B
   }, 45_000);
 });
 
-describe.skipIf(modelAvailable)("real local model unavailable", () => {
-  it("is a known, reported setup blocker — not a silently passed test", () => {
-    console.warn(`[realModel.e2e] SKIPPED: real companion + ${MODEL_ID} were not both reachable on this machine right now.`);
-    expect(true).toBe(true);
+describe("real local model availability", () => {
+  it("requires the actual configured local model to be available", () => {
+    if (!modelAvailable) console.warn(`[realModel.e2e] availability: real companion + ${MODEL_ID} were not both reachable on this machine right now.`);
+    expect(modelAvailable, "Required real local Ollama model is unavailable").toBe(true);
   });
 });

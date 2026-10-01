@@ -63,8 +63,8 @@ HF_HOME="$PWD/.hf-cache" .venv/bin/python server.py
 ```
 
 Wait for both `STT ready` and `TTS ready` in the log (a few seconds —
-model warmup, not download, once cached). The session token is printed and
-written to `~/.flow-companion/voice-token`; Flow's frontend needs it in
+model warmup, not download, once cached). The session token is written only
+to the private `~/.flow-companion/voice-token` file; Flow's local frontend needs it in
 `localStorage.setItem("flow.voiceCompanion.token", "<token>")` (no settings
 UI for this yet — set it via devtools, same as the existing desktop
 companion's token).
@@ -85,10 +85,11 @@ listening" — same rationale as the Node desktop companion's `/health`).
 
 ## Wire protocol
 
-`ws://127.0.0.1:8766/voice?token=<token>`, Origin must be
-`http://localhost:5173` or `http://127.0.0.1:5173` (checked before the
-handshake — a disallowed origin or bad token gets a real HTTP 403/401, the
-connection never opens).
+`ws://127.0.0.1:8766/voice` (then a first JSON message `{"type":"authenticate","token":"<private token>"}` within three seconds), Origin must be
+`http://localhost:5173` or `http://127.0.0.1:5173`. A disallowed origin receives
+HTTP 403 before the handshake. An absent, oversized, late or invalid first
+authentication message closes the socket with code 4401 before readiness,
+worker ownership or audio access. Credentials never appear in the URL.
 
 Client → server: binary frames are raw PCM16LE mono 24kHz microphone
 audio; JSON text frames are `session.start` / `session.stop` /
@@ -138,3 +139,10 @@ capable and has its own separate allowlist).
   a one-time MLX/Metal kernel-compile cost on the very first `generate()`
   call in the process's lifetime, not a per-utterance cost — every call
   after the first is fast (measured 0.6–0.8s warm).
+
+
+## Release security policy
+
+The public GitHub Pages origin is demo-only for this release. Both companions retain the exact localhost development-origin allowlist and loopback binding. Do not configure wildcard origins or expose ports. Pairing credentials never belong in URLs, screenshots, logs, Git or build artifacts. Authentication precedes worker ownership and audio handling. Failed voice reconnects stop after five retries.
+
+Use `npm run qa:production` and the physical microphone checklist in `docs/release/PHYSICAL_MICROPHONE.md`. Generated audio is not physical microphone acceptance. Existing local model caches may be reused with `HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1`; this never authorizes downloads.

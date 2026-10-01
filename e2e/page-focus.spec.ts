@@ -10,7 +10,7 @@ for (const width of [430, 1440]) test(`opens real working surfaces and preserves
   const fits = async (selector: string) => page.locator(selector).evaluate((element) => {
     const rect = element.getBoundingClientRect(), main = document.querySelector("[data-primary-content-rect]")!.getBoundingClientRect(); return rect.top >= main.top && rect.bottom <= main.bottom;
   });
-  await page.goto("/people"); await expect.poll(() => fits('[aria-label="Friend name"]')).toBe(true); const before = await lifeSnapshot(page);
+  await page.goto("./people"); await expect.poll(() => fits('[aria-label="Friend name"]')).toBe(true); const before = await lifeSnapshot(page);
   await page.getByRole("button", { name: /Sarah.*open commitments/ }).click(); await expect.poll(() => fits("#friend-message")).toBe(true);
   await expect(page.getByText("Message to Sarah", { exact: true })).toBeVisible();
   await typedCommand(page, "Open memory Morning"); await expect.poll(() => fits('[data-page-task="memory"] [data-action-id="memory.composition"]:first-of-type')).toBe(true);

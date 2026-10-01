@@ -20,7 +20,7 @@ for (const width of [430, 1440]) {
       }
       Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: Recognition });
     });
-    await page.goto("/");
+    await page.goto("./");
     await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "wake-armed");
     await expect(page.locator("html")).toHaveAttribute("data-native-start-count", "1");
     await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");

@@ -24,7 +24,7 @@ test("native recognition end preserves complete global navigation", async ({ pag
     }
     Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: Recognition });
   });
-  await page.goto("/");
+  await page.goto("./");
   for (const [transcript, path, isFinal] of [
     ["Flow", "/", true], ["open the journal", "/journal", false], ["go home", "/", false],
     ["open atmosphere", "/atmosphere", false], ["go home", "/", false],

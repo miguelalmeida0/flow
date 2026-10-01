@@ -87,7 +87,7 @@ async function fresh(page: Page) {
   const session = await page.context().newCDPSession(page);
   try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
   finally { await session.detach(); }
-  await page.goto("/");
+  await page.goto("./");
 }
 
 async function typeCommand(page: Page, transcript: string) {
@@ -320,7 +320,7 @@ test("the newest explicit Flow Live start preempts another same-origin tab and a
 
   const second = await context.newPage();
   watchPage(second); await installFakeRecognition(second);
-  await second.goto("/");
+  await second.goto("./");
   await second.getByLabel("Start Flow Live").click();
   await expect(second.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "moved");
@@ -406,7 +406,7 @@ test("an explicit Start reclaims an uncooperative stale same-origin voice client
   const claimant = await context.newPage();
   watchPage(claimant); await installFakeRecognition(claimant);
   await claimant.addInitScript(() => { (window as Window & { __flowUseGlobalNativeLock?: boolean }).__flowUseGlobalNativeLock = true; });
-  await claimant.goto("/");
+  await claimant.goto("./");
   await claimant.getByLabel("Start Flow Live").click();
   await expect.poll(() => claimant.evaluate(() => JSON.stringify({
     status: document.querySelector('[data-testid="flow-live-presence"]')?.getAttribute("data-flow-live-status"),

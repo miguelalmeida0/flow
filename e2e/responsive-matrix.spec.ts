@@ -42,7 +42,7 @@ async function submitHomeThroughRealForm(page: Page) {
 }
 
 async function activateHome(page: Page) {
-  await page.goto("/");
+  await page.goto("./");
   const home = page.getByTestId("home-space");
   await expect(home).toBeAttached();
 
@@ -163,7 +163,7 @@ for (const viewport of viewports) {
     }
 
     for (const route of routes) {
-      await page.goto(route.path);
+      await page.goto(`.${route.path}`);
       await expect(page.locator(`[data-space-shell='${route.name}']`)).toBeVisible();
       await assertViewportIntegrity(page, route.name);
 

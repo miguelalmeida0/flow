@@ -15,7 +15,7 @@ test.beforeEach(async ({ page }) => {
       sessionStorage.setItem("contextual-fixture-installed", "true");
     }
   }, contextualCalendarFixture());
-  await page.goto("/today");
+  await page.goto("./today");
   await expect(page.getByTestId("week-calendar")).toBeVisible();
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
 });

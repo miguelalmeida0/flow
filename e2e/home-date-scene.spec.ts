@@ -3,7 +3,7 @@ import { fillCommandField } from "./tide-helpers";
 
 test("Home date travel is native, bounded, and independent from exact history", async ({ page }, info) => {
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"daily":{"time":[]}}' }));
-  await page.goto("/");
+  await page.goto("./");
   let field = await fillCommandField(page, "Home");
   await field.press("Enter");
   await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "active");

@@ -29,6 +29,8 @@
  *   localStorage.setItem("flow.desktopCompanion.token", "<token from ~/.flow-companion/token>")
  */
 
+import { localCompanionUrl, localCompanionsAllowed } from "./localCompanionUrl";
+
 export const DESKTOP_COMPANION_TOKEN_KEY = "flow.desktopCompanion.token";
 export const DESKTOP_COMPANION_BASE_URL_KEY = "flow.desktopCompanion.baseUrl";
 export const DEFAULT_DESKTOP_COMPANION_BASE_URL = "http://127.0.0.1:8765";
@@ -55,10 +57,13 @@ function readLocalStorage(key: string): string | null {
 
 export function getDesktopCompanionBaseUrl(): string {
   const stored = readLocalStorage(DESKTOP_COMPANION_BASE_URL_KEY);
-  return stored && stored.length > 0 ? stored : DEFAULT_DESKTOP_COMPANION_BASE_URL;
+  const url = localCompanionUrl(stored || DEFAULT_DESKTOP_COMPANION_BASE_URL, "http:");
+  if (!url) throw new DesktopBridgeError("not-configured", "Companion address must be a loopback HTTP origin.");
+  return url;
 }
 
 export function getDesktopCompanionToken(): string | null {
+  if (!localCompanionsAllowed()) return null;
   const stored = readLocalStorage(DESKTOP_COMPANION_TOKEN_KEY);
   return stored && stored.length > 0 ? stored : null;
 }
@@ -104,6 +109,8 @@ export async function callDesktopCapability<T = unknown>(
   try {
     response = await fetchImpl(`${baseUrl}/capability`, {
       method: "POST",
+      redirect: "error",
+      signal: AbortSignal.timeout(20_000),
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ capability, args }),
     });

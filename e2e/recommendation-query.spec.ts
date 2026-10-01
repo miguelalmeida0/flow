@@ -8,7 +8,7 @@ test("what am I forgetting returns real recommendations from every world without
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ contentType: "application/json", body: '{"daily":{"time":[]}}' }));
-  await page.goto("/");
+  await page.goto("./");
   await committedCommand(page, "Capture check passport expiry");
   for (const route of ["Home", "Open today", "Open focus", "Open weather", "Open people", "Open good to know", "Open capture", "Open outcomes"]) {
     await command(page, route);

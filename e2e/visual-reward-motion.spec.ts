@@ -32,7 +32,7 @@ const viewports = [
 const samples = [0, 20, 40, 60, 80, 100] as const;
 
 async function prepare(page: Page, path: string) {
-  await page.goto(path);
+  await page.goto(`.${path}`);
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload();
   await page.waitForFunction(() => document.readyState === "complete" && document.fonts.status === "loaded");

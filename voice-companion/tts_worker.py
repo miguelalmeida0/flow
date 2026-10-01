@@ -23,6 +23,7 @@ import json
 import os
 import sys
 import threading
+import queue
 
 import numpy as np
 
@@ -70,7 +71,7 @@ def main():
     try:
         model = load_model()
     except Exception as exc:  # noqa: BLE001
-        emit_json({"type": "tts.error", "message": f"model load failed: {exc}"})
+        emit_json({"type": "tts.error", "message": "Local TTS model failed to load"})
         sys.exit(1)
     emit_json({"type": "worker.ready"})
 
@@ -99,9 +100,15 @@ def main():
                 event("tts.cancelled")
                 return
             except Exception as exc:  # noqa: BLE001
-                event("tts.error", message=str(exc))
+                event("tts.error", message="Local TTS synthesis failed")
                 return
             event("tts.cancelled" if is_cancelled_for(generation_id) else "tts.done")
+
+    pending = queue.Queue(maxsize=1)
+    def synthesis_loop():
+        while True:
+            run_speak(*pending.get())
+    threading.Thread(target=synthesis_loop, daemon=True).start()
 
     stdin = sys.stdin.buffer
     while True:
@@ -126,7 +133,11 @@ def main():
                 current_generation += 1
                 generation_id = current_generation
                 cancel_flag["cancelled"] = False
-            threading.Thread(target=run_speak, args=(text, generation_id, control.get("sessionId")), daemon=True).start()
+            try:
+                pending.get_nowait()
+            except queue.Empty:
+                pass
+            pending.put_nowait((text, generation_id, control.get("sessionId")))
         elif cmd == "cancel":
             with generation_lock:
                 cancel_flag["cancelled"] = True

@@ -19,7 +19,7 @@ interface RewardSnapshot {
 async function prepare(page: Page, path = "/") {
   await page.clock.install({ time: new Date("2026-09-04T09:32:00") });
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"daily":{"time":[]}}' }));
-  await page.goto(path);
+  await page.goto(`.${path}`);
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload();
   await expect(page.locator("[data-space-shell]")).toBeVisible();
@@ -105,7 +105,7 @@ test("Home world continuity, time travel, browser Back, and command dock remain 
 
 test("calendar snapshots skip unchanged feedback but measure real geometry and history", async ({ page }) => {
   await useNativeAnimationClock(page);
-  await page.goto("/today");
+  await page.goto("./today");
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload();
   await expect(page.locator('[data-event-id="deep-work"]')).toBeVisible();
@@ -147,7 +147,7 @@ test("Home mascot remains in reserved clear space through wrapped, short, and re
   await injectRecognition(page);
   await page.context().route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"daily":{"time":[]}}' }));
   await page.setViewportSize({ width: 1672, height: 941 });
-  await page.goto("/");
+  await page.goto("./");
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload();
   const mascot = page.locator("[data-mascot-renderer]");
@@ -177,7 +177,7 @@ test("Home mascot remains in reserved clear space through wrapped, short, and re
   const beforeRemote = (await reward(page)).sequence;
   const other = await page.context().newPage();
   await useNativeAnimationClock(other);
-  await other.goto("/");
+  await other.goto("./");
   await command(other, "Today");
   await expect(page.getByTestId("home-space")).toContainText("Friday, September 4");
   expect((await reward(page)).sequence).toBe(beforeRemote);
@@ -260,7 +260,7 @@ test("Capture routing uses real shared-state continuity and leaves no transition
 test("shared-flight paper reshapes without stretching its rendered text", async ({ page }) => {
   await useNativeAnimationClock(page);
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/capture");
+  await page.goto("./capture");
   await command(page, "Capture renew passport before Senegal");
   await page.getByRole("button", { name: "Renew passport before Senegal", exact: true }).click();
   await page.evaluate(() => {

@@ -74,7 +74,7 @@ describe("VoiceCompanionClient", () => {
       else Reflect.deleteProperty(navigator, "locks");
     }
   });
-  it("connects with the token in the query string and reports connectionError with no token", () => {
+  it("reports connectionError without opening a socket when no token exists", () => {
     const events: VoiceCompanionEvent[] = [];
     const client = makeClient(null);
     client.on((e) => events.push(e));
@@ -89,7 +89,8 @@ describe("VoiceCompanionClient", () => {
     client.on((e) => events.push(e));
     client.connect();
     const ws = FakeWebSocket.instances[0]!;
-    expect(ws.url).toBe("ws://127.0.0.1:8766/voice?token=test-token");
+    expect(ws.url).toBe("ws://127.0.0.1:8766/voice");
+    expect(ws.url).not.toContain("test-token");
     ws.simulateOpen();
     ws.simulateMessage(JSON.stringify({ type: "ready", sttReady: true, ttsReady: false, version: "0.1.0" }));
     expect(client.sttReady).toBe(true);
@@ -123,6 +124,7 @@ describe("VoiceCompanionClient", () => {
     client.speak("hello there");
     client.cancelSpeak();
     expect(ws.sent).toEqual([
+      JSON.stringify({ type: "authenticate", token: "test-token" }),
       JSON.stringify({ type: "session.start" }),
       JSON.stringify({ type: "session.stop" }),
       JSON.stringify({ type: "tts.speak", text: "hello there" }),
@@ -148,7 +150,7 @@ describe("VoiceCompanionClient", () => {
     ws = FakeWebSocket.instances[1]!;
     ws.simulateOpen();
     ws.simulateServerClose();
-    vi.advanceTimersByTime(499);
+    vi.advanceTimersByTime(999);
     expect(FakeWebSocket.instances.length).toBe(2); // not yet — backoff doubled to 1000ms
     vi.advanceTimersByTime(1);
     expect(FakeWebSocket.instances.length).toBe(3);
@@ -213,5 +215,25 @@ describe("VoiceCompanionClient", () => {
     ws.simulateMessage(JSON.stringify({ type: "future.lifecycle" }));
     expect(events.at(-1)).toMatchObject({ type: "protocol.unknown", messageType: "future.lifecycle" });
     expect(client.isConnected).toBe(true);
+  });
+});
+
+
+describe("credential and retry boundaries", () => {
+  it("never opens a socket to a remote or credential-bearing destination", () => {
+    for (const baseUrl of ["wss://example.com", "ws://example.com", "ws://127.0.0.1@evil.example", "ws://127.0.0.1:8766/?secret=x"]) {
+      FakeWebSocket.instances = [];
+      const client = new VoiceCompanionClient({ baseUrl, token: "sensitive", webSocketImpl: FakeWebSocket as unknown as typeof WebSocket });
+      client.connect(); expect(FakeWebSocket.instances).toHaveLength(0);
+    }
+  });
+  it("stops retrying after five failed reconnects and never retries authentication denial", () => {
+    const client = makeClient(); client.connect();
+    for (let i = 0; i < 6; i++) {
+      FakeWebSocket.instances.at(-1)!.simulateServerClose(); vi.advanceTimersByTime(20_000);
+    }
+    expect(FakeWebSocket.instances).toHaveLength(6); client.disconnect();
+    const denied = makeClient(); denied.connect(); FakeWebSocket.instances[0]!.simulateServerClose(4401);
+    vi.advanceTimersByTime(60_000); expect(FakeWebSocket.instances).toHaveLength(1); denied.disconnect();
   });
 });

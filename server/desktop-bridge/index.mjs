@@ -266,7 +266,9 @@ export function listRecentFiles(args, allowedDirs) {
       const full = path.join(dir, name);
       let stat;
       try {
-        stat = fs.statSync(full);
+        const real = fs.realpathSync(full);
+        if (!allowedDirs.some(root => isInsideDir(root, real))) continue;
+        stat = fs.statSync(real);
       } catch {
         continue;
       }
@@ -379,6 +381,10 @@ function buildCapabilities({ execFileImpl, allowedDirs, fetchImpl }) {
 
     "desktop.openFile": async (args) => {
       const resolved = resolveAllowedPath(args && args.path, allowedDirs);
+      const safeExtensions = new Set([".txt", ".md", ".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".csv"]);
+      if (!safeExtensions.has(path.extname(resolved).toLowerCase()) || (fs.statSync(resolved).mode & 0o111)) {
+        throw new HttpError(400, "Only non-executable supported documents may be opened.", "unsafe-file-type");
+      }
       await execFileAsync(execFileImpl, "open", [resolved]);
       return { opened: resolved };
     },
@@ -517,17 +523,11 @@ function readBody(req, maxBytes) {
   });
 }
 
-/** Short, non-sensitive representation of args for the audit trail. Full
- * file contents are never read by any capability, so there is nothing more
- * sensitive than short strings/numbers to redact here; we still cap length
- * defensively in case a future capability grows a large arg. */
+/** Retain audit shape without retaining user strings or credentials. */
 function redactArgs(args) {
-  try {
-    const json = JSON.stringify(args ?? {});
-    return json.length > 200 ? `${json.slice(0, 200)}...` : json;
-  } catch {
-    return "<unserializable>";
-  }
+  // Arguments may contain credentials, personal paths, prompts or signed URLs.
+  // Store shape only; even unknown field names may themselves contain secrets.
+  return JSON.stringify({ argumentCount: args && typeof args === "object" ? Object.keys(args).length : 0 });
 }
 
 const KNOWN_ROUTES = new Set(["POST /capability", "GET /health", "GET /audit", "OPTIONS /capability", "OPTIONS /audit"]);
@@ -561,7 +561,7 @@ export function createServer(options = {}) {
       try {
         fs.appendFileSync(auditLogPath, `${JSON.stringify(entry)}\n`, { mode: 0o600 });
       } catch (err) {
-        console.error("[flow-companion] failed to write audit log:", err);
+        console.error("[flow-companion] failed to write audit log:", err.code ?? "write-failed");
       }
     }
   }
@@ -622,7 +622,7 @@ export function createServer(options = {}) {
 
     // (b) Origin allowlist.
     if (!originAllowed) {
-      appendAudit({ id, ts, capability: routeKey, args: null, origin: origin ?? null, outcome: "rejected", reason: "origin-not-allowed" });
+      appendAudit({ id, ts, capability: routeKey, args: null, origin: null, outcome: "rejected", reason: "origin-not-allowed" });
       sendJson(res, 403, { error: "Origin not allowed." }, corsHeaders);
       return;
     }
@@ -681,7 +681,7 @@ export function createServer(options = {}) {
       appendAudit({
         id,
         ts,
-        capability: typeof capabilityId === "string" ? capabilityId : null,
+        capability: null,
         args: redactArgs(args),
         origin,
         outcome: "rejected",
@@ -701,8 +701,8 @@ export function createServer(options = {}) {
         appendAudit({ id, ts, capability: capabilityId, args: redactArgs(args), origin, outcome: "rejected", reason: err.reason });
         sendJson(res, err.status, { error: err.message }, corsHeaders);
       } else {
-        // Full error stays server-side only; the client never sees internals.
-        console.error("[flow-companion] capability threw:", capabilityId, err);
+        // Exception messages may contain user input or credentials.
+        console.error("[flow-companion] capability failed:", capabilityId);
         appendAudit({ id, ts, capability: capabilityId, args: redactArgs(args), origin, outcome: "rejected", reason: "internal-error" });
         sendJson(res, 500, { error: "Internal error." }, corsHeaders);
       }
@@ -711,7 +711,7 @@ export function createServer(options = {}) {
 
   const server = http.createServer((req, res) => {
     handleRequest(req, res).catch((err) => {
-      console.error("[flow-companion] unhandled error:", err);
+      console.error("[flow-companion] unhandled request error");
       if (!res.headersSent) sendJson(res, 500, { error: "Internal error." });
     });
   });
@@ -720,7 +720,7 @@ export function createServer(options = {}) {
 }
 
 function getConfigDir() {
-  return path.join(os.homedir(), ".flow-companion");
+  return process.env.FLOW_COMPANION_CONFIG_DIR || path.join(os.homedir(), ".flow-companion");
 }
 
 function persistToken(token) {
@@ -759,8 +759,8 @@ function main() {
   server.listen(port, "127.0.0.1", () => {
     console.log(`[flow-companion] listening on http://127.0.0.1:${port}`);
     console.log(`[flow-companion] session token written to ${tokenPath}`);
-    console.log(`[flow-companion] session token: ${token}`);
-    console.log("[flow-companion] paste this token into Flow's desktop companion settings.");
+    // Credentials are read from the private pairing file, never stdout.
+    console.log("[flow-companion] read the private token file to pair Flow locally; never paste it into logs.");
   });
 }
 

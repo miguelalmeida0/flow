@@ -15,12 +15,12 @@ export async function ownership(def, services, out) {
     const launch = await browserContext(services); browser = launch.browser;
     await launch.context.addInitScript(installAudioInput);
     let owner = await launch.context.newPage(); observe(owner, s, 'owner-0');
-    await owner.goto('http://localhost:5173/?flowVoiceDebug=1');
+    await owner.goto(`${process.env.FLOW_VOICE_APP_URL ?? 'http://localhost:5173/'}?flowVoiceDebug=1`);
     for (let round = 0; round < 3; round++) {
       s.failureStage = `ownership round ${round}`;
       await until(() => s.events.some(e => e.tabId === `owner-${round}` && e.event === 'voice.micLive'), 'owner capture');
       const waiting = await launch.context.newPage(); observe(waiting, s, `owner-${round + 1}`);
-      await waiting.goto('http://localhost:5173/?flowVoiceDebug=1');
+      await waiting.goto(`${process.env.FLOW_VOICE_APP_URL ?? 'http://localhost:5173/'}?flowVoiceDebug=1`);
       const locks = await until(async () => { const q = await waiting.evaluate(() => navigator.locks.query()); s.lastLocks = q; return q.pending.filter(l => l.name === 'flow.local-voice').length === 1 && q; }, 'one waiting tab after StrictMode cleanup');
       assert.equal(locks.held.filter(l => l.name === 'flow.local-voice').length, 1, 'exclusive lock count');
       assert(!s.events.some(e => e.tabId === `owner-${round + 1}` && e.event === 'voice.micLive'));
@@ -40,7 +40,12 @@ export async function ownership(def, services, out) {
     await until(() => s.events.some(e => e.tabId === 'owner-3' && e.event === 'voice.micLive'), 'final takeover');
     pass(s, 'three automatic ownership transfers');
     const beforeReconnect = s.events.length;
-    await owner.evaluate(() => window.voiceLabSockets.filter(ws => ws.readyState === WebSocket.OPEN && ws.url.includes('/voice?')).forEach(ws => ws.close(4000, 'automated reconnect fault')));
+    const closedSockets = await owner.evaluate(() => {
+      const sockets = window.voiceLabSockets.filter(ws => ws.readyState === WebSocket.OPEN && new URL(ws.url).pathname === '/voice');
+      sockets.forEach(ws => ws.close(4000, 'automated reconnect fault'));
+      return sockets.length;
+    });
+    assert.equal(closedSockets, 1, 'one authenticated socket receives the reconnect fault');
     await until(() => s.events.slice(beforeReconnect).some(e => e.event === 'voice.micLive'), 'real socket reconnect and microphone restart');
     await owner.evaluate(bytes => window.voiceLabPlay(bytes), [...padWav(fixture.bytes, 0, 2)]);
     await until(() => s.events.slice(beforeReconnect).some(e => e.event === 'voice.ttsPlaybackComplete'), 'reconnected owner response');

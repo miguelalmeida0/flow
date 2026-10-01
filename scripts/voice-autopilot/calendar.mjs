@@ -15,7 +15,7 @@ export async function calendar(def, services, out) {
     await launch.context.addInitScript(installAudioInput);
     page = await launch.context.newPage(); observe(page, s);
     await page.clock.setFixedTime(new Date('2026-09-20T12:00:00+02:00'));
-    await page.goto('http://localhost:5173/?flowVoiceDebug=1');
+    await page.goto(`${process.env.FLOW_VOICE_APP_URL ?? 'http://localhost:5173/'}?flowVoiceDebug=1`);
     await page.waitForFunction(() => localStorage.getItem('flow.life.v3'));
     // Disposable deterministic calendar fixture; the requested mutation still
     // runs exclusively through the application's voice/confirmation path.

@@ -20,7 +20,7 @@ export default defineConfig({
     : "list",
   outputDir: releaseQa ? "artifacts/release-qa/playwright-results" : "test-results",
   use: {
-    baseURL: appOrigin,
+    baseURL: `${appOrigin}${releaseQa ? "/flow/" : "/"}`,
     ...(executablePath ? { launchOptions: { executablePath } } : {}),
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
@@ -29,7 +29,7 @@ export default defineConfig({
     command: releaseQa
       ? "npm run preview -- --host 127.0.0.1 --port 5173 --strictPort"
       : "npm run dev -- --host 127.0.0.1 --port 5173 --strictPort",
-    url: appOrigin,
+    url: `${appOrigin}${releaseQa ? "/flow/" : "/"}`,
     reuseExistingServer: !releaseQa,
   },
   projects: [

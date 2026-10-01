@@ -1,0 +1,47 @@
+name: Flow release CI
+on:
+  pull_request:
+    branches: [main, test]
+  push:
+    branches: [main, test, release/safe-production]
+permissions:
+  contents: read
+concurrency:
+  group: flow-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  deterministic:
+    name: Deterministic gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Tier A clean deterministic gates and production artifact smoke
+        run: npm run qa:production -- --tier=a
+      - name: Keep exact successful candidate artifact
+        if: success() && github.event_name == 'push'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: flow-candidate-${{ github.sha }}
+          path: dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+      - name: Retain gate evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: flow-evidence-${{ github.sha }}
+          path: |
+            artifacts/production/
+            artifacts/production-smoke/
+          if-no-files-found: error
+          retention-days: 30

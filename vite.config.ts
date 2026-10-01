@@ -2,7 +2,8 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  base: mode === "production" ? "/flow/" : "/",
   plugins: [react(), tailwindcss()],
   server: {
     watch: {
@@ -31,4 +32,4 @@ export default defineConfig({
     ],
     environmentOptions: { jsdom: { url: "http://localhost/" } },
   },
-});
+}));

@@ -14,7 +14,8 @@ export async function speech(text, systemVoice) {
   if (!existsSync(file)) {
     const token = readFileSync(path.join(homedir(), '.flow-companion/voice-token'), 'utf8').trim();
     const pcm = await new Promise((resolve, reject) => {
-      const ws = new WebSocket(`ws://127.0.0.1:8766/voice?token=${token}`, { origin: 'http://localhost:5173' });
+      const ws = new WebSocket("ws://127.0.0.1:8766/voice", { origin: 'http://localhost:5173' });
+      ws.on('open', () => ws.send(JSON.stringify({ type: 'authenticate', token })));
       const chunks = [];
       const timer = setTimeout(() => { ws.close(); reject(new Error('Local fixture TTS exceeded 30s')); }, 30000);
       ws.on('error', () => { clearTimeout(timer); reject(new Error('Local fixture TTS connection failed')); });

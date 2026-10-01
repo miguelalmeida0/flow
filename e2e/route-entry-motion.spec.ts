@@ -12,7 +12,7 @@ test("native Home to Today entry preserves readable text and clears Now", async 
   await useNativeAnimationClock(page);
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ contentType: "application/json", body: '{"daily":{"time":[]}}' }));
-  await page.goto("/");
+  await page.goto("./");
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload();
   await expect(page.getByTestId("home-space")).toBeVisible();

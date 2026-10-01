@@ -11,6 +11,8 @@
  * codebase takes an injectable `fetchImpl`.
  */
 
+import { localCompanionUrl, localCompanionsAllowed } from "../lib/localCompanionUrl";
+
 export const VOICE_COMPANION_TOKEN_KEY = "flow.voiceCompanion.token";
 export const VOICE_COMPANION_BASE_URL_KEY = "flow.voiceCompanion.baseUrl";
 export const DEFAULT_VOICE_COMPANION_BASE_URL = "ws://127.0.0.1:8766";
@@ -31,6 +33,7 @@ export function getVoiceCompanionBaseUrl(): string {
 }
 
 export function getVoiceCompanionToken(): string | null {
+  if (!localCompanionsAllowed()) return null;
   const stored = readLocalStorage(VOICE_COMPANION_TOKEN_KEY);
   return stored && stored.length > 0 ? stored : null;
 }
@@ -120,7 +123,7 @@ export class VoiceCompanionClient {
   }
 
   connect(): void {
-    if (!this.token) {
+    if (!this.token || !localCompanionUrl(this.baseUrl, "ws:") || !localCompanionsAllowed()) {
       this.emit({ type: "connectionError" });
       return;
     }
@@ -147,12 +150,13 @@ export class VoiceCompanionClient {
   }
 
   private openSocket(): void {
-    const url = `${this.baseUrl}/voice?token=${encodeURIComponent(this.token!)}`;
+    const url = `${localCompanionUrl(this.baseUrl, "ws:")}/voice`;
     const ws = new this.webSocketImpl(url);
     ws.binaryType = "arraybuffer";
     this.ws = ws;
     ws.onopen = () => {
-      this.reconnectAttempt = 0;
+      if (this.ws !== ws) return;
+      ws.send(JSON.stringify({ type: "authenticate", token: this.token }));
     };
     ws.onmessage = (event: MessageEvent) => {
       if (this.ws !== ws) return;
@@ -179,7 +183,7 @@ export class VoiceCompanionClient {
       // new tab for the same connection slot over and over. This tab stays
       // disconnected until the user explicitly wakes it again, at which
       // point `connect()` is called fresh.
-      if (event.code === EVICTED_BY_ANOTHER_TAB_CODE) {
+      if (event.code === EVICTED_BY_ANOTHER_TAB_CODE || event.code === 4401 || event.code === 4403) {
         this.explicitlyDisconnected = true;
         return;
       }
@@ -192,7 +196,7 @@ export class VoiceCompanionClient {
   }
 
   private scheduleReconnect(): void {
-    if (this.reconnectTimer) return;
+    if (this.reconnectTimer || this.reconnectAttempt >= 5) return;
     const delay = Math.min(BASE_RECONNECT_DELAY_MS * 2 ** this.reconnectAttempt, MAX_RECONNECT_DELAY_MS);
     this.reconnectAttempt += 1;
     this.reconnectTimer = setTimeout(() => {
@@ -212,6 +216,7 @@ export class VoiceCompanionClient {
     if (type === "endpoint.detected" || type === "stt.flushStart" || type === "stt.flushRetry" || type === "stt.flushComplete" || type === "stt.reset" || type === "audio.silenceStart" || type === "audio.frame" || type === "audio.rms") {
       this.emit({ ...parsed, type });
     } else if (type === "ready") {
+      this.reconnectAttempt = 0;
       this._sttReady = Boolean(parsed.sttReady);
       this._ttsReady = Boolean(parsed.ttsReady);
       this.emit({ type: "ready", sttReady: this._sttReady, ttsReady: this._ttsReady, version: String(parsed.version ?? "") });

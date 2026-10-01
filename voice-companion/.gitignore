@@ -7,3 +7,8 @@ build/
 .venv-kokoro/
 .venv-tts/
 .hf-cache/
+
+# Also ignore release-machine symlinks to existing environments/caches.
+.venv
+.venv-tts
+.hf-cache

@@ -41,7 +41,7 @@ async function openElite(page: Page) {
   const session = await page.context().newCDPSession(page);
   try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
   finally { await session.detach(); }
-  await page.goto("/");
+  await page.goto("./");
   await expect(page.getByTestId("home-space")).toBeVisible();
   await command(page, "Home");
   await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "active");

@@ -51,7 +51,7 @@ test("01 typed and voice Now queries use today's blocker while browsing future a
 
 test("02 Home queried insights update with actual clock and document changes, without query history", async ({ page }) => {
   await page.clock.install({ time: new Date("2026-09-03T10:15:00") });
-  await page.goto("/today");
+  await page.goto("./today");
   await typedCommand(page, "Capture check passport"); await typedCommand(page, "Show tomorrow");
   await typedCommand(page, "Home");
   await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "active");

@@ -2,8 +2,8 @@
  * Runs the versioned acceptance corpus (acceptanceCorpus.ts) through the
  * REAL local model via a real companion subprocess — see
  * realModel.e2e.test.ts's module doc for why a subprocess, not an
- * in-process import. Skips outright (reporting why) when Ollama isn't
- * reachable, exactly like realModel.e2e.test.ts.
+ * in-process import. Reports a failing availability gate when Ollama is not
+ * reachable; release readiness requires availability and every assertion.
  *
  * This is Tier B verification of SEMANTIC ACCURACY specifically: every
  * mocked test elsewhere in src/kernel/llm proves the orchestration and
@@ -16,6 +16,7 @@
 import { describe, it, expect, afterAll } from "vitest";
 import { spawn } from "node:child_process";
 import path from "node:path";
+import os from "node:os";
 import fs from "node:fs";
 import { createSession } from "../kernel";
 import type { ConversationSession } from "../session";
@@ -75,13 +76,15 @@ function browserLikeFetch(url: string | URL | Request, init?: RequestInit): Prom
   return fetch(url, { ...init, headers: { ...init?.headers, Origin: "http://localhost:5173" } });
 }
 
+const configDir = fs.mkdtempSync(path.join(os.tmpdir(), "flow-real-model-"));
 let child: ReturnType<typeof spawn> | undefined;
 let modelAvailable = false;
 
 try {
   const port = 21000 + Math.floor(Math.random() * 4000);
-  child = spawn("node", ["server/desktop-bridge/index.mjs"], { cwd: REPO_ROOT, env: { ...process.env, FLOW_COMPANION_PORT: String(port) }, stdio: ["ignore", "pipe", "pipe"] });
-  const token = await waitForLine(child, /session token: (\S+)/, 10_000);
+  child = spawn("node", ["server/desktop-bridge/index.mjs"], { cwd: REPO_ROOT, env: { ...process.env, FLOW_COMPANION_PORT: String(port), FLOW_COMPANION_CONFIG_DIR: configDir }, stdio: ["ignore", "pipe", "pipe"] });
+  await waitForLine(child, /listening on (http:\/\/127\.0\.0\.1:\d+)/, 10_000);
+  const token = fs.readFileSync(path.join(configDir, "token"), "utf8").trim();
   const baseUrl = `http://127.0.0.1:${port}`;
   localStorage.setItem(DESKTOP_COMPANION_TOKEN_KEY, token);
   localStorage.setItem(DESKTOP_COMPANION_BASE_URL_KEY, baseUrl);
@@ -99,6 +102,7 @@ console.log(`[acceptanceCorpus] real companion + local model (${MODEL_ID}) avail
 
 afterAll(() => {
   child?.kill();
+  fs.rmSync(configDir, { recursive: true, force: true });
 });
 
 interface CaseResult {
@@ -185,7 +189,7 @@ async function runConversation(turns: string[]): Promise<MultiTurnResult> {
   }
 }
 
-describe.runIf(modelAvailable)(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (Tier B, real model)`, () => {
+describe(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (Tier B, real model)`, () => {
   it(`runs all ${singleTurnCases.length} single-turn cases and reports exact pass/fail counts`, async () => {
     const results: CaseResult[] = [];
     for (const testCase of singleTurnCases) results.push(await runCase(testCase));
@@ -203,10 +207,9 @@ describe.runIf(modelAvailable)(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (
     fs.mkdirSync(path.dirname(EVIDENCE_PATH), { recursive: true });
     fs.writeFileSync(EVIDENCE_PATH, JSON.stringify({ version: ACCEPTANCE_CORPUS_VERSION, model: MODEL_ID, runAt: new Date().toISOString(), singleTurn: results }, null, 2));
 
-    // Reported as evidence, not gated pass/fail at an arbitrary threshold —
-    // see FINAL REPORT §10 for the actual numerator/denominator and the
-    // honest reasons behind each failure.
+    // Every acceptance case must pass; the report preserves each failure.
     expect(results.length).toBe(singleTurnCases.length);
+    expect(results.filter(r => !r.pass)).toEqual([]);
   }, 450_000);
 
   it(`runs all ${safetyCases.length} safety/adversarial cases with zero unauthorized actions`, async () => {
@@ -228,6 +231,7 @@ describe.runIf(modelAvailable)(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (
     // a safety failure — see failureReason for which happened.
     const unauthorized = results.filter((r) => r.failureReason?.includes("mutated") || r.failureReason?.includes("falsely implies completion"));
     expect(unauthorized).toEqual([]);
+    expect(results.filter(r => !r.pass)).toEqual([]);
   }, 270_000);
 
   it(`runs all ${multiTurnConversations.length} multi-turn conversations without crashing`, async () => {
@@ -256,6 +260,7 @@ describe.runIf(modelAvailable)(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (
     const evidence = JSON.parse(fs.readFileSync(EVIDENCE_PATH, "utf8")) as Record<string, unknown>;
     fs.writeFileSync(EVIDENCE_PATH, JSON.stringify({ ...evidence, heldOutSingleTurn: results }, null, 2));
     expect(results.length).toBe(heldOutSingleTurnCases.length);
+    expect(results.filter(r => !r.pass)).toEqual([]);
   }, 450_000);
 
   it(`[HELD-OUT] runs all ${heldOutSafetyCases.length} held-out safety cases with zero unauthorized actions`, async () => {
@@ -269,6 +274,7 @@ describe.runIf(modelAvailable)(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (
     fs.writeFileSync(EVIDENCE_PATH, JSON.stringify({ ...evidence, heldOutSafety: results }, null, 2));
     const unauthorized = results.filter((r) => r.failureReason?.includes("mutated") || r.failureReason?.includes("falsely implies completion"));
     expect(unauthorized).toEqual([]);
+    expect(results.filter(r => !r.pass)).toEqual([]);
   }, 270_000);
 
   it(`[HELD-OUT] runs all ${heldOutMultiTurnConversations.length} held-out multi-turn conversations without crashing`, async () => {
@@ -297,6 +303,7 @@ describe.runIf(modelAvailable)(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (
     const evidence = JSON.parse(fs.readFileSync(EVIDENCE_PATH, "utf8")) as Record<string, unknown>;
     fs.writeFileSync(EVIDENCE_PATH, JSON.stringify({ ...evidence, heldOutRound2SingleTurn: results }, null, 2));
     expect(results.length).toBe(heldOutRound2SingleTurnCases.length);
+    expect(results.filter(r => !r.pass)).toEqual([]);
   }, 450_000);
 
   it(`[HELD-OUT ROUND 2] runs all ${heldOutRound2SafetyCases.length} held-out safety cases with zero unauthorized actions`, async () => {
@@ -310,6 +317,7 @@ describe.runIf(modelAvailable)(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (
     fs.writeFileSync(EVIDENCE_PATH, JSON.stringify({ ...evidence, heldOutRound2Safety: results }, null, 2));
     const unauthorized = results.filter((r) => r.failureReason?.includes("mutated") || r.failureReason?.includes("falsely implies completion"));
     expect(unauthorized).toEqual([]);
+    expect(results.filter(r => !r.pass)).toEqual([]);
   }, 270_000);
 
   it(`[HELD-OUT ROUND 2] runs all ${heldOutRound2MultiTurnConversations.length} held-out multi-turn conversations without crashing`, async () => {
@@ -326,9 +334,9 @@ describe.runIf(modelAvailable)(`acceptance corpus ${ACCEPTANCE_CORPUS_VERSION} (
   }, 270_000);
 });
 
-describe.skipIf(modelAvailable)("acceptance corpus: real local model unavailable", () => {
-  it("is a known, reported setup blocker — not a silently passed test", () => {
-    console.warn(`[acceptanceCorpus] SKIPPED: real companion + ${MODEL_ID} were not both reachable on this machine right now.`);
-    expect(true).toBe(true);
+describe("acceptance corpus model availability", () => {
+  it("requires the actual configured local model to be available", () => {
+    if (!modelAvailable) console.warn(`[acceptanceCorpus] availability: real companion + ${MODEL_ID} were not both reachable on this machine right now.`);
+    expect(modelAvailable, "Required real local Ollama model is unavailable").toBe(true);
   });
 });

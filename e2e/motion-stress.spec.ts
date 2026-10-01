@@ -47,7 +47,7 @@ test("20 interrupted morph cycles leave no clone or listener growth", async ({ p
   page.on("console", (message) => { if (message.type() === "error") browserErrors.push(message.text()); });
   page.on("pageerror", (error) => browserErrors.push(error.message));
   mkdirSync(evidenceDir, { recursive: true });
-  await page.goto("/inbox");
+  await page.goto("./inbox");
   let input = await fillCommandField(page, "Capture Renew passport before Senegal");
   await input.press("Enter");
   await expect(page.getByText("“Capture Renew passport before Senegal”").last()).toBeVisible();
