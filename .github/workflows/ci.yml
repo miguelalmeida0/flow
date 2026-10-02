@@ -1,0 +1,116 @@
+name: Flow CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: flow-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22.23.0"
+  PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/node_modules/.cache/ms-playwright
+
+jobs:
+  deterministic:
+    name: Deterministic gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit and semantic tests
+        run: npm run test:run
+
+      - name: Record semantic corpus
+        run: |
+          mkdir -p artifacts/ci
+          node scripts/qa-release.mjs --semantic-count-only | tee artifacts/ci/semantic-corpus.json
+
+      - name: Production build
+        run: npm run build
+
+      - name: Upload deterministic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-deterministic-evidence
+          path: artifacts/ci/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  browser:
+    name: Browser journeys
+    needs: deterministic
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser journeys
+        run: npm run test:e2e
+
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-browser-evidence
+          path: |
+            test-results/
+            playwright-report/
+            artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+
+      - name: Scan repository history for secrets
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Audit high-severity dependencies
+        run: npm audit --audit-level=high
