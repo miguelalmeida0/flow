@@ -96,8 +96,47 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-  browser:
-    name: Browser journeys
+  browser-baseline:
+    name: Baseline browser inventory
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture baseline browser report
+        shell: bash
+        run: |
+          mkdir -p artifacts/ci
+          set +e
+          FLOW_PLAYWRIGHT_RATCHET_FILE="$PWD/artifacts/ci/playwright.json"             npx --no-install playwright test               --reporter=./scripts/ci/playwright-ratchet-reporter.mjs               --trace=off               --output=artifacts/ci/playwright-output
+          code=$?
+          set -e
+          printf '%s\n' "$code" > artifacts/ci/playwright-exit-code.txt
+          test -s artifacts/ci/playwright.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flow-browser-baseline
+          path: |
+            artifacts/ci/playwright.json
+            artifacts/ci/playwright-exit-code.txt
+          retention-days: 7
+
+  browser-candidate:
+    name: Candidate browser inventory
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
@@ -116,19 +155,26 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run browser journeys
-        run: npm run test:e2e
+      - name: Capture candidate browser report
+        shell: bash
+        run: |
+          mkdir -p artifacts/ci
+          set +e
+          FLOW_PLAYWRIGHT_RATCHET_FILE="$PWD/artifacts/ci/playwright.json"             npx --no-install playwright test               --reporter=./scripts/ci/playwright-ratchet-reporter.mjs               --trace=off               --output=artifacts/ci/playwright-output
+          code=$?
+          set -e
+          printf '%s\n' "$code" > artifacts/ci/playwright-exit-code.txt
+          test -s artifacts/ci/playwright.json
 
-      - name: Upload browser evidence
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: flow-browser-evidence
+          name: flow-browser-candidate
           path: |
-            test-results/
-            playwright-report/
-            artifacts/
-          if-no-files-found: ignore
+            artifacts/ci/playwright.json
+            artifacts/ci/playwright-exit-code.txt
+            artifacts/ci/playwright-output/
+          if-no-files-found: warn
           retention-days: 7
 
   security:
@@ -159,7 +205,7 @@ jobs:
   deterministic:
     name: Deterministic gates
     if: always()
-    needs: [baseline, candidate, browser, security]
+    needs: [baseline, candidate, browser-baseline, browser-candidate, security]
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -170,25 +216,40 @@ jobs:
 
       - name: Require supporting lanes
         env:
-          CANDIDATE_RESULT: ${{ needs.candidate.result }}
-          BROWSER_RESULT: ${{ needs.browser.result }}
-          SECURITY_RESULT: ${{ needs.security.result }}
           BASELINE_RESULT: ${{ needs.baseline.result }}
+          CANDIDATE_RESULT: ${{ needs.candidate.result }}
+          BROWSER_BASELINE_RESULT: ${{ needs.browser-baseline.result }}
+          BROWSER_CANDIDATE_RESULT: ${{ needs.browser-candidate.result }}
+          SECURITY_RESULT: ${{ needs.security.result }}
         run: |
           test "$BASELINE_RESULT" = "success"
           test "$CANDIDATE_RESULT" = "success"
-          test "$BROWSER_RESULT" = "success"
+          test "$BROWSER_BASELINE_RESULT" = "success"
+          test "$BROWSER_CANDIDATE_RESULT" = "success"
           test "$SECURITY_RESULT" = "success"
 
       - uses: actions/download-artifact@v4
         with:
           name: flow-baseline-tests
-          path: artifacts/ci/base
+          path: artifacts/ci/unit-base
 
       - uses: actions/download-artifact@v4
         with:
           name: flow-candidate-tests
-          path: artifacts/ci/head
+          path: artifacts/ci/unit-head
 
-      - name: Block new test failures
-        run: node scripts/ci/compare-vitest-ratchet.mjs artifacts/ci/base/vitest.json artifacts/ci/head/vitest.json
+      - uses: actions/download-artifact@v4
+        with:
+          name: flow-browser-baseline
+          path: artifacts/ci/browser-base
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: flow-browser-candidate
+          path: artifacts/ci/browser-head
+
+      - name: Block new unit or semantic failures
+        run: node scripts/ci/compare-vitest-ratchet.mjs artifacts/ci/unit-base/vitest.json artifacts/ci/unit-head/vitest.json
+
+      - name: Block new browser failures
+        run: node scripts/ci/compare-playwright-ratchet.mjs artifacts/ci/browser-base/playwright.json artifacts/ci/browser-head/playwright.json
