@@ -29,6 +29,8 @@
  *   localStorage.setItem("flow.desktopCompanion.token", "<token from ~/.flow-companion/token>")
  */
 
+import { getRuntimeMode } from "../../app/runtimeMode";
+
 export const DESKTOP_COMPANION_TOKEN_KEY = "flow.desktopCompanion.token";
 export const DESKTOP_COMPANION_BASE_URL_KEY = "flow.desktopCompanion.baseUrl";
 export const DEFAULT_DESKTOP_COMPANION_BASE_URL = "http://127.0.0.1:8765";
@@ -59,6 +61,7 @@ export function getDesktopCompanionBaseUrl(): string {
 }
 
 export function getDesktopCompanionToken(): string | null {
+  if (getRuntimeMode() !== "local") return null;
   const stored = readLocalStorage(DESKTOP_COMPANION_TOKEN_KEY);
   return stored && stored.length > 0 ? stored : null;
 }
@@ -66,6 +69,7 @@ export function getDesktopCompanionToken(): string | null {
 export interface DesktopBridgeCallOptions {
   /** Injectable for tests; defaults to the global fetch. */
   fetchImpl?: typeof fetch;
+  signal?: AbortSignal;
 }
 
 /**
@@ -89,6 +93,9 @@ export async function callDesktopCapability<T = unknown>(
   args: Record<string, unknown> = {},
   options: DesktopBridgeCallOptions = {},
 ): Promise<T> {
+  if (getRuntimeMode() !== "local") {
+    throw new DesktopBridgeError("not-configured", "Desktop actions are available only in local Flow.");
+  }
   const token = getDesktopCompanionToken();
   if (!token) {
     throw new DesktopBridgeError(
@@ -106,6 +113,7 @@ export async function callDesktopCapability<T = unknown>(
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ capability, args }),
+      signal: options.signal,
     });
   } catch {
     throw new DesktopBridgeError(
@@ -137,9 +145,10 @@ export async function callDesktopCapability<T = unknown>(
 
 /** Best-effort liveness check for "companion offline" vs "companion online" UX. Never throws. */
 export async function checkDesktopCompanionHealth(options: DesktopBridgeCallOptions = {}): Promise<boolean> {
+  if (getRuntimeMode() !== "local") return false;
   const fetchImpl = options.fetchImpl ?? fetch;
   try {
-    const response = await fetchImpl(`${getDesktopCompanionBaseUrl()}/health`);
+    const response = await fetchImpl(`${getDesktopCompanionBaseUrl()}/health`, { signal: options.signal });
     return response.ok;
   } catch {
     return false;

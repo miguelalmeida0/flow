@@ -1500,11 +1500,9 @@
       "text": "never mind",
       "before": {},
       "expected": {
-        "intent": "history",
+        "intent": "cancel",
         "resolution": "execute",
-        "slots": {
-          "direction": "undo"
-        },
+        "slots": {},
         "route": "home",
         "actions": [],
         "targetIds": [],
@@ -1518,7 +1516,7 @@
         "noCreation": true,
         "feedback": {
           "phase": "completed",
-          "meaning": "No undo entry exists; explicitly say nothing changed."
+          "meaning": "Cancellation leaves the document and history unchanged."
         }
       }
     },
@@ -1732,4 +1730,3 @@
     }
   ]
 }
-

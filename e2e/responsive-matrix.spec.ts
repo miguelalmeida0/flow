@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync } from "node:fs";
+import { fillCommandField } from "./tide-helpers";
 
 const evidenceDir = process.env.FLOW_RESPONSIVE_EVIDENCE_DIR ?? "artifacts/responsive-matrix";
 
@@ -26,53 +27,13 @@ const routes = [
   { name: "atmosphere", path: "/atmosphere" },
 ] as const;
 
-async function submitHomeThroughRealForm(page: Page) {
-  return page.evaluate(() => {
-    const input = document.querySelector<HTMLInputElement>('input[aria-label="Tell Flow what to change"]');
-    if (!input) return false;
-    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
-    if (!setter) throw new Error("Native input value setter unavailable");
-    setter.call(input, "Home");
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-    const form = input.closest("form");
-    if (!form) throw new Error("Flow command form missing");
-    form.requestSubmit();
-    return true;
-  });
-}
-
 async function activateHome(page: Page) {
   await page.goto("/");
   const home = page.getByTestId("home-space");
   await expect(home).toBeAttached();
-
   if (await home.getAttribute("data-home-entrance") === "active") return;
-
-  await page.waitForFunction(() =>
-    Boolean(document.querySelector('input[aria-label="Tell Flow what to change"]'))
-    || Boolean(document.querySelector('button[aria-label="Open Flow command"]')),
-    undefined,
-    { timeout: 10_000 },
-  );
-
-  if (!await submitHomeThroughRealForm(page)) {
-    const opened = await page.evaluate(() => {
-      const button = document.querySelector<HTMLButtonElement>('button[aria-label="Open Flow command"]');
-      if (!button) return false;
-      button.click();
-      return true;
-    });
-    if (!opened) throw new Error("Flow command surface could not be opened");
-
-    await page.waitForFunction(() =>
-      Boolean(document.querySelector('input[aria-label="Tell Flow what to change"]')),
-      undefined,
-      { timeout: 10_000 },
-    );
-
-    if (!await submitHomeThroughRealForm(page)) throw new Error("Flow command form never became available");
-  }
-
+  const field = await fillCommandField(page, "Home");
+  await field.press("Enter");
   await expect(home).toHaveAttribute("data-home-entrance", "active", { timeout: 10_000 });
 }
 

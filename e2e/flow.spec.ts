@@ -109,7 +109,7 @@ test("ambiguity and destructive confirmation do not mutate prematurely", async (
   await submit(page, "Move the meeting to 8:30 am");
   await expect(page.getByText("Which meeting do you mean?")).toBeVisible();
   await captureEvidence(page, "artifacts/clarification.png");
-  await page.getByRole("button", { name: /Product meeting — 10 AM/ }).click();
+  await page.getByRole("button", { name: /^Product meeting — [A-Za-z]+, [A-Za-z]+ \d{1,2}, 10 AM$/ }).click();
   await expect(page.getByRole("button", { name: /Product meeting, 8:30 AM–9 AM/ })).toBeVisible();
 
   await fresh(page);

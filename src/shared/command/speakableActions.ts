@@ -4,7 +4,7 @@ import registry from "./uiCapabilityRegistry.json";
  * parity case. Native continuation is a result, never an exemption or success.
  * This is product audit metadata, not another execution router. */
 export interface UiCapability {
-  category?: "product-action" | "observation" | "developer-control";
+  category?: "product-action" | "observation" | "developer-control" | "privacy-access";
   actionId: string;
   domain: string;
   buttonLabel: string | readonly string[];
@@ -18,7 +18,7 @@ export interface UiCapability {
   component: string;
   gap?: string;
   existingTest?: string;
-  validation: "pending-three-mode" | "verified-three-mode";
+  validation: "pending-three-mode" | "verified-three-mode" | "pending-access" | "verified-access";
 }
 
 export const uiCapabilities: readonly UiCapability[] = registry as UiCapability[];

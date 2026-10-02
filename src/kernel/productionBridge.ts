@@ -33,7 +33,7 @@ import { createDefaultRegistry } from "./capabilities";
 import type { CalendarMoveArgs } from "./capabilities/calendar";
 import { createEnvironment, submit, reply, cancel, phaseFor, type KernelEnvironment, type KernelOutcome, type KernelPhase } from "./kernel";
 import type { CapabilityRegistry } from "./registry";
-import { createSession, type ConversationSession, type EntityReference } from "./session";
+import { createSession, clearInFlight, type ConversationSession, type EntityReference } from "./session";
 import { resolveReferentWord, resolveOrdinal, rememberSearchResults, searchHitToReference } from "./referents";
 import type { PlanStepInput } from "./planner";
 import { searchEverything, type SearchHit } from "./search";
@@ -43,12 +43,16 @@ import { dateKeyAfter } from "../features/day-planner/interpretation/temporal";
 import { parseFriendIntent } from "../features/friends/friendIntents";
 import type { PersonalMemoryFact } from "./types";
 import { createIdempotencyStore, type IdempotencyStore } from "./idempotency";
+import type { TurnAuthority } from "./turnAuthority";
+import { getRuntimeMode } from "../app/runtimeMode";
 
 let registrySingleton: CapabilityRegistry | undefined;
+let registryMode: ReturnType<typeof getRuntimeMode> | undefined;
 /** One registry for the process lifetime — CapabilityRegistry#register
  * throws on a duplicate id, so this must not be rebuilt per render/turn. */
 export function getBridgeRegistry(): CapabilityRegistry {
-  registrySingleton ??= createDefaultRegistry();
+  const mode = getRuntimeMode();
+  if (!registrySingleton || registryMode !== mode) { registrySingleton = createDefaultRegistry(mode); registryMode = mode; }
   return registrySingleton;
 }
 
@@ -414,6 +418,34 @@ export interface KernelBridgeDeps {
    * pipeline (see persistKernelMutation's doc comment). Omit in tests that
    * only care about the kernel's own decision, not real-app persistence. */
   dispatchLife?: (actions: LifeAction[], summary: string, transcript?: string) => void;
+  idempotency?: IdempotencyStore;
+  authority?: TurnAuthority;
+}
+
+export type KernelCommitOutcome = "durable" | "no-change" | "preview" | "error";
+
+/** Called while the document lock is owned. LocalStorage's commit is synchronous;
+ * callers using an asynchronous store must await it before invoking this boundary. */
+export function settleKernelTurn(
+  result: KernelTurnResult,
+  before: { document: LifeDocument; memory: PersonalMemoryFact[]; session: ConversationSession },
+  persist: (actions: LifeAction[]) => boolean,
+  finalizeIdempotency: () => void,
+  explicitActions?: LifeAction[],
+): { result: KernelTurnResult; status: KernelCommitOutcome; actions: LifeAction[] } {
+  const rejected = (message: string) => ({
+    result: { ...result, env: { ...result.env, document: before.document, memory: before.memory }, session: before.session,
+      outcome: { status: "error" as const, message }, phase: "done" as const, message },
+    status: "error" as const, actions: [],
+  });
+  let actions: LifeAction[];
+  try { actions = explicitActions?.length ? explicitActions : persistKernelMutation("", before.document, before.memory, result.env.document, result.env.memory, undefined); }
+  catch (error) { return rejected(error instanceof Error ? error.message : "This change cannot be saved safely. Nothing changed."); }
+  if (result.outcome.status !== "executed" && actions.length) return rejected("This request needs separate reviews. Ask for each change separately. Nothing changed.");
+  if (result.outcome.status === "error") return { result, status: "error", actions: [] };
+  if (actions.length && !persist(actions)) return rejected("Flow could not save this change. Your request is available to retry.");
+  if (result.outcome.status === "executed") finalizeIdempotency();
+  return { result, status: actions.length ? "durable" : result.outcome.status === "executed" ? "no-change" : "preview", actions };
 }
 
 export function runKernelTurn(
@@ -425,7 +457,7 @@ export function runKernelTurn(
   deps: KernelBridgeDeps = {},
 ): KernelTurnResult {
   const registry = getBridgeRegistry();
-  const env: KernelEnvironment = { ...createEnvironment(registry, document, { route: "home" }, { now }, getBridgeIdempotencyStore()), memory: memoryFacts };
+  const env: KernelEnvironment = { ...createEnvironment(registry, document, { route: "home" }, { now }, deps.idempotency ?? getBridgeIdempotencyStore()), memory: memoryFacts, authority: deps.authority };
   const hasPendingContext = Boolean(session.activeProposal || session.pendingClarification);
   const replyIntent = classifyReply(utterance);
 
@@ -504,7 +536,7 @@ export function runKernelTurn(
         ? `That's ${formatSeekTime(ref.audioTimestamp.atMs)} into "${ref.label}"${ref.audioTimestamp.confidence === "estimated" ? " (estimated)" : ""}. Flow doesn't have an audio player wired up to actually play it in this build.`
         : `"${ref.label}" doesn't have a recording to play from.`;
       const outcome: KernelOutcome = ref.audioTimestamp ? { status: "executed", descriptions: [message] } : { status: "error", message };
-      const nextSession = rememberSearchResults(session, [ref], now().getTime());
+      const nextSession = rememberSearchResults(clearInFlight(session), [ref], now().getTime());
       return { env, session: nextSession, outcome, phase: "done", message, recognized: true, openReferent: ref };
     }
 
@@ -514,7 +546,7 @@ export function runKernelTurn(
       // Refresh this specific referent to the front (not just leave it at
       // whatever index it was in the old result list) so an immediate
       // follow-up ("show it in Finder") points at exactly what was opened.
-      const nextSession = rememberSearchResults(session, [recognized.ref], now().getTime());
+      const nextSession = rememberSearchResults(clearInFlight(session), [recognized.ref], now().getTime());
       return { env, session: nextSession, outcome, phase: "done", message, recognized: true, openReferent: recognized.ref };
     }
 
@@ -529,17 +561,17 @@ export function runKernelTurn(
         const isRecall = capabilityId === "recall.search" || capabilityId === "recall.commitments";
         const isRecentFiles = capabilityId === "desktop.listRecentFiles";
         const isFileReferent = capabilityId === "desktop.openFile" || capabilityId === "desktop.revealInFinder";
-        let nextSession = session;
+        let nextSession = clearInFlight(session);
         let openReferent: EntityReference | undefined;
         if (result.status === "ok" && isRecall && Array.isArray(result.data)) {
-          nextSession = rememberSearchResults(session, (result.data as SearchHit[]).map(searchHitToReference), now().getTime());
+          nextSession = rememberSearchResults(nextSession, (result.data as SearchHit[]).map(searchHitToReference), now().getTime());
         } else if (result.status === "ok" && isRecentFiles && Array.isArray(result.data)) {
-          nextSession = rememberSearchResults(session, (result.data as RecentFileMeta[]).map(recentFileToReference), now().getTime());
+          nextSession = rememberSearchResults(nextSession, (result.data as RecentFileMeta[]).map(recentFileToReference), now().getTime());
         } else if (result.status === "ok" && isFileReferent) {
           const path = (recognized.steps[0]!.args as { path?: string }).path;
           if (path) {
             openReferent = fileReference(path, path.split("/").pop() ?? path);
-            nextSession = rememberSearchResults(session, [openReferent], now().getTime());
+            nextSession = rememberSearchResults(nextSession, [openReferent], now().getTime());
           }
         }
         return { env, session: nextSession, outcome, phase: phaseFor(outcome), message: messageFor(outcome), openReferent, recognized: true };
@@ -567,59 +599,72 @@ export function runKernelTurn(
  * read-only; unrecognized ids are left alone rather than guessed at).
  */
 export function persistKernelMutation(
-  capabilityId: string,
+  _capabilityId: string,
   before: LifeDocument,
   beforeMemory: PersonalMemoryFact[],
   after: LifeDocument,
   afterMemory: PersonalMemoryFact[],
-  entityId: string | undefined,
+  _entityId: string | undefined,
 ): LifeAction[] {
+  // Retained for existing bridge callers; deletions now derive from the diff.
+  void _entityId;
   const actions: LifeAction[] = [];
-
-  if (capabilityId === "memory.store") {
-    const added = afterMemory.find((fact) => !beforeMemory.some((existing) => existing.id === fact.id));
-    if (added) actions.push({ type: "memory.fact.create", fact: added });
+  const equal = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+  const assertFields = (prior: object, next: object, keys: string[]) => {
+    const permitted = new Set(keys);
+    for (const key of new Set([...Object.keys(prior), ...Object.keys(next)])) {
+      if (!permitted.has(key) && !equal((prior as Record<string, unknown>)[key], (next as Record<string, unknown>)[key])) throw new Error("This change contains fields that cannot be saved safely. Nothing changed.");
+    }
+  };
+  const allowed = new Set(["calendar", "calendars", "people", "plans", "studio", "personalMemoryFacts"]);
+  for (const key of Object.keys(after) as (keyof LifeDocument)[]) {
+    if (!allowed.has(key) && !equal(before[key], after[key])) throw new Error("This compound change cannot be saved safely. Ask for each change separately. Nothing changed.");
   }
-
-  if (capabilityId === "memory.forget" && entityId) {
-    actions.push({ type: "memory.fact.delete", factId: entityId });
+  for (const key of Object.keys(after.studio) as (keyof LifeDocument["studio"])[]) {
+    if (key !== "journalEntries" && !equal(before.studio[key], after.studio[key])) throw new Error("This journal change cannot be saved safely. Nothing changed.");
   }
+  if (!equal(before.personalMemoryFacts, after.personalMemoryFacts) && !equal(after.personalMemoryFacts ?? [], afterMemory)) throw new Error("The memory document and proposed facts disagree. Nothing changed.");
 
-  if (capabilityId === "friends.create") {
-    const addedPerson = after.people.find(person => !before.people.some(existing => existing.id === person.id));
-    if (addedPerson) actions.push({ type: "person.create", person: addedPerson });
+  for (const fact of beforeMemory) if (!afterMemory.some(({ id }) => id === fact.id)) actions.push({ type: "memory.fact.delete", factId: fact.id });
+  for (const fact of afterMemory) {
+    const prior = beforeMemory.find(({ id }) => id === fact.id);
+    const changed = !prior || !equal(prior, fact);
+    if (prior && changed) actions.push({ type: "memory.fact.delete", factId: fact.id });
+    if (changed) actions.push({ type: "memory.fact.create", fact });
   }
-
-  if (capabilityId === "friends.remember") {
-    const addedPerson = after.people.find((person) => !before.people.some((existing) => existing.id === person.id));
-    if (addedPerson) actions.push({ type: "person.ensure", person: addedPerson });
-    const addedFact = afterMemory.find((fact) => !beforeMemory.some((existing) => existing.id === fact.id));
-    if (addedFact) actions.push({ type: "memory.fact.create", fact: addedFact });
+  for (const person of after.people) {
+    const prior = before.people.find(({ id }) => id === person.id);
+    if (!prior) actions.push({ type: "person.create", person });
+    else if (!equal(prior, person)) throw new Error("This person change needs a fresh review. Nothing changed.");
   }
-
-  if (capabilityId === "journal.bookmark") {
-    for (const afterEntry of after.studio.journalEntries) {
-      const beforeEntry = before.studio.journalEntries.find((entry) => entry.id === afterEntry.id);
-      const addedBookmark = afterEntry.bookmarks.find((bookmark) => !beforeEntry?.bookmarks.some((existing) => existing.id === bookmark.id));
-      if (addedBookmark) { actions.push({ type: "journal.bookmark.add", entryId: afterEntry.id, bookmark: addedBookmark }); break; }
+  if (before.people.some(({ id }) => !after.people.some((person) => person.id === id))) throw new Error("This person removal cannot be saved safely. Nothing changed.");
+  for (const plan of before.plans) if (!after.plans.some(({ id }) => id === plan.id)) actions.push({ type: "plan.delete", planId: plan.id });
+  for (const plan of after.plans) {
+    const prior = before.plans.find(({ id }) => id === plan.id);
+    if (!prior) actions.push({ type: "plan.create", plan });
+    else if (!equal(prior, plan)) {
+      assertFields(prior, plan, ["title", "outcome", "status", "dueAt", "targetCondition", "nextStepId", "updatedAt"]);
+      actions.push({ type: "plan.update", planId: plan.id, patch: { title: plan.title, outcome: plan.outcome, status: plan.status, dueAt: plan.dueAt, targetCondition: plan.targetCondition, nextStepId: plan.nextStepId } });
     }
   }
-
-  // journal.create's own capability.execute() already applies its mutation
-  // through applyLifeTransaction against the KERNEL's env.document (see
-  // src/kernel/capabilities/journal.ts) — this branch re-plays the same
-  // "journal.create" action against the app's OWN document/storage so the
-  // two stay in sync, exactly like every other capability here.
-  if (capabilityId === "journal.create") {
-    const addedEntry = after.studio.journalEntries.find((entry) => !before.studio.journalEntries.some((existing) => existing.id === entry.id));
-    if (addedEntry) actions.push({ type: "journal.create", entry: addedEntry });
-  }
-
-  if (capabilityId === "calendar.move" || capabilityId === "calendar.create") {
-    for (const [dateKey, plan] of Object.entries(after.calendars)) {
-      if (before.calendars[dateKey] !== plan) actions.push({ type: "calendar.replace", plan });
+  for (const entry of before.studio.journalEntries) if (!after.studio.journalEntries.some(({ id }) => id === entry.id)) actions.push({ type: "journal.delete", entryId: entry.id });
+  for (const entry of after.studio.journalEntries) {
+    const prior = before.studio.journalEntries.find(({ id }) => id === entry.id);
+    if (!prior) { actions.push({ type: "journal.create", entry }); continue; }
+    assertFields(prior, entry, ["title", "text", "status", "recordingState", "recordingDurationMs", "audioAssetId", "tags", "bookmarks", "updatedAt"]);
+    const patch = { title: entry.title, text: entry.text, status: entry.status, recordingState: entry.recordingState, recordingDurationMs: entry.recordingDurationMs, audioAssetId: entry.audioAssetId, tags: entry.tags };
+    if (Object.entries(patch).some(([key, value]) => !equal(prior[key as keyof typeof prior], value))) actions.push({ type: "journal.update", entryId: entry.id, patch });
+    for (const bookmark of prior.bookmarks) if (!entry.bookmarks.some(({ id }) => id === bookmark.id)) actions.push({ type: "journal.bookmark.remove", entryId: entry.id, bookmarkId: bookmark.id });
+    for (const bookmark of entry.bookmarks) if (!prior.bookmarks.some(({ id }) => id === bookmark.id)) actions.push({ type: "journal.bookmark.add", entryId: entry.id, bookmark });
+    for (const bookmark of entry.bookmarks) {
+      const original = prior.bookmarks.find(({ id }) => id === bookmark.id);
+      if (original && !equal(original, bookmark)) throw new Error("This bookmark changed. Review it again. Nothing changed.");
     }
+    for (const key of ["photoAssetIds", "transcriptSegments", "drawings"] as const) if (!equal(prior[key], entry[key])) throw new Error("This journal change cannot be saved safely. Nothing changed.");
   }
+  if (Object.keys(before.calendars).some((key) => !after.calendars[key])) throw new Error("This calendar removal cannot be saved safely. Nothing changed.");
+  if ((!equal(before.calendar, after.calendar) || !equal(before.calendars, after.calendars)) && !equal(after.calendar, after.calendars[after.calendar.dateKey])) throw new Error("The calendar view and document disagree. Nothing changed.");
+  for (const [dateKey, plan] of Object.entries(after.calendars)) if (!equal(before.calendars[dateKey], plan)) actions.push({ type: "calendar.replace", plan });
 
   return actions;
 }

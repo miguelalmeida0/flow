@@ -4,7 +4,26 @@ import { FakeRecognitionAdapter } from "../day-planner/voice/fakeRecognition";
 import { LiveOwnershipCoordinator, type LiveLease, type LiveOwnershipTransport } from "./liveOwnership";
 import { useFlowLiveSession } from "./useFlowLiveSession";
 
-afterEach(() => vi.useRealTimers());
+afterEach(() => { vi.useRealTimers(); delete window.__FLOW_RUNTIME__; localStorage.clear(); });
+
+it.each(["local", "hosted", "typed-only"] as const)("gates programmatic dialogue/capture start by runtime: %s", async (mode) => {
+  vi.useFakeTimers();
+  window.__FLOW_RUNTIME__ = { mode, inferenceEnabled: true, releaseId: "test" };
+  const adapter = new FakeRecognitionAdapter();
+  const final = vi.fn();
+  const hook = renderHook(() => useFlowLiveSession(final, () => undefined, [], adapter));
+  act(() => window.dispatchEvent(new CustomEvent("flow-live-command", { detail: "start" })));
+  await act(async () => { await vi.advanceTimersByTimeAsync(100); });
+  expect(adapter.startCount).toBe(mode === "local" ? 1 : 0);
+  expect(hook.result.current.status).toBe(mode === "local" ? "listening" : "sleeping");
+  if (mode !== "local") {
+    act(() => hook.result.current.start());
+    await act(async () => { await vi.advanceTimersByTimeAsync(100); });
+    expect(adapter.startCount).toBe(0);
+    expect(final).not.toHaveBeenCalled();
+  }
+  hook.unmount();
+});
 
 async function setup() {
   vi.useFakeTimers();
@@ -34,6 +53,19 @@ it("accepts a final transcript after an expired own-winner lease and keeps liste
   expect(session.hook.result.current.lastTranscript).toBe("Start with my voice");
   await act(async () => { await vi.advanceTimersByTimeAsync(1); });
   expect(session.adapter.startCount).toBe(2);
+  session.hook.unmount();
+});
+
+it("publishes distinct accepted utterance identities for repeated words without accepting duplicate callbacks", async () => {
+  const session = await setup();
+  const callback = session.started.mock.calls[0]![0];
+  act(() => callback.onFinal([{ transcript: "Same words" }], { utteranceId: "first", cycle: 1 }));
+  expect(session.hook.result.current.lastUtteranceId).toBe("first");
+  act(() => callback.onFinal([{ transcript: "Same words" }], { utteranceId: "first", cycle: 1 }));
+  expect(session.final).toHaveBeenCalledTimes(1);
+  act(() => callback.onFinal([{ transcript: "Same words" }], { utteranceId: "second", cycle: 1 }));
+  expect(session.hook.result.current.lastUtteranceId).toBe("second");
+  expect(session.final).toHaveBeenCalledTimes(2);
   session.hook.unmount();
 });
 

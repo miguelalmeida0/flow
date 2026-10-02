@@ -9,8 +9,9 @@ import { memoryCapabilities } from "./memory";
 import { systemCapabilities } from "./system";
 import { desktopCapabilities } from "./desktop";
 import { recallCapabilities } from "./recall";
+import { getRuntimeMode, isCapabilityAllowed, type FlowRuntimeMode } from "../../app/runtimeMode";
 
-export function createDefaultRegistry(): CapabilityRegistry {
+export function createDefaultRegistry(mode: FlowRuntimeMode = getRuntimeMode()): CapabilityRegistry {
   const registry = new CapabilityRegistry();
   for (const capability of [
     ...calendarCapabilities,
@@ -23,6 +24,7 @@ export function createDefaultRegistry(): CapabilityRegistry {
     ...desktopCapabilities,
     ...recallCapabilities,
   ]) {
+    if (!isCapabilityAllowed(capability.id, mode)) continue;
     // `as unknown as` (rather than the plain `as` used above) because desktop
     // capabilities are async (see desktop.ts) and don't structurally match
     // the synchronous Capability<never> shape closely enough for a direct cast.

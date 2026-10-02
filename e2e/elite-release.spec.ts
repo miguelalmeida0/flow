@@ -1,3 +1,5 @@
+import { APP_ORIGIN } from "./app-origin";
+import { awaitLocalListening } from "./local-voice-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fillCommandField } from "./tide-helpers";
@@ -39,7 +41,7 @@ async function openElite(page: Page) {
   await page.clock.install({ time: new Date("2026-09-04T09:32:00") });
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(weatherPayload()) }));
   const session = await page.context().newCDPSession(page);
-  try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
+  try { await session.send("Storage.clearDataForOrigin", { origin: APP_ORIGIN, storageTypes: "local_storage" }); }
   finally { await session.detach(); }
   await page.goto("/");
   await expect(page.getByTestId("home-space")).toBeVisible();
@@ -126,7 +128,7 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
   });
 });
 test.afterEach(() => {
@@ -141,7 +143,7 @@ test.afterAll(() => writeFileSync(`${evidenceDir}/browser-evidence.json`, `${JSO
 test("locked 1672x941 Home keeps four live worlds and exposes the existing utility lenses", async ({ page }) => {
   await page.setViewportSize({ width: 1672, height: 941 });
   await openElite(page);
-  for (const world of ["Calendar", "Journal", "Atmosphere", "Memories"]) await expect(page.getByRole("button", { name: `Open ${world}`, exact: true })).toBeVisible();
+  for (const world of ["Calendar", "Journal", "Friends", "Memories"]) await expect(page.getByRole("button", { name: `Open ${world}`, exact: true })).toBeVisible();
   await expect(page.locator("[data-home-calendar-preview]")).toContainText("Lunch");
   await expect(page.getByRole("heading", { name: "Good to know" })).toBeVisible();
   await expect(page.locator("header nav")).toHaveCount(0);
@@ -150,7 +152,7 @@ test("locked 1672x941 Home keeps four live worlds and exposes the existing utili
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await shot(page, "01-elite-home-1672x941.png");
   // The utility lenses remain real destinations, not hidden Home replicas.
-  for (const [utterance, testId] of [["Open focus", "focus-space"], ["Open weather", "weather-outfit-space"], ["Open people", "people-space"], ["Open good to know", "good-to-know-space"]] as const) {
+  for (const [utterance, testId] of [["Open focus", "focus-space"], ["Open weather", "weather-outfit-space"], ["Open people", "friends-space"], ["Open good to know", "good-to-know-space"]] as const) {
     await command(page, utterance);
     await expect(page.getByTestId(testId)).toBeVisible();
   }
@@ -160,7 +162,7 @@ test("north-star temporal, outfit, focus proposal, apply, exact undo, and reload
   await page.setViewportSize({ width: 1672, height: 941 });
   await openElite(page);
   await command(page, "Tomorrow.");
-  await expect(page.getByText(/Saturday, September 5/i)).toBeVisible();
+  await expect(page.getByTestId("home-space").getByText(/Saturday, September 5/i)).toBeVisible();
   await expect(page.getByTestId("elite-today-lens")).toContainText("Creative Review");
   await expect(page.getByTestId("elite-focus-lens")).toContainText("28 min");
   await shot(page, "02-elite-tomorrow.png");
@@ -196,11 +198,11 @@ test("north-star temporal, outfit, focus proposal, apply, exact undo, and reload
   expect(undone.temporal.scope.dateKey).toBe("2026-09-05");
   await shot(page, "05-elite-exact-undo.png");
   await page.reload();
-  await expect(page.getByText(/Saturday, September 5/i)).toBeVisible();
+  await expect(page.locator("main").getByText(/Saturday, September 5/i)).toBeVisible();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).document.focus.active)).toBeUndefined();
   // Back is spatial history; explicit temporal language owns date rewind.
   await command(page, "Previous day.");
-  await expect(page.getByText(/Friday, September 4/i)).toBeVisible();
+  await expect(page.getByTestId("home-space").getByText(/Friday, September 4/i)).toBeVisible();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).past.length)).toBe(0);
   northStar = "PASS";
   accessibleActions = "PASS";
@@ -266,10 +268,10 @@ test("one synthetic activation keeps final recognition on the shared pipeline", 
   });
   await page.setViewportSize({ width: 1280, height: 800 });
   await openElite(page);
-  await page.getByLabel("Start Flow Live").click();
+  await awaitLocalListening(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await page.evaluate(() => (window as Window & { __eliteRecognition?: { final(value: string): void } }).__eliteRecognition?.final("Tomorrow."));
-  await expect(page.getByText(/Saturday, September 5/i)).toBeVisible();
+  await expect(page.locator("main").getByText(/Saturday, September 5/i)).toBeVisible();
   await expect(page.getByLabel("Tell Flow what to change")).toHaveValue("Tomorrow.");
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).past.length)).toBe(0);
   await expect.poll(() => page.evaluate(() => Boolean((window as Window & { __eliteRecognition?: unknown }).__eliteRecognition))).toBe(true);
@@ -297,24 +299,24 @@ test("tablet, mobile, and reduced-motion states preserve access without overflow
   }
   await page.setViewportSize({ width: 1024, height: 768 });
   await page.getByLabel("Time scope").getByRole("button", { name: "Tomorrow", exact: true }).click();
-  await expect(page.getByText(/Saturday, September 5/i)).toBeVisible();
+  await expect(page.locator("main").getByText(/Saturday, September 5/i)).toBeVisible();
   await page.getByLabel("Time scope").getByRole("button", { name: "Today", exact: true }).click();
-  await expect(page.getByText(/Friday, September 4/i)).toBeVisible();
+  await expect(page.getByTestId("home-space").getByText(/Friday, September 4/i)).toBeVisible();
   await shot(page, "07-elite-tablet.png");
 
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.getByLabel("Time scope").getByRole("button", { name: "Tomorrow", exact: true }).click();
-  await expect(page.getByText(/Saturday, September 5/i)).toBeVisible();
+  await expect(page.locator("main").getByText(/Saturday, September 5/i)).toBeVisible();
   await page.getByLabel("Time scope").getByRole("button", { name: "Today", exact: true }).click();
-  await expect(page.getByText(/Friday, September 4/i)).toBeVisible();
+  await expect(page.getByTestId("home-space").getByText(/Friday, September 4/i)).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await expectControlsSeparated(page);
   await page.getByLabel("Time scope").getByRole("button", { name: "Tomorrow", exact: true }).click();
-  await expect(page.getByText(/Saturday, September 5/i)).toBeVisible();
+  await expect(page.locator("main").getByText(/Saturday, September 5/i)).toBeVisible();
   await page.getByLabel("Time scope").getByRole("button", { name: "Today", exact: true }).click();
-  await expect(page.getByText(/Friday, September 4/i)).toBeVisible();
+  await expect(page.getByTestId("home-space").getByText(/Friday, September 4/i)).toBeVisible();
   await page.getByRole("heading", { name: "Good to know" }).scrollIntoViewIfNeeded();
   await expect(page.getByRole("heading", { name: "Good to know" })).toBeVisible();
   await shot(page, "08-elite-mobile.png");

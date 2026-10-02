@@ -179,7 +179,7 @@ export function parseTideClause(clause: string, today: string): TideClauseResult
       constraints: [],
     };
   }
-  if (Object.keys(patch).length && /^(?:make|mark|set|paint|color|change|anchor|let)\b/.test(clause)) {
+  if (Object.keys(patch).length && (/^(?:make|mark|set|paint|color|change|anchor)\b/.test(clause) || /^let\s+.+\s+flow$/.test(clause))) {
     const subject = /^(?:anchor)\s+/.test(clause)
       ? clause.replace(/^anchor\s+/, "")
       : /^let\s+/.test(clause)

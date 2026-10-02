@@ -1,3 +1,4 @@
+import { APP_ORIGIN } from "./app-origin";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { captureEvidence, eventById, expectValid, fresh, readEvents, submitRaw, submitSuccess } from "./tide-helpers";
@@ -16,7 +17,7 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") tideConsoleErrors.push(message.text()); });
   page.on("pageerror", (error) => tidePageErrors.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
       tideFailedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown failure"}`);
     }
   });
@@ -241,7 +242,7 @@ test("13 editing and keyboard parity cover identity, status, and focus", async (
   await submitSuccess(page, "Remove strategy label from roadmap");
   await expect(page.locator('[data-event-id="roadmap"]')).not.toContainText("strategy");
   await submitSuccess(page, "Rename roadmap to strategy review");
-  await expect(page.locator('[data-event-id="roadmap"]')).toContainText("Strategy review");
+  await expect(page.locator('[data-event-id="roadmap"]')).toContainText("strategy review");
   await submitSuccess(page, "Make strategy review heavy");
   await expect(page.locator('[data-event-id="roadmap"]')).toHaveAttribute("data-mobility", "heavy");
   await expect(page.locator('[data-event-id="roadmap"]')).toHaveAttribute("aria-label", /critical importance|normal importance|important importance/);
@@ -263,7 +264,7 @@ test("13 editing and keyboard parity cover identity, status, and focus", async (
   await page.keyboard.press("Space");
   await expect(roadmap).toHaveAttribute("data-status", "active");
   await page.keyboard.press("Space");
-  await expect(page.getByLabel("Strategy review completed")).toBeVisible();
+  await expect(page.getByLabel("strategy review completed")).toBeVisible();
   await submitSuccess(page, "Reopen strategy review");
   await expect(page.locator('[data-event-id="roadmap"]')).toHaveAttribute("data-status", "planned");
   await expect(page.getByRole("textbox", { name: "Tell Flow what to change" })).toBeVisible({ timeout: 2_000 });

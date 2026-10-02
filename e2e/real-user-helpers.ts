@@ -1,6 +1,8 @@
 import { expect, type Page } from "@playwright/test";
 import { writeFileSync } from "node:fs";
 import type { LifeSnapshot } from "../src/domain/life-model";
+import { fillCommandField } from "./tide-helpers";
+import { installLocalPromptSpeech, localUtteranceId, awaitLocalTurn, awaitLocalListening, awaitSpokenPrompt } from "./local-voice-helpers";
 
 export const acceptanceDirectory = process.env.REAL_USER_EVIDENCE_DIR ?? "artifacts/real-user-acceptance/browser";
 export const acceptanceViewports = [
@@ -10,12 +12,14 @@ export const acceptanceViewports = [
 /** Only browser ASR is injected. getUserMedia, MediaRecorder, IndexedDB,
  * HTMLAudioElement, play(), seeking and native decoders are untouched. */
 export async function installAcceptanceRecognition(page: Page) {
+  await installLocalPromptSpeech(page);
   await page.addInitScript(() => {
     class Recognition {
       continuous = true; interimResults = true; maxAlternatives = 1; lang = "en-US";
       onstart: (() => void) | null = null; onend: (() => void) | null = null;
       onresult: ((value: unknown) => void) | null = null; onerror: ((value: unknown) => void) | null = null;
       start() {
+
         Object.assign(window, { __acceptanceRecognition: this, __acceptanceReady: true, __acceptanceStarts: ((window as Window & { __acceptanceStarts?: number }).__acceptanceStarts ?? 0) + 1 });
         this.onstart?.();
       }
@@ -35,18 +39,19 @@ export async function installAcceptanceRecognition(page: Page) {
 
 export async function startAcceptance(page: Page, path = "/") {
   await page.goto(path);
-  const mic = page.getByLabel("Start Flow Live", { exact: true });
-  if (await mic.count()) await mic.click();
   await expect.poll(() => page.evaluate(() => Boolean((window as Window & { __acceptanceReady?: boolean }).__acceptanceReady))).toBe(true);
+  await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
 }
 
 export async function finalSpeech(page: Page, transcript: string, duplicate = false) {
-  await expect.poll(() => page.evaluate(() => Boolean((window as Window & { __acceptanceReady?: boolean }).__acceptanceReady))).toBe(true);
+  await awaitLocalListening(page);
+  await awaitSpokenPrompt(page);
+  const previousId = await localUtteranceId(page);
   await page.evaluate(({ transcript, duplicate }) => {
     const recognition = (window as Window & { __acceptanceRecognition?: { emit(text: string, final: boolean, duplicate?: boolean): void } }).__acceptanceRecognition!;
     recognition.emit(transcript, true, duplicate);
   }, { transcript, duplicate });
-  await expect(page.getByLabel("Global Flow command")).toHaveAttribute("data-last-transcript", transcript);
+  await awaitLocalTurn(page, previousId, transcript, !/^(?:pause listening|stop listening|go to sleep)$/i.test(transcript));
 }
 
 export async function interimSpeech(page: Page, transcript: string) {
@@ -54,10 +59,8 @@ export async function interimSpeech(page: Page, transcript: string) {
 }
 
 export async function typedCommand(page: Page, transcript: string) {
-  await page.keyboard.press("Control+k");
-  const field = page.getByRole("textbox", { name: "Tell Flow what to change" });
-  await expect(field).toBeFocused();
-  await field.fill(transcript); await field.press("Enter");
+  const field = await fillCommandField(page, transcript);
+  await field.press("Enter");
   await expect(page.getByLabel("Global Flow command")).toHaveAttribute("data-last-transcript", transcript);
 }
 

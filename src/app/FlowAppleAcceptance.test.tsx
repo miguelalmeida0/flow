@@ -1,4 +1,5 @@
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { LIFE_STORAGE_KEY } from "../domain/life-storage";
 import type { LifeSnapshot } from "../domain/life-model";
@@ -17,9 +18,8 @@ describe("Flow living environment", () => {
   it("runs the Apple acceptance journey through one persistent fake voice session with exactly eight domain entries", async () => {
     const adapter = new FakeRecognitionAdapter();
     render(<FlowEnvironmentApp now={() => new Date("2026-09-03T09:00:00")} recognitionAdapter={adapter} />);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
-    let cycle = 1;
+    await activateFlowVoice(adapter);
+    let cycle = adapter.startCount;
     const speak = async (transcript: string, restart = true) => {
       act(() => adapter.emitFinal(transcript, `apple-${cycle}`));
       cycle += 1;

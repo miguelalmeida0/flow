@@ -343,6 +343,9 @@ async function ollamaChat(fetchImpl, { model, system, user, schema }, timeoutMs 
       model,
       stream: false,
       think: false,
+      // Bounded weight residency, renewed by real reasoning/probe requests.
+      // No conversation messages or KV state are reused between requests.
+      keep_alive: "5m",
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
@@ -455,6 +458,7 @@ function buildCapabilities({ execFileImpl, allowedDirs, fetchImpl }) {
         // livProbe:true, which performs one real, tiny, bounded chat call.
         // Skipped by default so an ordinary status check stays cheap.
         let liveProbeOk = null;
+        let liveProbePerformance;
         if (defaultModelInstalled && args && args.liveProbe === true) {
           try {
             const probe = await ollamaChat(fetchImpl, {
@@ -464,6 +468,12 @@ function buildCapabilities({ execFileImpl, allowedDirs, fetchImpl }) {
               schema: { type: "object", properties: { ok: { type: "boolean" } }, required: ["ok"] },
             }, AI_LIVE_PROBE_TIMEOUT_MS);
             liveProbeOk = Boolean(probe && probe.message && typeof probe.message.content === "string");
+            if (args.measurements === true) {
+              liveProbePerformance = Object.fromEntries([
+                ["totalMs", "total_duration"], ["loadMs", "load_duration"],
+                ["promptEvalMs", "prompt_eval_duration"], ["evalMs", "eval_duration"],
+              ].map(([key, field]) => [key, Number.isFinite(probe?.[field]) ? probe[field] / 1e6 : null]));
+            }
           } catch {
             liveProbeOk = false;
           }
@@ -474,6 +484,7 @@ function buildCapabilities({ execFileImpl, allowedDirs, fetchImpl }) {
           defaultModel: DEFAULT_MODEL,
           defaultModelInstalled,
           liveProbeOk,
+          ...(liveProbePerformance ? { liveProbePerformance } : {}),
         };
       } catch {
         return { available: false, model: null, defaultModel: DEFAULT_MODEL, defaultModelInstalled: false, liveProbeOk: false };

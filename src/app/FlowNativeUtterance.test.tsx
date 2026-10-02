@@ -1,3 +1,4 @@
+import { awaitFlowListening } from "../test/flowVoiceAcquisition";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createLifeSnapshot, LIFE_STORAGE_KEY } from "../domain/life-storage";
@@ -61,7 +62,7 @@ function setup() {
   const start = async (record = true) => {
     await command("Open journal First Page");
     if (record) { await command("Start recording"); await waitFor(() => expect(entry()?.recordingState).toBe("recording")); }
-    fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" }));
+    await awaitFlowListening();
     await waitFor(() => expect(NativeSpeech.instance?.started).toBe(true));
     return NativeSpeech.instance;
   };

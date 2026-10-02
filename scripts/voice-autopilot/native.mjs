@@ -4,7 +4,9 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { padWav, metadata, readWav, wav, trimWav } from './wav.mjs';
+import { installPcmCapture } from './capture-pcm.mjs';
 import { speech } from './speech.mjs';
+import { launchOwnedBrowser } from './browser-lifecycle.mjs';
 
 export const definitions = [
   { id: 'add-anita', text: 'Flow, add new friend called Anita.', person: 'Anita', segments: [{ text: 'Flow, add new friend called' }, { text: 'Anita.' }] },
@@ -20,42 +22,47 @@ export const definitions = [
 ];
 export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 export async function until(fn, label, ms = 15000) {
-  const end = Date.now() + ms;
-  while (Date.now() < end) { const value = await fn(); if (value) return value; await delay(50); }
+  const end = performance.now() + ms;
+  while (performance.now() < end) { const value = await fn(); if (value) return value; await delay(50); }
   throw new Error(`${label}: deadline ${ms}ms exceeded`);
 }
 export const event = (s, name) => s.events.find(e => e.event === name || e.event === 'voice.companionEvent' && e.state.type === name);
 export function pass(s, label) { s.checks.push(label); console.log(`[PASS] ${s.id}: ${label}`); }
 export function observe(page, s, tabId = 'main') {
-  page.on('request', request => {
+  const requestListener = request => {
     if (!request.url().endsWith('/capability')) return;
     try { const body = request.postDataJSON(); (s.capabilities ??= []).push({ tabId, capability: body?.capability }); } catch { /* no payload or headers recorded */ }
-  });
-  page.on('console', message => {
+  };
+  const consoleListener = message => {
     const text = message.text();
     if (text.startsWith('[flow-voice-debug] ')) { try { s.events.push({ scenarioId: s.id, tabId, ...JSON.parse(text.slice(19)) }); } catch { /* Non-JSON diagnostics */ } }
-  });
-  page.on('pageerror', e => s.errors.push(e.message));
+  };
+  const errorListener = e => s.errors.push(e.message);
+  page.on('request', requestListener); page.on('console', consoleListener); page.on('pageerror', errorListener);
+  return () => { page.off('request', requestListener); page.off('console', consoleListener); page.off('pageerror', errorListener); };
 }
 export async function browserContext(services, args = []) {
   const executablePath = chromium.executablePath();
   if (!existsSync(executablePath)) execFileSync(process.execPath, ['node_modules/playwright/cli.js', 'install', 'chromium'], { stdio: 'inherit' });
-  const browser = await chromium.launch({ executablePath, headless: false,
-    args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream', ...args] });
-  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, timezoneId: 'Europe/Berlin', permissions: ['microphone'] });
-  // Weather refresh is unrelated to these disposable voice fixtures and
-  // otherwise races persisted-state comparisons with external live data.
-  await context.route('https://api.open-meteo.com/**', route => route.fulfill({ status: 503, body: 'Weather outside voice-lab coverage' }));
-  await context.addInitScript(({ desktopToken, voiceToken }) => {
-    localStorage.setItem('flow.desktopCompanion.token', desktopToken);
-    localStorage.setItem('flow.voiceCompanion.token', voiceToken);
-  }, { desktopToken: services.desktopToken, voiceToken: services.voiceToken });
-  return { browser, context };
+  const owned = await launchOwnedBrowser(chromium, { executablePath, headless: false,
+    args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', ...args] });
+  const { browser } = owned;
+  try {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, timezoneId: 'Europe/Berlin', permissions: ['microphone'] });
+    // Weather refresh is unrelated to these disposable voice fixtures and
+    // otherwise races persisted-state comparisons with external live data.
+    await context.route('https://api.open-meteo.com/**', route => route.fulfill({ status: 503, body: 'Weather outside voice-lab coverage' }));
+    await context.addInitScript(({ desktopToken, voiceToken }) => {
+      localStorage.setItem('flow.desktopCompanion.token', desktopToken);
+      localStorage.setItem('flow.voiceCompanion.token', voiceToken);
+    }, { desktopToken: services.desktopToken, voiceToken: services.voiceToken });
+    return { ...owned, context };
+  } catch (error) { await owned.close(); throw error; }
 }
-export async function native(def, services, out) {
-  const s = { id: def.id, lane: 'A — native browser microphone', status: 'FAIL', checks: [], events: [], errors: [], db: def.db ?? 0 };
-  const started = Date.now();
-  let browser, page;
+export async function native(def, services, out, shared) {
+  const s = { id: def.id, lane: shared ? 'B — long-lived reactive digital benchmark' : 'A — native browser microphone', status: 'FAIL', checks: [], events: [], errors: [], db: def.db ?? 0 };
+  const started = performance.now();
+  let launch, page, unobserve;
   try {
     console.log(`[RUN] ${s.id}`);
     s.failureStage = 'fixture';
@@ -63,7 +70,8 @@ export async function native(def, services, out) {
     if (def.segments) {
       const pieces = [];
       for (const segment of def.segments) pieces.push(await speech(segment.text, segment.voice));
-      audio = { bytes: wav(Buffer.concat(pieces.flatMap((p, i) => [ ...(i ? [Buffer.alloc(4800)] : []), trimWav(p.bytes) ]))), fixture: { text: def.text, segments: pieces.map(p => p.fixture), separationMs: 100 } };
+      const separationMs = def.pauseMs ?? 100;
+      audio = { bytes: wav(Buffer.concat(pieces.flatMap((p, i) => [ ...(i ? [Buffer.alloc(Math.round(separationMs * 48))] : []), trimWav(p.bytes) ]))), fixture: { text: def.text, segments: pieces.map(p => p.fixture), separationMs } };
     }
     const source = readWav(audio.bytes);
     const bytes = padWav(def.playbackRate ? wav(source.pcm, Math.round(source.sampleRate * def.playbackRate)) : audio.bytes, 1, 2, def.db ?? 0);
@@ -71,21 +79,29 @@ export async function native(def, services, out) {
     writeFileSync(fixture, bytes);
     s.fixture = { ...audio.fixture, ...metadata(bytes), playbackRate: def.playbackRate ?? 1, leadingSilenceMs: 1000, trailingSilenceMs: 2000 };
     s.failureStage = 'browser';
-    console.log('      launching headed Chromium; microphone: native WAV');
-    const launch = await browserContext(services, [`--use-file-for-fake-audio-capture=${fixture}%noloop`]);
-    browser = launch.browser;
+    if (!shared) console.log('      launching headed Chromium; microphone: native WAV');
+    launch = shared ?? await browserContext(services, ['--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${fixture}%noloop`]);
     const context = launch.context;
+    if (services.capturePcm && !shared) await context.addInitScript(installPcmCapture);
     if (def.unavailable) await context.route('**/capability', async route => {
       const body = route.request().postDataJSON();
       if (body?.capability?.startsWith('ai.')) await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'Local reasoner unavailable', code: 'model-unavailable' }) });
       else await route.continue();
     });
-    page = await context.newPage(); observe(page, s);
-    await page.clock.setFixedTime(new Date('2026-09-20T12:00:00+02:00'));
-    await page.goto('http://localhost:5173/?flowVoiceDebug=1');
+    page = shared?.page ?? await context.newPage();
+    unobserve = observe(page, s);
+    if (shared) {
+      s.browserInstanceId = shared.session;
+      s.inputs = [{ text: def.text, ...await page.evaluate(bytes => window.voiceLabPlay(bytes), [...bytes]) }];
+    } else {
+      await page.clock.setFixedTime(new Date('2026-09-20T12:00:00+02:00'));
+      await page.goto('http://localhost:5173/?flowVoiceDebug=1');
+    }
     const boundary = async name => { s.failureStage = name; await until(() => event(s, name), name); pass(s, name); };
-    await boundary('voice.micLive');
-    assert(event(s, 'voice.micLive').state.tracks.every(t => t.readyState === 'live'));
+    if (!shared) {
+      await boundary('voice.micLive');
+      assert(event(s, 'voice.micLive').state.tracks.every(t => t.readyState === 'live'));
+    }
     for (const name of ['voice.micPcm', 'speech.start', 'transcript.partial', 'endpoint.detected', 'stt.flushStart', 'stt.flushComplete', 'transcript.final']) await boundary(name);
     s.transcript = event(s, 'transcript.final').state.text;
     console.log(`[PASS] STT final: ${JSON.stringify(s.transcript)}`);
@@ -96,6 +112,7 @@ export async function native(def, services, out) {
       assert.equal((await persisted()).document.people.length, 0);
       pass(s, 'no wake / no mutation');
     } else {
+      if (shared) await boundary('voice.localWakeDetected');
       await boundary('voice.finalTranscriptToKernel');
       assert.equal(s.events.filter(e => e.event === 'voice.finalTranscriptToKernel').length, 1, 'Duplicate turn');
       if (def.clause) assert.equal(event(s, 'voice.finalTranscriptToKernel').state.transcript.toLowerCase().replace(/[.!?]$/g, ''), def.clause);
@@ -123,6 +140,10 @@ export async function native(def, services, out) {
         await until(async () => (await persisted()).temporal.scope.dateKey === def.date, 'resolved date', 5000);
         s.expectedDate = def.date; pass(s, `full date: ${def.date}`);
       }
+      if (def.route) {
+        await until(() => new URL(page.url()).pathname === def.route, 'requested route');
+        pass(s, `rendered route: ${def.route}`);
+      }
       await boundary('voice.speakFeedback'); s.response = event(s, 'voice.speakFeedback').state;
       if (def.unavailable && def.requiresReasoner) {
         assert.match(s.response.text ?? s.response.title, /unavailable|offline|couldn.t reach|(?:not|isn.t) responding/i);
@@ -147,12 +168,20 @@ export async function native(def, services, out) {
   } catch (error) { s.error = error.message.replace(/token=[^\s]+/g, 'token=[redacted]'); console.log(`[FAIL] ${s.id}: ${s.error}\nReplay: npm run test:voice:autopilot -- --scenario ${s.id}`); }
   finally {
     if (page && !page.isClosed()) {
+      if (services.capturePcm) {
+        const captured = await page.evaluate(() => window.voiceLabCapturedPcm?.()).catch(() => null);
+        if (captured) {
+          s.capture = { bytes: captured.bytes, truncated: captured.truncated };
+          writeFileSync(path.join(out, `${s.id}-captured.wav`), wav(Buffer.concat(captured.chunks.map(chunk => Buffer.from(chunk, 'base64')))));
+        }
+      }
       s.persisted = await page.evaluate(() => JSON.parse(localStorage.getItem('flow.life.v3'))).catch(() => null);
       s.traces = await page.evaluate(() => window.__FLOW_COMMAND_TRACES__ ?? []).catch(() => []);
       s.url = page.url(); s.screenshot = `${s.id}.png`;
       await page.screenshot({ path: path.join(out, s.screenshot) }).catch(() => { delete s.screenshot; });
     }
-    await browser?.close(); s.durationMs = Date.now() - started;
+    unobserve?.();
+    if (!shared) await launch?.close(); s.durationMs = performance.now() - started;
   }
   return s;
 }

@@ -1,3 +1,5 @@
+import { APP_ORIGIN } from "./app-origin";
+import { awaitLocalListening, awaitSpokenPrompt, installLocalPromptSpeech, wakeLocalVoice } from "./local-voice-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 
@@ -9,6 +11,7 @@ const transcripts: string[] = [];
 let singleSessionJourney = "FAIL";
 
 async function installRecognition(page: Page) {
+  await installLocalPromptSpeech(page);
   await page.addInitScript(() => {
     class Phrase { constructor(public phrase: string, public boost = 1) {} }
     class Recognition {
@@ -52,6 +55,8 @@ async function installRecognition(page: Page) {
 }
 
 async function speak(page: Page, transcript: string, final = false) {
+  await awaitLocalListening(page);
+  await awaitSpokenPrompt(page);
   const starts = await page.evaluate(() => (window as Window & { __eliteVoice?: { starts: number } }).__eliteVoice?.starts ?? 0);
   await page.evaluate((value) => {
     const voice = (window as Window & { __eliteVoice?: { instance?: { final(text: string): void } } }).__eliteVoice;
@@ -83,7 +88,7 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") browserConsoleErrors.push(message.text()); });
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
       failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
     }
   });
@@ -124,7 +129,7 @@ test("event inspection, contextual follow-up, proposal refinement, and alternati
   await expect(page.getByLabel("Global Flow command")).toContainText("Selected for your next command");
   expect(await historyLength(page)).toBe(0);
 
-  await page.getByLabel("Start Flow Live").click();
+  await wakeLocalVoice(page, () => speak(page, "Flow"));
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await page.evaluate(() => {
     const voice = (window as Window & { __eliteVoice?: { instance?: { final(text: string, alternatives: Array<{ transcript: string; confidence: number }>): void } } }).__eliteVoice;
@@ -153,7 +158,7 @@ test("exact 24-step product rescue journey uses one persistent global voice sess
   await page.clock.install({ time: new Date("2026-09-04T09:32:00") });
   await installRecognition(page);
   const session = await page.context().newCDPSession(page);
-  try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
+  try { await session.send("Storage.clearDataForOrigin", { origin: APP_ORIGIN, storageTypes: "local_storage" }); }
   finally { await session.detach(); }
   await page.goto("/");
   await expect(page.getByTestId("home-space")).toBeVisible();
@@ -173,7 +178,7 @@ test("exact 24-step product rescue journey uses one persistent global voice sess
     localStorage.setItem("flow.life.v3", JSON.stringify(snapshot));
   });
   await page.reload();
-  await page.getByLabel("Start Flow Live").click();
+  await wakeLocalVoice(page, () => speak(page, "Flow"));
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
 
   await speak(page, "Open the focus area.");
@@ -215,14 +220,14 @@ test("exact 24-step product rescue journey uses one persistent global voice sess
   await expect(page.locator('[data-event-id="meeting-tomorrow-2pm"]')).toHaveAttribute("data-color", "red");
   await expect(page.locator('[data-event-id="meeting-tomorrow-2pm"]')).toHaveAttribute("data-importance", "important");
   await speak(page, "Show Sarah.");
-  await expect(page.getByTestId("people-space")).toBeVisible();
-  await expect(page.locator('[data-life-entity-id="person-sarah"]')).toBeVisible();
+  await expect(page.getByTestId("friends-space")).toBeVisible();
+  await expect(page.locator('[data-task-entity-id="person-sarah"]')).toBeVisible();
   await speak(page, "Open the good to know area.");
   await expect(page.getByTestId("good-to-know-space")).toBeVisible();
   await speak(page, "What should I know?");
   await expect(page.getByLabel("Global Flow command")).not.toContainText("calendar action");
   await speak(page, "Give me forty minutes.");
-  await expect(page.getByLabel("Global Flow command")).toContainText("You asked for 40 minutes. You have 28 clear.");
+  await expect(page.getByLabel("Global Flow command")).toContainText("You asked for 40 minutes. You have 28 available.");
   await speak(page, "Do it.");
   await expect.poll(() => historyLength(page)).toBe(6);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).document.focus.active?.durationMinutes)).toBe(28);
@@ -237,7 +242,8 @@ test("exact 24-step product rescue journey uses one persistent global voice sess
   await speak(page, "Pause listening.", true);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "sleeping");
 
-  expect(transcripts).toHaveLength(24);
+  expect(transcripts[0]).toBe("Flow");
+  expect(transcripts.slice(1)).toHaveLength(24);
   const result = await page.evaluate(() => {
     const snapshot = JSON.parse(localStorage.getItem("flow.life.v3")!);
     const voice = (window as Window & { __eliteVoice?: { constructions: number; starts: number; stops: number } }).__eliteVoice!;

@@ -44,7 +44,7 @@ export function RewardLayer() {
       />}
       {plan?.level === 3 && <motion.div
         animate={plan.reducedMotion ? { opacity: [0, 1, 0], x: "-50%" } : { opacity: [0, 1, 1, 0], x: "-50%", y: [6, 0, 0, -4] }}
-        className="fixed left-1/2 top-[74px] rounded-full border border-flow-border bg-flow-elevated px-5 py-1 text-xs font-semibold tracking-[0.02em] text-flow-ink shadow-[0_12px_32px_rgba(35,43,55,0.08)]"
+        className="fixed left-1/2 top-[50px] rounded-full border border-flow-border bg-flow-elevated px-5 py-1 text-xs font-semibold tracking-[0.02em] text-flow-ink shadow-[0_12px_32px_rgba(35,43,55,0.08)] sm:top-[74px]"
         data-reward-label
         initial={{ opacity: 0, x: "-50%", y: 6 }}
         key={`label-${reward.sequence}`}

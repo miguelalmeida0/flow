@@ -1,5 +1,7 @@
+import { APP_ORIGIN } from "./app-origin";
+import { awaitLocalListening, awaitSpokenPrompt, installLocalPromptSpeech, localUtteranceId, awaitLocalTurn } from "./local-voice-helpers";
 import { expect, test, type Page } from "@playwright/test";
-import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { fillCommandField } from "./tide-helpers";
 
 const evidenceDir = "artifacts/voice-intelligence/browser";
@@ -7,6 +9,7 @@ const errors = new WeakMap<Page, { console: string[]; page: string[]; requests: 
 const results = { typedMilestone: false, contextualCommitment: false, injectedFinalJournal: false, physicalMicrophone: "NOT_PERFORMED" };
 
 async function installVoiceSeams(page: Page) {
+  await installLocalPromptSpeech(page);
   await page.addInitScript(() => {
     class Recorder {
       static isTypeSupported() { return true; }
@@ -32,6 +35,7 @@ async function installVoiceSeams(page: Page) {
       onerror: ((event: unknown) => void) | null = null;
       onend: (() => void) | null = null;
       start() {
+
         const runtime = window as Window & { __voiceIntelligenceRecognition?: Recognition; __voiceIntelligenceRecognitionGeneration?: number };
         this.generation = (runtime.__voiceIntelligenceRecognitionGeneration ?? 0) + 1;
         runtime.__voiceIntelligenceRecognitionGeneration = this.generation;
@@ -39,7 +43,7 @@ async function installVoiceSeams(page: Page) {
         this.onstart?.();
       }
       stop() { this.onend?.(); }
-      abort() { this.onend?.(); }
+      abort() { this.stop(); }
       emitFinal(transcript: string) {
         const result = Object.assign({ 0: { transcript, confidence: 0.94 } }, { isFinal: true, length: 1 });
         this.onresult?.({ results: [result] });
@@ -54,7 +58,7 @@ async function installVoiceSeams(page: Page) {
 
 async function fresh(page: Page, path = "/") {
   const session = await page.context().newCDPSession(page);
-  try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "all" }); }
+  try { await session.send("Storage.clearDataForOrigin", { origin: APP_ORIGIN, storageTypes: "all" }); }
   finally { await session.detach(); }
   await page.goto(path);
 }
@@ -65,25 +69,16 @@ async function command(page: Page, transcript: string) {
   await expect(page.getByLabel("Global Flow command")).toHaveAttribute("data-last-transcript", transcript);
 }
 
-async function speak(page: Page, transcript: string) {
-  await expect.poll(() => page.evaluate(() => {
-    const runtime = window as Window & {
-      __voiceIntelligenceRecognition?: { generation: number };
-      __voiceIntelligenceConsumedGeneration?: number;
-    };
-    return (runtime.__voiceIntelligenceRecognition?.generation ?? 0) > (runtime.__voiceIntelligenceConsumedGeneration ?? 0);
-  })).toBe(true);
+async function speak(page: Page, transcript: string, interrupt = false) {
+  await awaitLocalListening(page);
+  if (!interrupt) await awaitSpokenPrompt(page);
+  const previousId = await localUtteranceId(page);
   await page.evaluate((value) => {
-    const runtime = window as Window & {
-      __voiceIntelligenceRecognition?: { generation: number; emitFinal(transcript: string): void };
-      __voiceIntelligenceConsumedGeneration?: number;
-    };
-    const recognition = runtime.__voiceIntelligenceRecognition;
-    if (!recognition) throw new Error("A fresh recognition generation was not available");
-    runtime.__voiceIntelligenceConsumedGeneration = recognition.generation;
+    const recognition = (window as Window & { __voiceIntelligenceRecognition?: { emitFinal(transcript: string): void } }).__voiceIntelligenceRecognition;
+    if (!recognition) throw new Error("A listening recognition cycle was not available");
     recognition.emitFinal(value);
   }, transcript);
-  await expect(page.getByLabel("Global Flow command")).toHaveAttribute("data-last-transcript", transcript);
+  await awaitLocalTurn(page, previousId, transcript);
 }
 
 async function snapshot(page: Page) {
@@ -92,9 +87,6 @@ async function snapshot(page: Page) {
 
 test.beforeAll(() => {
   mkdirSync(evidenceDir, { recursive: true });
-  for (const entry of readdirSync(evidenceDir)) {
-    if (entry.startsWith("failure-")) rmSync(`${evidenceDir}/${entry}`, { force: true });
-  }
 });
 test.beforeEach(async ({ page }) => {
   const found = { console: [] as string[], page: [] as string[], requests: [] as string[] };
@@ -102,9 +94,10 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") found.console.push(message.text()); });
   page.on("pageerror", (error) => found.page.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) found.requests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) found.requests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
   });
   await installVoiceSeams(page);
+  await page.route("https://api.open-meteo.com/**", route => route.fulfill({status:200,contentType:"application/json",body:'{"daily":{"time":[]}}'}));
 });
 test.afterEach(async ({ page }, testInfo) => {
   const found = errors.get(page)!;
@@ -171,13 +164,14 @@ test("commitment clarification preserves its partial intent and commits once", a
 
 test("final recognition transcripts obey Journal command, dictation, and interruption modes", async ({ page }) => {
   await fresh(page);
-  await page.getByRole("button", { name: "Start Flow Live" }).click();
+  await awaitLocalListening(page);
   await speak(page, "Open my journal");
   await speak(page, "New entry");
   await speak(page, "Start with my voice");
   await speak(page, "The street was quiet after the rain");
   await speak(page, "Bookmark that");
-  await speak(page, "Stop recording");
+  // Stop is deliberately allowed while prompt speech is still active.
+  await speak(page, "Stop recording", true);
   // Exact transcript acknowledgement precedes asynchronous durable audio
   // finalization. Observe the same persisted contract, not a one-shot snapshot
   // during the explicit finalizing phase; failed media still cannot pass.

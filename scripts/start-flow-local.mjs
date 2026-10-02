@@ -111,7 +111,7 @@ if (desktopHealth && desktopToken) {
     const res = await fetch("http://127.0.0.1:8765/capability", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${desktopToken}`, Origin: "http://localhost:5173" },
-      body: JSON.stringify({ capability: "ai.status", args: { liveProbe: true } }),
+      body: JSON.stringify({ capability: "ai.status", args: { liveProbe: true, measurements: true } }),
       signal: AbortSignal.timeout(12_000),
     });
     probeResult = res.ok ? await res.json() : null;
@@ -126,6 +126,7 @@ if (desktopHealth && desktopToken) {
     fail(`reasoner model "${probeResult.defaultModel}" is installed but did not respond to a real request — it may be stuck loading or Ollama needs a restart`);
   } else {
     log(`reasoner ready: ${probeResult.defaultModel} responded to a real bounded request`);
+    if (probeResult.liveProbePerformance) log(`reasoner metrics: ${JSON.stringify({ model: probeResult.defaultModel, ...probeResult.liveProbePerformance })}`);
   }
 }
 

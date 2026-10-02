@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { cloneAtmosphereLayers } from "../domain/studio-model";
@@ -53,7 +54,7 @@ describe("September 8 production transaction acceptance", () => {
       await waitFor(() => expect(document.querySelector("audio")).toBeInTheDocument());
       const audio = document.querySelector("audio")!; audio.volume = .8; audio.currentTime = 42; audio.muted = utterance.startsWith("Unmute");
       if (mode === "typed") await view.command(utterance);
-      else { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); act(() => adapter.emitFinal(utterance, "journal-settings")); }
+      else { await activateFlowVoice(adapter); act(() => adapter.emitFinal(utterance, "journal-settings")); }
       await waitFor(() => expect({ volume: audio.volume, muted: audio.muted, playbackRate: audio.playbackRate }).toEqual(expected));
       expect(audio.currentTime).toBe(42); expect(audio.paused).toBe(true);
       expect(saved().document).toEqual(initial.document); expect(saved().past).toHaveLength(0); expect(saved().future).toHaveLength(0);
@@ -71,8 +72,7 @@ describe("September 8 production transaction acceptance", () => {
         fireEvent.click(screen.getByRole("button", { name: "Create" }));
       } else if (mode === "typed") await view.command(`Create an outcome called ${title}`);
       else {
-        fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" }));
-        await waitFor(() => expect(adapter.startCount).toBe(1));
+        await activateFlowVoice(adapter);
         act(() => adapter.emitFinal(`Create an outcome called ${title}`, "create-outcome"));
       }
       await waitFor(() => expect(saved().document.plans).toHaveLength(1));
@@ -141,7 +141,7 @@ describe("September 8 production transaction acceptance", () => {
         const count = playback.mock.calls.length;
         if (mode === "click") fireEvent.click(screen.getByRole("button", { name: "Select and play bookmark 2: The doors opened." }));
         else if (mode === "typed") await view.command("Play journal bookmark 2");
-        else { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); act(() => adapter.emitFinal("Play journal bookmark 2", "journal-playback")); }
+        else { await activateFlowVoice(adapter); act(() => adapter.emitFinal("Play journal bookmark 2", "journal-playback")); }
         await waitFor(() => expect(playback).toHaveBeenCalledTimes(count + 1));
         expect(audio.currentTime).toBe(42);
         expect(saved().document).toEqual(initial.document); expect(saved().past).toHaveLength(0); expect(saved().future).toHaveLength(0);
@@ -177,7 +177,7 @@ describe("September 8 production transaction acceptance", () => {
       const adapter = new FakeRecognitionAdapter(); const view = setup(adapter); await view.command("Open journal");
       if (mode === "click") fireEvent.click(screen.getByRole("checkbox", { name: "Remove sound from home ritual" }));
       else if (mode === "typed") await view.command("Remove sound from home ritual");
-      else { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); act(() => adapter.emitFinal("Remove sound from home ritual", "ritual-edit")); }
+      else { await activateFlowVoice(adapter); act(() => adapter.emitFinal("Remove sound from home ritual", "ritual-edit")); }
       await waitFor(() => expect(saved().past).toHaveLength(1));
       expect(saved().document).toEqual(expected);
       await view.command("Undo"); expect(saved().document).toEqual(initial.document);
@@ -219,7 +219,7 @@ describe("September 8 production transaction acceptance", () => {
         if (mode === "click") fireEvent.click(screen.getByRole("button", { name: "Export project" }));
         else {
           if (mode === "typed") await view.command("Export project");
-          else { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); act(() => adapter.emitFinal("Export project", "native-export")); }
+          else { await activateFlowVoice(adapter); act(() => adapter.emitFinal("Export project", "native-export")); }
           await waitFor(() => expect(document.querySelector('[data-native-action-id="memory.export"]')).toBeInTheDocument());
           expect(requested).toHaveLength(count);
           await view.command("Confirm"); expect(requested).toHaveLength(count);
@@ -239,7 +239,7 @@ describe("September 8 production transaction acceptance", () => {
     await view.command("Open journal");
     const utterance = "Attach an original photograph to this entry";
     if (mode === "typed") await view.command(utterance);
-    else { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); act(() => adapter.emitFinal(utterance, "native-photo")); }
+    else { await activateFlowVoice(adapter); act(() => adapter.emitFinal(utterance, "native-photo")); }
     await waitFor(() => expect(screen.getByRole("button", { name: "Choose photo" })).toBeInTheDocument());
     expect(saved().document).toEqual(initial.document); expect(saved().past).toHaveLength(0);
     await view.command("Confirm");
@@ -261,7 +261,7 @@ describe("September 8 production transaction acceptance", () => {
       const utterance = "Remove the second attached photo";
       if (mode === "click") fireEvent.click(screen.getAllByRole("button", { name: "Remove" })[1]!);
       else if (mode === "typed") await view.command(utterance);
-      else { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); act(() => adapter.emitFinal(utterance, "remove-photo")); }
+      else { await activateFlowVoice(adapter); act(() => adapter.emitFinal(utterance, "remove-photo")); }
       await waitFor(() => expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument());
       expect(saved().document).toEqual(initial.document); expect(saved().past).toHaveLength(0);
       await view.command("Confirm");
@@ -297,7 +297,7 @@ describe("September 8 production transaction acceptance", () => {
         if (kind === "field") { const field = screen.getByLabelText(label); fireEvent.change(field, { target: { value } }); fireEvent.blur(field); }
         else fireEvent.click(screen.getByRole(kind === "checkbox" ? "checkbox" : "button", { name: label }));
       } else if (mode === "typed") await view.command(utterance);
-      else { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); act(() => adapter.emitFinal(utterance, `parity-${label}`)); }
+      else { await activateFlowVoice(adapter); act(() => adapter.emitFinal(utterance, `parity-${label}`)); }
       await waitFor(() => expect(saved().past, JSON.stringify(window.__FLOW_COMMAND_TRACE__)).toHaveLength(1));
       expect(saved().document.calendar).toEqual(initial.document.calendar);
       expect(saved().document).toEqual(expected);
@@ -322,7 +322,7 @@ describe("September 8 production transaction acceptance", () => {
       await view.command("Open atmosphere");
       if (mode === "click") fireEvent.click(screen.getByRole("button", { name: /^Lower Rain$/i }));
       else if (mode === "typed") await view.command("Lower rain");
-      else { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); act(() => adapter.emitFinal("Lower rain", "parity-volume")); }
+      else { await activateFlowVoice(adapter); act(() => adapter.emitFinal("Lower rain", "parity-volume")); }
       await waitFor(() => expect(saved().past).toHaveLength(1));
       expect(saved().document).toEqual(expected);
       outputs.push(structuredClone(saved().document));
@@ -395,8 +395,7 @@ describe("September 8 production transaction acceptance", () => {
     const typedTitle = saved().document.calendar.events.find(({ id }) => id === "email")?.title;
     expect(saved().past).toHaveLength(1); typed.unmount();
     localStorage.clear(); fixture(); const adapter = new FakeRecognitionAdapter(); const voice = setup(adapter);
-    fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" }));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     act(() => adapter.emitFinal("Rename email to Fish and Chips — Mum's Birthday"));
     await waitFor(() => expect(saved().past).toHaveLength(1));
     expect(saved().document.calendar.events.find(({ id }) => id === "email")?.title).toBe(typedTitle);

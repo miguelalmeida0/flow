@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { FlowEnvironmentApp } from "./FlowEnvironmentApp";
@@ -39,8 +40,7 @@ describe("committed reward boundary", () => {
     render(<FlowEnvironmentApp now={now} recognitionAdapter={adapter} />);
     await typeCommand("Invent a purple dimension");
     expect((window as typeof window & { __FLOW_REWARD__?: { sequence: number; active: boolean } }).__FLOW_REWARD__).toMatchObject({ sequence: 0, active: false });
-    fireEvent.click(screen.getByRole("button", { name: /Start Flow Live/ }));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     (window as typeof window & { __FLOW_REWARD_EVENT_LOG__?: unknown[] }).__FLOW_REWARD_EVENT_LOG__ = [];
     await act(async () => adapter.emitFinal("Move deep work to 10 am", "voice-reward-boundary"));
     await waitFor(() => expect((window as typeof window & { __FLOW_REWARD__?: { event?: { type: string; source?: string } } }).__FLOW_REWARD__?.event).toMatchObject({ type: "transaction-committed", source: "voice" }));

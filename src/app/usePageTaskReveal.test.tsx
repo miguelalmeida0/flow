@@ -6,9 +6,13 @@ import { executeViewportScroll } from "../shared/command/viewportCapability";
 
 const rect = (top: number, height: number) => ({ top, bottom: top + height, left: 0, right: 800, width: 800, height, x: 0, y: top, toJSON: () => ({}) } as DOMRect);
 const frames = new Map<number, FrameRequestCallback>(); let sequence = 0;
+let resize: () => void;
+const disconnect = vi.fn();
 const scroll = vi.fn(function (this: HTMLElement, options: ScrollToOptions) { this.scrollTop = options.top ?? this.scrollTop; this.scrollLeft = options.left ?? this.scrollLeft; this.dispatchEvent(new Event("scroll")); });
 beforeEach(() => {
   frames.clear(); scroll.mockClear(); window.history.replaceState({}, "", "/people");
+  disconnect.mockClear();
+  vi.stubGlobal("ResizeObserver", class { constructor(callback: () => void) { resize = callback; } observe() {} disconnect = disconnect; });
   vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => { frames.set(++sequence, callback); return sequence; });
   vi.stubGlobal("cancelAnimationFrame", (id: number) => frames.delete(id));
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) { return this.hasAttribute("data-primary-content-rect") ? rect(100, 500) : rect(Number(this.dataset.top ?? this.closest<HTMLElement>("[data-top]")?.dataset.top ?? 700), this.tagName === "BUTTON" ? 44 : 180); });
@@ -36,7 +40,34 @@ it.each(["wheel", "touchstart", "pointerdown", "key", "voice"])("manual %s cance
   if (kind === "key") fireEvent.keyDown(document, { key: "PageDown" });
   else if (kind === "voice") { executeViewportScroll({ type: "scroll", direction: "down", fraction: 0.45 }, true); scroll.mockClear(); }
   else fireEvent(main, new Event(kind));
+  act(() => resize());
   await flush(); expect(scroll).not.toHaveBeenCalled();
+});
+it("reveals a usable slice of the editor on viewport resize without moving focus", async () => {
+  function Editor() {
+    usePageTaskReveal("journal", "entry", { id: 0, kind: "open" }, false);
+    return <main data-primary-content-rect><div data-space-shell="journal"><section data-page-task="journal" data-task-entity-id="entry" data-top="160"><button data-top="200">Choose entry</button><textarea data-page-task-anchor data-top="350" /></section></div></main>;
+  }
+  const view = render(<Editor />); await flush();
+  expect(scroll).not.toHaveBeenCalled();
+  const input = document.querySelector("textarea")!; input.focus(); input.value = "Keep this"; input.setSelectionRange(2, 4);
+  input.dataset.top = "610";
+  act(() => resize()); await flush();
+  expect(scroll).toHaveBeenCalledWith({ top: 494, left: 0, behavior: "auto" });
+  expect(document.activeElement).toBe(input); expect(input.selectionStart).toBe(2);
+  view.unmount(); expect(disconnect).toHaveBeenCalled(); expect(frames.size).toBe(0);
+});
+it.each(["wheel", "touchstart", "pointerdown", "key", "voice"])("resizing an editor after manual %s preserves the user's position", async kind => {
+  render(<Harness entity="sarah" top={180} />); await flush();
+  const input = document.querySelector("textarea")!;
+  input.setAttribute("data-page-task-anchor", "");
+  const main = document.querySelector("main")!;
+  if (kind === "key") fireEvent.keyDown(document, { key: "PageDown" });
+  else if (kind === "voice") executeViewportScroll({ type: "scroll", direction: "down", fraction: 0.45 }, true);
+  else fireEvent(main, new Event(kind));
+  scroll.mockClear(); input.dataset.top = "800";
+  act(() => resize()); await flush();
+  expect(scroll).not.toHaveBeenCalled();
 });
 it("same entity rerenders and reduced preference changes preserve manual orientation and input selection", async () => {
   const view = render(<Harness entity="sarah" />); await flush(); const input = document.querySelector("textarea")!; input.focus(); input.value = "My words"; input.setSelectionRange(3, 6); scroll.mockClear();

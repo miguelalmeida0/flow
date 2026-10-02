@@ -1,0 +1,34 @@
+# syntax=docker/dockerfile:1
+# This manifest is linux/amd64, verified as Node v22.23.3. Build with --platform linux/amd64.
+FROM node:22-bookworm-slim@sha256:25330af3531fb5e23318554a0aa911125b6e91b1b777edf7655501d207c067a2 AS dependencies
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts --no-audit --no-fund
+
+FROM dependencies AS build
+COPY . .
+RUN npm run build
+
+FROM node:22-bookworm-slim@sha256:25330af3531fb5e23318554a0aa911125b6e91b1b777edf7655501d207c067a2 AS production-dependencies
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+
+FROM node:22-bookworm-slim@sha256:25330af3531fb5e23318554a0aa911125b6e91b1b777edf7655501d207c067a2 AS runtime
+WORKDIR /app
+ENV NODE_ENV=production PORT=3000 FLOW_DIST_DIR=/app/dist FLOW_INFERENCE_ENABLED=false
+ARG FLOW_RELEASE_ID
+RUN test -n "$FLOW_RELEASE_ID"
+ENV FLOW_RELEASE_ID=$FLOW_RELEASE_ID
+LABEL org.opencontainers.image.title="Flow hosted beta" org.opencontainers.image.version=$FLOW_RELEASE_ID
+COPY --from=production-dependencies --chown=node:node /app/node_modules ./node_modules
+COPY --from=production-dependencies --chown=node:node /app/package.json /app/package-lock.json ./
+COPY --from=build --chown=node:node /app/dist ./dist
+COPY --from=build --chown=node:node /app/server/hosted-gateway/index.mjs /app/server/hosted-gateway/auth.mjs /app/server/hosted-gateway/config.mjs /app/server/hosted-gateway/store.mjs /app/server/hosted-gateway/quotas.mjs /app/server/hosted-gateway/operator.mjs /app/server/hosted-gateway/voice.mjs /app/server/hosted-gateway/model-contract.mjs /app/server/hosted-gateway/model-wire.mjs ./server/hosted-gateway/
+COPY --from=build --chown=node:node /app/server/hosted-gateway/providers/deepgram-stt.mjs /app/server/hosted-gateway/providers/openai-tts.mjs /app/server/hosted-gateway/providers/openai-model.mjs ./server/hosted-gateway/providers/
+COPY --from=build --chown=node:node /app/server/hosted-gateway/generated/model-contract.json /app/server/hosted-gateway/generated/prompts.mjs ./server/hosted-gateway/generated/
+COPY --from=build --chown=node:node /app/shared/hosted-voice-protocol.mjs ./shared/
+USER node
+EXPOSE 3000
+STOPSIGNAL SIGTERM
+CMD ["node", "server/hosted-gateway/index.mjs"]

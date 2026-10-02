@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { FlowEnvironmentApp } from "./FlowEnvironmentApp";
@@ -25,13 +26,13 @@ function setup() {
       if (!screen.queryByLabelText("Tell Flow what to change")) fireEvent.click(screen.getByRole("button", { name: "Open Flow command" }));
       const input = screen.getByLabelText("Tell Flow what to change"); fireEvent.change(input, { target: { value: text } }); fireEvent.submit(input.closest("form")!);
     } else {
-      if (!adapter.startCount) { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); }
+      await activateFlowVoice(adapter);
       act(() => adapter.emitFinal(text, `presentation-${text}`));
     }
     await waitFor(() => expect(document.querySelector("[data-last-transcript]")).toHaveAttribute("data-last-transcript", text));
   }
   const unchanged = () => { const after = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!); expect(after.document).toEqual(before.document); expect(after.past).toEqual(before.past); expect(after.future).toEqual(before.future); };
-  return { command, unchanged, preferences };
+  return { command, unchanged, preferences, adapter };
 }
 it.each(["click", "typed", "voice"] as const)("opens sensory settings through %s", async (mode) => {
   const view = setup();
@@ -89,6 +90,18 @@ it.each(["typed", "voice"] as const)("opens and focuses keyboard input through %
   await waitFor(() => expect(screen.getByLabelText("Tell Flow what to change")).toHaveFocus()); view.unchanged();
 });
 it("hides the idle main command field from a typed request without consuming history", async () => {
-  const view = setup(); await view.command("Hide Flow command", "typed");
+  const view = setup();
+  await activateFlowVoice(view.adapter);
+  fireEvent.click(screen.getByRole("button", { name: "Stop Flow Live" }));
+  await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "sleeping"));
+  await view.command("Hide Flow command", "typed");
   await waitFor(() => expect(screen.getByRole("button", { name: "Open Flow command" })).toBeInTheDocument()); view.unchanged();
+});
+it("keeps the command field available while recognition is actively listening", async () => {
+  const view = setup();
+  await activateFlowVoice(view.adapter);
+  await view.command("Hide Flow command", "typed");
+  expect(screen.getByText("Keep the active command visible")).toBeInTheDocument();
+  expect(screen.getByLabelText("Tell Flow what to change")).toBeInTheDocument();
+  view.unchanged();
 });

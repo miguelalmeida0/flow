@@ -1,0 +1,121 @@
+# PREPARATION TEMPLATE: replace placeholders and approve costs/workspace before applying.
+# Both services promote the same already-built private image digest. No Git auto-deploy field.
+# Region frankfurt is proposed and must be confirmed before creation.
+previews:
+  generation: off
+services:
+  - type: keyvalue
+    name: flow-beta-ledger
+    region: frankfurt
+    plan: 256mb
+    persistenceMode: journal-snapshot
+    maxmemoryPolicy: noeviction
+    ipAllowList: []
+  - type: web
+    name: flow-beta-staging
+    runtime: image
+    region: frankfurt
+    plan: 0.5c-512mb
+    numInstances: 1
+    image:
+      url: ghcr.io/REPLACE_OWNER/REPLACE_PACKAGE@sha256:REPLACE_TESTED_DIGEST
+      creds:
+        fromRegistryCreds:
+          name: REPLACE_PULL_ONLY_CREDENTIAL
+    healthCheckPath: /api/health
+    maxShutdownDelaySeconds: 30
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FLOW_ENVIRONMENT
+        value: staging
+      - key: FLOW_INFERENCE_ENABLED
+        value: "false"
+      - key: FLOW_PUBLIC_ORIGIN
+        sync: false
+      - key: FLOW_BUDGET_NAMESPACE
+        sync: false
+      # Set the authenticated INTERNAL URL for the same ledger in both services.
+      # ipAllowList: [] alone does not establish internal authentication.
+      - key: FLOW_REDIS_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DEEPGRAM_API_KEY
+        sync: false
+      - key: FLOW_CONSENT_VERSION
+        value: flow-cloud-v1
+      - key: FLOW_SESSION_TTL_MS
+        value: "86400000"
+      - key: FLOW_REQUEST_DEADLINE_MS
+        value: "15000"
+      - key: FLOW_MAX_INPUT_BYTES
+        value: "65536"
+      - key: FLOW_MAX_INPUT_TOKENS
+        value: "64000"
+      - key: FLOW_MAX_OUTPUT_TOKENS
+        value: "2048"
+      - key: FLOW_INTERPRET_COST_MICROS
+        value: "30000"
+      - key: FLOW_SPEECH_RATE_VERIFIED
+        value: "false"
+      - key: FLOW_STT_RATE_MICROS_PER_MINUTE
+        value: "7700"
+      - key: FLOW_STT_SESSION_COST_MICROS
+        value: "46200"
+      - key: FLOW_TTS_COST_MICROS
+        value: "10000"
+  - type: web
+    name: flow-beta-production
+    runtime: image
+    region: frankfurt
+    plan: 0.5c-512mb
+    numInstances: 1
+    image:
+      url: ghcr.io/REPLACE_OWNER/REPLACE_PACKAGE@sha256:REPLACE_TESTED_DIGEST
+      creds:
+        fromRegistryCreds:
+          name: REPLACE_PULL_ONLY_CREDENTIAL
+    healthCheckPath: /api/health
+    maxShutdownDelaySeconds: 30
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FLOW_ENVIRONMENT
+        value: production
+      - key: FLOW_INFERENCE_ENABLED
+        value: "false"
+      - key: FLOW_PUBLIC_ORIGIN
+        sync: false
+      - key: FLOW_BUDGET_NAMESPACE
+        sync: false
+      # Set the authenticated INTERNAL URL for the same ledger in both services.
+      # ipAllowList: [] alone does not establish internal authentication.
+      - key: FLOW_REDIS_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DEEPGRAM_API_KEY
+        sync: false
+      - key: FLOW_CONSENT_VERSION
+        value: flow-cloud-v1
+      - key: FLOW_SESSION_TTL_MS
+        value: "86400000"
+      - key: FLOW_REQUEST_DEADLINE_MS
+        value: "15000"
+      - key: FLOW_MAX_INPUT_BYTES
+        value: "65536"
+      - key: FLOW_MAX_INPUT_TOKENS
+        value: "64000"
+      - key: FLOW_MAX_OUTPUT_TOKENS
+        value: "2048"
+      - key: FLOW_INTERPRET_COST_MICROS
+        value: "30000"
+      - key: FLOW_SPEECH_RATE_VERIFIED
+        value: "false"
+      - key: FLOW_STT_RATE_MICROS_PER_MINUTE
+        value: "7700"
+      - key: FLOW_STT_SESSION_COST_MICROS
+        value: "46200"
+      - key: FLOW_TTS_COST_MICROS
+        value: "10000"

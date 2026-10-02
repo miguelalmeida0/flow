@@ -46,4 +46,11 @@ describe("LifeDocument cross-tab mutation coordinator", () => {
     await new LifeMutationCoordinator(locks).run(() => { commits += 1; });
     expect(commits).toBe(1);
   });
+
+  it("propagates a failed protected transaction without retrying it", async () => {
+    const locks: LifeLockManager = { request: async (_name, _options, callback) => callback() };
+    let attempts = 0;
+    await expect(new LifeMutationCoordinator(locks).run(() => { attempts += 1; throw new Error("save failed"); })).rejects.toThrow("save failed");
+    expect(attempts).toBe(1);
+  });
 });

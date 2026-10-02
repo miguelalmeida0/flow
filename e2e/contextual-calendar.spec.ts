@@ -9,6 +9,9 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") found.push(message.text()); });
   await page.clock.setFixedTime(new Date("2026-09-08T08:00:00"));
   await installAcceptanceRecognition(page);
+  // This suite proves document preservation, not weather enrichment. Keep
+  // the external response deterministic before taking whole-document baselines.
+  await page.route("https://api.open-meteo.com/**", route => route.fulfill({status:200,contentType:"application/json",body:'{"daily":{"time":[]}}'}));
   await page.addInitScript((snapshot) => {
     if (!sessionStorage.getItem("contextual-fixture-installed")) {
       localStorage.setItem("flow.life.v3", JSON.stringify(snapshot));

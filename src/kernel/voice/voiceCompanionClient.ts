@@ -11,6 +11,9 @@
  * codebase takes an injectable `fetchImpl`.
  */
 
+import { voiceDebug, voiceDebugEnabled } from "../../features/day-planner/voice/voiceDebug";
+import { getRuntimeMode } from "../../app/runtimeMode";
+
 export const VOICE_COMPANION_TOKEN_KEY = "flow.voiceCompanion.token";
 export const VOICE_COMPANION_BASE_URL_KEY = "flow.voiceCompanion.baseUrl";
 export const DEFAULT_VOICE_COMPANION_BASE_URL = "ws://127.0.0.1:8766";
@@ -36,21 +39,28 @@ export function getVoiceCompanionToken(): string | null {
 }
 
 export interface VoiceCorrelation {
+  captureEpoch?: string;
+  generation?: number;
+  sequence?: number;
   sessionId?: string;
   utteranceId?: string;
   atMs?: number;
   audioMs?: number;
+  captureId?: number;
+  workerEpoch?: string;
+  requestId?: number;
 }
 export type VoiceCompanionEvent = (
-  | { type: "endpoint.detected" | "stt.flushStart" | "stt.flushRetry" | "stt.flushComplete" | "stt.reset" | "audio.silenceStart" | "audio.frame" | "audio.rms"; atMs?: number; audioMs?: number; utteranceId?: string; durationMs?: number }
+  | { type: "endpoint.detected" | "stt.speechDetected" | "stt.firstToken" | "stt.decoderReady" | "stt.flushStart" | "stt.flushRetry" | "stt.flushComplete" | "stt.reset" | "audio.silenceStart" | "audio.frame" | "audio.rms"; atMs?: number; audioMs?: number; utteranceId?: string; durationMs?: number }
   | { type: "protocol.unknown"; messageType: string }
-  | { type: "ready"; sttReady: boolean; ttsReady: boolean; version: string }
+  | { type: "ready"; sttReady: boolean; ttsReady: boolean; version: string | number; expiresAt?: number; startup?: Record<string, unknown> }
   | { type: "speech.start" }
   | { type: "transcript.partial"; text: string }
   | { type: "transcript.final"; text: string }
   | { type: "speech.end" }
   | { type: "stt.error"; message: string }
   | { type: "tts.start" }
+  | { type: "tts.chunkGenerated"; chunkIndex: number; durationMs: number; samples: number }
   | { type: "tts.audio"; data: ArrayBuffer }
   | { type: "tts.done" }
   | { type: "tts.cancelled" }
@@ -93,6 +103,12 @@ export class VoiceCompanionClient {
   private _ttsReady = false;
   private ownershipAbort: AbortController | null = null;
   private releaseOwnership: (() => void) | null = null;
+  private captureId = 0;
+  private inputMode: "command" | "dictation" = "command";
+  private sentSamples = 0;
+  private sessionId: string | undefined;
+  private ttsRequestId = 0;
+  private receivingTts = false;
 
   constructor(options: VoiceCompanionClientOptions = {}) {
     this.webSocketImpl = options.webSocketImpl ?? (typeof WebSocket !== "undefined" ? WebSocket : (undefined as unknown as typeof WebSocket));
@@ -120,6 +136,7 @@ export class VoiceCompanionClient {
   }
 
   connect(): void {
+    if (getRuntimeMode() !== "local") { this.emit({ type: "connectionError" }); return; }
     if (!this.token) {
       this.emit({ type: "connectionError" });
       return;
@@ -147,6 +164,7 @@ export class VoiceCompanionClient {
   }
 
   private openSocket(): void {
+    if (getRuntimeMode() !== "local") return;
     const url = `${this.baseUrl}/voice?token=${encodeURIComponent(this.token!)}`;
     const ws = new this.webSocketImpl(url);
     ws.binaryType = "arraybuffer";
@@ -158,7 +176,7 @@ export class VoiceCompanionClient {
       if (this.ws !== ws) return;
       if (typeof event.data === "string") {
         this.handleTextMessage(event.data);
-      } else if (event.data instanceof ArrayBuffer) {
+      } else if (event.data instanceof ArrayBuffer && this.receivingTts) {
         this.emit({ type: "tts.audio", data: event.data });
       }
     };
@@ -209,12 +227,22 @@ export class VoiceCompanionClient {
       return;
     }
     const type = parsed.type;
-    if (type === "endpoint.detected" || type === "stt.flushStart" || type === "stt.flushRetry" || type === "stt.flushComplete" || type === "stt.reset" || type === "audio.silenceStart" || type === "audio.frame" || type === "audio.rms") {
+    if (typeof type === "string" && type.startsWith("tts.") && !(type === "tts.error" && parsed.requestId === undefined)) {
+      if (parsed.requestId !== this.ttsRequestId || !this.ttsRequestId) return;
+      if (type === "tts.start") this.receivingTts = true;
+      if (type === "tts.done" || type === "tts.cancelled" || type === "tts.error") this.receivingTts = false;
+    }
+    if (type === "endpoint.detected" || type === "stt.speechDetected" || type === "stt.firstToken" || type === "stt.decoderReady" || type === "stt.flushStart" || type === "stt.flushRetry" || type === "stt.flushComplete" || type === "stt.reset" || type === "audio.silenceStart" || type === "audio.frame" || type === "audio.rms") {
       this.emit({ ...parsed, type });
+    } else if (type === "tts.chunkGenerated") {
+      this.emit({ ...parsed, type, chunkIndex: Number(parsed.chunkIndex), durationMs: Number(parsed.durationMs), samples: Number(parsed.samples) });
     } else if (type === "ready") {
+      this.receivingTts = false;
       this._sttReady = Boolean(parsed.sttReady);
       this._ttsReady = Boolean(parsed.ttsReady);
-      this.emit({ type: "ready", sttReady: this._sttReady, ttsReady: this._ttsReady, version: String(parsed.version ?? "") });
+      this.sessionId = typeof parsed.sessionId === "string" ? parsed.sessionId : undefined;
+      this.emit({ type: "ready", sttReady: this._sttReady, ttsReady: this._ttsReady, version: String(parsed.version ?? ""), ...(this.sessionId ? { sessionId: this.sessionId } : {}),
+        ...(parsed.startup && typeof parsed.startup === "object" ? { startup: parsed.startup as Record<string, unknown> } : {}) });
     } else if (type === "transcript.partial" || type === "transcript.final") {
       this.emit({ ...parsed, type, text: String(parsed.text ?? "") });
     } else if (type === "stt.error" || type === "tts.error") {
@@ -251,11 +279,23 @@ export class VoiceCompanionClient {
    * `isMicActive` from the state machine, not on connection state, so a
    * brief reconnect window just drops audio rather than crashing. */
   sendAudio(pcm: ArrayBuffer): void {
-    if (this.isConnected) this.ws!.send(pcm);
+    if (!this.isConnected) return;
+    const firstSample = this.sentSamples;
+    this.sentSamples += pcm.byteLength / 2;
+    this.ws!.send(pcm);
+    if (voiceDebugEnabled()) voiceDebug("voice.micFrameSent", { sessionId: this.sessionId, captureId: this.captureId, firstSample, lastSample: this.sentSamples });
   }
 
   startSession(): void {
-    this.sendJson({ type: "session.start" });
+    this.captureId += 1;
+    this.sentSamples = 0;
+    this.sendJson({ type: "session.start", captureId: this.captureId, inputMode: this.inputMode });
+  }
+
+  setInputMode(inputMode: "command" | "dictation"): void {
+    if (inputMode === this.inputMode) return;
+    this.inputMode = inputMode;
+    this.sendJson({ type: "session.profile", inputMode });
   }
 
   stopSession(): void {
@@ -263,10 +303,14 @@ export class VoiceCompanionClient {
   }
 
   speak(text: string): void {
-    this.sendJson({ type: "tts.speak", text });
+    this.receivingTts = false;
+    this.ttsRequestId += 1;
+    this.sendJson({ type: "tts.speak", text, requestId: this.ttsRequestId });
   }
 
   cancelSpeak(): void {
+    this.receivingTts = false;
+    this.ttsRequestId += 1;
     this.sendJson({ type: "tts.cancel" });
   }
 

@@ -115,6 +115,17 @@ describe("wake lifecycle ownership", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  it("clears preview projection before listening and starts final targeting at eyes", () => {
+    const { result } = renderHook(() => useVoiceWorld(true, false));
+    act(() => result.current.preview({ actionId: "preview", transcript: "Open calendar", source: "voice", domain: "today", confidenceTier: "high" }));
+    act(() => result.current.activate("listening"));
+    expect(result.current.snapshot.domain).toBeUndefined();
+    expect(result.current.snapshot.actionId).toBeUndefined();
+    expect(result.current.snapshot.targetMotionStage).toBeUndefined();
+    act(() => result.current.target({ actionId: "final", transcript: "Open calendar", source: "voice", domain: "today", confidenceTier: "high" }));
+    expect(result.current.snapshot).toMatchObject({ actionId: "final", domain: "today", phase: "targeting", targetMotionStage: "eyes" });
+  });
+
   it("does not let a new interim or listening reset steal a pending final command", async () => {
     vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(1_440);
     vi.spyOn(document.documentElement, "clientHeight", "get").mockReturnValue(900);

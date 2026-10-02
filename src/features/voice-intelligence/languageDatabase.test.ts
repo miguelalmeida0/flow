@@ -6,6 +6,8 @@ import { createLifeSnapshot } from "../../domain/life-storage";
 import { normalizeTranscript } from "../day-planner/interpretation/normalize";
 import { languageInventory, languageReleaseMinimums, type LanguageCase, type LanguageDialogue, type ResolutionExpectation } from "./languageDatabase";
 
+import { declaredLanguageFixture } from "./languageCaseFixture";
+
 const evidenceRoot = "artifacts/voice-intelligence";
 const evaluationNow = Date.parse("2026-09-05T12:00:00Z");
 const destructiveSafetyUtterances = [
@@ -59,7 +61,7 @@ function domainForIntent(intent?: GlobalIntent["type"]): string {
 }
 
 function evaluate(row: LanguageCase): Evaluation {
-  const result = resolveGlobalCommand(row.utterance, row.context, "2026-09-05");
+  const result = resolveGlobalCommand(row.utterance, row.context, "2026-09-05", [], 17 * 60, row.fixtureId ? declaredLanguageFixture(row).document.calendar : undefined);
   const actualResolution = resolutionFor(result.intent);
   const passed = actualResolution === row.expected.resolution
     && (!row.expected.intent || row.expected.intent === result.intent.type);
@@ -80,7 +82,7 @@ function evaluateDialogue(dialogue: LanguageDialogue): Evaluation[] {
   let context = dialogue.initialContext;
   return dialogue.turns.map((turn) => {
     const contextualTurn = { ...turn, context };
-    const result = resolveGlobalCommand(turn.utterance, context, "2026-09-05");
+    const result = resolveGlobalCommand(turn.utterance, context, "2026-09-05", [], 17 * 60, turn.fixtureId ? declaredLanguageFixture(turn).document.calendar : undefined);
     const evaluation = evaluate(contextualTurn);
     const intent = result.intent;
     if (intent.type === "navigate" && intent.route !== "back") {

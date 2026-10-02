@@ -40,7 +40,7 @@ export const pendingLateAssistedCases: LanguageCase[] = ([batchI, batchJ] as unk
   // near-time deletion first clarifies; compound leave-alone is a constraint.
   if (row.id === 94) {
     expected = { intent: "clarification", resolution: "clarify", route: "calendar" };
-    semantic = { historyDelta: 0, commitCount: 0, feedbackPhase: "clarification", noCreation: true, actions: [], intent: { type: "clarification" }, feedback: { title: "I found Shareholders at 11:30 AM, not an exact 11 AM start. Which event should I remove?", detail: "Shareholders — 11:30 AM Nothing changed." } };
+    semantic = { historyDelta: 0, commitCount: 0, feedbackPhase: "clarification", noCreation: true, actions: [], intent: { type: "clarification" }, feedback: { title: "I found Shareholders at 11:30 AM, not an exact 11 AM start. Which event should I remove?", detail: "Shareholders — Tuesday, Sep 8, 11:30 AM Nothing changed." } };
   }
   if (row.id === 178) semantic = { ...semantic, calendarActionTypes: ["shift"], actions: [{ type: "calendar.request", request: { constraints: [{ type: "keep", selector: { type: "title", query: "lunch" } }] } }] };
   // capture.update's discriminated union has a top-level title. This is a

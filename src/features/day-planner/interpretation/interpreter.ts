@@ -110,7 +110,10 @@ function sourceOnlyAtMove(clause: string) {
 }
 
 function titleForCreate(clause: string) {
+  const taskWrapper = /^create\s+(?:a\s+)?new task:\s*dedicate\s+/.test(clause);
   const withoutVerbOrDuration = clause
+    .replace(/^create\s+(?:a\s+)?new task:\s*dedicate\s+/, "create ")
+    .replace(/^block\s+off\s+/, "block ")
     .replace(/^(?:add|create|schedule|block|book|fit|make room for|give me|make)\s+/, "")
     .replace(new RegExp(`\\b${numberToken}\\s*-?\\s*hours?(?:\\s+and\\s+${numberToken}\\s*-?\\s*minutes?)?\\b`, "g"), "")
     .replace(new RegExp(`\\b${numberToken}\\s*-?\\s*(?:minutes?|mins?|min)\\b`, "g"), "")
@@ -126,7 +129,8 @@ function titleForCreate(clause: string) {
     .replace(/\s+at\s+(?:noon|midnight)$/i, "")
     .replace(new RegExp(`\\s+at\\s+(?:half past|quarter (?:to|past))\\s+${numberToken}\\s*(?:am|pm|oclock)?$`, "i"), "")
     .replace(new RegExp(`\\s+at\\s+${numberToken}(?::\\d{2})?\\s*(?:am|pm|oclock)?$`, "i"), "");
-  return cleanTitle(withoutTemporalSuffix.replace(/^\s*of\s+/, "").replace(/\s+to (?:my|your|the) (?:schedule|calendar)$/, "")).replace(/\bat\s+(.+)$/i, (_, location: string) => `at ${location.replace(/\b\w/g, (letter) => letter.toUpperCase())}`);
+  const withoutTaskPrefix = taskWrapper ? withoutTemporalSuffix.replace(/^\s*to\s+/, "") : withoutTemporalSuffix;
+  return cleanTitle(withoutTaskPrefix.replace(/\s+starting$/, "").replace(/^\s*of\s+/, "").replace(/\s+to (?:my|your|the) (?:schedule|calendar)$/, "")).replace(/\bat\s+(.+)$/i, (_, location: string) => `at ${location.replace(/\b\w/g, (letter) => letter.toUpperCase())}`);
 }
 
 function parseKeepConstraints(clause: string): CalendarConstraint[] {

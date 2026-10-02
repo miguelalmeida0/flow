@@ -1,3 +1,4 @@
+import { activateFlowVoice, awaitFlowListening } from "../test/flowVoiceAcquisition";
 import { StrictMode } from "react";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -16,6 +17,7 @@ import { withEventDefaults } from "../features/day-planner/eventDefaults";
 import { primaryWorldUiActions, type UiActionDescriptor } from "../shared/command/uiActionDescriptors";
 import { FlowEnvironmentApp } from "./FlowEnvironmentApp";
 import { acceptanceFixture } from "../features/voice-intelligence/acceptanceFixtures";
+import { calendarDialogueFixture } from "../features/voice-intelligence/calendarDialogueFixture";
 
 type OwnershipMessage = Parameters<LiveOwnershipTransport["publish"]>[0];
 
@@ -101,6 +103,17 @@ beforeEach(() => {
 });
 
 describe("Flow living environment", () => {
+  it("keeps civil tomorrow unchanged when the selected event is already there in the requested morning", async () => {
+    localStorage.setItem(LIFE_STORAGE_KEY, JSON.stringify(calendarDialogueFixture()));
+    const { command } = setup(undefined, () => new Date("2026-09-05T12:00:00.000Z"));
+    command("Open tomorrow");
+    const before = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
+    expect(before.document.calendar.dateKey).toBe("2026-09-06");
+    expect(before.document.calendar.events.find(({ id }) => id === "dialogue-roadmap")).toMatchObject({ dateKey: "2026-09-06", start: 630, end: 660 });
+    command("Move the roadmap to tomorrow morning");
+    await waitFor(() => expect(document.querySelector("[data-flow-feedback]")).toHaveAttribute("data-feedback-phase", "completed"));
+    expect(JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!)).toEqual(before);
+  });
   it("presents the actual near-time choice before a separate removal confirmation", async () => {
     const fixture = acceptanceFixture("calendar-near");
     localStorage.setItem(LIFE_STORAGE_KEY, JSON.stringify(fixture.snapshot));
@@ -183,8 +196,7 @@ describe("Flow living environment", () => {
   it("keeps Flow Live presence visible in the header and lets it revoke the session", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
     const presence = screen.getByTestId("flow-live-presence");
-    expect(presence).toHaveAttribute("data-flow-live-status", "sleeping");
-    fireEvent.click(presence);
+    await awaitFlowListening(adapter);
     await waitFor(() => expect(presence).toHaveAttribute("data-flow-live-status", "listening"));
     expect(adapter.startCount).toBe(1);
     fireEvent.click(presence);
@@ -208,8 +220,8 @@ describe("Flow living environment", () => {
     expect(bus.unsubscriptions).toBe(0);
     expect(bus.closes).toBe(0);
 
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(firstAdapter.startCount).toBe(1));
+    await awaitFlowListening(firstAdapter);
+    expect(firstAdapter.startCount).toBe(1);
     await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening"));
     expect(firstAdapter.abortCount).toBe(0);
 
@@ -232,8 +244,8 @@ describe("Flow living environment", () => {
       </StrictMode>,
     );
     await act(async () => { await new Promise((resolve) => window.setTimeout(resolve, 0)); });
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(secondAdapter.startCount).toBe(1));
+    await awaitFlowListening(secondAdapter);
+    expect(secondAdapter.startCount).toBe(1);
     await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening"));
     second.unmount();
     await act(async () => { await new Promise((resolve) => window.setTimeout(resolve, 0)); });
@@ -267,10 +279,10 @@ describe("Flow living environment", () => {
 
   it("recedes during quiet recognition and keeps the exact interim visible without expanding the reserved dock", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
     act(() => adapter.emitFinal("Home"));
-    await waitFor(() => expect(adapter.startCount).toBe(2), { timeout: 600 });
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1), { timeout: 600 });
     await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening"));
     expect(screen.getByRole("button", { name: "Stop Flow Live" })).toBeInTheDocument();
     await waitFor(() => expect(screen.getByRole("button", { name: "Open Flow command" })).toBeInTheDocument(), { timeout: 2_500 });
@@ -298,18 +310,18 @@ describe("Flow living environment", () => {
     let hidden = false;
     const hiddenSpy = vi.spyOn(document, "hidden", "get").mockImplementation(() => hidden);
     try {
-      fireEvent.click(screen.getByLabelText("Start Flow Live"));
-      await waitFor(() => expect(adapter.startCount).toBe(1));
+      await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
       hidden = true;
       act(() => document.dispatchEvent(new Event("visibilitychange")));
       await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "suspended"));
       expect(adapter.abortCount).toBe(1);
       await new Promise((resolve) => window.setTimeout(resolve, 420));
-      expect(adapter.startCount).toBe(1);
+      expect(adapter.startCount).toBe(initialCycle + 0);
 
       hidden = false;
       act(() => document.dispatchEvent(new Event("visibilitychange")));
-      await waitFor(() => expect(adapter.startCount).toBe(2));
+      await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1));
       await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening"));
       act(() => adapter.emitFinal("Capture Buy coffee", "resumed-final"));
       await waitFor(() => {
@@ -317,7 +329,7 @@ describe("Flow living environment", () => {
         expect(state.document.captures).toEqual([expect.objectContaining({ title: "Buy coffee" })]);
         expect(state.past).toHaveLength(1);
       });
-      await waitFor(() => expect(adapter.startCount).toBe(3), { timeout: 700 });
+      await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 2), { timeout: 700 });
       act(() => adapter.emitFinal("Capture Buy coffee", "resumed-final"));
       const state = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
       expect(state.document.captures).toHaveLength(1);
@@ -329,16 +341,16 @@ describe("Flow living environment", () => {
 
   it("does not auto-restart after permission denial but lets the user retry and commit after permission changes", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
     act(() => adapter.emitError("permission-denied"));
     await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "permission-denied"));
     await new Promise((resolve) => window.setTimeout(resolve, 420));
-    expect(adapter.startCount).toBe(1);
+    expect(adapter.startCount).toBe(initialCycle + 0);
     expect(screen.getByText(/Allow it in Site settings, then Retry/)).toBeInTheDocument();
     expect(screen.queryByText("Flow Live ready")).not.toBeInTheDocument();
     fireEvent.click(screen.getByLabelText("Retry Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(2));
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1));
     act(() => adapter.emitFinal("Capture Permission restored", "permission-retry-final"));
     await waitFor(() => {
       const state = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
@@ -352,8 +364,8 @@ describe("Flow living environment", () => {
     let hidden = false;
     const hiddenSpy = vi.spyOn(document, "hidden", "get").mockImplementation(() => hidden);
     try {
-      fireEvent.click(screen.getByLabelText("Start Flow Live"));
-      await waitFor(() => expect(adapter.startCount).toBe(1));
+      await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
       act(() => adapter.emitError("microphone-unavailable"));
       await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "microphone-unavailable"));
       expect(screen.getByText(/Check the input device and macOS permission/)).toBeInTheDocument();
@@ -362,12 +374,12 @@ describe("Flow living environment", () => {
       hidden = false; act(() => document.dispatchEvent(new Event("visibilitychange")));
       await new Promise((resolve) => window.setTimeout(resolve, 420));
       expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "microphone-unavailable");
-      expect(adapter.startCount).toBe(1);
+      expect(adapter.startCount).toBe(initialCycle + 0);
 
       fireEvent.click(screen.getByLabelText("Retry Flow Live"));
-      await waitFor(() => expect(adapter.startCount).toBe(2));
+      await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1));
       act(() => adapter.emitFinal("Capture Retry succeeded", "retry-boundary"));
-      await waitFor(() => expect(adapter.startCount).toBe(3), { timeout: 700 });
+      await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 2), { timeout: 700 });
       act(() => adapter.emitFinal("Capture Retry succeeded", "retry-boundary"));
       const state = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
       expect(state.document.captures).toEqual([expect.objectContaining({ title: "Retry succeeded" })]);
@@ -377,6 +389,15 @@ describe("Flow living environment", () => {
     }
   });
 
+  it("cancels with never mind without undoing a previously saved change", async () => {
+    const { command } = setup();
+    command("Capture Keep this saved note");
+    await waitFor(() => expect((JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot).past).toHaveLength(1));
+    const before = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
+    command("never mind");
+    expect(JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!)).toEqual(before);
+    expect(before.document.captures).toEqual([expect.objectContaining({ title: "Keep this saved note" })]);
+  });
   it("captures globally without changing Calendar", () => {
     const { command } = setup();
     const before = (JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot).document.calendar;
@@ -618,8 +639,9 @@ describe("Flow living environment", () => {
   it("runs a final voice transcript through the same global command path", async () => {
     const adapter = new FakeRecognitionAdapter();
     setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
+    fireEvent.click(screen.getByRole("button", { name: "Open Flow command" }));
     act(() => adapter.emitInterim("Renew passport"));
     expect(screen.getByDisplayValue("Renew passport")).toBeInTheDocument();
     act(() => adapter.emitFinal("Capture Renew passport before Senegal"));
@@ -628,7 +650,7 @@ describe("Flow living environment", () => {
       expect(state.document.captures[0]?.source).toBe("voice");
     });
     expect(screen.getByDisplayValue("Capture Renew passport before Senegal")).toBeInTheDocument();
-    await waitFor(() => expect(adapter.startCount).toBe(2), { timeout: 800 });
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1), { timeout: 800 });
   });
 
   it("keeps important Home, Today, Capture, Outcomes, and Commitments buttons in click, typed, and final-voice parity", async () => {
@@ -720,8 +742,7 @@ describe("Flow living environment", () => {
         if (mode === "click") parityCase.click();
         else if (mode === "typed") prepared.command(parityCase.action.phrase);
         else {
-          fireEvent.click(screen.getByLabelText("Start Flow Live"));
-          await waitFor(() => expect(adapter.startCount).toBe(1));
+          await activateFlowVoice(adapter);
           act(() => adapter.emitFinal(parityCase.action.phrase, `parity-${parityCase.name}`));
         }
         const result = await waitFor(() => {
@@ -742,8 +763,7 @@ describe("Flow living environment", () => {
   it("ranks an actionable Living transcript above a higher-confidence unusable alternative", async () => {
     const adapter = new FakeRecognitionAdapter();
     setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     act(() => adapter.emitFinal([
       { transcript: "move later maybe", confidence: 0.98 },
       { transcript: "Capture Renew passport before Senegal", confidence: 0.52 },
@@ -757,8 +777,7 @@ describe("Flow living environment", () => {
 
   it("routes a lower-confidence navigation alternative ahead of explicit capture", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     act(() => adapter.emitFinal([
       { transcript: "Capture open the calendar", confidence: 0.99 },
       { transcript: "Open the calendar", confidence: 0.2 },
@@ -770,8 +789,7 @@ describe("Flow living environment", () => {
 
   it("lets complete Calendar actions beat higher-confidence fuzzy navigation alternatives", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     act(() => adapter.emitFinal([
       { transcript: "Open focus aria", confidence: 0.99 },
       { transcript: "Move deep work to four", confidence: 0.2 },
@@ -799,8 +817,7 @@ describe("Flow living environment", () => {
 
   it("runs event inspection through a final fake-voice transcript without a navigation fallback", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     act(() => adapter.emitFinal("Open the two PM meeting", "inspect-event"));
     expect(await screen.findByTestId("calendar-space")).toBeInTheDocument();
     await waitFor(() => expect(document.querySelector("[data-event-id='roadmap']")).toHaveAttribute("aria-pressed", "true"));
@@ -822,7 +839,7 @@ describe("Flow living environment", () => {
     command("What do I owe her?");
     await waitFor(() => expect(screen.getByLabelText("Global Flow command")).toHaveTextContent("Sarah: Send the proposal"));
     command("Give me forty minutes");
-    await waitFor(() => expect(screen.getByLabelText("Global Flow command")).toHaveTextContent("You asked for 40 minutes. You have 28 clear."));
+    await waitFor(() => expect(screen.getByLabelText("Global Flow command")).toHaveTextContent("You asked for 40 minutes. You have 28 available."));
     command("Actually make it 15.");
     await waitFor(() => expect(screen.getByLabelText("Global Flow command")).toHaveTextContent("15 minutes ready"));
     expect((JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot).past).toHaveLength(0);
@@ -842,8 +859,7 @@ describe("Flow living environment", () => {
     snapshot.document.commitments.push({ id: "commitment-sarah", kind: "commitment", personId: "person-sarah", title: "Send the proposal", direction: "i-owe", status: "open", createdAt: at, updatedAt: at });
     localStorage.setItem(LIFE_STORAGE_KEY, JSON.stringify(snapshot));
     const adapter = new FakeRecognitionAdapter(); setup(adapter, now);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     let cycle = 1;
     const speak = async (transcript: string) => {
       act(() => adapter.emitFinal(transcript, `context-${cycle}`));
@@ -919,7 +935,7 @@ describe("Flow living environment", () => {
     command("Calendar"); command("Add a 30 minute product meeting at 10"); command("Add a 30 minute hiring meeting at 3");
     command("Move the meeting to 8:30 am");
     expect(screen.getByText("Which meeting do you mean?")).toBeInTheDocument();
-    command("Product meeting — 10 AM");
+    command("Product meeting — Thursday, Sep 3, 10 AM");
     const state = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
     expect(state.document.calendar.events.find(({ title }) => title === "Product meeting")?.start).toBe(8 * 60 + 30);
     expect(state.past).toHaveLength(3);
@@ -927,10 +943,10 @@ describe("Flow living environment", () => {
 
   it("deduplicates a repeated final boundary across persistent restarts", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
     act(() => adapter.emitFinal("Capture Buy coffee", "utterance-one"));
-    await waitFor(() => expect(adapter.startCount).toBe(2), { timeout: 800 });
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1), { timeout: 800 });
     act(() => adapter.emitFinal("Capture Buy coffee", "utterance-one"));
     const state = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
     expect(state.document.captures.filter(({ title }) => title === "Buy coffee")).toHaveLength(1);
@@ -940,10 +956,10 @@ describe("Flow living environment", () => {
   it("accepts the same intentional command again on the next recognition cycle", async () => {
     const adapter = new FakeRecognitionAdapter(); const { command } = setup(adapter);
     command("Capture Buy coffee"); command("Capture Buy tea");
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
     act(() => adapter.emitFinal("Undo", "undo-one"));
-    await waitFor(() => expect(adapter.startCount).toBe(2), { timeout: 800 });
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1), { timeout: 800 });
     act(() => adapter.emitFinal("Undo", "undo-two"));
     await waitFor(() => expect((JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot).document.captures).toHaveLength(0));
   });
@@ -951,17 +967,16 @@ describe("Flow living environment", () => {
   it("keeps an interim voice transcript preview-only", async () => {
     const adapter = new FakeRecognitionAdapter();
     setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     act(() => adapter.emitInterim("Turn that into a plan"));
     const state = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
     expect(state.document.plans).toHaveLength(0);
     expect(state.past).toHaveLength(0);
   });
 
-  it("suspends Flow Live on Escape", () => {
+  it("suspends Flow Live on Escape", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
+    await awaitFlowListening(adapter);
     fireEvent.keyDown(window, { key: "Escape" });
     expect(screen.getByLabelText("Start Flow Live")).toBeInTheDocument();
   });
@@ -973,8 +988,8 @@ describe("Flow living environment", () => {
     const adapter = new FakeRecognitionAdapter();
     const { command, unmount } = setup(adapter, undefined, firstOwnership);
 
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
     expect(await secondOwnership.claim()).toBe(true);
     await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "moved"));
     expect(adapter.abortCount).toBeGreaterThan(0);
@@ -1000,10 +1015,10 @@ describe("Flow living environment", () => {
     await waitFor(() => expect(screen.getAllByText("Created in tab B").length).toBeGreaterThan(0));
 
     fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(2));
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1));
     await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening"));
     act(() => adapter.emitFinal("Capture Cross tab owner", "cross-tab-final"));
-    await waitFor(() => expect(adapter.startCount).toBe(3), { timeout: 800 });
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 2), { timeout: 800 });
     act(() => adapter.emitFinal("Capture Cross tab owner", "cross-tab-final"));
     let state = JSON.parse(localStorage.getItem(LIFE_STORAGE_KEY)!) as LifeSnapshot;
     expect(state.document.captures).toEqual([
@@ -1031,8 +1046,7 @@ describe("Flow living environment", () => {
     const adapter = new FakeRecognitionAdapter();
     adapter.releaseDelayMs = 140;
     const { unmount } = setup(adapter, undefined, firstOwnership);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
 
     const startedAt = performance.now();
     const claim = secondOwnership.claimWithRelease();
@@ -1057,7 +1071,7 @@ describe("Flow living environment", () => {
     const adapter = new BrowserRecognitionAdapter();
     const { unmount } = setup(adapter, undefined, firstOwnership);
     try {
-      fireEvent.click(screen.getByLabelText("Start Flow Live"));
+      await awaitFlowListening();
       await waitFor(() => expect(DelayedPhraseRecognition.instances).toHaveLength(1));
       const first = DelayedPhraseRecognition.instances[0]!;
       await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening"));
@@ -1088,14 +1102,14 @@ describe("Flow living environment", () => {
 
   it("retries a recognition-busy start once and never enters an automatic retry loop", async () => {
     const adapter = new FakeRecognitionAdapter(); setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
     act(() => adapter.emitError("recognition-busy"));
-    await waitFor(() => expect(adapter.startCount).toBe(2), { timeout: 1_300 });
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1), { timeout: 1_300 });
     act(() => adapter.emitError("recognition-busy"));
     await waitFor(() => expect(screen.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "recognition-busy"));
     await new Promise((resolve) => window.setTimeout(resolve, 420));
-    expect(adapter.startCount).toBe(2);
+    expect(adapter.startCount).toBe(initialCycle + 1);
     expect(screen.getByLabelText("Retry Flow Live")).toBeInTheDocument();
   });
 
@@ -1189,8 +1203,7 @@ describe("Flow living environment", () => {
 
     const adapter = new FakeRecognitionAdapter();
     setup(adapter, now);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
     let cycle = 1;
     const transcripts: string[] = [];
     const speak = async (transcript: string, restart = true) => {
@@ -1221,7 +1234,7 @@ describe("Flow living environment", () => {
     await speak("Open the good to know area.");
     await speak("What should I know?");
     await speak("Give me forty minutes.");
-    expect(screen.getByLabelText("Global Flow command")).toHaveTextContent("You asked for 40 minutes. You have 28 clear.");
+    expect(screen.getByLabelText("Global Flow command")).toHaveTextContent("You asked for 40 minutes. You have 28 available.");
     await speak("Do it."); await history(6);
     await speak("Undo."); await history(5);
     await speak("Redo."); await history(6);

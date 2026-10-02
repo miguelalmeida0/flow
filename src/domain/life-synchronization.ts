@@ -24,11 +24,11 @@ export class LifeMutationCoordinator {
     return this.locks.request(LIFE_DOCUMENT_LOCK_NAME, { mode: "exclusive" }, () => {
       began = true;
       return task();
-    }).catch(() => {
+    }).catch((error: unknown) => {
       // A platform lock failure before acquisition must not make the product
       // inert. Never execute twice when the protected callback itself threw.
       if (!began) return Promise.resolve(task());
-      return undefined as T;
+      throw error;
     });
   }
 }

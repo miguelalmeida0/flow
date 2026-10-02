@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useFlowEnvironment } from "../../../app/FlowEnvironmentProvider";
 import type { LifeRoute } from "../../../domain/life-model";
+import { getRuntimeMode } from "../../../app/runtimeMode";
 
 type Destination = Extract<LifeRoute, "calendar" | "inbox" | "plans" | "people">;
 const labels = { calendar: "Today", inbox: "Capture", plans: "Outcomes", people: "Commitments" } as const;
@@ -30,7 +31,7 @@ export function HomeAccessibleActions() {
       onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") open(route); }}
       type="button"
     >{labels[route]}</button>)}
-    <button data-action-id="session.control"
+    {getRuntimeMode() === "local" ? <button data-action-id="session.control"
       aria-label={`Flow Live is ${environment.flowLiveStatus}. ${environment.flowLiveStatus === "sleeping" ? "Start voice session" : "Put voice session to sleep"}`}
       className="sr-only"
       data-flow-live-status={environment.flowLiveStatus}
@@ -39,7 +40,7 @@ export function HomeAccessibleActions() {
       onClick={() => window.dispatchEvent(new CustomEvent("flow-live-command", { detail: environment.flowLiveStatus === "sleeping" ? "start" : "sleep" }))}
       tabIndex={-1}
       type="button"
-    >Flow Live {environment.flowLiveStatus}</button>
+    >Flow Live {environment.flowLiveStatus}</button> : <output className="sr-only" data-testid="flow-live-presence" data-flow-live-status={environment.flowLiveStatus}>Voice {environment.flowLiveStatus}</output>}
     {isHome && <button data-action-id="history.undo-redo" aria-label="Undo last change" className={focusReveal} data-flow-action="Undo" disabled={!environment.canUndo} onClick={() => environment.undo()} type="button">Undo</button>}
     {isHome && <button data-action-id="history.undo-redo" aria-label="Redo last change" className={focusReveal} data-flow-action="Redo" disabled={!environment.canRedo} onClick={() => environment.redo()} type="button">Redo</button>}
     {isHome && (() => {

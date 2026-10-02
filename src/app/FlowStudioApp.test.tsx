@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LifeSnapshot } from "../domain/life-model";
@@ -137,8 +138,7 @@ describe("Flow Living Studio through the real React boundary", () => {
       } else if (mode === "pause") { entry.recordingState = "paused"; entry.recordingDurationMs = 60_000; }
       if (input === "typed") app.command(text);
       else {
-        fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" }));
-        await waitFor(() => expect(adapter.startCount).toBe(1));
+        await activateFlowVoice(adapter);
         act(() => adapter.emitFinal(text, `legacy-native-${suffix}`));
       }
       if (mode === "stop") {
@@ -167,6 +167,16 @@ describe("Flow Living Studio through the real React boundary", () => {
       }
     } finally { app.unmount(); clock.mockRestore(); chunk.mockRestore(); write?.mockRestore(); vi.useRealTimers(); }
   });
+  it("does not bookmark a last sentence in a new empty recording", async () => {
+    const { command } = setup();
+    command("Let me talk for a while");
+    await waitFor(() => expect(snapshot().document.studio.journalEntries[0]?.recordingState).toBe("recording"));
+    const before = snapshot();
+    expect(before.document.studio.journalEntries[0]?.text).toBe("");
+    command("Save the last sentence");
+    expect(await screen.findByText("There is no last sentence to bookmark.")).toBeInTheDocument();
+    expect(snapshot()).toEqual(before);
+  });
   it.each(["pause", "resume"])("reports unsaved %s state truthfully when persistence is rejected", async (mode) => {
     const { command } = setup();
     command("Let me talk for a while");
@@ -176,7 +186,7 @@ describe("Flow Living Studio through the real React boundary", () => {
       await waitFor(() => expect(snapshot().document.studio.journalEntries[0]?.recordingState).toBe("paused"));
     }
     const before = snapshot();
-    const save = vi.spyOn(lifeStorage, "saveLifeSnapshot").mockReturnValue(false);
+    const save = vi.spyOn(lifeStorage, "saveLifeSnapshotOutcome").mockReturnValue({ status: "storage-unavailable" });
     try {
       command(mode === "pause" ? "Pause recording" : "Resume recording");
       await screen.findByText(mode === "pause" ? /Audio is paused, but that state was not saved/ : /Audio is recording, but that state was not saved/);
@@ -291,13 +301,14 @@ describe("Flow Living Studio through the real React boundary", () => {
     try {
       const adapter = new FakeRecognitionAdapter();
       const { command } = setup(adapter);
-      fireEvent.click(screen.getByLabelText("Start Flow Live"));
-      await waitFor(() => expect(adapter.startCount).toBe(1));
+      await activateFlowVoice(adapter);
       act(() => adapter.emitFinal("Let me talk for a while"));
       await waitFor(() => expect(snapshot().document.studio.journalEntries).toHaveLength(1));
       const before = snapshot();
+      const firstDictationCycle = adapter.startCount;
       for (let index = 0; index < 3; index += 1) {
-        await waitFor(() => expect(adapter.startCount).toBeGreaterThanOrEqual(index + 2));
+        await waitFor(() => expect(adapter.startCount).toBeGreaterThanOrEqual(firstDictationCycle + index));
+        await activateFlowVoice(adapter);
         act(() => adapter.emitFinal(index === 2 ? "Another thought." : "It was cool."));
       }
       await waitFor(() => expect(snapshot().document.studio.journalEntries[0]!.transcriptSegments).toHaveLength(3));
@@ -357,21 +368,21 @@ describe("Flow Living Studio through the real React boundary", () => {
   it("runs journal recording and long-form speech through one persistent fake voice session", async () => {
     const adapter = new FakeRecognitionAdapter();
     setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
     act(() => adapter.emitFinal("Let me talk for a while"));
     expect(await screen.findByTestId("journal-space")).toBeInTheDocument();
     await waitFor(() => expect(FakeMediaRecorder.instances).toHaveLength(1));
     expect(snapshot().past).toHaveLength(1);
     expect(snapshot().document.studio.journalEntries[0]).toMatchObject({ recordingState: "recording", audioAssetId: expect.any(String) });
 
-    await waitFor(() => expect(adapter.startCount).toBeGreaterThanOrEqual(2));
+    await waitFor(() => expect(adapter.startCount).toBeGreaterThanOrEqual(initialCycle + 1));
     act(() => adapter.emitFinal("The street was quiet after the rain"));
     await waitFor(() => expect(snapshot().document.studio.journalEntries[0]?.text).toContain("The street was quiet after the rain"));
-    await waitFor(() => expect(adapter.startCount).toBeGreaterThanOrEqual(3));
+    await waitFor(() => expect(adapter.startCount).toBeGreaterThanOrEqual(initialCycle + 2));
     act(() => adapter.emitFinal("Bookmark that"));
     await waitFor(() => expect(snapshot().document.studio.journalEntries[0]?.bookmarks).toHaveLength(1));
-    await waitFor(() => expect(adapter.startCount).toBeGreaterThanOrEqual(4));
+    await waitFor(() => expect(adapter.startCount).toBeGreaterThanOrEqual(initialCycle + 3));
     act(() => adapter.emitFinal("Stop the journal recording"));
     await waitFor(() => expect(snapshot().document.studio.journalEntries[0]).toMatchObject({ recordingState: "idle", recordingDurationMs: expect.any(Number) }));
     expect(snapshot().document.studio.mediaAssets[0]?.size).toBeGreaterThan(0);

@@ -4,6 +4,16 @@
 
 [Live demo ↗](https://miguelalmeida0.github.io/flow/) *(external — leaves GitHub)*
 
+## Hosted beta access
+
+On a hosted Flow deployment, open **Cloud features**, read the disclosure and redeem a single-use invitation. This enables cloud access; a separate **Start voice** action starts microphone capture. **Stop voice**, hiding the tab, logout or session expiry ends capture. Start again explicitly when you return. Stopping voice also finishes an active microphone recording; its captured audio follows the normal local save process.
+
+Cloud requests send the command and limited context (recent commands/replies, referenced labels and lookup results) to OpenAI. Voice sends microphone audio to Deepgram and uses OpenAI for AI-generated spoken replies. Supported typed commands remain available when cloud services or microphone access are unavailable. Cloud mutations require review; an AI answer alone does not change the document.
+
+Calendar, journal and media storage belongs to this browser and address. The [previous Flow version](https://miguelalmeida0.github.io/flow/) retains its separate browser data. There is no cloud backup, import or cross-device sync. After logout/access expiry, request a replacement invitation for the same identity; quota does not reset. If saving fails, keep the tab open and choose **Retry save** or **Discard unsaved request**. A stale request must be reviewed against the current document.
+
+These instructions describe the hosted implementation; they do not certify a deployed provider connection or account settings.
+
 Flow is built around an active spoken loop rather than a command box. Spoken requests update structured application state, clarifications remain contextual, and the visual interface stays directly editable.
 
 <p align="center">

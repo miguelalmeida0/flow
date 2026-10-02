@@ -19,12 +19,22 @@ import { calendarReferenceScope } from "../../app/calendarCommandScope";
 import { BrowserPromptSpeech, PromptSpeechCoordinator, type PromptSpeechAdapter } from "../../features/voice/promptSpeech";
 import { beginRecordingUtterance, sampleRecordingUtterance, finishRecordingUtterance, discardRecordingUtterance } from "../../features/studio/journalRuntimeClock";
 import { getVoiceCompanionToken } from "../../kernel/voice/voiceCompanionClient";
+import { getRuntimeMode } from "../../app/runtimeMode";
+import { CloudVoiceConsent } from "../../features/voice/CloudVoiceConsent";
+import { useHostedAccess } from "../../features/voice/useHostedAccess";
+import { useOptionalStudioRuntime } from "../../features/studio/StudioRuntimeProvider";
 
 const VOICE_PERMISSION_MARKER = "flow.voice.permission-granted.v1";
 
 export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnership, promptSpeechAdapter }: { recognitionAdapter?: RecognitionAdapter; voiceLocale?: VoiceLocale; liveOwnership?: LiveOwnershipCoordinator; promptSpeechAdapter?: PromptSpeechAdapter }) {
+  const mode = getRuntimeMode();
+  const browserVoiceAllowed = mode === "local";
   const environment = useFlowEnvironment();
   const transition = useFlowTransition();
+  const access = useHostedAccess(mode === "hosted", environment.hostedVoice.stop);
+  const studio = useOptionalStudioRuntime();
+  const dockRef = useRef<HTMLElement>(null);
+  const hosted = mode === "hosted";
   const { setFlowLiveStatus } = environment;
   const [draft, setDraft] = useState("");
   const [editing, setEditing] = useState(false);
@@ -81,7 +91,7 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
       // `dispatch` directly, so it becomes a no-op rather than a second,
       // competing kernel call for the same physical utterance.
       const dispatchIfOwned = (value: string) => {
-        if (environment.voiceInputOwner === "kyutai-local") {
+        if (environment.voiceInputOwner !== "browser-fallback") {
           voiceDebug("wake.suppressedBrowserDispatch", { text: value, commandId });
           return;
         }
@@ -166,16 +176,20 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
     // repair C). Kyutai's own barge-in has no such special-casing: it
     // cancels TTS immediately and the next utterance goes through the same
     // production reply-handling any typed "confirm" already uses.
-    if (!promptText || !voice.active || environment.voiceInputOwner === "kyutai-local") return;
+    if (!promptText || !voice.active || environment.voiceInputOwner !== "browser-fallback") return;
     let current = true;
     setPromptIssue(undefined);
     void promptSpeech.speak(promptText, effectiveLocale).catch((error: unknown) => { if (current) setPromptIssue(error instanceof Error ? error.message : "Spoken prompts are unavailable. The question is visible."); });
     return () => { current = false; promptSpeech.cancel(); };
   }, [effectiveLocale, promptSpeech, promptText, environment.pending?.baseRevision, environment.feedback.speechKey, voice.active, environment.voiceInputOwner]);
   useEffect(() => () => promptSpeech.cancel(), [promptSpeech]);
-  useEffect(() => { setFlowLiveStatus(voice.status); }, [setFlowLiveStatus, voice.status]);
+  useEffect(() => { if (browserVoiceAllowed) setFlowLiveStatus(voice.status); }, [browserVoiceAllowed, setFlowLiveStatus, voice.status]);
   useEffect(() => {
     voiceDebug("dock.mount", { supported: voice.supported, entrance: entranceRef.current });
+    if (getRuntimeMode() !== "local") return;
+    // The reclaimer reloads an older document with this marker. Automatic
+    // acquisition here would immediately take voice back from the new owner.
+    if (new URLSearchParams(window.location.search).has("flow-live-yield")) return;
     // A paired local voice installation owns capture even during warm-up
     // and reconnect. Starting Chrome recognition here creates a competing
     // microphone and silently falls back to cloud STT on local failure.
@@ -193,21 +207,26 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voice.supported]);
   useEffect(() => {
-    if (voice.status === "listening") {
+    if (browserVoiceAllowed && voice.status === "listening") {
       try { window.localStorage.setItem(VOICE_PERMISSION_MARKER, "granted"); } catch { /* storage may be disabled */ }
     }
-  }, [voice.status]);
+  }, [browserVoiceAllowed, voice.status]);
+  const selectedActive = hosted ? environment.hostedVoice.active : browserVoiceAllowed && voice.active;
+  const selectedListening = hosted ? environment.hostedVoice.status === "active" : browserVoiceAllowed && voice.status === "listening";
+  const voiceMessage = hosted ? environment.hostedVoice.reason ?? (environment.hostedVoice.status === "connecting" ? "Connecting cloud voice…" : selectedListening ? "Cloud voice active" : "Voice stopped. Supported typed commands still work.") : browserVoiceAllowed ? voice.message : "Supported typed commands are available.";
+  const voiceLabel = hosted ? selectedActive ? "Stop voice" : access.authenticated ? "Start voice" : "Enable cloud features" : voice.active ? "Stop Flow Live" : "Start Flow Live";
+  const voiceDisabled = hosted ? access.busy || (access.authenticated && !access.session?.speechEnabled && !selectedActive) : !browserVoiceAllowed || !voice.supported;
   const retryable = ["permission-denied", "microphone-unavailable", "recognition-busy", "start-failed"].includes(voice.status);
   const dictating = environment.conversationContext.voiceMode === "journal-longform" || environment.conversationContext.voiceMode === "voice-note-longform";
-  const voiceNeedsSurface = Boolean(voice.issue) || ["moved", "permission-denied", "microphone-unavailable", "recognition-busy", "start-failed", "unavailable"].includes(voice.status);
-  const actionable = Boolean(environment.pending || environment.calendarPreview || transition || voiceNeedsSurface || settingsOpen)
+  const voiceNeedsSurface = hosted ? Boolean(environment.hostedVoice.reason && environment.hostedVoice.reason !== "Voice stopped.") : browserVoiceAllowed && (Boolean(voice.issue) || ["moved", "permission-denied", "microphone-unavailable", "recognition-busy", "start-failed", "unavailable"].includes(voice.status));
+  const actionable = Boolean(environment.pending || environment.calendarPreview || environment.confirmationAuthority || environment.hasUnsavedChanges || transition || voiceNeedsSurface || settingsOpen)
     || ["understanding", "clarification", "confirmation", "error"].includes(environment.feedback.phase);
   const requestComposer = useCallback((open: boolean) => environment.dispatchPresentation({ type: "command-surface", surface: "composer", open }), [environment]);
-  const { expanded, inputRef, stayOpen } = useCommandSurface(actionable, environment.feedback.phase, environment.lastTranscript, dictating || environment.voiceWorld.entrance === "wake-armed" || voice.status === "listening", !dictating || environment.feedback.title !== "Journal updated.", environment.commandPresentation.composerRequest, requestComposer);
+  const { expanded, inputRef, stayOpen } = useCommandSurface(actionable, environment.feedback.phase, environment.lastTranscript, dictating || browserVoiceAllowed && environment.voiceWorld.entrance === "wake-armed" || selectedListening, !dictating || environment.feedback.title !== "Journal updated.", environment.commandPresentation.composerRequest, requestComposer);
   // Acquisition/ownership failures are live facts; a prior completed command
   // must never cover them with "ready" or "listening resumes" feedback.
   const voiceFailure = voiceNeedsSurface && !environment.pending
-    && (Boolean(voice.issue) || /^Flow Live ready|^Tell Flow|^Ready|^Listening/i.test(environment.feedback.title) || environment.feedback.phase === "ready");
+    && (!hosted && Boolean(voice.issue) || /^Flow Live ready|^Tell Flow|^Ready|^Listening/i.test(environment.feedback.title) || environment.feedback.phase === "ready");
   const changeSettingsOpen = useCallback((open: boolean) => {
     setSettingsOpen(open);
     if (open) stayOpen();
@@ -227,6 +246,17 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
   }
 
   function toggleVoice() {
+    if (hosted) {
+      stayOpen();
+      if (selectedActive) environment.hostedVoice.stop();
+      else if (access.authenticated && access.session?.speechEnabled) environment.hostedVoice.start();
+      else {
+        const panel = dockRef.current?.querySelector<HTMLDetailsElement>("[data-hosted-access]");
+        if (panel) { panel.open = true; panel.querySelector<HTMLInputElement>("input")?.focus({preventScroll:true}); }
+      }
+      return;
+    }
+    if (!browserVoiceAllowed) return;
     setSettingsOpen(false);
     stayOpen();
     if (!voice.active) {
@@ -242,16 +272,20 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
 
   return (
     <motion.aside
+      ref={dockRef}
       aria-label="Global Flow command"
       className="relative mx-auto w-full max-w-[630px]"
       data-command-expanded={expanded ? "true" : "false"}
       data-flow-region="command"
       data-last-transcript={environment.lastTranscript || undefined}
+      data-last-utterance-id={voice.lastUtteranceId}
       data-voice-energy-origin
       initial={expanded && !reducedMotion ? { opacity: 0, y: 12 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={reducedMotion ? { duration: 0.12 } : { type: "spring", stiffness: 280, damping: 32 }}
     >
+      {hosted && <CloudVoiceConsent access={access} voice={environment.hostedVoice} recording={Boolean(studio && ["requesting", "recording", "paused"].includes(studio.recorder.status))} />}
+      <div className="relative">
       {expanded ? <div className={`overflow-visible rounded-[28px] border bg-flow-elevated text-flow-ink ${environment.feedback.phase === "confirmation" ? "border-flow-orange/70" : "border-flow-border"}`}>
         <form className="flex min-h-[58px] items-center gap-2 px-2 sm:px-4" onSubmit={submit}>
           <span className="ml-1 grid size-9 shrink-0 place-items-center rounded-full text-[#4D91F5]"><Icon name="spark" size={18} /></span>
@@ -263,18 +297,26 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
             onFocus={() => stayOpen()}
             onKeyDown={() => stayOpen()}
             onPointerDown={() => stayOpen()}
-            placeholder={voice.status === "listening" ? "Listening…" : "Ask Flow or give a command…"}
+            placeholder={selectedListening ? "Listening…" : "Ask Flow or give a command…"}
             ref={inputRef}
             value={editing ? draft : heardInterim || draft}
           />
-          <button data-action-id="session.control" aria-label={voice.active ? "Stop Flow Live" : retryable ? "Retry Flow Live" : "Start Flow Live"} className={`grid size-11 shrink-0 place-items-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flow-blue ${voice.active ? "bg-flow-blue-soft text-flow-blue-strong" : "text-flow-ink hover:bg-flow-neutral-soft"}`} data-flow-action="Flow Live session" disabled={!voice.supported} onClick={toggleVoice} title={retryable ? "Retry microphone access" : undefined} type="button"><Icon name={voice.active ? "pause" : "mic"} size={22} /></button>
+          <button data-action-id={hosted ? "cloud.voice" : "session.control"} aria-label={!hosted && retryable ? "Retry Flow Live" : voiceLabel} className={`grid size-11 shrink-0 place-items-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flow-blue ${selectedActive ? "bg-flow-blue-soft text-flow-blue-strong" : "text-flow-ink hover:bg-flow-neutral-soft"}`} data-flow-action="Flow Live session" disabled={voiceDisabled} onClick={toggleVoice} title={retryable ? "Retry microphone access" : undefined} type="button"><Icon name={selectedActive ? "pause" : "mic"} size={22} /></button>
         </form>
-        {(environment.feedback.phase !== "ready" || voice.status !== "sleeping" || environment.pending) && (
+        {(environment.feedback.phase !== "ready" || selectedActive || voiceNeedsSurface || environment.pending || environment.confirmationAuthority || environment.hasUnsavedChanges) && (
           <div aria-live="polite" className="flex min-h-8 flex-wrap items-center justify-center gap-x-3 border-t border-flow-border px-4 py-2 text-center text-[11px] text-flow-secondary" data-feedback-phase={environment.feedback.phase} data-feedback-transcript={environment.feedback.transcript} data-pending-change={Boolean(environment.pending)} data-feedback-transaction-id={environment.feedback.phase === "completed" ? environment.snapshot.lastTransaction?.id : undefined} data-flow-feedback>
             <span className="text-flow-ink">{voiceFailure ? "Voice needs attention" : environment.feedback.title}</span>
-            <span className="break-words">{voiceFailure ? voice.issue ?? voice.message : environment.feedback.detail ?? voice.message}</span>
+            <span className="break-words">{voiceFailure ? hosted ? voiceMessage : voice.issue ?? voiceMessage : environment.feedback.detail ?? voiceMessage}</span>
+            {!environment.pending && environment.confirmationAuthority && environment.feedback.phase === "confirmation" && <>
+              <button data-action-id="pending.confirm" className="min-h-11 rounded-md px-2 font-semibold underline focus-visible:ring-2 focus-visible:ring-flow-blue" onClick={()=>{ environment.confirm(); stayOpen(true); }} type="button">Confirm</button>
+              <button data-action-id="pending.cancel" className="min-h-11 rounded-md px-2 underline focus-visible:ring-2 focus-visible:ring-flow-blue" onClick={()=>{ environment.cancel(); stayOpen(true); }} type="button">Cancel</button>
+            </>}
+            {environment.hasUnsavedChanges && <div className="w-full" role="status"><p>Your request has not been saved. Keep this tab open until you retry or discard it.</p>
+              <button data-action-id="storage.retry-save" className="min-h-11 rounded-md px-2 font-semibold underline focus-visible:ring-2 focus-visible:ring-flow-blue" onClick={()=>{ void environment.retrySave().then(()=>stayOpen(true)); }} type="button">Retry save</button>
+              <button data-action-id="storage.discard-unsaved" className="min-h-11 rounded-md px-2 underline focus-visible:ring-2 focus-visible:ring-flow-blue" onClick={()=>{ environment.discardUnsavedChanges(); stayOpen(true); }} type="button">Discard unsaved request</button>
+            </div>}
             {promptIssue && <span className="text-flow-error" role="status">{promptIssue}</span>}
-            {voiceNeedsSurface && !voiceFailure && !environment.pending && <span className="line-clamp-2 text-flow-error">{voice.message}</span>}
+            {voiceNeedsSurface && !voiceFailure && !environment.pending && <span className="line-clamp-2 text-flow-error">{voiceMessage}</span>}
             {environment.feedback.transcript && <span className="max-w-full break-words text-[#52606D]" title={environment.feedback.transcript}>“{environment.feedback.transcript}”</span>}
             {(environment.pending?.capture || environment.pending?.media || environment.pending?.clarification) && <button data-action-id="pending.cancel" className="min-h-11 rounded-md font-semibold text-flow-secondary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-flow-blue" onClick={environment.cancel} type="button">Cancel</button>}
             {pendingChoices?.slice(0, 3).map((choice) => <button data-action-id="pending.clarification-choice" className="min-h-11 rounded-md font-semibold text-[#245D9C] underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#245D9C] focus-visible:ring-offset-2 focus-visible:ring-offset-flow-elevated" data-flow-action="Choose clarification" key={choice.id} onClick={() => environment.choosePending(choice.id)} type="button">{choice.label}</button>)}
@@ -282,11 +324,12 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
           </div>
         )}
       </div> : <div className="flex w-full max-w-full items-center gap-1 rounded-[28px] border border-[#D8CEC2] bg-flow-elevated p-1.5 pl-[58px] shadow-[0_16px_44px_rgba(35,43,55,0.08)]">
-        <button data-action-id="command.open-composer" aria-label="Open Flow command" className="inline-flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-full px-3 text-sm text-[#52606D] hover:bg-flow-neutral-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flow-blue" data-flow-action="Open Flow command" onClick={() => requestComposer(true)} type="button"><Icon name="spark" size={18} /><span className="min-w-0 max-w-[440px] break-words text-left">{heardInterim || (environment.lastTranscript && environment.feedback.phase === "completed" ? <><span className="block text-flow-ink">{environment.feedback.title}</span><span className="block text-xs">{environment.feedback.detail}</span><span className="block text-xs">“{environment.lastTranscript}”</span></> : dictating ? "Journal recording · listening" : environment.voiceWorld.entrance === "wake-armed" ? "Keyboard alternative" : voice.active ? "Listening" : "Ask Flow")}</span></button>
-        <button data-action-id="session.control" aria-label={voice.active ? "Stop Flow Live" : retryable ? "Retry Flow Live" : "Start Flow Live"} className={`grid size-11 shrink-0 place-items-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flow-blue ${voice.active ? "bg-flow-blue-soft text-flow-blue-strong" : "text-flow-ink hover:bg-flow-neutral-soft"}`} data-flow-action="Flow Live session" disabled={!voice.supported} onClick={toggleVoice} type="button"><Icon name={voice.active ? "pause" : "mic"} size={22} /></button>
+        <button data-action-id="command.open-composer" aria-label="Open Flow command" className="inline-flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-full px-3 text-sm text-[#52606D] hover:bg-flow-neutral-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flow-blue" data-flow-action="Open Flow command" onClick={() => requestComposer(true)} type="button"><Icon name="spark" size={18} /><span className="min-w-0 max-w-[440px] break-words text-left">{heardInterim || (environment.lastTranscript && environment.feedback.phase === "completed" ? <><span className="block text-flow-ink">{environment.feedback.title}</span><span className="block text-xs">{environment.feedback.detail}</span><span className="block text-xs">“{environment.lastTranscript}”</span></> : dictating ? "Journal recording · listening" : environment.voiceWorld.entrance === "wake-armed" ? "Keyboard alternative" : selectedActive ? "Listening" : "Ask Flow")}</span></button>
+        <button data-action-id={hosted ? "cloud.voice" : "session.control"} aria-label={!hosted && retryable ? "Retry Flow Live" : voiceLabel} className={`grid size-11 shrink-0 place-items-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flow-blue ${selectedActive ? "bg-flow-blue-soft text-flow-blue-strong" : "text-flow-ink hover:bg-flow-neutral-soft"}`} data-flow-action="Flow Live session" disabled={voiceDisabled} onClick={toggleVoice} type="button"><Icon name={selectedActive ? "pause" : "mic"} size={22} /></button>
       </div>}
       <div className={expanded ? "absolute right-[62px] top-[9px] z-10" : "absolute left-1.5 top-1.5 z-10"}>
         <RewardPreferencesButton compact onOpenChange={changeSettingsOpen} open={settingsOpen} />
+      </div>
       </div>
     </motion.aside>
   );

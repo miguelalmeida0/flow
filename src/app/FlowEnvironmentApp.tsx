@@ -90,15 +90,15 @@ function EnvironmentProjection({ recognitionAdapter, voiceLocale, liveOwnership,
         style={homeCanvasColor ? { backgroundColor: homeCanvasColor, borderColor: homeCanvasBorder } : undefined}
       >
         <StudioSecondarySurface />
-        <div className="mx-auto grid w-full max-w-[1680px] grid-cols-1 items-center gap-2 lg:grid-cols-[1fr_minmax(360px,630px)_1fr]">
-          {route !== "home" && <div className="hidden min-w-0 lg:block lg:justify-self-start"><StudioRestingShelf /></div>}
-          <div className="min-w-0 w-full lg:col-start-2">
+        <div className="mx-auto grid w-full max-w-[1680px] grid-cols-1 items-center gap-4 min-[1578px]:grid-cols-[1fr_minmax(360px,630px)_1fr]">
+          {route !== "home" && <div className="hidden min-w-0 min-[1578px]:block min-[1578px]:justify-self-start"><StudioRestingShelf /></div>}
+          <div className="min-w-0 w-full min-[1578px]:col-start-2">
             <GlobalCommandDock promptSpeechAdapter={promptSpeechAdapter} liveOwnership={liveOwnership} recognitionAdapter={recognitionAdapter} voiceLocale={voiceLocale} />
           </div>
           {homeActive
-            ? <div className="min-w-0 w-full sm:w-auto sm:justify-self-end lg:col-start-3" data-flow-region="time"><TimeScopeControl /></div>
+            ? <div className="min-w-0 w-full sm:w-auto sm:justify-self-end min-[1578px]:col-start-3" data-flow-region="time"><TimeScopeControl /></div>
             : route !== "home"
-              ? <div className="min-w-0 sm:justify-self-end lg:hidden"><StudioRestingShelf /></div>
+              ? <div className="min-w-0 sm:justify-self-end min-[1578px]:hidden"><StudioRestingShelf /></div>
               : null}
         </div>
       </footer>

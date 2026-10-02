@@ -377,6 +377,7 @@ describe("ai.interpretTurn", () => {
     // on, sub-second with it off. Flow never reads `message.thinking` and
     // never displays chain-of-thought, so this must always be off.
     expect(body.think).toBe(false);
+    expect(body.keep_alive).toBe("5m");
     expect(body.messages).toEqual([
       { role: "system", content: "You are Flow's interpreter." },
       { role: "user", content: "Move dinner to eight." },
@@ -464,6 +465,17 @@ describe("ai.status", () => {
     const res = await post("/capability", { capability: "ai.status", args: { liveProbe: true } });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ available: false, model: ALLOWED_MODELS[0], defaultModel: ALLOWED_MODELS[0], defaultModelInstalled: true, liveProbeOk: false });
+  });
+
+  it("reports requested model-local load timings without exposing generated probe content", async () => {
+    fetchImpl = makeFakeFetch(async (url) => {
+      if (String(url).endsWith("/api/tags")) return { ok: true, json: async () => ({ models: [{ name: ALLOWED_MODELS[0] }] }) };
+      return { ok: true, json: async () => ({ message: { content: "probe content" }, total_duration: 4500000000, load_duration: 4100000000, eval_duration: 250000000 }) };
+    });
+    const res = await post("/capability", { capability: "ai.status", args: { liveProbe: true, measurements: true } });
+    const result = await res.json();
+    expect(result.liveProbePerformance).toEqual({ totalMs: 4500, loadMs: 4100, promptEvalMs: null, evalMs: 250 });
+    expect(JSON.stringify(result)).not.toContain("probe content");
   });
 
   it("does not run the live probe when the default model isn't even installed — nothing to probe", async () => {

@@ -38,9 +38,9 @@ for (const tuple of protect.rows) {
   declarations.set(`curated-${suffix}`, { text, line, target, intent: "calendar", semantic: { ...base, targetIds: [target.id], eventChanges: [{ id: target.id, patch: { protected: true } }], calendarActionTypes: ["protect"], actions: [{ type: "calendar.request", request: { actions: [{ type: "protect", selector }], constraints: flavor === "K" ? [{ type: "keep", selector }] : [] } }] } });
 }
 for (const tuple of defer.rows) {
-  const [suffix, line, text, title, spokenDate, destinationDate] = tuple as [string, number, string, string, string, string];
+  const [suffix, line, text, title, , destinationDate] = tuple as [string, number, string, string, string, string];
   const target = targetRecord(title), selector: EventSelector = { type: "title", query: title.toLowerCase() };
-  declarations.set(`curated-${suffix}`, { text, line, target, intent: "calendar", semantic: { ...base, targetIds: [target.id], datedEventChanges: [{ id: target.id, sourceDate: "2026-09-05", destinationDate, patch: {} }], calendarActionTypes: ["defer"], actions: [{ type: "calendar.request", request: { actions: [{ type: "defer", selector, date: spokenDate.toLowerCase() === "tomorrow" ? "tomorrow" : { dateKey: destinationDate } }], constraints: [] } }] } });
+  declarations.set(`curated-${suffix}`, { text, line, target, intent: "calendar", semantic: { ...base, targetIds: [target.id], datedEventChanges: [{ id: target.id, sourceDate: "2026-09-05", destinationDate, patch: {} }], calendarActionTypes: ["defer"], actions: [{ type: "calendar.request", request: { actions: [{ type: "defer", selector, date: { dateKey: destinationDate } }], constraints: [] } }] } });
 }
 for (const tuple of temporal.rows) {
   const [suffix, line, text, kind, dateKey, endDateKey] = tuple as [string, number, string, TemporalScope["kind"], string, string | null, string];

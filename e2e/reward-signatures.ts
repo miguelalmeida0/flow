@@ -33,7 +33,7 @@ export const signatures = [
   {
     id: "outcome-completion", path: "/outcomes", transcript: "Complete this outcome",
     setup: async (page: Page) => {
-      await committedCommand(page, "I need to draft a report");
+      await committedCommand(page, "Create an outcome called Draft a report");
       for (const step of ["Define the audience and outcome", "Draft the structure", "Review and deliver"]) await committedCommand(page, `Mark ${step} complete`);
     },
   },

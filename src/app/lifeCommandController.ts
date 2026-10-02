@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
+import { getRuntimeMode } from "./runtimeMode";
 import type { LifeAction } from "../domain/life-actions";
 import { createLifeLink, initialPlanSteps, uniqueLifeId } from "../domain/life-factories";
 import { selectNowCandidates, selectNowWindow, type NowQuery, type NowRecommendation } from "../domain/life-selectors";
@@ -513,6 +514,7 @@ export function createLifeCommandRunner(options: ControllerOptions) {
       return options.setFeedback({ phase: "completed", title: change?.summary ?? "No changes yet", detail: change ? `${change.actionTypes.join(" · ")} · ${change.at}` : "This is the starting life document.", transcript: text });
     }
     if (intent.type === "session") {
+      if (getRuntimeMode() === "hosted" && intent.mode !== "sleep") return options.setFeedback({ phase: "completed", title: "Choose Start voice", detail: "Open Cloud features to enable access, then choose Start voice. This command does not start the microphone.", transcript: text });
       window.dispatchEvent(new CustomEvent("flow-live-command", { detail: intent.mode }));
       return options.setFeedback({ phase: "completed", title: intent.mode === "sleep" ? "Flow Live sleeping" : "Flow Live ready", detail: intent.mode === "sleep" ? "The microphone session is off." : "Listening resumes after each final command.", transcript: text });
     }
@@ -781,6 +783,7 @@ export function createLifeCommandRunner(options: ControllerOptions) {
     }
 
     if (intent.type === "commitment-create") {
+      if (intent.unresolvedDeadline) return clarify("When is this promise due?", `Specify an exact deadline for “${intent.unresolvedDeadline}”. Nothing was created.`, text);
       const at = options.now().toISOString();
       const existing = document.people.find(({ name }) => name.toLowerCase() === intent.person.toLowerCase());
       const person: Person = existing ?? { id: uniqueLifeId(document, "person", intent.person), kind: "person", name: intent.person, createdAt: at, updatedAt: at };

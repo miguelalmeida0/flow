@@ -127,7 +127,9 @@
           "durationMinutes": 60,
           "destination": {
             "type": "dayPart",
-            "date": "tomorrow",
+            "date": {
+              "dateKey": "2026-09-09"
+            },
             "part": "morning"
           }
         }
@@ -157,7 +159,9 @@
           "durationMinutes": 30,
           "destination": {
             "type": "dayPart",
-            "date": "tomorrow",
+            "date": {
+              "dateKey": "2026-09-09"
+            },
             "part": "morning"
           }
         }
@@ -375,7 +379,9 @@
           "durationMinutes": 30,
           "destination": {
             "type": "dayPart",
-            "date": "tomorrow",
+            "date": {
+              "dateKey": "2026-09-09"
+            },
             "part": "afternoon"
           }
         }
@@ -467,7 +473,9 @@
             "type": "title",
             "query": "roadmap"
           },
-          "date": "tomorrow",
+          "date": {
+            "dateKey": "2026-09-09"
+          },
           "part": "morning"
         }
       ],
@@ -500,7 +508,9 @@
             "type": "all",
             "priority": "low"
           },
-          "date": "tomorrow"
+          "date": {
+            "dateKey": "2026-09-09"
+          }
         }
       ],
       "datedEventChanges": [
@@ -532,7 +542,9 @@
             "type": "all",
             "priority": "low"
           },
-          "date": "tomorrow"
+          "date": {
+            "dateKey": "2026-09-09"
+          }
         }
       ],
       "datedEventChanges": [
@@ -564,7 +576,9 @@
             "type": "title",
             "query": "email"
           },
-          "date": "tomorrow"
+          "date": {
+            "dateKey": "2026-09-09"
+          }
         }
       ],
       "datedEventChanges": [
@@ -634,7 +648,9 @@
               "query": "lunch"
             }
           },
-          "date": "tomorrow"
+          "date": {
+            "dateKey": "2026-09-09"
+          }
         }
       ],
       "datedEventChanges": [

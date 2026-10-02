@@ -1,5 +1,6 @@
 import type { PreflightAlternative, PreflightResult } from "./types";
 import type { PlanStep } from "./planner";
+import type { TurnAuthority } from "./turnAuthority";
 
 /**
  * A Proposal is Flow's way of saying "here's what I'd do" before doing it.
@@ -20,6 +21,8 @@ export interface Proposal {
   consequences: PreflightResult;
   status: ProposalStatus;
   createdAt: string;
+  authority?: TurnAuthority & { proposalId: string };
+  requiresMutationReview?: boolean;
 }
 
 let sequence = 0;

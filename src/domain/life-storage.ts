@@ -300,7 +300,9 @@ export function loadLifeSnapshot(dateKey: string): LifeSnapshot {
   return stored ? parseLifeSnapshot(stored, dateKey) ?? createLifeSnapshot(dateKey) : createLifeSnapshot(dateKey);
 }
 
-export function saveLifeSnapshot(snapshot: LifeSnapshot, expectedRevision?: number) {
+export type LifeSaveOutcome = { status: "saved" } | { status: "revision-conflict" } | { status: "storage-unavailable" };
+
+export function saveLifeSnapshotOutcome(snapshot: LifeSnapshot, expectedRevision?: number): LifeSaveOutcome {
   try {
     if (expectedRevision !== undefined) {
       const stored = localStorage.getItem(LIFE_STORAGE_KEY);
@@ -308,12 +310,16 @@ export function saveLifeSnapshot(snapshot: LifeSnapshot, expectedRevision?: numb
       // Malformed storage fails closed rather than allowing a stale tab to
       // replace it. Missing storage is the valid initial revision.
       const currentRevision = stored === null ? 0 : storedRevision;
-      if (currentRevision !== expectedRevision) return false;
+      if (currentRevision !== expectedRevision) return { status: "revision-conflict" };
     }
     const serialized = JSON.stringify(compactSnapshotForStorage(snapshot));
     localStorage.setItem(LIFE_STORAGE_KEY, serialized);
-    return true;
-  } catch { return false; }
+    return { status: "saved" };
+  } catch { return { status: "storage-unavailable" }; }
+}
+
+export function saveLifeSnapshot(snapshot: LifeSnapshot, expectedRevision?: number) {
+  return saveLifeSnapshotOutcome(snapshot, expectedRevision).status === "saved";
 }
 
 export function clearLifeStorage() {

@@ -4,6 +4,8 @@ export function installAudioInput() {
   window.voiceLabOutput = [];
   window.voiceLabInput = [];
   window.voiceLabSockets = [];
+  window.voiceLabEndedInputs = [];
+  let inputId = 0;
   window.WebSocket = class extends Socket {
     send(data) {
       if (data instanceof ArrayBuffer) window.voiceLabInput.push(Array.from(new Uint8Array(data)));
@@ -21,6 +23,10 @@ export function installAudioInput() {
   const native = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
   let context;
   let destination;
+  const identity = crypto.randomUUID();
+  window.voiceLabActiveInputs = 0;
+  window.voiceLabIdentity = () => ({ id: identity, sampleRate: context?.sampleRate, state: context?.state,
+    streamId: destination?.stream.id, tracks: destination?.stream.getTracks().map(track => ({ id: track.id, state: track.readyState })) });
   navigator.mediaDevices.getUserMedia = async (constraints) => {
     if (!constraints.audio) return native(constraints);
     context ??= new AudioContext({ sampleRate: 24000 });
@@ -29,7 +35,7 @@ export function installAudioInput() {
     // Each consumer owns its track; Journal recording must not stop STT.
     return destination.stream.clone();
   };
-  window.voiceLabPlay = async (bytes, gain = 1) => {
+  window.voiceLabPlay = async (bytes, gain = 1, requestedStartAt) => {
     if (!context) throw new Error('Production microphone has not opened');
     await context.resume();
     const buffer = await context.decodeAudioData(Uint8Array.from(bytes).buffer);
@@ -37,8 +43,13 @@ export function installAudioInput() {
     const volume = context.createGain();
     volume.gain.value = gain;
     source.buffer = buffer;
+    const id = ++inputId;
+    window.voiceLabActiveInputs++;
+    source.onended = () => { window.voiceLabActiveInputs--; window.voiceLabEndedInputs.push(id); source.disconnect(); volume.disconnect(); };
     source.connect(volume).connect(destination);
-    source.start();
-    return { at: performance.now(), durationMs: buffer.duration * 1000 };
+    const now = performance.now();
+    const waitMs = Math.max(0, (requestedStartAt ?? now) - now);
+    source.start(context.currentTime + waitMs / 1000);
+    return { id, at: now + waitMs, requestedAt: now, durationMs: buffer.duration * 1000 };
   };
 }

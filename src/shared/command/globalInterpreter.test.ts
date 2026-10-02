@@ -118,6 +118,7 @@ const corpus: CorpusRow[] = [
   ["Delete proposal promise to Maya", "home", { type: "commitment-delete", query: "proposal", person: "Maya" }],
   ["Confirm", "home", { type: "confirm" }],
   ["Cancel", "home", { type: "cancel" }],
+  ["Wait.", "home", { type: "cancel" }],
   ["Link Maya promise to Senegal plan", "home", { type: "commitment-link-plan", person: "Maya", planQuery: "Senegal" }],
   ["Move proposal deadline to Monday", "home", { type: "commitment-due", query: "proposal", dueAt: `${monday}T17:00:00.000Z` }],
   ["Reserve 30 minutes for the proposal promise to Maya Friday at ten", "home", { type: "commitment-schedule", person: "Maya", query: "proposal", dateKey: friday, minutes: 600, durationMinutes: 30 }],
@@ -255,6 +256,13 @@ const neverCaptureCorpus = [
 const neverCalendarJournalCorpus = ["Start a new note", "Create a note", "Rename this entry", "Delete this entry"];
 
 describe("strict global router safety", () => {
+  it.each(["Open next, Thursday.", "Open next. Thursday.", "Show last... Monday", "Go to this; Saturday"])("keeps a paused temporal destination intact: %s", (utterance) => {
+    const context = { ...contexts.home, nowMs: Date.parse("2026-09-20T12:00:00+02:00") };
+    const uninterrupted = utterance.replace(/([a-z])[,.;:]+\s+/gi, "$1 ");
+    const expected = interpretGlobalCommand(uninterrupted, context, "2026-09-20");
+    expect(expected.type).toBe("temporal");
+    expect(interpretGlobalCommand(utterance, context, "2026-09-20")).toEqual(expected);
+  });
   it.each(navigationCorpus)("routes $utterance without capture", ({ utterance, route }) => {
     expect(interpretGlobalCommand(utterance, contexts.inbox, dateKey)).toEqual({ type: "navigate", route });
   });

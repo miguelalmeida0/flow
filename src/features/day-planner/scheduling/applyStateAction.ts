@@ -4,7 +4,8 @@ import { formatTime } from "../time";
 import type { ChangeSet, EngineFailure } from "./engineTypes";
 import { mergeEvents, splitEvent, updateEvents } from "./eventTransforms";
 import { removeLinkedRooms } from "./linkedBreathingRooms";
-import { deferEvent, uniqueId } from "./schedulePlacement";
+import { deferEvent, placeToday, uniqueId } from "./schedulePlacement";
+import { dayPartStart } from "../interpretation/temporal";
 
 type StateAction = Extract<CalendarAction, { type: "protect" | "unprotect" | "update" | "complete" | "reopen" | "split" | "merge" | "defer" | "delete" }>;
 
@@ -88,6 +89,19 @@ export function applyStateAction(
   }
   if (action.type === "defer") {
     for (const event of targets) {
+      if (action.date === "today" || typeof action.date === "object" && action.date.dateKey === plan.dateKey) {
+        // Civil tomorrow may already be the visible day. Keep a satisfied
+        // day/part request unchanged; real rescheduling uses the same exact
+        // collision checks and day-part placement as an ordinary move.
+        const alreadyInPart = event.dateKey === plan.dateKey && (!action.part
+          || event.start >= dayPartStart(action.part) && event.end <= (action.part === "morning" ? 12 * 60 : 17 * 60));
+        const destination = action.atMinutes !== undefined ? { type: "absolute" as const, minutes: action.atMinutes }
+          : action.part && !alreadyInPart ? { type: "dayPart" as const, date: { dateKey: plan.dateKey }, part: action.part }
+            : { type: "absolute" as const, minutes: event.start };
+        const failure = placeToday(plan, event, destination, changes, request, undefined, destination.type === "absolute");
+        if (failure) return failure;
+        continue;
+      }
       const error = deferEvent(plan, event, action.date, action.part, changes, action.atMinutes);
       if (error) return { status: "conflict", title: "No safe deferred slot", detail: `${error} Nothing changed.`, options: ["Choose another day"] };
     }
@@ -104,4 +118,3 @@ export function applyStateAction(
   }
   return null;
 }
-

@@ -39,7 +39,7 @@ export function matchSystem(transcript: string): SystemMatch | null {
   if (normalized === "pause") return { type: "session", mode: "sleep" };
   if (/^(?:flow|hey flow|start flow live|flow live|start listening|resume listening|wake up flow|turn on flow live)$/.test(normalized)) return { type: "session", mode: "start" };
   if (/^(?:confirm|confirm removal|confirm deletion|yes|yes please|yes do it|do it|apply|proceed|go ahead|move anyway)$/.test(normalized)) return { type: "confirm" };
-  if (/^(?:cancel|never mind|nevermind|cancel that|dismiss|no|no thanks|do not do that|keep (?:the )?event)$/.test(normalized)) return { type: "cancel" };
+  if (/^(?:cancel|never mind|nevermind|cancel that|wait|dismiss|no|no thanks|do not do that|keep (?:the )?event)$/.test(normalized)) return { type: "cancel" };
   if (/^(?:capture mode|start capture mode|capture the next thing)$/.test(normalized)) return { type: "capture-mode" };
   if (/^(?:help|what can i say|show commands|how does this work)$/.test(normalized)) return { type: "help" };
   return null;

@@ -42,6 +42,12 @@ describe("canonical UI capability inventory", () => {
   });
   it("requires a voice route for every product capability, including native continuations", () => {
     expect(uiCapabilities.filter(({ voiceSupported, category }) => !voiceSupported && (!category || category === "product-action")).map(({ actionId, gap }) => ({ actionId, gap }))).toEqual([]);
+    // Privacy/access controls require explicit consent or credentials before voice exists.
+    // They remain inventoried and require honest evidence, without a fabricated voice route.
+    for (const capability of uiCapabilities.filter(({ category }) => category === "privacy-access")) {
+      expect(capability.actionId).toMatch(/^cloud\./);
+      expect(capability.requiredContext).toContain("explicit user gesture");
+    }
     // Read-only output and developer tooling stay in the denominator with an
     // explicit reason. They must never be disguised as verified voice actions.
     for (const capability of uiCapabilities.filter(({ category }) => category && category !== "product-action")) {
@@ -49,6 +55,9 @@ describe("canonical UI capability inventory", () => {
     }
   });
   it("requires verified three-mode evidence, not an alias or source-inspection flag", () => {
-    expect(uiCapabilities.filter(({ validation }) => validation !== "verified-three-mode").map(({ actionId }) => actionId)).toEqual([]);
+    // Observations and developer controls have no product voice route. Keep
+    // them inventoried without misrepresenting them as verified voice actions.
+    const actions = uiCapabilities.filter(({ category }) => !category || category === "product-action" || category === "privacy-access");
+    expect(actions.filter(({ validation, category }) => validation !== (category === "privacy-access" ? "verified-access" : "verified-three-mode")).map(({ actionId }) => actionId)).toEqual([]);
   });
 });

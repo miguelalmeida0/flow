@@ -20,7 +20,7 @@ export const literalCreationRegressions: LanguageCase[] = rows.map((row, index) 
   expected: { intent: "calendar", resolution: "execute", route: "calendar" },
   semantic: {
     historyDelta: 1, feedbackPhase: "completed", noPending: true,
-    intent: { type: "calendar", request: { transcript: row.utterance, actions: [{ type: "create", title: row.title, durationMinutes: 30, destination: { type: "absolute", minutes: row.start, ...(row.date === "2026-09-09" ? { date: "tomorrow" as const } : {}) } }] } },
+    intent: { type: "calendar", request: { transcript: row.utterance, actions: [{ type: "create", title: row.title, durationMinutes: 30, destination: { type: "absolute", minutes: row.start, ...(row.date === "2026-09-09" ? { date: { dateKey: row.date } } : {}) } }] } },
     calendarActionTypes: ["create"], actions: [{ type: "calendar.request", selectedId: "E1" }],
     calendarInsertions: [{ id: row.id, title: row.title, dateKey: row.date, start: row.start, end: row.start + 30, kind: "flexible", priority: "medium", color: "neutral", labels: [], importance: "normal", mobility: "light", protected: false, status: "planned", bufferBeforeMinutes: 0, bufferAfterMinutes: 0 }],
   },

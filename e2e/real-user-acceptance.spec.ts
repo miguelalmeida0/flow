@@ -197,6 +197,7 @@ test("06 native recording survives live command interruption, route return, book
 test("07 prose identity distinguishes duplicate delivery from intentional repeated speech", async ({ page }) => {
   await startAcceptance(page, "/journal");
   await finalSpeech(page, "Let me talk for a while");
+  await expect(page.getByRole("button", { name: "Pause recording", exact: true })).toBeVisible();
   await finalSpeech(page, "It was cool.", true);
   await expect.poll(async () => (await lifeSnapshot(page)).document.studio.journalEntries[0]!.transcriptSegments.length).toBe(1);
   await finalSpeech(page, "It was cool.");
@@ -268,7 +269,9 @@ test("11 secondary Atmosphere and voice are reserved outside the editable worksp
     expect(sample.overlaps).toEqual([]); expect(sample.rectangles).toHaveLength(2);
     expect(sample.rectangles.find(({ name }) => name === "dock")!.height).toBeLessThan(height * 0.3);
     geometry.push(sample);
-    const controls = await measureRegions(page, { editor: "textarea[aria-label='Journal text']", actions: "[data-page-actions]", secondary: "[data-secondary-surface='atmosphere']", voice: "[aria-label='Global Flow command']" });
+    const readControls = () => measureRegions(page, { editor: "textarea[aria-label='Journal text']", actions: "[data-page-actions]", secondary: "[data-secondary-surface='atmosphere']", voice: "[aria-label='Global Flow command']" });
+    await expect.poll(async () => (await readControls()).rectangles.length).toBe(4);
+    const controls = await readControls();
     expect(controls.rectangles).toHaveLength(4); expect(controls.overlaps).toEqual([]);
     geometry.push(controls);
     await page.getByRole("textbox", { name: "Journal text" }).fill("The editor remains reachable with the room playing.");

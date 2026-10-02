@@ -1,4 +1,5 @@
 import { mkdirSync, writeFileSync } from "node:fs";
+import { env } from "node:process";
 import { afterAll, describe, expect, it } from "vitest";
 import { createLifeCommandRunner, type ControllerOptions } from "../../app/lifeCommandController";
 import type { CommandFeedback, PendingLifeChange } from "../../app/environment-types";
@@ -31,9 +32,12 @@ import { calendarDialogueFixture } from "./calendarDialogueFixture";
 import { literalCreationRegressions } from "./literalCreationRegressions";
 import { initialCommitmentView, type CommitmentViewState } from "../people/commitmentView";
 import { temporalScopeTransition } from "../../domain/temporalScopeTransition";
+import { declaredLanguageFixture } from "./languageCaseFixture";
+import { createOutcomeLedger } from "./productionOutcomeLedger";
 
 const now = new Date("2026-09-05T12:00:00.000Z");
-const evidencePath = "artifacts/voice-intelligence/production-pipeline-report.json";
+const evidenceDirectory = env.FLOW_CORPUS_EVIDENCE_DIR ?? "artifacts/voice-intelligence";
+const evidencePath = `${evidenceDirectory}/production-pipeline-report.json`;
 const pristineEvaluationSnapshot = createFreshLifeSnapshot("2026-09-05");
 
 function stable(value: unknown) {
@@ -56,22 +60,7 @@ function selectorQuery(selector: EventSelector): string | undefined {
 function snapshotForCase(row?: LanguageCase): LifeSnapshot {
   if (!row) return pristineEvaluationSnapshot;
   if (row.fixtureId) {
-    const snapshot = acceptanceFixture(row.fixtureId).snapshot;
-    if (row.fixtureSpec?.collections) Object.assign(snapshot.document, structuredClone(row.fixtureSpec.collections));
-    const target = row.fixtureSpec?.calendarTarget;
-    if (target) {
-      const plan = snapshot.document.calendars[target.dateKey];
-      if (!plan || Object.values(snapshot.document.calendars).some((day) => day.events.some(({ id }) => id === target.id))) throw new Error(`Invalid independent target fixture: ${row.id}`);
-      plan.events.push(structuredClone(target)); plan.events.sort((a, b) => a.start - b.start || a.id.localeCompare(b.id));
-      snapshot.document.calendar = structuredClone(snapshot.document.calendars[snapshot.document.calendar.dateKey]!);
-    }
-    const preset = row.fixtureSpec?.playingPreset;
-    if (preset) {
-      const studio = snapshot.document.studio;
-      if (!studio.atmospherePresets.some(({ id }) => id === preset.id)) studio.atmospherePresets.push(structuredClone(preset));
-      studio.activeAtmosphere = { presetId: preset.id, playing: true, muted: false, masterVolume: preset.masterVolume, layers: structuredClone(preset.layers) };
-    }
-    return snapshot;
+    return declaredLanguageFixture(row);
   }
   const needsFixture = row.context.route === "journal"
     || row.context.topic === "journal"
@@ -568,11 +557,24 @@ function executeCase(row: LanguageCase, subject = evaluator(row.context, row), s
     stateChanged,
     feedback: result.feedback.phase,
     latencyMs,
-    ...(row.fixtureId ? { fixtureId: row.fixtureId, provenance: row.provenance, semanticExpectation: row.semantic, selectedSemanticIntent: selectedIntent, plannedSemanticActions: trace.actions } : {}),
+    ...(row.semantic ? { semanticExpectation: row.semantic } : {}),
+    ...(row.fixtureId ? { fixtureId: row.fixtureId, provenance: row.provenance, selectedSemanticIntent: selectedIntent, plannedSemanticActions: trace.actions } : {}),
   };
 }
 
 describe("production voice-intelligence planner and transaction evaluator", () => {
+  it.each(["before breakfast on Friday", "after Friday", "by Friday evening"])("clarifies unsupported commitment deadline %s before any mutation", (deadline) => {
+    for (const source of ["type", "voice"] as const) {
+      const fixture = acceptanceFixture("empty-home"), before = structuredClone(fixture.snapshot);
+      const subject = evaluator(fixture.context, undefined, fixture.snapshot);
+      const result = subject.run(`I promised Maya I would send the proposal ${deadline}`, source);
+      expect(result.feedback.phase).toBe("clarification");
+      expect(result.snapshot).toEqual(before);
+      expect(result.context.pendingIntent).toBeUndefined();
+      expect(subject.commitCount()).toBe(0);
+      expect(window.__FLOW_COMMAND_TRACE__?.actions).toEqual([]);
+    }
+  });
   it("projects an independently named calendar day without business history", () => {
     const fixture = acceptanceFixture("calendar-reference");
     fixture.snapshot.past = [{ document: structuredClone(fixture.snapshot.document) }];
@@ -779,17 +781,8 @@ describe("production voice-intelligence planner and transaction evaluator", () =
     executeCase(row);
   });
   const directRows = [...languageInventory.curated, ...languageInventory.generated, ...languageInventory.negatives];
-  const productionEvidence: ProductionCaseEvidence[] = [];
-  const serializedProductionEvidence: string[] = [];
-  const recordProductionEvidence = (rows: ProductionCaseEvidence | ProductionCaseEvidence[]) => {
-    for (const row of Array.isArray(rows) ? rows : [rows]) {
-      productionEvidence.push(row);
-      // Serialize beside the partition that produced the row. The final
-      // persistence test remains a cheap aggregate/write step even on a
-      // contended clean-container host, while retaining every full trace.
-      serializedProductionEvidence.push(JSON.stringify(row));
-    }
-  };
+  const manifest = [...directRows.map(row => row.id), ...languageInventory.dialogues.flatMap(dialogue => dialogue.turns.map(turn => turn.id))];
+  const ledger = createOutcomeLedger<ProductionCaseEvidence>(manifest);
   it("executes semantic resolution, entity planning, atomic transactions, history, and no-mutation failures", () => {
     const subject = evaluator();
     const original = stable(subject.snapshot().document);
@@ -870,7 +863,7 @@ describe("production voice-intelligence planner and transaction evaluator", () =
         commitments: subject.snapshot().document.commitments.length,
       },
     };
-    mkdirSync("artifacts/voice-intelligence", { recursive: true });
+    mkdirSync(evidenceDirectory, { recursive: true });
     writeFileSync(evidencePath, `${JSON.stringify(report, null, 2)}\n`);
   });
 
@@ -882,11 +875,8 @@ describe("production voice-intelligence planner and transaction evaluator", () =
     const rows = directRows.slice(start, start + partitionSize);
     for (let batchStart = 0; batchStart < rows.length; batchStart += 100) {
       for (const row of rows.slice(batchStart, batchStart + 100)) {
-        try {
-          recordProductionEvidence(executeCase(row));
-        } catch (error) {
-          failures.push(`${row.id}: ${error instanceof Error ? error.message : String(error)}`);
-        }
+        const outcome = ledger.run(row.id, () => executeCase(row));
+        if (outcome.status === "failed") failures.push(`${row.id}: ${outcome.reason}`);
       }
       await new Promise<void>((resolve) => setTimeout(resolve, 0));
     }
@@ -897,17 +887,28 @@ describe("production voice-intelligence planner and transaction evaluator", () =
     const partitionSize = Math.ceil(languageInventory.dialogues.length / 2);
     const start = partition * partitionSize;
     const dialogues = languageInventory.dialogues.slice(start, start + partitionSize);
+    const failures: string[] = [];
     for (let batchStart = 0; batchStart < dialogues.length; batchStart += 25) {
-      recordProductionEvidence(dialogues.slice(batchStart, batchStart + 25).flatMap((dialogue) => {
-        const subject = evaluator(dialogue.initialContext, undefined, dialogue.fixtureId === "calendar-next-day" ? calendarDialogueFixture() : undefined);
-        return dialogue.turns.map((turn) => executeCase(turn, subject));
-      }));
+      for (const dialogue of dialogues.slice(batchStart, batchStart + 25)) {
+        let subject: ReturnType<typeof evaluator> | undefined;
+        let blockedBy: string | undefined;
+        for (const turn of dialogue.turns) {
+          if (blockedBy) { ledger.skip(turn.id, `dependency:${blockedBy}`); continue; }
+          const outcome = ledger.run(turn.id, () => {
+            subject ??= evaluator(dialogue.initialContext, undefined, dialogue.fixtureId === "calendar-next-day" ? calendarDialogueFixture() : undefined);
+            return executeCase(turn, subject);
+          });
+          if (outcome.status === "failed") { blockedBy = turn.id; failures.push(`${turn.id}: ${outcome.reason}`); }
+        }
+      }
       await new Promise<void>((resolve) => setTimeout(resolve, 0));
     }
+    expect(failures, `dialogue partition ${partition} failures`).toEqual([]);
   }, 120_000);
 
-  it("persists strict per-case production outcomes and derives the release accuracy report from them", () => {
-    const evidence = productionEvidence;
+  function persistEvidence() {
+    const outcomes = ledger.outcomes();
+    const evidence = outcomes.flatMap(outcome => outcome.result ? [outcome.result] : []);
     const totals = {
       mutations: 0, clarifications: 0, confirmations: 0, passed: 0,
       executeExpected: 0, executeCompleted: 0, plannerErrors: 0,
@@ -919,7 +920,8 @@ describe("production voice-intelligence planner and transaction evaluator", () =
       if (row.feedback === "clarification") totals.clarifications += 1;
       if (row.feedback === "confirmation") totals.confirmations += 1;
       if (row.expectedResolution === "execute") {
-        totals.executeExpected += 1;
+        // Recognition is distinct from the exact expected execution outcome.
+        if (!row.semanticExpectation?.feedbackPhase || ["completed", "confirmation"].includes(row.semanticExpectation.feedbackPhase)) totals.executeExpected += 1;
         if (["completed", "confirmation"].includes(row.feedback)) totals.executeCompleted += 1;
         if (row.feedback === "error") totals.plannerErrors += 1;
       }
@@ -928,43 +930,41 @@ describe("production voice-intelligence planner and transaction evaluator", () =
       if (["unsupported", "clarification"].includes(row.selectedIntent) && row.stateChanged) totals.unresolvedMutations += 1;
       totals.latencyTotalMs += row.latencyMs;
       totals.maxLatencyMs = Math.max(totals.maxLatencyMs, row.latencyMs);
-      const didPass = row.expectedResolution === "execute"
-        ? ["completed", "confirmation"].includes(row.feedback) && (!row.expectedIntent || row.selectedIntent === row.expectedIntent)
-        : row.expectedResolution === "clarify"
-          ? row.feedback === "clarification" && !row.stateChanged && row.historyDelta === 0
-          : row.selectedIntent === "unsupported" && !row.stateChanged && row.historyDelta === 0;
-      if (didPass) totals.passed += 1;
+
     }
     const report = {
       generatedAt: new Date().toISOString(),
       evaluator: "resolveGlobalCommand → createLifeCommandRunner → domain planner/entity resolution → applyLifeTransaction → invariant validation → atomic history",
-      cases: evidence.length,
+      runId: env.FLOW_RELEASE_RUN_ID ?? null,
+      candidate: env.FLOW_RELEASE_CANDIDATE ?? null,
+      ...ledger.summary(),
+      manifest,
+      recognizedExecutable: evidence.filter(row => row.expectedResolution === "execute").length,
       directCases: directRows.length,
       dialogueTurns: languageInventory.dialogues.reduce((total, dialogue) => total + dialogue.turns.length, 0),
       stateMutations: totals.mutations,
       clarifications: totals.clarifications,
       confirmations: totals.confirmations,
-      passed: totals.passed,
-      failed: evidence.length - totals.passed,
-      accuracy: Number((totals.passed / evidence.length).toFixed(6)),
       executeExpected: totals.executeExpected,
       executeCompleted: totals.executeCompleted,
-      plannerErrors: totals.plannerErrors,
-      unsafePlannerErrors: totals.unsafePlannerErrors,
-      atomicityViolations: totals.atomicityViolations,
-      unresolvedMutations: totals.unresolvedMutations,
+      safetyMetricsScope: ledger.summary().safetyMetricsComplete ? "all declared outcomes" : "unknown: failed or unexecuted outcomes have no complete trace",
+      plannerErrors: ledger.summary().safetyMetricsComplete ? totals.plannerErrors : null,
+      unsafePlannerErrors: ledger.summary().safetyMetricsComplete ? totals.unsafePlannerErrors : null,
+      atomicityViolations: ledger.summary().safetyMetricsComplete ? totals.atomicityViolations : null,
+      unresolvedMutations: ledger.summary().safetyMetricsComplete ? totals.unresolvedMutations : null,
       maxLatencyMs: totals.maxLatencyMs,
-      averageLatencyMs: Number((totals.latencyTotalMs / evidence.length).toFixed(3)),
+      averageLatencyMs: evidence.length ? Number((totals.latencyTotalMs / evidence.length).toFixed(3)) : null,
       physicalMicrophone: "NOT_PERFORMED — synthetic typed/final-transcript evaluation only",
       perCaseEvidence: "production-case-results.jsonl",
     };
-    mkdirSync("artifacts/voice-intelligence", { recursive: true });
-    writeFileSync("artifacts/voice-intelligence/production-case-results.jsonl", `${serializedProductionEvidence.join("\n")}\n`);
+    mkdirSync(evidenceDirectory, { recursive: true });
+    writeFileSync(`${evidenceDirectory}/production-case-results.jsonl`, `${outcomes.map(outcome => JSON.stringify(outcome)).join("\n")}\n`);
     writeFileSync(evidencePath, `${JSON.stringify(report, null, 2)}\n`);
-    writeFileSync("artifacts/voice-intelligence/accuracy-report.json", `${JSON.stringify({
+    writeFileSync(`${evidenceDirectory}/accuracy-report.json`, `${JSON.stringify({
       generatedAt: report.generatedAt,
       evaluator: report.evaluator,
-      totalEvaluated: report.cases,
+      totalEvaluated: report.passed + report.failed,
+      expected: report.expected, complete: report.complete, skipped: report.skipped, missing: report.missing,
       passed: report.passed,
       failed: report.failed,
       accuracy: report.accuracy,
@@ -973,15 +973,21 @@ describe("production voice-intelligence planner and transaction evaluator", () =
       note: "This release accuracy is derived from production planner/transaction outcomes. Resolver-only diagnostics are stored separately in resolver-accuracy-report.json.",
       physicalMicrophone: report.physicalMicrophone,
     }, null, 2)}\n`);
-    expect(evidence).toHaveLength(33_700);
+    return report;
+  }
+  // Filtered runs must replace prior reports with explicit incomplete evidence.
+  afterAll(() => { persistEvidence(); });
+  it("persists strict per-case production outcomes and derives the release accuracy report from them", () => {
+    const report = persistEvidence();
+    expect(report.cases).toBe(manifest.length);
+    expect(report.complete).toBe(true);
+    expect(report.skipped).toBe(0);
+    expect(report.missing).toBe(0);
     expect(report.failed).toBe(0);
     expect(report.executeCompleted).toBe(report.executeExpected);
     expect(report.atomicityViolations).toBe(0);
     expect(report.unresolvedMutations).toBe(0);
     expect(report.unsafePlannerErrors).toBe(0);
-    // The report and JSONL are now durable. Release the 33,500 full candidate
-    // traces before Vitest reuses this worker for resolver and React suites.
-    productionEvidence.length = 0;
-    serializedProductionEvidence.length = 0;
+
   });
 });

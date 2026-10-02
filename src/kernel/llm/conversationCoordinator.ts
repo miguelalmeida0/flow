@@ -1,3 +1,4 @@
+import { getRuntimeMode } from "../../app/runtimeMode";
 import type { KernelEnvironment } from "../kernel";
 import { submit } from "../kernel";
 import { phaseFor, type KernelOutcome, type KernelPhase } from "../kernel";
@@ -12,8 +13,12 @@ import { validateModelOutput, type ValidatedTurn } from "./validateModelOutput";
 import { assessComplexity } from "./complexityGate";
 import { needsVerification, runVerifier, parseVerifierOutput } from "./verifier";
 import { DEFAULT_CONVERSATION_BUDGET, type ConversationBudget, type ConversationDeclineReason, type ConversationSource, type LookupRecord } from "./types";
+import type { PlanStepInput } from "../planner";
+import type { TurnAuthority } from "../turnAuthority";
 
 export interface ConversationTurnResult extends KernelTurnResult {
+  /** Free-form hosted model prose is displayed as untrusted detail, never spoken as application status. */
+  hostedModelResponse?: boolean;
   sources: ConversationSource[];
   /** The first plan step's capability id, when this turn executed a model
    * plan — mirrors tryKernelBridge's own `recognized.steps[0]?.capabilityId`
@@ -57,6 +62,9 @@ export interface ConversationTurnInput {
    * `model` when unset — the homogeneous same-model cascade already
    * benchmarked. Never used by any production call site. */
   verifierModel?: string;
+  authority?: TurnAuthority;
+  /** Production owns freshness, locking, execution and durable publication. */
+  executePlan?: (steps: PlanStepInput[], context: { signal?: AbortSignal; authority?: TurnAuthority }) => Promise<KernelTurnResult> | KernelTurnResult;
 }
 
 /** Truthful, cause-specific decline text (see FINAL REPORT's physical-test
@@ -67,6 +75,7 @@ export interface ConversationTurnInput {
  * (see modelClient.ts's ModelCallOutcome) is the most specific signal
  * available at this boundary. */
 function modelUnavailableMessage(reason: Exclude<Awaited<ReturnType<typeof interpretTurn>>, { ok: true }>["reason"]): string {
+  if (getRuntimeMode() !== "local") return reason === "unauthorized" ? "Cloud access expired. Activate it again. Typed commands still work." : reason === "cancelled" ? "Cancelled." : "Cloud reasoning is unavailable. Typed commands still work.";
   switch (reason) {
     case "not-configured":
       return "Flow's desktop companion isn't paired yet — open Flow's companion settings and enter the token printed by `npm run companion:dev`.";
@@ -88,7 +97,7 @@ function declined(env: KernelEnvironment, session: ConversationSession, reason: 
 
 function answered(env: KernelEnvironment, session: ConversationSession, text: string, sources: ConversationSource[]): ConversationTurnResult {
   const outcome: KernelOutcome = { status: "executed", descriptions: [text] };
-  return { env, session, outcome, phase: "done" as KernelPhase, message: text, recognized: true, sources };
+  return { env, session, outcome, phase: "done" as KernelPhase, message: text, recognized: true, sources, ...(getRuntimeMode() === "hosted" ? { hostedModelResponse: true } : {}) };
 }
 
 /** Serializes a VALIDATED (already capability-checked) interpreter output
@@ -107,19 +116,27 @@ function serializeForVerifier(validated: ValidatedTurn): string {
   }
 }
 
+/** A timeout revokes the underlying fetch as well as ending the UI wait. */
+async function boundedModelCall(run: (signal: AbortSignal) => Promise<Awaited<ReturnType<typeof interpretTurn>>>, parent: AbortSignal | undefined, ms: number): Promise<Awaited<ReturnType<typeof interpretTurn>> | undefined> {
+  const controller = new AbortController();
+  let finish: () => void = () => {};
+  const cancelled = new Promise<undefined>(resolve => { finish = () => resolve(undefined); });
+  const abort = () => { controller.abort(); finish(); };
+  parent?.addEventListener("abort", abort, { once: true });
+  const timer = setTimeout(abort, Math.max(0, ms));
+  if (parent?.aborted) abort();
+  try { return await Promise.race([controller.signal.aborted ? cancelled : run(controller.signal), cancelled]); }
+  finally { clearTimeout(timer); parent?.removeEventListener("abort", abort); }
+}
+
 type VerifierRoundResult =
   | { kind: "accept" }
   | { kind: "clarify"; question: string }
   | { kind: "repaired"; validated: ValidatedTurn }
   | { kind: "cancelled" };
 
-/** Runs the "complex path" second pass (see verifier.ts's module doc) for
- * ONE already-validated interpreter result. Fails open to "accept" (use
- * the interpreter's own result unchanged) on any verifier-side problem —
- * a model-unavailable verifier, a timeout, or unparseable verifier JSON
- * never turns an already-good, already-validated interpretation into a
- * decline; the verifier can only make things MORE cautious (clarify) or
- * MORE correct (a re-validated repair), never less safe. */
+/** Hosted verification failure asks for clarification. Local mode retains its
+ * existing policy of using the capability-validated original interpretation. */
 async function runVerifierRound(
   input: ConversationTurnInput,
   capabilities: CapabilityDescription[],
@@ -128,19 +145,10 @@ async function runVerifierRound(
   budget: ConversationBudget,
   todayDateKey: string,
 ): Promise<VerifierRoundResult> {
-  let timedOut = false;
-  const timeout = new Promise<"timeout">((resolve) => {
-    setTimeout(() => {
-      timedOut = true;
-      resolve("timeout");
-    }, Math.min(remainingMs, budget.verifierRoundDeadlineMs));
-  });
-  const modelResult = await Promise.race([
-    runVerifier({ rawTranscript: input.rawTranscript, interpreterOutputJson: serializeForVerifier(validated), capabilities, signal: input.signal, fetchImpl: input.fetchImpl, model: input.verifierModel ?? input.model }),
-    timeout,
-  ]);
+  const modelResult = await boundedModelCall(signal => runVerifier({ rawTranscript: input.rawTranscript, interpreterOutputJson: serializeForVerifier(validated), capabilities, signal, fetchImpl: input.fetchImpl, model: input.verifierModel ?? input.model }), input.signal, Math.min(remainingMs, budget.verifierRoundDeadlineMs));
+  const failure: VerifierRoundResult = getRuntimeMode() === "hosted" ? { kind: "clarify", question: "Flow couldn't verify the complete request. Please ask for one clear change at a time. Nothing changed." } : { kind: "accept" };
   if (input.signal?.aborted) return { kind: "cancelled" };
-  if (timedOut || modelResult === "timeout" || !modelResult.ok) return { kind: "accept" };
+  if (!modelResult || !modelResult.ok) return failure;
 
   const parsed = parseVerifierOutput(modelResult.response.content);
   if (parsed.verdict === "clarify" && parsed.clarifyQuestion) return { kind: "clarify", question: parsed.clarifyQuestion };
@@ -155,12 +163,10 @@ async function runVerifierRound(
       todayDateKey,
     });
     // The repair is exactly as untrusted as a fresh interpreter round — an
-    // invalid repair (invented capability, invented entity, an exclusion
-    // it itself now violates) is rejected the same way and we fail open to
-    // the ORIGINAL (already-valid) interpretation rather than the broken repair.
+    // invalid repair follows the runtime-specific failure policy above.
     if (revalidated.kind !== "rejected") return { kind: "repaired", validated: revalidated };
   }
-  return { kind: "accept" };
+  return parsed.verdict === "accept" ? { kind: "accept" } : failure;
 }
 
 export async function runConversationTurn(input: ConversationTurnInput): Promise<ConversationTurnResult> {
@@ -196,18 +202,9 @@ export async function runConversationTurn(input: ConversationTurnInput): Promise
     // just the per-round one) so a slow round can't silently eat the whole
     // budget — a deadline decline is returned even if `interpretTurn` itself
     // never settles in time.
-    let timedOut = false;
-    const timeout = new Promise<never>((resolve) => {
-      setTimeout(() => {
-        timedOut = true;
-        resolve(undefined as never);
-      }, Math.min(remainingMs, budget.roundDeadlineMs));
-    });
-    const modelResult = await Promise.race([
-      interpretTurn({ system: systemPrompt, user: buildUserPrompt(promptCtx), schema: MODEL_TURN_OUTPUT_SCHEMA, signal: input.signal, fetchImpl: input.fetchImpl, model: input.model }),
-      timeout,
-    ]);
-    if (timedOut || modelResult === undefined) return declined(input.env, input.session, "deadline", "That took too long to work out — try asking again.");
+    const modelResult = await boundedModelCall(signal => interpretTurn({ system: systemPrompt, user: buildUserPrompt(promptCtx), schema: MODEL_TURN_OUTPUT_SCHEMA, hostedRequest: { version: 1, kind: "interpret", context: { ...promptCtx, recentTurns: promptCtx.recentTurns.slice(-4) } }, signal, fetchImpl: input.fetchImpl, model: input.model }), input.signal, Math.min(remainingMs, budget.roundDeadlineMs));
+    if (input.signal?.aborted) return declined(input.env, input.session, "cancelled", "Cancelled.");
+    if (!modelResult) return declined(input.env, input.session, "deadline", "That took too long to work out — try asking again.");
 
     if (!modelResult.ok) {
       const reason: ConversationDeclineReason = modelResult.reason === "cancelled" ? "cancelled" : "model-unavailable";
@@ -242,7 +239,11 @@ export async function runConversationTurn(input: ConversationTurnInput): Promise
           return result;
         }
         if (verifierResult.kind === "repaired") validated = verifierResult.validated;
-        // "accept": fall through with the original `validated` unchanged.
+        // "accept": fall through with the original validated unchanged.
+      } else if (getRuntimeMode() === "hosted") {
+        const question = "Flow couldn't verify the complete request in time. Please ask for one clear change. Nothing changed.";
+        const clarification = createClarification(question, "conversational", [], input.env.clock.now().toISOString());
+        return { env: input.env, session: input.session, outcome: { status: "clarify", clarification }, phase: "needs-clarification", message: question, recognized: true, sources: [], conversationalClarification: { question, choices: [] } };
       }
     }
 
@@ -316,7 +317,15 @@ export async function runConversationTurn(input: ConversationTurnInput): Promise
         if (validated.steps.length > budget.maxPlanSteps) {
           return declined(input.env, input.session, "plan-rejected", `That would take more than ${budget.maxPlanSteps} steps — try breaking it up.`);
         }
-        const step = submit(input.env, input.session, input.rawTranscript, validated.steps);
+        if (input.signal?.aborted) return declined(input.env, input.session, "cancelled", "Cancelled.");
+        if (getRuntimeMode() === "hosted" && validated.steps.length > 1 && validated.steps.some(step => input.env.registry.get(step.capabilityId)?.mutates)) {
+          return declined(input.env, input.session, "plan-rejected", "Please ask for each change separately so you can review it. Nothing changed.");
+        }
+        if (input.executePlan) {
+          const result = await input.executePlan(validated.steps, { signal: input.signal, authority: input.authority });
+          return { ...result, sources: [], primaryCapabilityId: validated.steps[0]?.capabilityId };
+        }
+        const step = submit({ ...input.env, requireMutationReview: getRuntimeMode() === "hosted" }, input.session, input.rawTranscript, validated.steps);
         return { env: step.env, session: step.session, outcome: step.outcome, phase: phaseFor(step.outcome), message: messageFor(step.outcome), recognized: true, sources: [], primaryCapabilityId: validated.steps[0]?.capabilityId };
       }
     }

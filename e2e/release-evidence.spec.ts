@@ -1,3 +1,5 @@
+import { APP_ORIGIN } from "./app-origin";
+import { awaitLocalListening } from "./local-voice-helpers";
 import { expect, test } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { eventById, expectValid, fresh, readEvents, submitSuccess } from "./tide-helpers";
@@ -17,7 +19,7 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
       failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown failure"}`);
     }
   });
@@ -92,7 +94,7 @@ test("routes a final browser-recognition transcript through the identical pipeli
     browserWindow.SpeechRecognition = ReleaseRecognition;
   });
   await fresh(page);
-  await page.getByRole("button", { name: "Start Flow Live" }).click();
+  await awaitLocalListening(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await expect.poll(() => page.evaluate(() => Boolean((window as Window & { __flowReleaseRecognition?: unknown }).__flowReleaseRecognition))).toBe(true);
   const configuration = await page.evaluate(() => {

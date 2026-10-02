@@ -56,7 +56,7 @@ function protectLeadingRename(source: string, today: string) {
     const direct = raw.match(/^(?:change|make)\s+(.+?)\s+(?:to\s+)?(.+)$/i);
     // Omitted delimiters are safe only with a bounded contextual target. For
     // named objects, `change TITLE to VALUE` supplies the explicit boundary.
-    const bounded = raw.match(/^(?:change|make)\s+(it|this|that|this one|that one)\s+(?:to\s+)?(.+)$/i)
+    const bounded = raw.match(/^(?:change|make)\s+(it|this(?: one)?|that(?: one)?)\s+(?:to\s+)?(.+)$/i)
       ?? raw.match(/^change\s+(.+?)\s+to\s+(.+)$/i);
     if (direct && bounded) {
       const valueBoundary = commandBoundary(bounded[2]!);

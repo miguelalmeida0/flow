@@ -94,7 +94,7 @@ const corpus: Array<[string, Expected]> = [
   ["Take me to Now.", { type: "navigate", route: "now" }],
   ["Go back.", { type: "navigate", route: "back" }],
   ["What fits right now?", { type: "query-now", excluded: [] }],
-  ["Something under 20 minutes.", { type: "query-now", excluded: [], maxMinutes: 20 }],
+  ["Something under 20 minutes.", { type: "query-now", excluded: [], maxMinutes: 19 }],
   ["Keep the time free.", { type: "keep-free" }],
   ["Capture renew passport before Senegal.", { type: "capture-create", title: "renew passport before Senegal" }],
   ["Remember to call the embassy.", { type: "capture-create", title: "call the embassy" }],

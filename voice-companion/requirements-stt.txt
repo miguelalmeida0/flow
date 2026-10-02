@@ -3,7 +3,9 @@
 moshi_mlx==0.2.12
 huggingface_hub
 numpy
-rustymimi
+# The safe fallback reconstructs this release per utterance. For verified
+# reusable codec state, build/install 0.4.1+flowreset2 per CODEC_LIFECYCLE.md.
+rustymimi==0.4.1
 sentencepiece
 sounddevice
 sphn

@@ -10,6 +10,8 @@ import { recordingDocument, recordingUpdate } from "./recordingTarget";
 import type { RecordingTarget } from "../../domain/friends-actions";
 import type { RecordingRequest } from "./recordingRequest";
 import { deliveredAssetIds, deliveryRetentionKnown } from "../friends/messaging";
+import { getRuntimeMode } from "../../app/runtimeMode";
+import { hostedMicrophoneBroker, type HostedMicrophoneLease } from "../../kernel/voice/hostedMicrophoneBroker";
 
 type RecorderStatus = "idle" | "requesting" | "recording" | "paused" | "saving" | "error";
 
@@ -48,6 +50,7 @@ export function StudioRuntimeProvider({ children }: { children: ReactNode }) {
   const [recorder, setRecorder] = useState<RecorderSnapshot>(emptyRecorder);
   const recorderRef = useRef<MediaRecorder | undefined>(undefined);
   const streamRef = useRef<MediaStream | undefined>(undefined);
+  const microphoneLeaseRef = useRef<HostedMicrophoneLease | undefined>(undefined);
   const chunksRef = useRef<Blob[]>([]);
   const startedAtRef = useRef(0);
   const elapsedBeforeResumeRef = useRef(0);
@@ -78,7 +81,7 @@ export function StudioRuntimeProvider({ children }: { children: ReactNode }) {
         nativeRecorder.onstop = () => { releaseAssetRef.current?.(); releaseAssetRef.current = undefined; };
         nativeRecorder.stop();
       } else { releaseAssetRef.current?.(); releaseAssetRef.current = undefined; }
-      streamRef.current?.getTracks().forEach((track) => track.stop());
+      releaseMicrophone();
       if (tickerRef.current !== undefined) window.clearInterval(tickerRef.current);
       setJournalRuntimePosition(undefined, 0);
     };
@@ -96,7 +99,7 @@ export function StudioRuntimeProvider({ children }: { children: ReactNode }) {
     completionRef.current?.reject(new Error("The recording reference was removed."));
     native.ondataavailable = null; native.onstop = null; native.onerror = null;
     if (native.state !== "inactive") native.stop();
-    streamRef.current?.getTracks().forEach((track) => track.stop());
+    releaseMicrophone();
     streamRef.current = undefined; recorderRef.current = undefined;
     if (tickerRef.current !== undefined) window.clearInterval(tickerRef.current);
     tickerRef.current = undefined; finalizerRef.current = undefined;
@@ -141,8 +144,14 @@ export function StudioRuntimeProvider({ children }: { children: ReactNode }) {
     }, 200);
   }
 
+  function releaseMicrophone() {
+    if (microphoneLeaseRef.current) { microphoneLeaseRef.current.release(); microphoneLeaseRef.current = undefined; }
+    else streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = undefined;
+  }
+
   function closeStream() {
-    streamRef.current?.getTracks().forEach((track) => track.stop());
+    releaseMicrophone();
     streamRef.current = undefined; recorderRef.current = undefined; stopTicker();
   }
 
@@ -172,13 +181,15 @@ export function StudioRuntimeProvider({ children }: { children: ReactNode }) {
     const acquisition = targetKind === "journal" ? environmentRef.current.prepareJournalAcquisition(entryId, origin, owns) : environmentRef.current.prepareVoiceNoteAcquisition(entryId, owns);
     setRecorder({ entryId, targetKind, status: "requesting", elapsedMs: 0 });
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true }, video: false });
+      const lease = getRuntimeMode() === "hosted" ? await hostedMicrophoneBroker.acquire(() => { void stopRecording().catch(() => undefined); }) : undefined;
+      const stream = lease?.stream ?? await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true }, video: false });
       if (!mountedRef.current || generation !== generationRef.current || !acquisition.isCurrent()) {
-        stream.getTracks().forEach((track) => track.stop());
+        if (lease) lease.release(); else stream.getTracks().forEach((track) => track.stop());
         if (mountedRef.current && generation === generationRef.current) setRecorder({ entryId, targetKind, status: "error", elapsedMs: 0, error: "The recording request changed before the microphone was ready. Start recording again when ready." });
         return;
       }
       streamRef.current = stream;
+      microphoneLeaseRef.current = lease;
       const mimeType = preferredRecordingType();
       const nativeRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
       const assetId = `${targetKind === "journal" ? "journal-audio" : "voice-note-audio"}-${entryId}-${Date.now().toString(36)}`;
@@ -412,3 +423,6 @@ export function useStudioRuntime() {
   if (!value) throw new Error("useStudioRuntime must be used inside StudioRuntimeProvider");
   return value;
 }
+
+/** Optional presentation access for isolated command surfaces without Studio. */
+export function useOptionalStudioRuntime() { return useContext(StudioRuntimeContext); }

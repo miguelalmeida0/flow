@@ -40,6 +40,11 @@ WebSocket connection (see `framing.py`).
 
 ## First-time setup
 
+The low-latency codec lifecycle uses the local reset repair documented in
+[CODEC_LIFECYCLE.md](../CODEC_LIFECYCLE.md). Install it after the standard STT
+dependencies below. Without that explicit capability, Flow safely reconstructs
+the original codec for each utterance, with higher setup latency.
+
 ```sh
 cd voice-companion
 uv venv .venv

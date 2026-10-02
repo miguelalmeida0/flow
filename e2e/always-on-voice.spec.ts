@@ -1,6 +1,8 @@
+import { APP_ORIGIN } from "./app-origin";
 import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fillCommandField } from "./tide-helpers";
+import { awaitLocalListening, awaitSpokenPrompt, wakeLocalVoice } from "./local-voice-helpers";
 
 const evidenceDir = "artifacts/always-on-voice-release";
 const consoleErrors: string[] = []; const pageErrors: string[] = []; const failedRequests: string[] = [];
@@ -15,7 +17,7 @@ function watchPage(page: Page) {
   page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
       failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
     }
   });
@@ -30,7 +32,11 @@ async function installFakeRecognition(page: Page) {
     window.addEventListener("pagehide", () => {
       if (localStorage.getItem(lockKey) !== tabId) return;
       const delay = (window as Window & { __flowPageHideNativeReleaseDelayMs?: number }).__flowPageHideNativeReleaseDelayMs ?? 0;
-      if (delay > 0) localStorage.setItem(`${lockKey}.release-at`, String(Date.now() + delay));
+      if (delay > 0) {
+        const deadline = String(Date.now() + delay);
+        localStorage.setItem(`${lockKey}.release-at`, deadline);
+        localStorage.setItem(`${lockKey}.release-deadline`, deadline);
+      }
       else localStorage.removeItem(lockKey);
     });
     class Recognition {
@@ -44,12 +50,14 @@ async function installFakeRecognition(page: Page) {
         (runtime.__flowVoiceStartTimes ??= []).push(Date.now());
         if (runtime.__flowUseGlobalNativeLock) {
           const releaseAt = Number(localStorage.getItem(`${lockKey}.release-at`) ?? 0);
+          if (releaseAt > Date.now()) throw new DOMException("Recognition is releasing", "InvalidStateError");
           if (releaseAt > 0 && Date.now() >= releaseAt) {
             localStorage.removeItem(lockKey); localStorage.removeItem(`${lockKey}.release-at`);
           }
           const owner = localStorage.getItem(lockKey);
           if (owner && owner !== tabId) throw new DOMException("Recognition is already active", "InvalidStateError");
           localStorage.setItem(lockKey, tabId);
+          localStorage.setItem(`${lockKey}.acquired-at`, String(Date.now()));
           this.ownsGlobalLock = true;
         }
         const failure = runtime.__flowVoiceFailures?.shift();
@@ -85,10 +93,12 @@ async function installFakeRecognition(page: Page) {
 
 async function fresh(page: Page) {
   const session = await page.context().newCDPSession(page);
-  try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
+  try { await session.send("Storage.clearDataForOrigin", { origin: APP_ORIGIN, storageTypes: "local_storage" }); }
   finally { await session.detach(); }
   await page.goto("/");
 }
+
+async function activate(page: Page) { await wakeLocalVoice(page, () => speak(page, "Flow")); }
 
 async function typeCommand(page: Page, transcript: string) {
   const input = await fillCommandField(page, transcript); await input.press("Enter");
@@ -96,6 +106,7 @@ async function typeCommand(page: Page, transcript: string) {
 }
 
 async function speak(page: Page, transcript: string, expectRestart = true) {
+  await awaitSpokenPrompt(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await expect.poll(() => page.evaluate(() => Boolean((window as Window & { __flowVoiceReady?: boolean }).__flowVoiceReady))).toBe(true);
   const starts = await page.evaluate(() => (window as Window & { __flowVoiceStarts?: number }).__flowVoiceStarts ?? 0);
@@ -144,13 +155,16 @@ test.afterAll(() => writeFileSync(`${evidenceDir}/browser-evidence.json`, `${JSO
 test("one persistent recognizer completes the exact Apple fourteen-command contract", async ({ page }) => {
   test.setTimeout(60_000);
   await page.setViewportSize({ width: 1440, height: 1000 }); await fresh(page);
-  await page.getByLabel("Start Flow Live").click();
+  await activate(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
 
   await speak(page, "Home");
   await speak(page, "Book dinner at Pizzeria Roma tomorrow at eight");
   await speak(page, "Make it red and important");
+  const beforeGoal = await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).past.length);
   await speak(page, "I need to renew my passport before Senegal");
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).past.length)).toBe(beforeGoal);
+  await speak(page, "Create an outcome called Renew my passport before Senegal");
   await speak(page, "The first step is check the requirements");
   await speak(page, "Schedule it Thursday after work");
   await speak(page, "I promised Maya the proposal by Friday");
@@ -214,7 +228,7 @@ test("one Flow Live activation executes the complete contextual cross-space jour
   // Honest fixture setup through the production command path: the passport
   // thought exists before the legacy contextual journey begins.
   await typeCommand(page, "Capture Renew passport before Senegal"); await typeCommand(page, "Home");
-  await page.getByLabel("Start Flow Live").click();
+  await activate(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
 
   await speak(page, "Calendar"); await expect(page.getByTestId("calendar-space")).toBeVisible();
@@ -252,7 +266,7 @@ test("one Flow Live activation executes the complete contextual cross-space jour
 
 test("navigation never becomes Inbox data and shell geometry clears the persistent header", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 }); await fresh(page);
-  await page.getByLabel("Start Flow Live").click();
+  await activate(page);
   for (const [command, testId] of [["Open the calendar", "calendar-space"], ["Open inbox", "inbox-space"], ["Open the plans container", "plans-space"], ["Show my calendar", "calendar-space"]] as const) {
     await speak(page, command); await expect(page.getByTestId(testId)).toBeVisible();
   }
@@ -287,7 +301,6 @@ test("a complete dated Calendar create wins over cross-space step syntax", async
 test("microphone acquisition failure exposes Retry and a fresh recognizer succeeds exactly once", async ({ page }) => {
   await page.addInitScript(() => { (window as Window & { __flowVoiceFailures?: string[] }).__flowVoiceFailures = ["audio-capture"]; });
   await page.setViewportSize({ width: 1440, height: 1000 }); await fresh(page);
-  await page.getByLabel("Start Flow Live").click();
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "microphone-unavailable");
   await expect(page.getByText(/Check the input device and macOS permission/)).toBeVisible();
   await expect(page.getByLabel("Retry Flow Live")).toBeVisible();
@@ -296,6 +309,7 @@ test("microphone acquisition failure exposes Retry and a fresh recognizer succee
   await page.getByLabel("Retry Flow Live").click();
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   expect(await page.evaluate(() => (window as Window & { __flowVoiceConstructions?: number }).__flowVoiceConstructions)).toBe(2);
+  await activate(page);
   await page.evaluate(() => {
     const recognition = (window as Window & { __flowRecognition?: { emit(value: string): void } }).__flowRecognition!;
     recognition.emit("Capture Voice retry succeeded");
@@ -315,12 +329,16 @@ test("the newest explicit Flow Live start preempts another same-origin tab and a
   test.setTimeout(60_000);
   await page.addInitScript(() => { (window as Window & { __flowVoiceReleaseDelayMs?: number }).__flowVoiceReleaseDelayMs = 450; });
   await page.setViewportSize({ width: 1440, height: 1000 }); await fresh(page);
-  await page.getByLabel("Start Flow Live").click();
+  await activate(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
 
   const second = await context.newPage();
   watchPage(second); await installFakeRecognition(second);
   await second.goto("/");
+  await awaitLocalListening(second);
+  await second.getByLabel("Stop Flow Live").click();
+  await page.getByLabel("Start Flow Live").click();
+  await awaitLocalListening(page);
   await second.getByLabel("Start Flow Live").click();
   await expect(second.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "moved");
@@ -330,11 +348,12 @@ test("the newest explicit Flow Live start preempts another same-origin tab and a
     requestedAt: (window as Window & { __flowVoiceReleaseRequestedAt?: number }).__flowVoiceReleaseRequestedAt,
     releasedAt: (window as Window & { __flowVoiceReleasedAt?: number }).__flowVoiceReleasedAt,
   }));
-  const secondStartedAt = await second.evaluate(() => (window as Window & { __flowVoiceStartTimes?: number[] }).__flowVoiceStartTimes?.[0]);
+  const secondStartedAt = await second.evaluate(() => (window as Window & { __flowVoiceStartTimes?: number[] }).__flowVoiceStartTimes?.at(-1));
   expect(firstRelease.requestedAt).toBeDefined();
   expect(firstRelease.releasedAt).toBeGreaterThanOrEqual(firstRelease.requestedAt! + 400);
   expect(secondStartedAt).toBeGreaterThanOrEqual(firstRelease.releasedAt!);
 
+  await activate(second);
   await speak(second, "Capture Cross tab acquisition succeeded");
   const committed = await second.evaluate(() => {
     const state = JSON.parse(localStorage.getItem("flow.life.v3")!);
@@ -348,6 +367,7 @@ test("the newest explicit Flow Live start preempts another same-origin tab and a
 
   await second.close({ runBeforeUnload: true });
   await page.getByLabel("Start Flow Live").click();
+  await activate(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).document.captures.some(({ title }: { title: string }) => title === "Cross tab acquisition succeeded"))).toBe(true);
 
@@ -396,6 +416,8 @@ test("an explicit Start reclaims an uncooperative stale same-origin voice client
     runtime.__flowUseGlobalNativeLock = true; runtime.__flowPageHideNativeReleaseDelayMs = 2_200;
   });
   await page.setViewportSize({ width: 1440, height: 1000 }); await fresh(page);
+  await awaitLocalListening(page);
+  await page.getByLabel("Stop Flow Live").click();
   await page.evaluate(() => {
     const Constructor = (window as Window & { SpeechRecognition?: new () => { start(): void } }).SpeechRecognition!;
     (window as Window & { __legacyOrphan?: { start(): void } }).__legacyOrphan = new Constructor();
@@ -406,7 +428,8 @@ test("an explicit Start reclaims an uncooperative stale same-origin voice client
   const claimant = await context.newPage();
   watchPage(claimant); await installFakeRecognition(claimant);
   await claimant.addInitScript(() => { (window as Window & { __flowUseGlobalNativeLock?: boolean }).__flowUseGlobalNativeLock = true; });
-  await claimant.goto("/");
+  // A previously yielded tab exercises explicit Start without racing local autostart.
+  await claimant.goto("/?flow-live-yield=manual-start-fixture");
   await claimant.getByLabel("Start Flow Live").click();
   await expect.poll(() => claimant.evaluate(() => JSON.stringify({
     status: document.querySelector('[data-testid="flow-live-presence"]')?.getAttribute("data-flow-live-status"),
@@ -415,6 +438,11 @@ test("an explicit Start reclaims an uncooperative stale same-origin voice client
     nativeReleaseAt: localStorage.getItem("flow.voice.fake-native-owner.release-at"),
   })), { timeout: 8_000 }).toContain('"status":"listening"');
   await expect.poll(() => page.url()).toContain("flow-live-yield=");
+  await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "sleeping");
+  expect(await page.evaluate(() => (window as Window & { __flowVoiceConstructions?: number }).__flowVoiceConstructions ?? 0)).toBe(0);
+  const release = await claimant.evaluate(() => ({ deadline: Number(localStorage.getItem("flow.voice.fake-native-owner.release-deadline")), acquired: Number(localStorage.getItem("flow.voice.fake-native-owner.acquired-at")) }));
+  expect(release.deadline).toBeGreaterThan(0);
+  expect(release.acquired).toBeGreaterThanOrEqual(release.deadline);
   expect(await claimant.evaluate(() => (window as Window & { __flowVoiceConstructions?: number }).__flowVoiceConstructions)).toBeGreaterThanOrEqual(3);
   expect(await claimant.evaluate(() => (window as Window & { __flowVoiceDiagnostics?: Array<{ phase: string; detail: string }> }).__flowVoiceDiagnostics)).toEqual(expect.arrayContaining([
     expect.objectContaining({ phase: "native-error", detail: expect.stringContaining("recognition-busy") }),
@@ -433,7 +461,7 @@ test("an explicit Start reclaims an uncooperative stale same-origin voice client
 
 test("mobile and reduced motion preserve navigation, transcript, and header clearance", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 }); await page.emulateMedia({ reducedMotion: "reduce" }); await fresh(page);
-  await page.getByLabel("Start Flow Live").click(); await speak(page, "Open inbox");
+  await activate(page); await speak(page, "Open inbox");
   await expect(page.getByTestId("inbox-space")).toBeVisible();
   const geometry = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, viewport: window.innerWidth, header: document.querySelector("header")!.getBoundingClientRect().bottom, content: document.querySelector("main > div")!.getBoundingClientRect().top }));
   expect(geometry.width).toBeLessThanOrEqual(geometry.viewport); expect(geometry.content).toBeGreaterThanOrEqual(geometry.header);

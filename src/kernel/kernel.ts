@@ -8,6 +8,7 @@ import { resolveArgReferents } from "./referents";
 import { createSession, rememberResult, clearInFlight, type ConversationSession } from "./session";
 import { emptyHistory, recordMutation, undo as undoHistory, redo as redoHistory, whatChanged as describeChanges, captureState, type HistoryState } from "./history";
 import { computeStepIdempotencyKey, type IdempotencyStore } from "./idempotency";
+import { PROPOSAL_AUTHORITY_TTL_MS, type TurnAuthority } from "./turnAuthority";
 
 export { createSession };
 
@@ -23,6 +24,9 @@ export interface KernelEnvironment {
    * that don't care about it). Production call sites supply a shared,
    * long-lived store — see productionBridge.ts's `getBridgeIdempotencyStore`. */
   idempotency?: IdempotencyStore;
+  authority?: TurnAuthority;
+  requireMutationReview?: boolean;
+  reviewedStepId?: string;
 }
 
 export function createEnvironment(
@@ -164,7 +168,8 @@ function continuePlan(env: KernelEnvironment, session: ConversationSession, plan
     return { env, session: { ...session, pendingClarification: clarification, pendingPlan: plan }, outcome: { status: "clarify", clarification } };
   }
   const preflight = capability.preflight?.(resolvedArgs, ctx) ?? emptyPreflight();
-  const needsConfirmation = capability.riskLevel === "high" || capability.requiresConfirmation(resolvedArgs, ctx);
+  const needsConfirmation = capability.riskLevel === "high" || capability.requiresConfirmation(resolvedArgs, ctx)
+    || Boolean(env.requireMutationReview && capability.mutates && env.reviewedStepId !== step.id);
   if (preflight.blocking) {
     if (preflight.alternatives.length === 0) {
       return fail(env, session, preflight.conflicts.map((conflict) => conflict.message).join(" ") || "That can't be done as stated.");
@@ -173,12 +178,16 @@ function continuePlan(env: KernelEnvironment, session: ConversationSession, plan
     const proposedStep = { ...step, args: { ...resolvedArgs, ...bestAlternative.args } };
     const proposedPlan: Plan = { ...plan, steps: plan.steps.map((candidate) => (candidate.id === step.id ? proposedStep : candidate)) };
     const proposal = createProposal(plan.id, plan.sourceUtterance, proposedStep, preflight, env.clock.now().toISOString());
+    if (env.authority) proposal.authority = { ...env.authority, proposalId: proposal.id };
+    proposal.requiresMutationReview = env.requireMutationReview;
     return { env, session: { ...session, activeProposal: proposal, pendingPlan: proposedPlan, pendingClarification: undefined }, outcome: { status: "proposed", proposal } };
   }
   if (needsConfirmation) {
     const confirmStep = { ...step, args: resolvedArgs };
     const confirmPlan: Plan = { ...plan, steps: plan.steps.map((candidate) => (candidate.id === step.id ? confirmStep : candidate)) };
     const proposal = createProposal(plan.id, plan.sourceUtterance, confirmStep, preflight, env.clock.now().toISOString());
+    if (env.authority) proposal.authority = { ...env.authority, proposalId: proposal.id };
+    proposal.requiresMutationReview = env.requireMutationReview;
     return { env, session: { ...session, activeProposal: proposal, pendingPlan: confirmPlan, pendingClarification: undefined }, outcome: { status: "proposed", proposal } };
   }
   return executeStep(env, session, plan, step.id, resolvedArgs);
@@ -188,6 +197,9 @@ function continuePlan(env: KernelEnvironment, session: ConversationSession, plan
  * capability calls a domain interpreter produced for this utterance — the
  * kernel does not itself pattern-match natural language (see planner.ts). */
 export function submit(env: KernelEnvironment, session: ConversationSession, utterance: string, intents: PlanStepInput[]): KernelStep {
+  if (env.requireMutationReview && intents.length > 1 && intents.some((step) => env.registry.get(step.capabilityId)?.mutates)) {
+    return fail(env, clearInFlight(session), "Please request one change at a time so you can review every change before confirming. Nothing changed.");
+  }
   const plan = buildPlan(utterance, intents, env.clock.now().toISOString());
   return continuePlan(env, clearInFlight(session), plan);
 }
@@ -196,7 +208,28 @@ function requireProposal(env: KernelEnvironment, session: ConversationSession): 
   if (!session.activeProposal || session.activeProposal.status !== "pending" || !session.pendingPlan) {
     return fail(env, session, "There's nothing to confirm.");
   }
+  const proposal = session.activeProposal;
+  const age = env.clock.now().getTime() - new Date(proposal.createdAt).getTime();
+  const binding = proposal.authority;
+  if (!Number.isFinite(age) || age < 0 || age > PROPOSAL_AUTHORITY_TTL_MS
+    || proposal.originatingPlanId !== session.pendingPlan.id
+    || (binding && (binding.proposalId !== proposal.id || binding.sessionId !== session.id
+      || !env.authority || binding.sessionId !== env.authority.sessionId
+      || binding.documentRevision !== env.authority.documentRevision))) {
+    return fail(env, clearInFlight(session), "That review is no longer current. Ask again to review the latest document. Nothing changed.");
+  }
   return { proposal: session.activeProposal, plan: session.pendingPlan };
+}
+
+function executeApproved(env: KernelEnvironment, session: ConversationSession, proposal: Proposal, plan: Plan, args: Record<string, unknown>): KernelStep {
+  const capability = env.registry.get(proposal.step.capabilityId);
+  if (!capability) return fail(env, clearInFlight(session), "That action is no longer available. Nothing changed.");
+  const ctx = contextOf(env);
+  const invalid = capability.validate(args, ctx);
+  const preflight = invalid ? undefined : capability.preflight?.(args, ctx);
+  if (invalid || preflight?.blocking) return fail(env, clearInFlight(session), invalid ?? "The document changed. Review this request again. Nothing changed.");
+  const approved = approveProposal({ ...proposal, step: { ...proposal.step, args } });
+  return executeStep({ ...env, requireMutationReview: env.requireMutationReview || proposal.requiresMutationReview, reviewedStepId: proposal.step.id }, { ...session, activeProposal: approved }, plan, proposal.step.id, args);
 }
 
 /** "yes"/"do it" — approves ONLY the session's current activeProposal. A
@@ -206,9 +239,7 @@ export function approve(env: KernelEnvironment, session: ConversationSession): K
   const found = requireProposal(env, session);
   if ("outcome" in found) return found;
   const { proposal, plan } = found;
-  const approved = approveProposal(proposal);
-  const nextSession = { ...session, activeProposal: approved };
-  return executeStep(env, nextSession, plan, proposal.step.id, proposal.step.args);
+  return executeApproved(env, session, proposal, plan, proposal.step.args);
 }
 
 /** Picks a non-default alternative the proposal offered, e.g. "the first one" / "7:30". */
@@ -219,8 +250,7 @@ export function chooseAlternative(env: KernelEnvironment, session: ConversationS
   const alternative = proposal.consequences.alternatives.find((candidate) => candidate.label.toLowerCase() === label.toLowerCase());
   if (!alternative) return fail(env, session, `"${label}" wasn't one of the options.`);
   const args = { ...proposal.step.args, ...alternative.args };
-  const approved = approveProposal({ ...proposal, step: { ...proposal.step, args } });
-  return executeStep(env, { ...session, activeProposal: approved }, plan, proposal.step.id, args);
+  return executeApproved(env, session, proposal, plan, args);
 }
 
 /** "no"/rejecting the active proposal outright — nothing changes. */

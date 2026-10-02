@@ -1,3 +1,4 @@
+import { APP_ORIGIN } from "./app-origin";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -39,7 +40,7 @@ async function installMediaSeams(page: Page) {
 async function fresh(page: Page, path = "/") {
   const session = await page.context().newCDPSession(page);
   try {
-    await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "all" });
+    await session.send("Storage.clearDataForOrigin", { origin: APP_ORIGIN, storageTypes: "all" });
   } finally {
     await session.detach();
   }
@@ -70,7 +71,7 @@ test.beforeEach(async ({ page, context }) => {
   page.on("console", (message) => { if (message.type() === "error") found.console.push(message.text()); });
   page.on("pageerror", (error) => found.page.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) found.requests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) found.requests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
   });
   await installMediaSeams(page);
   await context.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"daily":{"time":[]}}' }));
@@ -135,7 +136,7 @@ test("Memory uses original local media, bookmarked voice, constrained edits, pla
   const editor = page.getByRole("textbox", { name: "Journal text" });
   await editor.fill("The rain stopped just as the street lights came on.");
   await editor.blur();
-  const photo = resolve("FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/01-living-home.png");
+  const photo = resolve("docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/01-living-home.png");
   await page.locator("input[type='file']").setInputFiles(photo);
   await expect(page.getByRole("button", { name: "Use photo" })).toBeVisible();
   await page.getByRole("button", { name: "Use photo" }).click();

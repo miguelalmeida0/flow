@@ -1,8 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 import { existsSync } from "node:fs";
+import { APP_ORIGIN, APP_PORT } from "./e2e/app-origin";
 
 const releaseQa = process.env.FLOW_RELEASE_QA === "1";
-const appOrigin = "http://127.0.0.1:5173";
+const appOrigin = APP_ORIGIN;
 const macChrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const executablePath = process.env.FLOW_CHROME_EXECUTABLE ?? (existsSync(macChrome) ? macChrome : undefined);
 
@@ -27,8 +28,8 @@ export default defineConfig({
   },
   webServer: {
     command: releaseQa
-      ? "npm run preview -- --host 127.0.0.1 --port 5173 --strictPort"
-      : "npm run dev -- --host 127.0.0.1 --port 5173 --strictPort",
+      ? `npm run preview -- --host 127.0.0.1 --port ${APP_PORT} --strictPort`
+      : `npm run dev -- --host 127.0.0.1 --port ${APP_PORT} --strictPort`,
     url: appOrigin,
     reuseExistingServer: !releaseQa,
   },
@@ -39,12 +40,12 @@ export default defineConfig({
       // not Flow's transition. Thresholds and the 20 real cycles stay intact.
       name: "chromium-motion",
       testMatch: /motion-stress\.spec\.ts/,
-      testIgnore: /visual-reward-(motion|performance)\.spec\.ts/,
+      testIgnore: [/visual-reward-(motion|performance)\.spec\.ts/, /hosted-release\.spec\.ts/],
       use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "chromium",
-      testIgnore: [/motion-stress\.spec\.ts/, /dev-strictmode\.spec\.ts/, /visual-reward-(motion|performance)\.spec\.ts/],
+      testIgnore: [/motion-stress\.spec\.ts/, /dev-strictmode\.spec\.ts/, /visual-reward-(motion|performance)\.spec\.ts/, /hosted-release\.spec\.ts/],
       use: { ...devices["Desktop Chrome"] },
     },
   ],

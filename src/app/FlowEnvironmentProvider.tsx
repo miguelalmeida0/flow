@@ -12,7 +12,7 @@ import type { ConversationEntityReference, LifeContext, LifeDocument, LifeRoute,
 import { applyLifeTransaction } from "../domain/life-transaction";
 import { projectInstinctExposure } from "../features/elite/instinctExposure";
 import { completeJournalCreation, type JournalAcquisition, type JournalCreationOrigin } from "../features/studio/journalAcquisition";
-import { LIFE_STORAGE_KEY, readLifeSnapshot, readLifeSnapshotRevision, saveLifeSnapshot } from "../domain/life-storage";
+import { LIFE_STORAGE_KEY, readLifeSnapshot, readLifeSnapshotRevision, saveLifeSnapshot, saveLifeSnapshotOutcome } from "../domain/life-storage";
 import { LifeMutationCoordinator } from "../domain/life-synchronization";
 import { selectNowCandidates, type NowQuery, type NowRecommendation } from "../domain/life-selectors";
 import type { ActiveLifeTransition, CapturedCommandContext, CommandFeedback, PendingLifeChange } from "./environment-types";
@@ -53,16 +53,21 @@ import { calendarReferenceScope, calendarRequestSourceDate } from "./calendarCom
 import { initialCommitmentView, commitmentViewCommands, type CommitmentViewState } from "../features/people/commitmentView";
 import { entityViewDescription, type EntityEditor, type EntityViewIntent } from "../features/entity-navigation/entityView";
 import { initialCommandPresentation, type CommandPresentation, type PresentationIntent } from "../shared/command/presentationCapability";
-import { runKernelTurn, createBridgeSession, fileReference, recentFileToReference, getBridgeRegistry, getBridgeIdempotencyStore, persistKernelMutation, type RecentFileMeta } from "../kernel/productionBridge";
+import { runKernelTurn, createBridgeSession, fileReference, recentFileToReference, getBridgeRegistry, getBridgeIdempotencyStore, settleKernelTurn, messageFor, type RecentFileMeta } from "../kernel/productionBridge";
 import { rememberSearchResults } from "../kernel/referents";
 import { referenceFromLegacyContext, legacyContextPatchFromReference } from "./kernelReferentBridge";
 import { desktopBridgeEvents } from "../kernel/lib/desktopBridgeClient";
-import { createEnvironment } from "../kernel/kernel";
+import { createEnvironment, submit, phaseFor } from "../kernel/kernel";
+import { stageIdempotency } from "../kernel/idempotency";
+import { clearInFlight } from "../kernel/session";
+import { authorityIsCurrent, type TurnAuthority } from "../kernel/turnAuthority";
+import { getRuntimeMode } from "./runtimeMode";
+import { classifyReply, matchProposalAlternative } from "../kernel/proposals";
 import { assessComplexity } from "../kernel/llm/complexityGate";
 import { runConversationTurn } from "../kernel/llm/conversationCoordinator";
 import { correctedTranscript } from "../shared/command/selfCorrection";
 import type { ReferentSummary, RecentTurn } from "../kernel/llm/promptBuilder";
-import { useKyutaiVoiceSession } from "../features/voice/useKyutaiVoiceSession";
+import { useKyutaiVoiceSession, type KyutaiVoiceSession } from "../features/voice/useKyutaiVoiceSession";
 import { voiceDebug } from "../features/day-planner/voice/voiceDebug";
 import { deriveVoiceInputOwner, type VoiceInputOwner } from "../kernel/voice/voiceOwnership";
 
@@ -94,6 +99,7 @@ interface EnvironmentValue {
    * decide whether the legacy browser SpeechRecognition path is allowed to
    * dispatch a transcript into the kernel; it never is while Kyutai owns. */
   voiceInputOwner: VoiceInputOwner;
+  hostedVoice: KyutaiVoiceSession;
   reward: RewardRuntimeSnapshot;
   rewardPreferences: RewardPreferences;
   conversationContext: LifeContext;
@@ -115,6 +121,10 @@ interface EnvironmentValue {
   dispatchPresentation: (intent: PresentationIntent, fromGesture?: boolean) => void;
   dispatchCalendar: (actions: CalendarAction[], source: TransactionSource, transcript: string) => void;
   dispatchLife: (actions: LifeAction[], summary: string, transcript?: string, source?: TransactionSource) => boolean | Promise<boolean>;
+  hasUnsavedChanges: boolean;
+  retrySave: () => Promise<boolean>;
+  discardUnsavedChanges: () => void;
+  invalidateAsyncAuthority: (reason?: string) => void;
   dispatchFriend: (intent: FriendIntent) => void;
   prepareJournalAcquisition: (entryId: string, origin: JournalCreationOrigin | undefined, ownsRequest: () => boolean) => JournalAcquisition;
   prepareVoiceNoteAcquisition: (noteId: string, ownsRequest: () => boolean) => JournalAcquisition;
@@ -342,6 +352,14 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
   });
   const conversationRef = useRef(conversationContext);
   const processedCommandIds = useRef<string[]>([]);
+  const asyncAuthorityEpoch = useRef(0);
+  const captureCancellationEpoch = useRef(0);
+  const latestCommandIdRef = useRef<string | undefined>(undefined);
+  const hostedVoiceOutcomeRef = useRef<{ commandId: string; epoch: number; captureEpoch: string } | undefined>(undefined);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const unsavedRef = useRef<{ revision: number; commandId?: string; retry: () => boolean } | undefined>(undefined);
+  const retryingSaveRef = useRef(false);
+  const storageFailureRef = useRef(false);
   // The kernel bridge (see productionBridge.ts) claims a narrow, growing
   // slice of the real conversation — memory, universal recall, Earmark
   // playback, the desktop companion, and a buffer-aware calendar move — and
@@ -569,15 +587,75 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
   }, [syncFromStorage]);
 
   function persistSnapshot(next: LifeSnapshot, expectedRevision: number) {
-    if (!saveLifeSnapshot(next, expectedRevision)) {
-      syncFromStorage(true);
-      setFeedback({ phase: "error", title: "Another Flow tab changed this first", detail: "The latest complete document is active. Repeat the command if it is still needed." });
+    const saved = saveLifeSnapshotOutcome(next, expectedRevision);
+    storageFailureRef.current = saved.status === "storage-unavailable";
+    if (saved.status !== "saved") {
+      if (saved.status === "revision-conflict") {
+        syncFromStorage(false);
+        setFeedback({ phase: "error", title: "Another Flow tab changed this first", detail: "Review the latest document before repeating the change." });
+      } else {
+        if (!unsavedRef.current) unsavedRef.current = { revision: expectedRevision, commandId: activeCommandId.current, retry: () => persistSnapshot(next, expectedRevision) };
+        setHasUnsavedChanges(true);
+        setFeedback({ phase: "error", title: "Flow could not save this change", detail: "Your change is kept in this tab. Free browser storage, then choose Retry save before leaving." });
+      }
       return false;
     }
     snapshotRef.current = next;
     setSnapshot(next);
     return true;
   }
+
+  async function retrySave(): Promise<boolean> {
+    return mutationCoordinator.run(() => {
+      const pendingSave = unsavedRef.current;
+      if (!pendingSave) return false;
+      syncFromStorage();
+      if (snapshotRef.current.revision !== pendingSave.revision) {
+        setFeedback({ phase: "error", title: "Review your unsaved change", detail: "The document changed since saving failed. Your request remains in this tab; repeat it against the current document." });
+        return false;
+      }
+      retryingSaveRef.current = true;
+      storageFailureRef.current = false;
+      try {
+        const saved = pendingSave.retry();
+        if (saved) { if (pendingSave.commandId) processedCommandIds.current = [...processedCommandIds.current.slice(-127), pendingSave.commandId]; unsavedRef.current = undefined; setHasUnsavedChanges(false); }
+        return saved;
+      } finally { retryingSaveRef.current = false; }
+    });
+  }
+
+  function invalidateAsyncAuthority(reason?: string) {
+    voiceDebug("turn.authorityInvalidated", { reason });
+    captureCancellationEpoch.current += 1;
+    asyncAuthorityEpoch.current += 1;
+    hostedVoiceOutcomeRef.current = undefined;
+    conversationalAbortRef.current?.abort();
+    conversationalPendingRef.current = false;
+    pendingConversationalClarificationRef.current = undefined;
+    kernelSessionRef.current = clearInFlight(kernelSessionRef.current);
+  }
+
+  function discardUnsavedChanges() {
+    invalidateAsyncAuthority("discard-unsaved");
+    unsavedRef.current = undefined;
+    storageFailureRef.current = false;
+    setHasUnsavedChanges(false);
+    setFeedback({ phase: "ready", title: "Unsaved request discarded", detail: "Your saved document is unchanged." });
+  }
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) return;
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ""; };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [hasUnsavedChanges]);
+
+  useEffect(() => () => {
+    captureCancellationEpoch.current += 1;
+    asyncAuthorityEpoch.current += 1;
+    hostedVoiceOutcomeRef.current = undefined;
+    conversationalAbortRef.current?.abort();
+  }, []);
 
   useEffect(() => {
     const tick = () => setClockTime(now());
@@ -664,15 +742,17 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       // brand-new utterance, which just incidentally aborts the old one as
       // a side effect of routing a different turn, not a real cancel.
       const hasConversationalTurn = conversationalPendingRef.current;
-      if (!pending && !calendarPreview && !hasPresentation && !hasConversationalTurn) return;
+      const hasKernelProposal = Boolean(kernelSessionRef.current.activeProposal);
+      if (!pending && !calendarPreview && !hasPresentation && !hasConversationalTurn && !hasKernelProposal) return;
       event.preventDefault(); cancelTransition(); rewardDirector.cancel("cancelled");
-      if (hasConversationalTurn) {
-        conversationalAbortRef.current?.abort();
-        conversationalPendingRef.current = false;
-        pendingConversationalClarificationRef.current = undefined;
-      }
+      captureCancellationEpoch.current += 1;
+      asyncAuthorityEpoch.current += 1;
+      conversationalAbortRef.current?.abort();
+      conversationalPendingRef.current = false;
+      pendingConversationalClarificationRef.current = undefined;
+      kernelSessionRef.current = clearInFlight(kernelSessionRef.current);
       if (!pending && !calendarPreview) {
-        if (hasConversationalTurn) setFeedback({ phase: "completed", title: "Cancelled", detail: "Nothing changed." });
+        if (hasConversationalTurn || hasKernelProposal) setFeedback({ phase: "completed", title: "Cancelled", detail: "Nothing changed." });
         return;
       }
       const hadPreview = Boolean(calendarPreview);
@@ -685,6 +765,10 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
   }, [pending, calendarPreview, cancelTransition, rewardDirector]);
 
   function commit(actions: LifeAction[], transcript: string, source: TransactionSource, summary?: string, transitionIntent?: Omit<ActiveLifeTransition, "beat"> & { route: LifeRoute; planId?: string; peopleView?: PeopleView }, backgroundRecording = false) {
+    if (unsavedRef.current && !retryingSaveRef.current) {
+      setFeedback({ phase: "error", title: "An earlier change still needs saving", detail: "Choose Retry save before making another change.", transcript });
+      return false;
+    }
     if (!backgroundRecording) patchCommandTrace(activeCommandId.current ?? window.__FLOW_COMMAND_TRACE__?.commandId, { actions });
     const current = snapshotRef.current;
     const activePreview = calendarPreviewRef.current;
@@ -768,7 +852,10 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     const temporal = revealScope && revealScope !== scope ? { ...current.temporal!, scope: revealScope, previousScope: scope } : current.temporal;
     record.after = revealedDocument;
     const next: LifeSnapshot = { revision: current.revision + 1, document: revealedDocument, temporal, past: [...current.past, { document: current.document, ...(previousRecord ? { lastTransaction: previousRecord } : {}) }], future: [], lastTransaction: record };
-    if (!persistSnapshot(next, current.revision)) return false;
+    if (!persistSnapshot(next, current.revision)) {
+      if (storageFailureRef.current) unsavedRef.current = { revision: current.revision, commandId: activeCommandId.current, retry: () => commit(actions, transcript, source, summary, transitionIntent, backgroundRecording) };
+      return false;
+    }
     const recordingAction = actions.find((action) => action.type === "journal.update" || action.type === "voice-note.update" || action.type === "recording.segment.add" || action.type === "recording.markers.replace");
     const recordingId = recordingAction?.type === "journal.update" ? recordingAction.entryId : recordingAction?.type === "voice-note.update" ? recordingAction.noteId : recordingAction?.type === "recording.segment.add" || recordingAction?.type === "recording.markers.replace" ? recordingAction.target.id : undefined;
     patchCommandTrace(backgroundRecording ? recordingId ? recordingCommandId(recordingId) : undefined : activeCommandId.current ?? window.__FLOW_COMMAND_TRACE__?.commandId, { committedAt: performance.now(), actualActions: actions, transactionId });
@@ -1020,8 +1107,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     // that arrives after this point is discarded by tryConversationalBridge's
     // own superseded-controller check, and drops the one-shot conversational
     // clarification so a stale "yes" can't resume it.
-    conversationalAbortRef.current?.abort();
-    pendingConversationalClarificationRef.current = undefined;
+    invalidateAsyncAuthority("cancel");
     // Stops any in-progress Kyutai TTS playback immediately and returns the
     // voice state machine to LISTENING — the same "never mind"/Escape
     // cancel path barge-in itself uses (see useKyutaiVoiceSession's cancel).
@@ -1220,7 +1306,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
    * returns false and falls through unchanged — there is exactly one
    * conversational brain here, not two running in parallel.
    */
-  function tryKernelBridge(transcript: string, source: TransactionSource): boolean {
+  function tryKernelBridge(transcript: string, source: TransactionSource, commandId?: string, captured?: CapturedCommandContext): boolean {
     const document = snapshotRef.current.document;
     const priorTransactionId = snapshotRef.current.lastTransaction?.id;
 
@@ -1238,17 +1324,45 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       kernelSessionRef.current = rememberSearchResults(kernelSessionRef.current, [legacyRef], legacyRef.at ?? now().getTime());
     }
 
-    const result = runKernelTurn(
+    const kernelStartedAt = performance.now();
+    const priorSession = kernelSessionRef.current;
+    if (captured && priorSession.activeProposal && (classifyReply(transcript) === "approve" || matchProposalAlternative(priorSession.activeProposal, transcript))
+      && captured.confirmationAuthority !== priorSession.activeProposal) {
+      setFeedback({ phase: "error", title: "The pending request changed while you were speaking", detail: "Review it again before confirming. Nothing changed." });
+      return true;
+    }
+    const staged = stageIdempotency(getBridgeIdempotencyStore(), priorSession.activeProposal?.authority?.turnId ?? commandId);
+    const authority: TurnAuthority = { sessionId: priorSession.id, turnId: commandId ?? `kernel-${Date.now()}`, captureEpoch: asyncAuthorityEpoch.current, documentRevision: snapshotRef.current.revision, createdAtMs: now().getTime() };
+    let explicitActions: LifeAction[] = [];
+    const tentative = runKernelTurn(
       transcript,
       document,
       document.personalMemoryFacts ?? [],
       kernelSessionRef.current,
       now,
-      { dispatchLife: (actions, summary, t) => { dispatchLife(actions, summary, t, source); } },
+      { dispatchLife: (actions) => { explicitActions = actions; }, idempotency: staged, authority },
     );
+    if (!tentative.recognized) { kernelSessionRef.current = tentative.session; return false; }
+    beginCommandTrace(transcript, { type: "kernel" }, conversationRef.current, [], undefined, commandId);
+    const settled = settleKernelTurn(tentative, { document, memory: document.personalMemoryFacts ?? [], session: priorSession },
+      (actions) => commit(actions, transcript, source, tentative.message), () => staged.commit(), explicitActions);
+    const result = settled.result;
+    if (settled.status === "error") {
+      if (commandId) processedCommandIds.current = processedCommandIds.current.filter((id) => id !== commandId);
+      if (storageFailureRef.current && unsavedRef.current) {
+        const revision = snapshotRef.current.revision;
+        unsavedRef.current = { revision, commandId, retry: () => {
+          activeCommandId.current = commandId; activeCommandSource.current = source;
+          try { tryKernelBridge(transcript, source, commandId, captured); return snapshotRef.current.revision > revision; }
+          finally { activeCommandId.current = undefined; activeCommandSource.current = undefined; }
+        } };
+      } else setFeedback({ phase: "error", title: result.message, transcript });
+      completeCommandTrace([], [], result.message);
+      return true;
+    }
     kernelSessionRef.current = result.session;
-    if (!result.recognized) return false;
-    voiceDebug("voice.kernelDispatch", { sessionId: result.session.id, turnId: result.session.turn,
+    completeCommandTrace(settled.actions, [], result.outcome.status === "executed" ? undefined : result.message);
+    voiceDebug("voice.kernelDispatch", { commandId, durationMs: performance.now() - kernelStartedAt, sessionId: result.session.id, turnId: result.session.turn,
       planId: result.session.pendingPlan?.id ?? result.session.recentResults.at(-1)?.planId, proposalId: result.session.activeProposal?.id,
       stepId: result.session.recentResults.at(-1)?.stepId,
       status: result.outcome.status, transcript,
@@ -1272,8 +1386,8 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     // they'd otherwise never stamp the dev command trace the way every
     // other command (kernel- or legacy-handled) does — beginCommandTrace is
     // dev/test-only tooling (see commandTrace.ts), not user-visible behavior.
-    if (result.delegateToApp === "undo") { beginCommandTrace(transcript, { type: "history-undo" }, conversationRef.current); void mutationCoordinator.run(() => { syncFromStorage(); applyUndo(transcript); }); return true; }
-    if (result.delegateToApp === "redo") { beginCommandTrace(transcript, { type: "history-redo" }, conversationRef.current); void mutationCoordinator.run(() => { syncFromStorage(); applyRedo(transcript); }); return true; }
+    if (result.delegateToApp === "undo") { beginCommandTrace(transcript, { type: "history-undo" }, conversationRef.current); applyUndo(transcript); return true; }
+    if (result.delegateToApp === "redo") { beginCommandTrace(transcript, { type: "history-redo" }, conversationRef.current); applyRedo(transcript); return true; }
     if (result.delegateToApp === "whatChanged") {
       beginCommandTrace(transcript, { type: "history-what-changed" }, conversationRef.current);
       setFeedback({ phase: "completed", title: snapshotRef.current.lastTransaction?.summary ?? "Nothing has changed yet.", transcript });
@@ -1355,13 +1469,14 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
    * same UI/state surface as any other kernel-recognized command — no
    * second chat surface, no separate status card (Rule #9).
    */
-  async function tryConversationalBridge(transcript: string, source: TransactionSource): Promise<void> {
+  async function tryConversationalBridge(transcript: string, source: TransactionSource, commandId: string, inputEpoch: number): Promise<void> {
+    if (inputEpoch !== asyncAuthorityEpoch.current) return;
     conversationalAbortRef.current?.abort();
     const controller = new AbortController();
     conversationalAbortRef.current = controller;
     conversationalPendingRef.current = true;
     try {
-      await tryConversationalBridgeBody(transcript, source, controller);
+      await tryConversationalBridgeBody(transcript, source, controller, commandId);
     } finally {
       // Only clear the flag if a NEWER call hasn't already superseded this
       // one (that newer call owns the flag now, and will clear it itself).
@@ -1369,104 +1484,109 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     }
   }
 
-  async function tryConversationalBridgeBody(transcript: string, source: TransactionSource, controller: AbortController): Promise<void> {
-    // Stamp the same dev command trace every other turn stamps (see the
-    // undo/redo/whatChanged delegation just above tryKernelBridge for the
-    // identical pattern) — this tier is reached either before the
-    // deterministic recognizers run at all, or after legacy's own
-    // "unsupported" branch would otherwise have stamped it itself
-    // (lifeCommandController.ts), so without this call a model-handled turn
-    // would never mark window.__FLOW_COMMAND_TRACE__, breaking any
-    // trace-driven observability/tests that every other command satisfies.
-    beginCommandTrace(transcript, { type: "conversational" }, conversationRef.current);
-
-    const beforeDocument = snapshotRef.current.document;
-    const beforeMemory = beforeDocument.personalMemoryFacts ?? [];
-
-    const legacyRef = referenceFromLegacyContext(conversationRef.current);
-    const kernelRef = kernelSessionRef.current.referents.lastMentioned;
-    if (legacyRef && (legacyRef.at ?? 0) > (kernelRef?.at ?? -1)) {
-      kernelSessionRef.current = rememberSearchResults(kernelSessionRef.current, [legacyRef], legacyRef.at ?? now().getTime());
-    }
-
-    const env = { ...createEnvironment(getBridgeRegistry(), beforeDocument, { route: routeRef.current }, { now }, getBridgeIdempotencyStore()), memory: beforeMemory };
-    const referentEntries = Object.entries(kernelSessionRef.current.referents).filter(([key]) => key !== "lastSearchResults") as [ReferentSummary["key"], { id: string; kind: string; label?: string } | undefined][];
-    const referents: ReferentSummary[] = referentEntries
-      .filter((entry): entry is [ReferentSummary["key"], { id: string; kind: string; label?: string }] => entry[1] !== undefined)
-      .map(([key, ref]) => ({ key, label: ref.label ?? ref.id, kind: ref.kind }));
-
-    const clarification = activeConversationalClarification();
-
-    const result = await runConversationTurn({
-      rawTranscript: transcript,
-      normalizedTranscript: correctedTranscript(transcript),
-      env,
-      session: kernelSessionRef.current,
-      recentTurns: recentConversationTurnsRef.current,
-      referents,
-      activeClarificationQuestion: clarification?.question,
-      signal: controller.signal,
+  async function tryConversationalBridgeBody(transcript: string, source: TransactionSource, controller: AbortController, commandId: string): Promise<void> {
+    // Snapshot prompt context under a short lock. No provider promise owns it.
+    const context = await mutationCoordinator.run(() => {
+      syncFromStorage();
+      const document = snapshotRef.current.document;
+      const legacyRef = referenceFromLegacyContext(conversationRef.current);
+      const kernelRef = kernelSessionRef.current.referents.lastMentioned;
+      if (legacyRef && (legacyRef.at ?? 0) > (kernelRef?.at ?? -1)) kernelSessionRef.current = rememberSearchResults(kernelSessionRef.current, [legacyRef], legacyRef.at ?? now().getTime());
+      const session = kernelSessionRef.current;
+      const authority: TurnAuthority = { sessionId: session.id, turnId: commandId, captureEpoch: asyncAuthorityEpoch.current, documentRevision: snapshotRef.current.revision, createdAtMs: now().getTime() };
+      const env = { ...createEnvironment(getBridgeRegistry(), document, { route: routeRef.current }, { now }), memory: document.personalMemoryFacts ?? [], authority };
+      const referents: ReferentSummary[] = Object.entries(session.referents)
+        .filter(([key, ref]) => key !== "lastSearchResults" && ref !== undefined)
+        .map(([key, value]) => { const ref = value as { id: string; kind: string; label?: string }; return { key: key as ReferentSummary["key"], label: ref.label ?? ref.id, kind: ref.kind }; });
+      return { env, session, authority, referents, clarification: activeConversationalClarification(), recentTurns: [...recentConversationTurnsRef.current] };
     });
-
-    // A newer utterance (including the user saying "stop"/"never mind")
-    // superseded this turn while the model was thinking — a late response
-    // from an interrupted turn must never execute or update visible state.
-    if (conversationalAbortRef.current !== controller) return;
-
-    kernelSessionRef.current = result.session;
-
-    if (result.conversationalClarification) {
-      pendingConversationalClarificationRef.current = { ...result.conversationalClarification, askedAtMs: now().getTime() };
-    } else {
-      pendingConversationalClarificationRef.current = undefined;
-    }
-
-    const persistedActions = result.outcome.status === "executed" && result.primaryCapabilityId
-      ? persistKernelMutation(result.primaryCapabilityId, beforeDocument, beforeMemory, result.env.document, result.env.memory, undefined)
-      : [];
-    if (persistedActions.length > 0) dispatchLife(persistedActions, result.message, transcript, source);
-
-    const currentRef = kernelSessionRef.current.referents.lastMentioned;
-    if (currentRef) {
-      const patch = legacyContextPatchFromReference(currentRef, now().getTime());
-      if (patch && conversationRef.current.focusedEntityId !== patch.focusedEntityId) {
-        const next = { ...conversationRef.current, ...patch };
-        conversationRef.current = next;
-        setConversationContext(next);
-        setFocusedEntityId(patch.focusedEntityId);
-      }
-    }
-
-    setLastTranscript(transcript);
-    recentConversationTurnsRef.current = [...recentConversationTurnsRef.current.slice(-5), { transcript, response: result.message }];
-
-    const phaseToFeedback: Record<string, CommandFeedback["phase"]> = {
-      listening: "clarification", thinking: "understanding", checking: "understanding",
-      "needs-clarification": "clarification", "ready-to-act": "confirmation", done: "completed",
-    };
-    // result.message already carries the cause-specific truthful text (see
-    // conversationCoordinator.ts's modelUnavailableMessage — not-configured
-    // vs. offline vs. unauthorized vs. a genuinely unresponsive model are
-    // different problems with different fixes, so they no longer collapse
-    // into one generic "isn't available" string here).
-    const declineMessage = result.message;
-    completeCommandTrace(persistedActions, [], result.outcome.status === "executed" ? undefined : declineMessage);
-    // A decline is exactly legacy's own "unsupported" shape (title "Nothing
-    // changed" + a specific detail, see lifeCommandController.ts) — nothing
-    // mutated, and the reason (model unavailable, deadline, cancelled, ...)
-    // belongs in the detail, not a bespoke title, so this tier never grows a
-    // second status-card convention (Rule #9) and always honestly discloses
-    // a local-model/companion-unavailable state instead of quietly acting
-    // like nothing was asked.
-    setFeedback(
-      result.declineReason
-        ? { phase: "error", title: "Nothing changed", detail: declineMessage, transcript }
-        : { phase: result.outcome.status === "error" ? "error" : (phaseToFeedback[result.phase] ?? "completed"), title: result.message, transcript },
-    );
+    if (controller.signal.aborted || conversationalAbortRef.current !== controller) return;
+    beginCommandTrace(transcript, { type: "conversational" }, conversationRef.current, [], undefined, commandId);
+    const current = () => !controller.signal.aborted && conversationalAbortRef.current === controller
+      && authorityIsCurrent(context.authority, { ...context.authority, sessionId: kernelSessionRef.current.id, captureEpoch: asyncAuthorityEpoch.current, documentRevision: snapshotRef.current.revision }, now().getTime());
+    let publishedRevision: number | undefined;
+    let persistedActions: LifeAction[] = [];
+    const result = await runConversationTurn({
+      rawTranscript: transcript, normalizedTranscript: correctedTranscript(transcript),
+      env: context.env, session: context.session, recentTurns: context.recentTurns,
+      referents: context.referents, activeClarificationQuestion: context.clarification?.question,
+      signal: controller.signal, authority: context.authority,
+      executePlan: (steps, execution) => mutationCoordinator.run(() => {
+        const executeLocked = () => {
+          syncFromStorage();
+          if (execution.signal !== controller.signal || execution.authority !== context.authority || !current()) {
+            const message = "The request is no longer current. Review the latest document and ask again. Nothing changed.";
+            return { env: context.env, session: kernelSessionRef.current, outcome: { status: "error" as const, message }, phase: "done" as const, message, recognized: true };
+          }
+          const staged = stageIdempotency(getBridgeIdempotencyStore(), commandId);
+          const before = { document: snapshotRef.current.document, memory: snapshotRef.current.document.personalMemoryFacts ?? [], session: kernelSessionRef.current };
+          const step = submit({ ...context.env, document: before.document, memory: before.memory, idempotency: staged, requireMutationReview: getRuntimeMode() === "hosted" }, before.session, transcript, steps);
+          const tentative = { ...step, phase: phaseFor(step.outcome), message: messageFor(step.outcome), recognized: true };
+          activeCommandId.current = commandId; activeCommandSource.current = source;
+          let settled: ReturnType<typeof settleKernelTurn>;
+          try { settled = settleKernelTurn(tentative, before, (actions) => commit(actions, transcript, source, tentative.message), () => staged.commit()); }
+          finally { activeCommandId.current = undefined; activeCommandSource.current = undefined; }
+          if (settled.status === "error") {
+            processedCommandIds.current = processedCommandIds.current.filter((id) => id !== commandId);
+            if (storageFailureRef.current && unsavedRef.current) {
+              unsavedRef.current = { revision: context.authority.documentRevision, commandId, retry: () => {
+                const retryResult = executeLocked();
+                if (retryResult.outcome.status === "executed") {
+                  completeCommandTrace(persistedActions, []);
+                  setFeedback({ phase: "completed", title: retryResult.message, transcript });
+                }
+                return publishedRevision !== undefined && publishedRevision > context.authority.documentRevision;
+              } };
+            }
+          } else {
+            kernelSessionRef.current = settled.result.session;
+            publishedRevision = snapshotRef.current.revision;
+            persistedActions = settled.actions;
+          }
+          return settled.result;
+        };
+        return executeLocked();
+      }),
+    });
+    await mutationCoordinator.run(() => {
+      syncFromStorage();
+      if (controller.signal.aborted || conversationalAbortRef.current !== controller || asyncAuthorityEpoch.current !== context.authority.captureEpoch) return;
+      if (publishedRevision === undefined ? !current() : publishedRevision !== snapshotRef.current.revision) return;
+      if (storageFailureRef.current && unsavedRef.current) { completeCommandTrace([], [], "Storage unavailable"); return; }
+      kernelSessionRef.current = result.session;
+      pendingConversationalClarificationRef.current = result.conversationalClarification ? { ...result.conversationalClarification, askedAtMs: now().getTime() } : undefined;
+      const ref = result.session.referents.lastMentioned;
+      const patch = ref && legacyContextPatchFromReference(ref, now().getTime());
+      if (patch) { conversationRef.current = { ...conversationRef.current, ...patch }; setConversationContext(conversationRef.current); setFocusedEntityId(patch.focusedEntityId); }
+      setLastTranscript(transcript);
+      recentConversationTurnsRef.current = [...recentConversationTurnsRef.current.slice(-3), { transcript, response: result.message }];
+      completeCommandTrace(persistedActions, [], result.outcome.status === "executed" ? undefined : result.message);
+      const phase = result.outcome.status === "error" ? "error" : result.outcome.status === "proposed" ? "confirmation" : result.outcome.status === "clarify" ? "clarification" : "completed";
+      setFeedback(result.hostedModelResponse ? { phase: "completed", title: "AI response — no changes made", detail: result.message, transcript } : result.declineReason ? { phase: "error", title: "Nothing changed", detail: result.message, transcript } : { phase, title: result.message, transcript });
+    });
   }
 
   function runCommandExactlyOnce(transcript: string, source: TransactionSource = "type", commandId = `${source}-${Date.now()}-${Math.random().toString(36).slice(2)}`, captured?: CapturedCommandContext) {
+    // Exact recovery controls do not intercept quoted text or active dictation.
+    const recoveryMode = captured?.context.voiceMode ?? conversationRef.current.voiceMode;
+    const recoveryAllowed = !["dictation", "journal-longform", "voice-note-longform"].includes(recoveryMode ?? "");
+    if (unsavedRef.current && recoveryAllowed) {
+      if (/^retry save[.!]?$/i.test(transcript.trim())) { void retrySave(); return; }
+      if (/^discard unsaved request[.!]?$/i.test(transcript.trim())) { discardUnsavedChanges(); return; }
+    }
+    if (unsavedRef.current?.commandId === commandId) { void retrySave(); return; }
     if (processedCommandIds.current.includes(commandId)) return;
+    asyncAuthorityEpoch.current += 1;
+    const inputEpoch = asyncAuthorityEpoch.current;
+    // New turns may queue in order. Only a capture lifecycle cancellation
+    // revokes a hosted final that has not reached its durable boundary yet.
+    const captureEpoch = captureCancellationEpoch.current;
+    const revokedCapture = () => source === "voice" && getRuntimeMode() === "hosted" && captureEpoch !== captureCancellationEpoch.current;
+    latestCommandIdRef.current = commandId;
+    hostedVoiceOutcomeRef.current = undefined;
+    conversationalAbortRef.current?.abort();
+    storageFailureRef.current = false;
+    if (source === "voice") voiceDebug("voice.routingStarted", { commandId });
     processedCommandIds.current = [...processedCommandIds.current.slice(-127), commandId];
     // Never let the kernel bridge intercept dictation — someone narrating a
     // journal entry who happens to say "remember to call mom" means that
@@ -1494,12 +1614,12 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       const hasLegacyPendingContext = Boolean(pendingRef.current || calendarPreviewRef.current);
       const continuesConversation = Boolean(activeConversationalClarification());
       if (!hasKernelPendingContext && !hasLegacyPendingContext && (continuesConversation || assessComplexity(transcript).flagged)) {
-        void mutationCoordinator.run(() => tryConversationalBridge(transcript, source));
+        if (source === "voice") voiceDebug("voice.routeSelected", { commandId, route: "reasoner" });
+        void tryConversationalBridge(transcript, source, commandId, inputEpoch);
         return;
       }
     }
 
-    if (!isDictating && tryKernelBridge(transcript, source)) return;
     // Typed submission has the same acquisition boundary as final speech.
     // Freeze references/authority, never the document: execution still reads
     // the latest snapshot inside the durable CAS coordinator.
@@ -1508,7 +1628,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       scope: structuredClone(snapshotRef.current.temporal?.scope ?? { kind: "day", dateKey: snapshotRef.current.document.calendar.dateKey }),
       selectedCalendarEventId: selectedCalendarEventRef.current,
       recommendations: structuredClone(nowCandidates),
-      confirmationAuthority: calendarPreviewRef.current ?? pendingRef.current ?? null,
+      confirmationAuthority: calendarPreviewRef.current ?? pendingRef.current ?? kernelSessionRef.current.activeProposal ?? null,
     };
     const inputSequence = ++commandInputSequence.current;
     nativeFeedbackEpoch.current += 1;
@@ -1525,7 +1645,9 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     // obsolete clone or frame sampler running over that work.
     voiceWorldController.interruptTargetPresentation();
     flushSync(() => { cancelTransition(); rewardDirector.cancel("interrupted"); });
-    void mutationCoordinator.run(() => {
+    let startConversation = false;
+    const coordinated = mutationCoordinator.run(() => {
+      if (revokedCapture()) return;
       syncFromStorage();
       activeCommandId.current = commandId;
       activeCommandSource.current = source;
@@ -1545,12 +1667,22 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
           nowMs: now().getTime(),
         };
         const scope = captured?.scope ?? snapshotRef.current.temporal?.scope;
-        let resolution = captured?.boundaryClarification ? { intent: { type: "clarification" as const, title: "Please repeat the complete request", detail: captured.boundaryClarification }, candidates: [] }
+        const resolution = captured?.boundaryClarification ? { intent: { type: "clarification" as const, title: "Please repeat the complete request", detail: captured.boundaryClarification }, candidates: [] }
           : resolveGlobalCommand(transcript.trim(), currentContext, snapshotRef.current.temporal?.todayDateKey ?? currentDocument.calendar.dateKey, currentDocument.steps, currentDocument.preferences.workdayEndMinutes, calendarReferenceScope(currentDocument, scope), currentDocument.people, currentDocument.friends?.groups);
-        if (captured && ["confirm", "pending-choice", "cancel", "capture-answer", "friend-draft", "friend-marker-answer"].includes(resolution.intent.type)
+        // A bound clarification reply belongs to its pending request. Kernel
+        // search referents must not steal ordinals such as "the first one".
+        const isPendingReply = ["confirm", "pending-choice", "cancel", "capture-answer", "friend-draft", "friend-marker-answer"].includes(resolution.intent.type);
+        const legacyReply = isPendingReply && Boolean(calendarPreviewRef.current || pendingRef.current || currentContext.pending);
+        if (!isDictating && !legacyReply && tryKernelBridge(transcript, source, commandId, captured)) return;
+        if (captured && isPendingReply
           && captured.confirmationAuthority !== (calendarPreviewRef.current ?? pendingRef.current ?? null)) {
-          resolution = { intent: { type: "clarification", title: "The pending request changed while you were speaking.", detail: "Review the current request, then confirm or cancel it again. Nothing changed." }, candidates: [] };
+          // A stale reply has no authority over the replacement request,
+          // including the authority to dismiss it through clarification.
+          setLastTranscript(transcript);
+          setFeedback({ phase: "error", title: "The pending request changed while you were speaking.", detail: "Review the current request, then confirm or cancel it again. Nothing changed.", transcript });
+          return;
         }
+        if (source === "voice") voiceDebug("voice.routeSelected", { commandId, route: "legacy", intentType: resolution.intent.type });
         // Last-resort conversational tier: the legacy interpreter's own
         // "unsupported" fallback took no action and mutated nothing, so
         // handing the SAME utterance to the model here cannot double-execute
@@ -1568,7 +1700,8 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
         // with a worse (and slower) one for no benefit.
         if (!isDictating && !captured?.boundaryClarification && resolution.intent.type === "unsupported"
           && (TERMINAL_FALLBACK_DETAILS as readonly string[]).includes(resolution.intent.detail)) {
-          return tryConversationalBridge(transcript.trim(), source);
+          startConversation = true;
+          return;
         }
         const isView = ["commitment-view", "entity-view", "editor-close", "command-surface", "sensory-preference", "voice-retry"].includes(resolution.intent.type);
         const supersededView = () => isView && inputSequence < latestCommitmentViewSequence.current;
@@ -1578,22 +1711,34 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
         const isDictation = resolution.segment?.classification === "CONTENT";
         if (!isDictation) flushSync(() => voiceWorldController.target(projection));
         const execute = () => {
-          if (supersededView()) { activeCommandId.current = undefined; activeCommandSource.current = undefined; activeCommandIntent.current = undefined; return; }
+          if (revokedCapture() || supersededView()) { activeCommandId.current = undefined; activeCommandSource.current = undefined; activeCommandIntent.current = undefined; return; }
           if (isView) latestCommitmentViewSequence.current = inputSequence;
           voiceWorldController.markExecutionStarted();
           const foreground = conversationRef.current;
           const priorFocus = focusedEntityRef.current;
           const preserveForeground = isDictation && captured && (foreground.activeJournalEntryId !== captured.context.activeJournalEntryId || foreground.voiceMode !== captured.context.voiceMode);
-          try { createCurrentCommandRunner(captured ? { ...captured, context: currentContext } : undefined, inputSequence)(transcript, source, commandId, { resolution, presented: true }); }
+          if (source === "voice") voiceDebug("voice.commandExecutionStarted", { commandId, intentType: resolution.intent.type });
+          const priorTransaction = snapshotRef.current.lastTransaction?.id;
+          try {
+            createCurrentCommandRunner(captured ? { ...captured, context: currentContext } : undefined, inputSequence)(transcript, source, commandId, { resolution, presented: true });
+            if (source === "voice") voiceDebug("voice.commandExecutionCompleted", { commandId, intentType: resolution.intent.type,
+              executionId: snapshotRef.current.lastTransaction?.id !== priorTransaction ? snapshotRef.current.lastTransaction?.id : undefined });
+          }
           finally {
             if (preserveForeground) { conversationRef.current = foreground; setConversationContext(foreground); setFocusedEntityId(priorFocus); }
             activeCommandId.current = undefined; activeCommandSource.current = undefined; activeCommandIntent.current = undefined;
           }
         };
-        const presentation = !isDictation && projection.confidenceTier !== "clarify" && projection.confidenceTier !== "unsupported"
+        // Closed replies act on an already presented proposal/history entry.
+        // Sleep must also stop capture before the native restart timer fires;
+        // presentation cannot delay an authorized microphone control.
+        const isClosedVoiceReply = source === "voice" && ["confirm", "cancel", "history"].includes(resolution.intent.type);
+        const isSleep = resolution.intent.type === "session" && resolution.intent.mode === "sleep";
+        const presentation = !isSleep && !isClosedVoiceReply && !isDictation && projection.confidenceTier !== "clarify" && projection.confidenceTier !== "unsupported"
           ? voiceWorldController.waitForTargetPaint(commandId)
           : undefined;
         if (presentation) {
+          if (source === "voice") voiceDebug("voice.presentationWaitStarted", { commandId });
           deferred = true;
           return presentation.then(execute);
         }
@@ -1607,6 +1752,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
         }
       }
     });
+    void Promise.resolve(coordinated).then(() => { if (startConversation) return tryConversationalBridge(transcript.trim(), source, commandId, inputEpoch); });
   }
   function dispatchCommitmentView(patch: Partial<CommitmentViewState>) {
     // Pointer parameters are already typed. Use the same canonical controller
@@ -1724,7 +1870,10 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
   }
   const undo = (transcript?: string) => { nativeFeedbackEpoch.current += 1; flushSync(() => { cancelTransition(); rewardDirector.cancel("cancelled"); }); void mutationCoordinator.run(() => { syncFromStorage(); applyUndo(transcript); }); };
   const redo = (transcript?: string) => { nativeFeedbackEpoch.current += 1; flushSync(() => { cancelTransition(); rewardDirector.cancel("cancelled"); }); void mutationCoordinator.run(() => { syncFromStorage(); applyRedo(transcript); }); };
-  const confirm = () => { nativeFeedbackEpoch.current += 1; void mutationCoordinator.run(() => { const changed = syncFromStorage(); if (!changed) applyConfirm(); }); };
+  const confirm = () => {
+    if (kernelSessionRef.current.activeProposal) { runCommandExactlyOnce("confirm"); return; }
+    nativeFeedbackEpoch.current += 1; void mutationCoordinator.run(() => { const changed = syncFromStorage(); if (!changed) applyConfirm(); });
+  };
   const choosePending = (choiceId: string) => { nativeFeedbackEpoch.current += 1; void mutationCoordinator.run(() => { const changed = syncFromStorage(); if (!changed) applyPendingSelection(choiceId); }); };
   const setListeningFeedback = useCallback((interim: string) => {
     if (pendingRef.current) return;
@@ -1761,15 +1910,21 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       kyutaiAwaitingResponseRef.current = true;
       setFeedback({ phase: "clarification", title: "The pending request changed while you were speaking.", detail: "Review the current request, then confirm or cancel it again. Nothing changed." });
     },
-    onFinalTranscript: (transcript) => {
-      voiceDebug("voice.finalTranscriptToKernel", { transcript });
+    onSessionStopped: (reason) => { kyutaiAwaitingResponseRef.current = false; invalidateAsyncAuthority(reason); },
+    onFinalTranscript: (transcript, correlation) => {
+      const commandId = correlation?.commandId ?? `voice-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      voiceDebug("voice.finalTranscriptToKernel", { transcript, commandId });
       kyutaiAwaitingResponseRef.current = !["dictation", "journal-longform", "voice-note-longform"].includes(conversationRef.current.voiceMode ?? "command");
       voiceWorldController.activate("listening");
-      runCommandExactlyOnce(transcript, "voice");
+      runCommandExactlyOnce(transcript, "voice", commandId);
+      if (correlation) hostedVoiceOutcomeRef.current = { commandId, epoch: asyncAuthorityEpoch.current, captureEpoch: correlation.captureEpoch };
     },
   });
   const kyutaiVoiceRef = useRef(kyutaiVoice);
   kyutaiVoiceRef.current = kyutaiVoice;
+  useEffect(() => {
+    if (getRuntimeMode() === "hosted") setFlowLiveStatus(kyutaiVoice.status === "active" ? "listening" : kyutaiVoice.status === "connecting" ? "live-idle" : "sleeping");
+  }, [kyutaiVoice.status]);
   // The one authoritative ownership signal (see voiceOwnership.ts) —
   // GlobalCommandDock reads this off the environment to decide whether its
   // own (legacy browser SpeechRecognition) transcript is allowed to reach
@@ -1785,6 +1940,10 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
   useEffect(() => {
     voiceDebug("voice.feedback", { phase: feedback.phase, title: feedback.title, awaiting: kyutaiAwaitingResponseRef.current });
     if (!kyutaiAwaitingResponseRef.current) return;
+    if (getRuntimeMode() === "hosted") {
+      const outcome = hostedVoiceOutcomeRef.current;
+      if (!outcome || outcome.epoch !== asyncAuthorityEpoch.current || outcome.commandId !== latestCommandIdRef.current || outcome.captureEpoch !== kyutaiVoiceRef.current.captureEpoch || !kyutaiVoiceRef.current.active) { kyutaiAwaitingResponseRef.current = false; return; }
+    }
     if (feedback.phase === "understanding" || feedback.phase === "listening" || feedback.phase === "ready") return;
     kyutaiAwaitingResponseRef.current = false;
     // Speech presentation (Rule: concise, never JSON/chain-of-thought) —
@@ -1810,7 +1969,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
     snapshot, document: snapshot.document, route, peopleView, commitmentView, entityEditor, commandPresentation, activePlanId, focusedEntityId, selectedCalendarEventId, feedback, calendarFeedback, conversationContext,
     pageNavigation, temporalScope, todayDateKey: snapshot.temporal?.todayDateKey ?? dateKey, currentTime: clockTime, setTemporalScope, recordInstinctExposure,
     renderedCalendar: calendarPreview?.proposed.calendar ?? snapshot.document.calendar, calendarPreview: Boolean(calendarPreview),
-    lastTranscript, pending, nowCandidates, nowQuery, nowExplanationOpen, flowLiveStatus, voiceWorld: voiceWorldController.snapshot, voiceInputOwner, reward, rewardPreferences, canUndo: snapshot.past.length > 0, canRedo: snapshot.future.length > 0,
+    lastTranscript, pending, nowCandidates, nowQuery, nowExplanationOpen, flowLiveStatus, voiceWorld: voiceWorldController.snapshot, voiceInputOwner, hostedVoice: kyutaiVoice, reward, rewardPreferences, canUndo: snapshot.past.length > 0, canRedo: snapshot.future.length > 0,
     // Public pointer navigation supersedes pending native playback. The
     // controller's internal navigate function belongs to its current command
     // and must not invalidate that command's own target-ready handoff.
@@ -1832,7 +1991,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       const next = { ...conversationRef.current, focusedEntityId: id, selected: reference, lastReferenced: reference, nowMs: now().getTime() };
       conversationRef.current = next; setConversationContext(next);
     },
-    runCommand: runCommandExactlyOnce, dispatchFriend, dispatchCommitmentView, dispatchEntityView, dispatchPresentation, dispatchCalendar, dispatchLife, dispatchRecording, prepareJournalAcquisition, prepareVoiceNoteAcquisition, undo, redo, confirm, continueNative, requestNativeStudio, cancel, choosePending, confirmationAuthority: calendarPreview ?? pending ?? null,
+    runCommand: runCommandExactlyOnce, hasUnsavedChanges, retrySave, discardUnsavedChanges, invalidateAsyncAuthority, dispatchFriend, dispatchCommitmentView, dispatchEntityView, dispatchPresentation, dispatchCalendar, dispatchLife, dispatchRecording, prepareJournalAcquisition, prepareVoiceNoteAcquisition, undo, redo, confirm, continueNative, requestNativeStudio, cancel, choosePending, confirmationAuthority: calendarPreview ?? pending ?? kernelSessionRef.current.activeProposal ?? null,
     setListeningFeedback, setFlowLiveStatus,
     wakeVoiceHome: (transcript) => { setLastTranscript(transcript); voiceWorldController.wake(transcript); },
     waitForVoiceWake: (transcript) => { setLastTranscript(transcript); voiceWorldController.waitForWake(transcript); },
@@ -1888,7 +2047,7 @@ export function FlowEnvironmentProvider({ children, now = systemNow, weatherProv
       conversationRef.current = next; setConversationContext(next);
     },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [snapshot, route, peopleView, commitmentView, entityEditor, commandPresentation, activePlanId, focusedEntityId, selectedCalendarEventId, feedback, calendarFeedback, lastTranscript, pending, nowCandidates, nowQuery, nowExplanationOpen, flowLiveStatus, voiceWorldController.snapshot, voiceInputOwner, voiceWorldController.wake, voiceWorldController.waitForWake, voiceWorldController.activate, voiceWorldController.disableWakeGate, reward, rewardPreferences, rewardDirector, navigate, calendarPreview, conversationContext, syncFromStorage, temporalScope, dateKey, clockTime, now, setTemporalScope, setListeningFeedback]);
+  }), [snapshot, route, peopleView, commitmentView, entityEditor, commandPresentation, activePlanId, focusedEntityId, selectedCalendarEventId, feedback, calendarFeedback, lastTranscript, pending, nowCandidates, nowQuery, nowExplanationOpen, flowLiveStatus, voiceWorldController.snapshot, voiceInputOwner, kyutaiVoice, voiceWorldController.wake, voiceWorldController.waitForWake, voiceWorldController.activate, voiceWorldController.disableWakeGate, reward, rewardPreferences, rewardDirector, navigate, calendarPreview, conversationContext, syncFromStorage, temporalScope, dateKey, clockTime, now, setTemporalScope, setListeningFeedback]);
 
   return <EnvironmentContext.Provider value={value}>
     <TransitionContext.Provider value={transition}>{children}</TransitionContext.Provider>

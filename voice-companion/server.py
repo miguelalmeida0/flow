@@ -118,6 +118,7 @@ class Worker:
         self.env_overrides = env_overrides
         self.process: asyncio.subprocess.Process | None = None
         self.ready = False
+        self.startup = None
         self._restart_count = 0
         self._MAX_RESTARTS = 5
 
@@ -183,6 +184,8 @@ class VoiceCompanion:
         self.tts = Worker("tts", venv_tts, REPO_ROOT / "tts_worker.py", {})
         self.current_ws = None
         self._tts_output_session = None
+        self._tts_output_request = None
+        self._tts_expected_request = None
         self._listening = False
 
     async def start(self):
@@ -208,6 +211,7 @@ class VoiceCompanion:
             event = json.loads(payload)
             if event.get("type") == "worker.ready":
                 self.stt.ready = True
+                self.stt.startup = {"workerEpoch": event.get("workerEpoch"), **(event.get("startup") or {})}
                 log.info("STT ready")
                 continue
             await self._forward_to_client(event)
@@ -225,15 +229,21 @@ class VoiceCompanion:
                 await self._restart(self.tts)
                 continue
             if msg_type == FRAME_AUDIO:
-                if self._tts_output_session == getattr(self, "session_id", None):
+                if (self._tts_output_session, self._tts_output_request) == self._tts_expected_request:
                     await self._forward_bytes_to_client(payload)
                 continue
             event = json.loads(payload)
             if event.get("type") == "tts.start":
                 self._tts_output_session = event.get("sessionId")
+                self._tts_output_request = event.get("requestId")
             if event.get("type") == "worker.ready":
                 self.tts.ready = True
+                self.tts.startup = {"workerEpoch": event.get("workerEpoch"), **(event.get("startup") or {})}
                 log.info("TTS ready")
+                continue
+            if (event.get("type", "").startswith("tts.")
+                    and not (event.get("type") == "tts.error" and "requestId" not in event)
+                    and (event.get("sessionId"), event.get("requestId")) != self._tts_expected_request):
                 continue
             await self._forward_to_client(event)
 
@@ -282,6 +292,7 @@ async def handle_connection(ws, companion: VoiceCompanion):
     previous_ws = companion.current_ws
     companion.current_ws = ws
     companion.session_id = str(uuid.uuid4())
+    companion._tts_expected_request = None
     session_id = companion.session_id
     if previous_ws is not None and previous_ws is not ws:
         log.info("closing a previous tab's connection: superseded by a new tab")
@@ -294,7 +305,8 @@ async def handle_connection(ws, companion: VoiceCompanion):
     if companion.current_ws is not ws:
         await ws.close(code=4409, reason="superseded by a newer tab")
         return
-    await ws.send(json.dumps({"type": "ready", "sttReady": companion.stt.ready, "ttsReady": companion.tts.ready, "version": VERSION}))
+    await ws.send(json.dumps({"type": "ready", "sttReady": companion.stt.ready, "ttsReady": companion.tts.ready, "version": VERSION, "sessionId": session_id,
+                             "startup": {"stt": companion.stt.startup, "tts": companion.tts.startup}}))
     log.info("client connected")
     try:
         async for message in ws:
@@ -312,14 +324,24 @@ async def handle_connection(ws, companion: VoiceCompanion):
                 continue
             msg_type = control.get("type")
             if msg_type == "session.start":
-                await companion.stt.send_json({"cmd": "start", "sessionId": session_id})
+                capture_id = control.get("captureId")
+                await companion.stt.send_json({"cmd": "start", "sessionId": session_id,
+                                               "inputMode": "dictation" if control.get("inputMode") == "dictation" else "command",
+                                               "captureId": capture_id if isinstance(capture_id, int) and 0 < capture_id <= 2**53 - 1 else None})
+            elif msg_type == "session.profile" and control.get("inputMode") in ("command", "dictation"):
+                await companion.stt.send_json({"cmd": "profile", "sessionId": session_id, "inputMode": control["inputMode"]})
             elif msg_type == "session.stop":
                 await companion.stt.send_json({"cmd": "stop"})
             elif msg_type == "tts.speak":
                 text = control.get("text")
                 if isinstance(text, str) and text.strip():
-                    await companion.tts.send_json({"cmd": "speak", "text": text, "sessionId": session_id})
+                    request_id = control.get("requestId")
+                    if request_id is not None and (not isinstance(request_id, int) or not 0 < request_id <= 2**53 - 1):
+                        continue
+                    companion._tts_expected_request = (session_id, request_id)
+                    await companion.tts.send_json({"cmd": "speak", "text": text, "sessionId": session_id, "requestId": request_id})
             elif msg_type == "tts.cancel":
+                companion._tts_expected_request = None
                 await companion.tts.send_json({"cmd": "cancel"})
     except Exception:  # noqa: BLE001
         log.exception("connection error")

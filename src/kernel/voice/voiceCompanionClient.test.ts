@@ -57,6 +57,19 @@ afterEach(() => {
 });
 
 describe("VoiceCompanionClient", () => {
+  it("preserves diagnostic acquisition clocks and identity without promoting them to speech or finals", () => {
+    const client = makeClient();
+    const events: VoiceCompanionEvent[] = [];
+    client.on(event => events.push(event));
+    client.connect();
+    const diagnostics = ["stt.speechDetected", "stt.decoderReady", "stt.firstToken"].map(type => ({
+      type, sessionId: "session-a", utteranceId: "session-a:2", atMs: 123.5, durationMs: 45,
+    }));
+    for (const event of diagnostics) FakeWebSocket.instances[0]!.simulateMessage(JSON.stringify(event));
+    expect(events).toEqual(diagnostics);
+    expect(FakeWebSocket.instances[0]!.sent).toEqual([]);
+    client.disconnect();
+  });
   it("queues only the live acquisition after StrictMode connect-disconnect-connect", async () => {
     const descriptor = Object.getOwnPropertyDescriptor(navigator, "locks");
     const request = vi.fn(() => new Promise(() => undefined));
@@ -105,6 +118,8 @@ describe("VoiceCompanionClient", () => {
     const ws = FakeWebSocket.instances[0]!;
     ws.simulateOpen();
     const buf = new ArrayBuffer(4);
+    client.speak("Current speech");
+    ws.simulateMessage(JSON.stringify({ type: "tts.start", requestId: 1 }));
     ws.simulateMessage(buf);
     ws.simulateMessage(JSON.stringify({ type: "transcript.partial", text: "hello" }));
     ws.simulateMessage(JSON.stringify({ type: "transcript.final", text: "hello world" }));
@@ -123,9 +138,9 @@ describe("VoiceCompanionClient", () => {
     client.speak("hello there");
     client.cancelSpeak();
     expect(ws.sent).toEqual([
-      JSON.stringify({ type: "session.start" }),
+      JSON.stringify({ type: "session.start", captureId: 1, inputMode: "command" }),
       JSON.stringify({ type: "session.stop" }),
-      JSON.stringify({ type: "tts.speak", text: "hello there" }),
+      JSON.stringify({ type: "tts.speak", text: "hello there", requestId: 1 }),
       JSON.stringify({ type: "tts.cancel" }),
     ]);
   });
@@ -133,6 +148,43 @@ describe("VoiceCompanionClient", () => {
   it("drops sendAudio silently when not connected instead of throwing", () => {
     const client = makeClient();
     expect(() => client.sendAudio(new ArrayBuffer(8))).not.toThrow();
+  });
+
+  it("drops superseded TTS starts, queued PCM and completions", () => {
+    const client = makeClient();
+    const events: VoiceCompanionEvent[] = [];
+    client.on(event => events.push(event)); client.connect();
+    const ws = FakeWebSocket.instances[0]!; ws.simulateOpen();
+    client.speak("Old response");
+    ws.simulateMessage(JSON.stringify({ type: "tts.start", requestId: 1 }));
+    client.cancelSpeak();
+    const before = events.length;
+    ws.simulateMessage(new ArrayBuffer(4));
+    ws.simulateMessage(JSON.stringify({ type: "tts.start", requestId: 1 }));
+    ws.simulateMessage(JSON.stringify({ type: "tts.done", requestId: 1 }));
+    client.speak("New response");
+    ws.simulateMessage(new ArrayBuffer(4));
+    expect(events).toHaveLength(before);
+    ws.simulateMessage(JSON.stringify({ type: "tts.start", requestId: 3 }));
+    ws.simulateMessage(new ArrayBuffer(8));
+    expect(events.at(-1)).toMatchObject({ type: "tts.audio" });
+    ws.simulateMessage(JSON.stringify({ type: "tts.done", requestId: 1 }));
+    ws.simulateMessage(new ArrayBuffer(8));
+    expect(events.at(-1)).toMatchObject({ type: "tts.audio" });
+  });
+
+  it("carries dictation context into acquisition and changes profile without restarting capture", () => {
+    const client = makeClient();
+    client.setInputMode("dictation");
+    client.connect();
+    const ws = FakeWebSocket.instances[0]!;
+    ws.simulateOpen();
+    client.startSession();
+    client.setInputMode("command");
+    expect(ws.sent).toEqual([
+      JSON.stringify({ type: "session.start", captureId: 1, inputMode: "dictation" }),
+      JSON.stringify({ type: "session.profile", inputMode: "command" }),
+    ]);
   });
 
   it("reconnects with exponential backoff after an unexpected close, but never after an explicit disconnect", () => {

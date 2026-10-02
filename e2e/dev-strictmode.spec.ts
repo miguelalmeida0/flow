@@ -1,3 +1,4 @@
+import { awaitLocalListening, wakeLocalVoice } from "./local-voice-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 
@@ -12,7 +13,7 @@ function watchPage(page: Page) {
   page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5174") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
+    if (request.url().startsWith(`http://127.0.0.1:${process.env.FLOW_DEV_E2E_PORT ?? "5174"}`) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
       failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
     }
   });
@@ -72,13 +73,17 @@ test("a single development tab acquires Flow Live after the StrictMode effect pr
   await page.evaluate(() => localStorage.clear());
   await page.reload();
 
-  await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "sleeping");
-  await page.getByLabel("Start Flow Live").click();
+  await awaitLocalListening(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   expect(await page.evaluate(() => ({
     constructions: (window as Window & { __strictVoiceConstructions?: number }).__strictVoiceConstructions ?? 0,
     starts: (window as Window & { __strictVoiceStarts?: number }).__strictVoiceStarts ?? 0,
   }))).toEqual({ constructions: 1, starts: 1 });
+
+  await wakeLocalVoice(page, async () => {
+    await page.evaluate(() => (window as Window & { __strictRecognition?: { emit(value: string): void } }).__strictRecognition!.emit("Flow"));
+    await expect(page.getByLabel("Global Flow command")).toHaveAttribute("data-last-transcript", "Flow");
+  });
 
   await page.evaluate(() => {
     (window as Window & { __strictRecognition?: { emit(value: string): void } }).__strictRecognition?.emit("Capture StrictMode voice works");

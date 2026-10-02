@@ -62,10 +62,14 @@ export function usePageTaskReveal(route: string, entityId: string | undefined, n
       if (!task && route !== "home" && route !== "today" && ++attempts < 12) { frame = requestAnimationFrame(reveal); return; }
       const bounds = viewport.getBoundingClientRect();
       if (bounds.height <= 0 && ++attempts < 12) { frame = requestAnimationFrame(reveal); return; }
-      const first = task && [...task.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),audio[controls]')].find((element) => {
+      const anchor = task?.querySelector<HTMLElement>("[data-page-task-anchor]");
+      const first = anchor ?? (task && [...task.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),audio[controls]')].find((element) => {
         const rect = element.getBoundingClientRect(); return rect.height > 0 && rect.width > 0 && window.getComputedStyle(element).visibility !== "hidden";
-      });
-      const top = saved ? saved.top : task ? taskScrollTop(bounds, task.getBoundingClientRect(), viewport.scrollTop, first?.getBoundingClientRect()) : route === "home" || route === "today" ? 0 : undefined;
+      }));
+      const firstBounds = first?.getBoundingClientRect();
+      // Large editors need an initially usable slice, not their entire height.
+      const actionBounds = anchor && firstBounds ? new DOMRect(firstBounds.x, firstBounds.y, firstBounds.width, Math.min(120, firstBounds.height)) : firstBounds;
+      const top = saved ? saved.top : task ? taskScrollTop(bounds, task.getBoundingClientRect(), viewport.scrollTop, actionBounds) : route === "home" || route === "today" ? 0 : undefined;
       if (top !== undefined && Math.abs(viewport.scrollTop - top) > 1) viewport.scrollTo?.({ top, left: saved?.left ?? viewport.scrollLeft, behavior: reducedPreference.current || saved ? "instant" : "auto" });
       remember();
     };
@@ -78,7 +82,14 @@ export function usePageTaskReveal(route: string, entityId: string | undefined, n
     const restoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
     reveal();
+    const resize = !saved && typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => {
+      if (cancelled || !viewport.querySelector("[data-page-task-anchor]")) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(reveal);
+    }) : undefined;
+    resize?.observe(viewport);
     return () => {
+      resize?.disconnect();
       cancel(); viewport.removeEventListener("scroll", remember); viewport.removeEventListener("wheel", cancel); viewport.removeEventListener("touchstart", cancel); viewport.removeEventListener("pointerdown", cancel); viewport.removeEventListener("flow-manual-scroll", cancel); document.removeEventListener("keydown", keyDown);
       window.history.scrollRestoration = restoration;
     };

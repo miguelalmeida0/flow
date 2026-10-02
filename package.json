@@ -10,13 +10,13 @@
   "scripts": {
     "dev": "vite",
     "start:local": "node scripts/start-flow-local.mjs",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/build-hosted-model-contract.mjs && tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "TMPDIR=$PWD/node_modules/.tmp vitest",
-    "test:run": "TMPDIR=$PWD/node_modules/.tmp vitest run --maxWorkers=1",
-    "test:server": "TMPDIR=$PWD/node_modules/.tmp vitest run --config vitest.server.config.ts",
-    "check": "npm run lint && npm run test:run && npm run test:server && npm run build",
+    "test": "node scripts/build-hosted-model-contract.mjs && TMPDIR=$PWD/node_modules/.tmp vitest",
+    "test:run": "node scripts/build-hosted-model-contract.mjs && TMPDIR=$PWD/node_modules/.tmp vitest run --maxWorkers=1",
+    "test:server": "node scripts/build-hosted-model-contract.mjs && TMPDIR=$PWD/node_modules/.tmp vitest run --config vitest.server.config.ts",
+    "check": "npm run lint && npm run build && npm run test:run && npm run test:server",
     "test:real-model": "TMPDIR=$PWD/node_modules/.tmp vitest run --config vitest.realmodel.config.ts",
     "test:e2e": "TMPDIR=${TMPDIR:-$PWD/node_modules/.tmp} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/node_modules/.cache/ms-playwright} node scripts/run-e2e.mjs",
     "test:e2e:dev": "TMPDIR=${TMPDIR:-$PWD/node_modules/.tmp} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$PWD/node_modules/.cache/ms-playwright} node scripts/run-e2e.mjs --dev",
@@ -24,12 +24,18 @@
     "qa:release": "node scripts/qa-release.mjs",
     "qa:design-migration": "node scripts/qa-design-migration.mjs",
     "qa:motion": "node scripts/qa-motion.mjs",
-    "test:voice:autopilot": "node scripts/voice-autopilot/run.mjs"
+    "test:voice:autopilot": "node scripts/voice-autopilot/run.mjs",
+    "test:voice:latency": "node scripts/voice-autopilot/latency-run.mjs",
+    "test:voice:cold-warm": "node scripts/voice-autopilot/cold-warm.mjs",
+    "test:voice:fluidity": "node scripts/voice-autopilot/fluidity.mjs",
+    "build:hosted-contract": "node scripts/build-hosted-model-contract.mjs"
   },
   "dependencies": {
     "motion": "^12.23.12",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "redis": "6.3.0",
+    "ws": "8.22.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {
@@ -41,6 +47,7 @@
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.2",
+    "esbuild": "0.28.2",
     "eslint": "^9.35.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",

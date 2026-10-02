@@ -23,13 +23,18 @@ import json
 import os
 import sys
 import threading
+import time
+import uuid
 
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from framing import FRAME_AUDIO, FRAME_JSON, read_frame, write_frame  # noqa: E402
+from tts_text import speech_chunks  # noqa: E402
+from latest_speech import LatestSpeech  # noqa: E402
 
 MAX_TTS_TEXT_CHARS = 4_000
+WORKER_EPOCH = str(uuid.uuid4())
 _write_lock = threading.Lock()
 # Model/G2P dependencies print progress to stdout on first synthesis. Keep
 # framed protocol on a dedicated descriptor so those bytes cannot corrupt it.
@@ -58,50 +63,77 @@ def load_model():
     return _load(repo)
 
 
-def synthesize(model, text: str, voice: str, is_cancelled):
-    for result in model.generate(text=text, voice=voice, speed=1.0, stream=False):
+def synthesize(model, text: str, voice: str, is_cancelled, publish):
+    # Kokoro yields one playable segment at a time. Preserve sentence text and
+    # let the existing player schedule consecutive PCM buffers without gaps.
+    segmented = "\n".join(speech_chunks(text))
+    for result in model.generate(text=segmented, voice=voice, speed=1.0, stream=False):
         if is_cancelled():
             raise _Cancelled()
         pcm16 = (np.clip(np.asarray(result.audio), -1.0, 1.0) * 32767.0).astype(np.int16)
-        emit_audio(pcm16.tobytes())
+        if not publish(pcm16.tobytes()):
+            raise _Cancelled()
 
 
 def main():
+    started = time.monotonic()
+    voice = os.environ.get("FLOW_TTS_VOICE", "af_heart")
     try:
         model = load_model()
+        loaded = time.monotonic()
+        # Pay lazy G2P/voice/kernel setup before advertising synthesis readiness.
+        # This feed-forward probe is discarded and never enters audio output or
+        # a conversation. Consume the generator to finish allocator cleanup.
+        for result in model.generate(text="Ready.", voice=voice, speed=1.0, stream=False):
+            np.asarray(result.audio)
     except Exception as exc:  # noqa: BLE001
-        emit_json({"type": "tts.error", "message": f"model load failed: {exc}"})
+        emit_json({"type": "tts.error", "message": f"model initialization failed: {exc}"})
         sys.exit(1)
-    emit_json({"type": "worker.ready"})
+    emit_json({"type": "worker.ready", "workerEpoch": WORKER_EPOCH,
+               "startup": {"modelLoadMs": (loaded - started) * 1000,
+                           "synthesisWarmupMs": (time.monotonic() - loaded) * 1000,
+                           "totalMs": (time.monotonic() - started) * 1000, "synthesisWarmed": True}})
 
-    voice = os.environ.get("FLOW_TTS_VOICE", "af_heart")
-    current_generation = 0
-    generation_lock = threading.Lock()
-    synthesis_lock = threading.Lock()
-    cancel_flag = {"cancelled": False}
+    queue = LatestSpeech()
 
-    def is_cancelled_for(generation_id):
-        with generation_lock:
-            return cancel_flag["cancelled"] or generation_id != current_generation
+    def consume():
+        # One persistent inference thread. The stdin/control thread never waits
+        # for inference, and replacement/cancellation cannot accumulate jobs.
+        while (request := queue.take()) is not None:
+            synthesis_started = time.monotonic()
+            chunk_index = 0
 
-    def run_speak(text, generation_id, session_id):
-        def event(kind, **metadata):
-            emit_json({"type": kind, "id": generation_id, "sessionId": session_id, **metadata})
-        # MLX model state is shared; cancellation invalidates a generation but
-        # does not make concurrent model.generate calls safe.
-        with synthesis_lock:
-            if is_cancelled_for(generation_id):
-                return
-            event("tts.start")
+            def event(kind, **metadata):
+                emit_json({"type": kind, "id": request.generation,
+                           "requestId": request.request_id, "sessionId": request.session_id,
+                           "workerEpoch": WORKER_EPOCH, "atMs": time.monotonic() * 1000, **metadata})
+
+            def publish(pcm):
+                nonlocal chunk_index
+                generated_ms = (time.monotonic() - synthesis_started) * 1000
+                def output():
+                    event("tts.chunkGenerated", chunkIndex=chunk_index, samples=len(pcm) // 2,
+                          durationMs=generated_ms, requestToSamplesMs=(time.monotonic() - request.received_at) * 1000,
+                          synthesisQueueDepth=int(queue.pending is not None))
+                    emit_audio(pcm)
+                emitted = queue.publish(request, output)
+                chunk_index += int(emitted)
+                return emitted
+
+            if not queue.publish(request, lambda: event("tts.start", synthesisQueueDepth=0,
+                queueWaitMs=(synthesis_started - request.received_at) * 1000)):
+                continue
             try:
-                synthesize(model, text, voice, lambda: is_cancelled_for(generation_id))
+                synthesize(model, request.text, voice, lambda: not queue.current(request), publish)
             except _Cancelled:
                 event("tts.cancelled")
-                return
+                continue
             except Exception as exc:  # noqa: BLE001
                 event("tts.error", message=str(exc))
-                return
-            event("tts.cancelled" if is_cancelled_for(generation_id) else "tts.done")
+                continue
+            queue.publish(request, lambda: event("tts.done"))
+
+    threading.Thread(target=consume, name="kokoro-synthesis", daemon=True).start()
 
     stdin = sys.stdin.buffer
     while True:
@@ -122,14 +154,10 @@ def main():
             if len(text) > MAX_TTS_TEXT_CHARS:
                 emit_json({"type": "tts.error", "message": "text too long", "id": control.get("id")})
                 continue
-            with generation_lock:
-                current_generation += 1
-                generation_id = current_generation
-                cancel_flag["cancelled"] = False
-            threading.Thread(target=run_speak, args=(text, generation_id, control.get("sessionId")), daemon=True).start()
+            queue.replace(text, control.get("sessionId"), control.get("requestId"))
         elif cmd == "cancel":
-            with generation_lock:
-                cancel_flag["cancelled"] = True
+            queue.cancel()
+    queue.close()
 
 
 if __name__ == "__main__":

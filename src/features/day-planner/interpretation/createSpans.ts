@@ -11,7 +11,9 @@ export function createTemporalSpans(clause: string): { error: string } | { minut
   for (const match of clause.matchAll(new RegExp(`\\b(?:at|for)\\s+(${clock})(?=\\s|$)`, "g"))) {
     // "for 30 minutes" is a duration, never the start-time slot.
     if (/^\s*(?:minutes?|hours?)\b/.test(clause.slice(match.index + match[0].length))) continue;
-    spans.push({ start: match.index, end: match.index + match[0].length, text: match[1]! });
+    // "Sharp" qualifies this clock, never the event's literal title.
+    const sharp = clause.slice(match.index + match[0].length).match(/^\s+sharp\b/);
+    spans.push({ start: match.index, end: match.index + match[0].length + (sharp?.[0].length ?? 0), text: match[1]! });
   }
   const front = clause.match(new RegExp(`^(?:(?:book|add|create|schedule)\\s+(?:an?\\s+)?)?(${clock})(?=\\s+(?:meeting|appointment|event|call)\\b|\\s+.+$)`));
   if (front && /\b(?:am|pm|oclock)\b|\d:\d/.test(front[1]!)) {

@@ -58,7 +58,7 @@ describe("Flow Tide domain actions", () => {
     expect(result.status).toBe("success");
     if (result.status !== "success") return;
     expect(result.plan.deferred).toEqual(expect.arrayContaining([
-      expect.objectContaining({ title: "Lunch with ana", dateKey: "2026-09-03", start: 13 * 60 }),
+      expect.objectContaining({ title: "Lunch with Ana", dateKey: "2026-09-03", start: 13 * 60 }),
     ]));
   });
 

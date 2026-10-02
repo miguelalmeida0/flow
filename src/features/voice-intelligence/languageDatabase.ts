@@ -45,6 +45,11 @@ const fixedNow = Date.parse("2026-09-05T12:00:00Z");
 const baseContext = (route: LifeRoute = "home", patch: Partial<LifeContext> = {}): LifeContext => ({ route, nowMs: fixedNow, activeMode: "command", ...patch });
 
 export function buildCuratedLanguageCases(): LanguageCase[] {
+  // These original requests hit independently seeded occupied future slots.
+  // Keep their fixture and prove rejection; free-slot success and exact title
+  // coverage live in FlowCalendarCreationBoundary.test.tsx. See the per-row
+  // rationale in docs/quality/hosted-fixture-reconciliation.md.
+  const occupiedCreationCases = new Set(["curated-0097", "curated-0194", "curated-0336", "curated-0478", "curated-0563", "curated-0618", "curated-0945", "curated-0962", "curated-0987"]);
   const legacy = curatedLanguageSeeds.map((seed): LanguageCase => applyLegacySemanticOverlay({
     id: seed.id,
     utterance: seed.utterance,
@@ -60,16 +65,15 @@ export function buildCuratedLanguageCases(): LanguageCase[] {
     // 8 contract withdraws implicit creation authority, not test coverage.
     expected: seed.intent === "outcome-create"
       ? { intent: "unsupported", resolution: "unsupported" }
-      : seed.utterance === "never mind" ? { intent: "history", resolution: "execute" }
       : seed.id === "curated-1532" ? { intent: "unsupported", resolution: "unsupported" }
       : { intent: seed.intent as GlobalIntent["type"], resolution: "execute" },
-    ...(seed.intent === "outcome-create" || seed.utterance === "never mind" || seed.id === "curated-1532" ? { contractMigration: {
+    ...(seed.intent === "outcome-create" || seed.id === "curated-1532" ? { contractMigration: {
       previousIntent: seed.intent as GlobalIntent["type"], version: "2026-09-08" as const,
       reason: seed.intent === "outcome-create" ? "Explicit creation authority required; original goal preserved as a negative."
-        : seed.utterance === "never mind" ? "Cancel pending action, otherwise undo, per new conversational contract."
           : "The old top-level Calendar assertion hid a zero-length six-to-six range. Invalid range must not create data.",
     } } : {}),
     source: "editorial_product",
+    ...(occupiedCreationCases.has(seed.id) ? { semantic: { historyDelta: 0, commitCount: 0, feedbackPhase: "error" as const, noCreation: true, noPending: true } } : {}),
     family: seed.family,
     requiredCore: true,
     editorial: seed.editorial as LanguageCase["editorial"],
@@ -171,7 +175,11 @@ export function buildContextualDialogues(): LanguageDialogue[] {
     const local = index % 200;
     const row = (turn: number, utterance: string, intent: GlobalIntent["type"], resolution: ResolutionExpectation = "execute"): LanguageCase => ({ id: `d${index}-${turn}`, utterance, context: baseContext(), expected: { intent, resolution }, source: "contextual_dialogue" });
     if (family === 0) return { id: `dialogue-journal-${local + 1}`, initialContext: baseContext(), turns: [
-      row(1, pick(journalOpen, local), "navigate"), row(2, pick(journalNew, local, 10), "journal-create"), row(3, pick(journalStart, local, 20), "journal-recording"), row(4, pick(journalMark, local, 40), "journal-bookmark"),
+      row(1, pick(journalOpen, local), "navigate"), row(2, pick(journalNew, local, 10), "journal-create"), row(3, pick(journalStart, local, 20), "journal-recording"),
+      // A last-sentence bookmark needs actual preceding prose. Preserve all
+      // existing turn IDs; this additional input supplies that precondition.
+      ...(pick(journalMark, local, 40) === "save the last sentence" ? [row(3.5, "The street was quiet after the rain.", "journal-append")] : []),
+      row(4, pick(journalMark, local, 40), "journal-bookmark"),
     ] };
     if (family === 1) return { id: `dialogue-calendar-${local + 1}`, fixtureId: "calendar-next-day", initialContext: baseContext(), turns: [
       row(1, pick(weekOpen, local), "temporal"),

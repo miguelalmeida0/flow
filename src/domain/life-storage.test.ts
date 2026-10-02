@@ -1,11 +1,19 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createInitialPlan } from "../features/day-planner/seed";
-import { LEGACY_LIFE_STORAGE_KEY, LIFE_BACKUP_KEY, LIFE_STORAGE_KEY, createLifeDocument, loadLifeSnapshot, readLifeSnapshot, readLifeSnapshotRevision, saveLifeSnapshot } from "./life-storage";
+import { LEGACY_LIFE_STORAGE_KEY, LIFE_BACKUP_KEY, LIFE_STORAGE_KEY, createLifeDocument, loadLifeSnapshot, readLifeSnapshot, readLifeSnapshotRevision, saveLifeSnapshot, saveLifeSnapshotOutcome } from "./life-storage";
 import type { LifeSnapshot } from "./life-model";
 
 beforeEach(() => localStorage.clear());
 
 describe("living environment storage", () => {
+  it("distinguishes storage quota failure from a competing document revision", () => {
+    const snapshot = loadLifeSnapshot("2026-10-02");
+    expect(saveLifeSnapshotOutcome(snapshot, 9)).toEqual({ status: "revision-conflict" });
+    const save = vi.spyOn(localStorage, "setItem").mockImplementation(() => { throw new DOMException("full", "QuotaExceededError"); });
+    try { expect(saveLifeSnapshotOutcome(snapshot, 0)).toEqual({ status: "storage-unavailable" }); }
+    finally { save.mockRestore(); }
+    expect(saveLifeSnapshotOutcome(snapshot, 0)).toEqual({ status: "saved" });
+  });
   it("migrates the authoritative Calendar v4 projection without changing event IDs", () => {
     const plan = createInitialPlan("2026-09-03");
     localStorage.setItem("flow.planner.v4", JSON.stringify({ version: 4, plan, past: [], future: [] }));

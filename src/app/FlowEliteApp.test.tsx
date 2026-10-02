@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { LifeSnapshot } from "../domain/life-model";
@@ -75,23 +76,25 @@ describe("Flow Elite north-star release path", () => {
   it("keeps final voice transcripts on the same route-independent path and deduplicates one boundary", async () => {
     const adapter = new FakeRecognitionAdapter();
     setup(adapter);
-    fireEvent.click(screen.getByLabelText("Start Flow Live"));
-    await waitFor(() => expect(adapter.startCount).toBe(1));
+    await activateFlowVoice(adapter);
+    const initialCycle = adapter.startCount;
     act(() => adapter.emitFinal("Tomorrow.", "elite-tomorrow"));
-    await waitFor(() => expect(screen.getByText(/Friday, September 4/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/^Friday, September 4$/i)).toBeInTheDocument());
     expect(screen.getByLabelText("Tell Flow what to change")).toHaveValue("Tomorrow.");
     expect(snapshot().past).toHaveLength(0);
 
-    await waitFor(() => expect(adapter.startCount).toBe(2));
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 1));
     act(() => adapter.emitFinal("Give me 40 minutes before lunch.", "elite-proposal"));
     await waitFor(() => expect(screen.getByText("You asked for 40 minutes. You have 28 clear.")).toBeInTheDocument());
     expect(snapshot().past).toHaveLength(0);
 
-    await waitFor(() => expect(adapter.startCount).toBe(3));
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 2));
     act(() => adapter.emitFinal("Do it.", "elite-confirm"));
     await waitFor(() => expect(snapshot().past).toHaveLength(1));
     expect(snapshot().document.focus.active?.durationMinutes).toBe(28);
     // Replaying the exact final boundary cannot create a second transaction.
+    await waitFor(() => expect(adapter.startCount).toBe(initialCycle + 3));
+    await activateFlowVoice(adapter);
     act(() => adapter.emitFinal("Do it.", "elite-confirm"));
     expect(snapshot().past).toHaveLength(1);
   });

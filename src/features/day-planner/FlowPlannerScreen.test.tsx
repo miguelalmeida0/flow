@@ -155,7 +155,7 @@ describe("FlowPlannerScreen", () => {
     render(<FlowPlannerScreen />);
     command("Move the meeting to 8:30 am");
     expect(screen.getByText("Which meeting do you mean?")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /Product meeting — 10 AM/ }));
+    fireEvent.click(screen.getByRole("button", { name: new RegExp(`Product meeting — ${new Intl.DateTimeFormat("en", { weekday: "long", month: "short", day: "numeric" }).format(new Date(`${dateKey}T12:00:00`))}, 10 AM`) }));
     expect(screen.getByRole("button", { name: /Product meeting, 8:30 AM–9 AM/ })).toBeInTheDocument();
   });
 
@@ -346,7 +346,7 @@ describe("FlowPlannerScreen", () => {
     ]));
     expect(screen.getByRole("textbox")).toHaveValue("move quarterly meeting to three");
     expect(screen.getByText("Event not found")).toBeInTheDocument();
-    expect(screen.getByText("I could not find “quarterly meeting” on today’s calendar.")).toBeInTheDocument();
+    expect(screen.getByText(`I could not find “quarterly meeting” in the calendar for ${new Intl.DateTimeFormat("en", { weekday: "long", month: "short", day: "numeric" }).format(new Date(`${localDateKey()}T12:00:00`))}.`)).toBeInTheDocument();
     expect(screen.queryByText("Didn't catch that")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Deep work — project brief, 9 AM–10 AM/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Undo last change" })).toBeDisabled();

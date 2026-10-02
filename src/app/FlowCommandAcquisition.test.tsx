@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { FlowEnvironmentApp } from "./FlowEnvironmentApp";
@@ -20,7 +21,7 @@ it.each(["typed", "voice"] as const)("binds the %s command's selected target bef
       if (!screen.queryByLabelText("Tell Flow what to change")) fireEvent.click(screen.getByRole("button", { name: "Open Flow command" }));
       const input = screen.getByLabelText("Tell Flow what to change"); fireEvent.change(input, { target: { value: text } }); fireEvent.submit(input.closest("form")!);
     } else {
-      fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1));
+      await activateFlowVoice(adapter);
       act(() => adapter.emitFinal(text, "bound-rename"));
     }
     await waitFor(() => expect(queued).toHaveLength(1));

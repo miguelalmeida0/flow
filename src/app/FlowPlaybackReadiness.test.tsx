@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi, type MockInstance } from "vitest";
 import { FlowEnvironmentApp } from "./FlowEnvironmentApp";
@@ -122,8 +123,7 @@ describe("bound native playback readiness", () => {
       expect(document.querySelector("audio")).not.toBeInTheDocument();
       if (mode === "typed") await view.command(utterance);
       else {
-        fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" }));
-        await waitFor(() => expect(view.adapter.startCount).toBe(1));
+        await activateFlowVoice(view.adapter);
         act(() => view.adapter.emitFinal(utterance, "off-route-playback"));
       }
       await waitFor(() => expect(playback, `${window.location.pathname}: ${document.querySelector("[data-flow-feedback]")?.textContent}`).toHaveBeenCalledTimes(1));

@@ -4,6 +4,7 @@ import { createBrowserRecognitionAdapter, DEFAULT_VOICE_LOCALE, type Recognition
 import { createBrowserLiveOwnership, type LiveOwnershipCoordinator } from "./liveOwnership";
 import { reclaimStaleVoiceClients, recordVoiceAcquisitionDiagnostic } from "./staleClientReclaimer";
 import { voiceDebug } from "../day-planner/voice/voiceDebug";
+import { getRuntimeMode } from "../../app/runtimeMode";
 
 export type FlowLiveStatus = "sleeping" | "live-idle" | "listening" | "interpreting" | "suspended" | "moved" | "permission-denied" | "microphone-unavailable" | "recognition-busy" | "start-failed" | "unavailable";
 
@@ -59,6 +60,7 @@ export function useFlowLiveSession(
   const [status, setStatus] = useState<FlowLiveStatus>("sleeping");
   const [interim, setInterim] = useState("");
   const [lastTranscript, setLastTranscript] = useState("");
+  const [lastUtteranceId, setLastUtteranceId] = useState<string>();
   const [message, setMessage] = useState("Voice off · audio is never stored by Flow");
   const [issue, setIssue] = useState<string>();
   latestFinal.current = onFinal; latestInterim.current = onInterim; latestPhrases.current = phrases; latestRank.current = rankTranscript; latestOwnershipGranted.current = onOwnershipGranted;
@@ -132,7 +134,7 @@ export function useFlowLiveSession(
           || (a.browserIndex ?? 0) - (b.browserIndex ?? 0))[0];
         const transcript = selected?.transcript.trim() ?? "";
         voiceDebug("live.selected", { transcript, utteranceId: boundary.utteranceId, rank: selected?.rank, routeBefore: window.location.pathname });
-        setInterim(""); latestInterim.current(""); setLastTranscript(transcript); setStatus("interpreting");
+        setInterim(""); latestInterim.current(""); setLastTranscript(transcript); setLastUtteranceId(boundary.utteranceId); setStatus("interpreting");
         // Recognition boundary IDs—not transcript similarity—are the
         // exactly-once authority. A user may intentionally repeat the same
         // phrase in the very next cycle, including an immediate fake-adapter
@@ -255,6 +257,7 @@ export function useFlowLiveSession(
   }, [getOwnership, startRecognition, sessionId]);
 
   const start = useCallback(() => {
+    if (getRuntimeMode() !== "local") { voiceDebug("recognition.start.blocked", { reason: "runtime-mode" }); return; }
     if (enabled.current) { voiceDebug("recognition.start.blocked", { reason: "session-already-active" }); return; }
     generation.current += 1; enabled.current = true; fatal.current = false; recoveryAttempts.current = 0; busyRetryUsed.current = false; busyRecoveryInFlight.current = false; busyRecoveryAttempt.current = 0; busyRecoveryDeadline.current = 0;
     claimAndStart(generation.current);
@@ -303,5 +306,5 @@ export function useFlowLiveSession(
     };
   }, [adapter, claimAndStart, getOwnership, providedOwnership, releaseRecognition, sessionId, start, stop]);
 
-  return { supported: adapter.supported, active: ["live-idle", "listening", "interpreting", "suspended"].includes(status), status, interim, lastTranscript, message, issue, clearIssue: () => setIssue(undefined), start, stop };
+  return { supported: adapter.supported, active: ["live-idle", "listening", "interpreting", "suspended"].includes(status), status, interim, lastTranscript, lastUtteranceId, message, issue, clearIssue: () => setIssue(undefined), start, stop };
 }

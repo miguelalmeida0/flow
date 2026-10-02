@@ -1,3 +1,4 @@
+import { APP_ORIGIN } from "./app-origin";
 import { expect, type Page } from "@playwright/test";
 
 export interface RenderedEvent {
@@ -27,7 +28,7 @@ export async function fresh(page: Page) {
   const session = await page.context().newCDPSession(page);
   try {
     await session.send("Storage.clearDataForOrigin", {
-      origin: "http://127.0.0.1:5173",
+      origin: APP_ORIGIN,
       storageTypes: "local_storage",
     });
   } finally {
@@ -47,25 +48,14 @@ export async function captureEvidence(page: Page, path: string) {
 }
 
 export async function fillCommandField(page: Page, transcript: string) {
+  await expect(page.getByLabel("Global Flow command")).toBeAttached();
   const field = page.getByRole("textbox", { name: "Tell Flow what to change" });
-  let lastError: unknown;
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    try {
-      if (!await field.isVisible().catch(() => false)) {
-        const becameVisible = await field.waitFor({ state: "visible", timeout: 700 }).then(() => true).catch(() => false);
-        if (!becameVisible) {
-          const opener = page.getByRole("button", { name: "Open Flow command" });
-          await expect(opener).toBeVisible({ timeout: 1_500 });
-          await opener.click();
-        }
-      }
-      await field.fill(transcript, { timeout: 1_500 });
-      return field;
-    } catch (error) {
-      lastError = error;
-    }
-  }
-  throw lastError;
+  // The supported shortcut focuses the field, preventing the intentional
+  // unfocused recede timer from racing a visibility probe and later fill.
+  await page.keyboard.press("Control+k");
+  await expect(field).toBeFocused();
+  await field.fill(transcript);
+  return field;
 }
 
 export async function submitSuccess(page: Page, transcript: string) {

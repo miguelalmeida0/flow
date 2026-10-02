@@ -1,3 +1,5 @@
+import { APP_ORIGIN } from "./app-origin";
+import { installLocalPromptSpeech, localUtteranceId, awaitLocalTurn, awaitLocalListening, awaitSpokenPrompt } from "./local-voice-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync } from "node:fs";
 import { useNativeAnimationClock } from "./native-clock";
@@ -6,6 +8,7 @@ const evidenceDir = process.env.LOCKED_HOME_EVIDENCE_DIR ?? "artifacts/locked-vo
 const errors = new WeakMap<Page, { console: string[]; page: string[]; requests: string[] }>();
 
 async function installGrantedRecognition(page: Page) {
+  await installLocalPromptSpeech(page);
   await page.addInitScript(() => {
     localStorage.setItem("flow.voice.permission-granted.v1", "granted");
     class Recognition {
@@ -14,6 +17,7 @@ async function installGrantedRecognition(page: Page) {
       onerror: ((event: unknown) => void) | null = null; onend: (() => void) | null = null;
       generation = 0;
       start() {
+
         const runtime = window as Window & { __lockedRecognition?: Recognition; __lockedGeneration?: number; __lockedReady?: boolean };
         this.generation = (runtime.__lockedGeneration ?? 0) + 1;
         runtime.__lockedGeneration = this.generation;
@@ -22,7 +26,7 @@ async function installGrantedRecognition(page: Page) {
         this.onstart?.();
       }
       stop() { (window as Window & { __lockedReady?: boolean }).__lockedReady = false; this.onend?.(); }
-      abort() { (window as Window & { __lockedReady?: boolean }).__lockedReady = false; this.onend?.(); }
+      abort() { this.stop(); }
       emit(transcript: string) {
         const runtime = window as Window & { __lockedReady?: boolean };
         runtime.__lockedReady = false;
@@ -43,9 +47,11 @@ async function fresh(page: Page) {
 }
 
 async function speak(page: Page, transcript: string) {
-  const generation = await beginSpeech(page, transcript);
-  await expect.poll(() => page.evaluate(() => (window as Window & { __lockedGeneration?: number }).__lockedGeneration ?? 0), { timeout: 15_000 }).toBeGreaterThan(generation);
-  await expect(page.getByLabel("Global Flow command")).toHaveAttribute("data-last-transcript", transcript);
+  await awaitLocalListening(page);
+  await awaitSpokenPrompt(page);
+  const previousId = await localUtteranceId(page);
+  await beginSpeech(page, transcript);
+  await awaitLocalTurn(page, previousId, transcript);
 }
 
 async function beginSpeech(page: Page, transcript: string) {
@@ -343,7 +349,7 @@ async function sampleTargetMotion(page: Page, transcript: string) {
       const diagnostics = (window as Window & { __FLOW_LOCKED_HOME__?: {
         targetAcknowledgedAt?: number; targetStageScheduleMs?: { eyes: number; body: number; world: number };
       } }).__FLOW_LOCKED_HOME__;
-      const targetStartedAt = diagnostics?.targetAcknowledgedAt;
+      const targetStartedAt = diagnostics?.targetAcknowledgedAt !== undefined && diagnostics.targetAcknowledgedAt >= emittedAt ? diagnostics.targetAcknowledgedAt : undefined;
       const elapsed = now - (targetStartedAt ?? emittedAt);
       const currentEyes = matrix(document.querySelector("[data-mascot-motion-stage='gaze-first']"));
       const currentBody = matrix(document.querySelector("[data-mascot-motion-stage='body-follow']"));
@@ -424,12 +430,13 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") found.console.push(message.text()); });
   page.on("pageerror", (error) => found.page.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) found.requests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) found.requests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
   });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await installGrantedRecognition(page);
 });
 test.afterEach(async ({ page }, testInfo) => {
+  if (testInfo.status !== testInfo.expectedStatus) console.info("LOCKED_FAILED_PRESENTATION", JSON.stringify(await page.evaluate(() => window.__FLOW_LOCKED_HOME__).catch(() => undefined)));
   expect(errors.get(page)).toEqual({ console: [], page: [], requests: [] });
   console.info("LOCKED_BROWSER_RESULT", JSON.stringify({ title: testInfo.title, status: testInfo.status, errors: errors.get(page) }));
 });
@@ -443,7 +450,7 @@ test("permission-once Live Session wakes autonomously without persisting pre-wak
   const restingMascot = await entranceMascotGeometry(page);
   expectVisibleEntranceMascot(restingMascot);
 
-  await speak(page, "Open my journal");
+  await speak(page, "Capture buy milk");
   await expect(page).toHaveURL(/\/$/);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).past.length)).toBe(0);
 
@@ -484,7 +491,7 @@ test("permission-once Live Session wakes autonomously without persisting pre-wak
 
   await expect(page.getByRole("heading", { name: "I’m listening…" })).toBeVisible({ timeout: 3_200 });
   await waitForRestart(page, wakeGeneration);
-  for (const name of ["Calendar", "Journal", "Atmosphere", "Memories"]) await expect(page.getByRole("button", { name: `Open ${name}` })).toBeVisible();
+  for (const name of ["Calendar", "Journal", "Friends", "Memories"]) await expect(page.getByRole("button", { name: `Open ${name}` })).toBeVisible();
   const timings = await page.evaluate(() => (window as Window & { __FLOW_LOCKED_HOME__?: {
     wakeAcknowledgementMs?: number; wakeTranscriptAt?: number; wakeFirstFrameAt?: number; wakePaintedAt?: number; wakeToHomeMs?: number;
     wakeRewardMs?: number; preparingMs?: number; preparingPainted?: boolean; preparingPresentedAt?: number; preparingPaintedAt?: number;
@@ -550,10 +557,14 @@ test("speech interrupts wake reward and the locked compound commits and rewinds 
   await speak(page, "Open my journal");
   await expect(page).toHaveURL(/\/journal$/);
   await speak(page, "Home");
+  // The outgoing Home surface can still be mounted during Journal's morph.
+  // Wait for the Home command to execute before sending its follow-up.
+  await expect(page).toHaveURL(`${APP_ORIGIN}/`);
   await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "active");
 
   await observeNextCompoundAcknowledgement(page);
   await speak(page, "Open my journal and leave Sunday evening playing");
+  await expect.poll(() => page.evaluate(() => (window as Window & { __lockedCompoundAck?: unknown }).__lockedCompoundAck)).toEqual({ text: "“Open my journal and leave Sunday evening playing”", domain: "journal", route: "/", past: 0 });
   const acknowledgement = await page.evaluate(() => (window as Window & { __lockedCompoundAck?: unknown }).__lockedCompoundAck);
   expect(acknowledgement).toEqual({ text: "“Open my journal and leave Sunday evening playing”", domain: "journal", route: "/", past: 0 });
   console.info("LOCKED_COMPOUND_ACK", JSON.stringify(acknowledgement));
@@ -772,7 +783,7 @@ test("Atmosphere follow-up and visible last-one reference use the same live cont
   const rainBefore = await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).document.studio.activeAtmosphere.layers.find((layer: { id: string }) => layer.id === "rain").volume);
   await speak(page, "Less rain");
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).document.studio.activeAtmosphere.layers.find((layer: { id: string }) => layer.id === "rain").volume)).toBeLessThan(rainBefore);
-  await expect(page.locator("[data-atmosphere-preview-layer='rain']")).toHaveAttribute("data-layer-volume", String(Math.max(0, rainBefore - 0.12)));
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).document.studio.activeAtmosphere.layers.find((layer: { id: string }) => layer.id === "rain").volume)).toBe(Number(Math.max(0, rainBefore - 0.1).toFixed(6)));
 
   const lastGeneration = await beginSpeech(page, "Make the last one red");
   await expect(page.locator("[data-visible-reference='resolved']")).toContainText("Dinner");

@@ -1,3 +1,5 @@
+import { APP_ORIGIN } from "./app-origin";
+import { awaitLocalListening } from "./local-voice-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fillCommandField } from "./tide-helpers";
@@ -52,7 +54,7 @@ async function shot(page: Page, viewport: string, state: string, settled = true)
 
 async function reset(page: Page) {
   const session = await page.context().newCDPSession(page);
-  try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
+  try { await session.send("Storage.clearDataForOrigin", { origin: APP_ORIGIN, storageTypes: "local_storage" }); }
   finally { await session.detach(); }
   await page.goto("/");
   await expect(page.getByTestId("home-space")).toBeVisible();
@@ -71,7 +73,7 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") browserConsoleErrors.push(message.text()); });
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) failedRequests.push(`${request.method()} ${request.url()}`);
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) failedRequests.push(`${request.method()} ${request.url()}`);
   });
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(weatherPayload()) }));
 });
@@ -126,7 +128,7 @@ for (const [viewport, dimensions] of viewports) {
     await shot(page, viewport, "weather-outfit");
 
     await command(page, "Open People");
-    await expect(page.getByTestId("people-space")).toBeVisible();
+    await expect(page.getByTestId("friends-space")).toBeVisible();
     await shot(page, viewport, "people-default");
     await command(page, "I promised Maya the proposal by Friday");
     await command(page, "Show commitments");
@@ -160,7 +162,7 @@ for (const [viewport, dimensions] of viewports) {
     await navigationInput.press("Enter");
     await shot(page, viewport, "navigation-transition", false);
 
-    await page.getByLabel("Start Flow Live").click();
+    await awaitLocalListening(page);
     await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
     await shot(page, viewport, "command-listening");
     await page.getByLabel("Stop Flow Live").click();

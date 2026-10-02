@@ -15,6 +15,7 @@ import { captureRoleFrame } from "../../features/inbox/captureRoleFrames";
 import { outcomeRoleFrame } from "../../features/plans/outcomeRoleFrames";
 import { commitmentQueryRoleFrame, commitmentRoleFrame } from "../../features/people/commitmentRoleFrames";
 import { assertedObligation, genericRecipient } from "../../features/people/recipientAuthority";
+import { commitmentDeadline, commitmentObject } from "../../features/people/commitmentDeadline";
 import { matchNavigationIntent, matchSystem } from "./globalMatchers";
 import { bindRequestDestinations } from "../../features/day-planner/interpretation/sourceDates";
 import { dateKeyFromClock, nearestWeekday, weekendScope, weekScope } from "../../features/elite/temporal";
@@ -104,7 +105,7 @@ export type GlobalIntent =
   | { type: "step-defer"; query: string; dateKey?: string }
   | { type: "step-unschedule"; query: string }
   | { type: "step-schedule"; query: string; dateKey: string; minutes: number; protect: boolean }
-  | { type: "commitment-create"; person: string; title: string; direction: "i-owe" | "waiting-on" | "next-conversation"; status: "open"; dueAt?: string }
+  | { type: "commitment-create"; person: string; title: string; direction: "i-owe" | "waiting-on" | "next-conversation"; status: "open"; dueAt?: string; unresolvedDeadline?: string }
   | { type: "commitment-find-time"; person?: string; query: string }
   | { type: "commitment-schedule"; person?: string; query: string; dateKey: string; minutes: number; durationMinutes: number }
   | { type: "commitment-complete"; person?: string; query?: string; excluded?: { person?: string; query: string } }
@@ -266,28 +267,19 @@ function parseCommitmentSchedule(text: string, dateKey: string): GlobalIntent | 
 }
 
 function parseCommitment(text: string, dateKey: string): GlobalIntent | null {
-  const deadlineNormalized = text.replace(/\bno later than\b/gi, "by");
-  // Only an outer asserted obligation grants creation authority. Reported
-  // words, quoted examples and negated assertions must not match a substring.
-  const mine = deadlineNormalized.match(/^(?:i promised|i owe|add (?:a )?promise to)\s+([a-z][\w'-]*)\s+(?:i(?:'d| would| will|'ll)?\s+|to\s+)?(.+?)(?:\s+(?:by\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow))?$/i)
-    ?? deadlineNormalized.match(/^i told\s+([a-z][\w'-]*)\s+i(?: would| will|'d|'ll)\s+(.+?)(?:\s+(?:by\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow))?$/i);
+  const mine = text.match(/^add (?:a )?promise to\s+([a-z][\w'-]*)\s+(?:to\s+)?(.+)$/i);
   const possessiveWaiting = text.match(/^(?:i am\s+)?waiting (?:on|for)\s+([a-z][\w'-]*)'s\s+(.+)$/i);
   if (possessiveWaiting) return { type: "commitment-create", person: titleCase(possessiveWaiting[1]!), title: titleCase(clean(possessiveWaiting[2]!)), direction: "waiting-on", status: "open" };
   const nextConversation = text.match(/^(?:next time i (?:see|speak (?:with|to))|for my next conversation with)\s+([a-z][\w'-]*)\s+(?:i need to\s+|remember to\s+)?(.+)$/i);
   if (nextConversation) return { type: "commitment-create", person: titleCase(nextConversation[1]!), title: titleCase(clean(nextConversation[2]!)), direction: "next-conversation", status: "open" };
-  const theirs = deadlineNormalized.match(/^(?:waiting on\s+([a-z][\w'-]*)\s+(?:for|to)\s+|([a-z][\w'-]*)\s+(?:promised\s+(?:(?:she|he|they)\s*)?(?:(?:would|'d|will)\s+)?|said\s+(?:she|he|they)(?:\s+(?:would|will)|'(?:d|ll))\s+))(.+?)(?:\s+(?:by\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow))?$/i);
+  const theirs = text.match(/^(?:waiting on\s+([a-z][\w'-]*)\s+(?:for|to)\s+|([a-z][\w'-]*)\s+(?:promised\s+(?:(?:she|he|they)\s*)?(?:(?:would|'d|will)\s+)?|said\s+(?:she|he|they)(?:\s+(?:would|will)|'(?:d|ll))\s+))(.+)$/i);
   const match = mine ?? theirs;
   if (!match) return null;
   const person = titleCase(mine ? match[1]! : (match[1] ?? match[2])!);
   const title = clean(mine ? match[2]! : match[3]!);
   if (/^(?:not|never|no longer)\b/i.test(title)) return null;
-  const dueWord = mine ? match[3] : match[4];
-  let dueAt: string | undefined;
-  if (dueWord) {
-    const dueKey = dueWord.toLowerCase() === "tomorrow" ? (() => { const d = new Date(`${dateKey}T12:00:00`); d.setDate(d.getDate() + 1); return d.toISOString().slice(0, 10); })() : dateKeyForWeekday(dateKey, dueWord.toLowerCase());
-    dueAt = `${dueKey}T17:00:00.000Z`;
-  }
-  return { type: "commitment-create", person, title: titleCase(title.replace(/^the\s+/, "").replace(/^she\s+|^he\s+|^they\s+/i, "")), direction: mine ? "i-owe" : "waiting-on", status: "open", dueAt };
+  const deadline = commitmentDeadline(title, dateKey);
+  return { type: "commitment-create", person, ...deadline, title: commitmentObject(deadline.title), direction: mine ? "i-owe" : "waiting-on", status: "open" };
 }
 /** Independent feature adapters. Each adapter owns one bounded product
  * grammar and may propose at most one intent. The global registry evaluates
@@ -661,7 +653,10 @@ function temporalScopeFromText(normalized: string, context: LifeContext): Tempor
   if (/^(?:previous|last) week$/.test(text)) return shiftedWeek(today, -1, weekStartsOn);
   if (/^this weekend$/.test(text)) return weekendScope(dateKeyAfter(today, -1));
   if (/^next weekend$/.test(text)) return weekendScope(today);
-  const weekday = text.match(/^(?:(this|next|last)\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)(?:\s+(?:morning|afternoon|evening))?$/);
+  // STT can punctuate a hesitation between a date modifier and its weekday.
+  // Accept that boundary only in a whole temporal destination; quoted titles
+  // and event selectors keep their original punctuation and identity.
+  const weekday = text.match(/^(?:(this|next|last)[,.;:…]*\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)(?:\s+(?:morning|afternoon|evening))?$/);
   if (weekday) return { kind: "day", dateKey: sourceDateKey({ weekday: weekdayIndex[weekday[2]!]!, relation: (weekday[1] ?? "named") as "this" | "next" | "last" | "named" }, today) };
   return null;
 }

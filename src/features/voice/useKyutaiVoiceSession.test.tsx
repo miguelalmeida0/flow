@@ -11,6 +11,7 @@ class FakeClient {
   disconnect = vi.fn();
   sendAudio = vi.fn();
   startSession = vi.fn(() => this.sent.push({ kind: "start" }));
+  setInputMode = vi.fn();
   stopSession = vi.fn(() => this.sent.push({ kind: "stop" }));
   speak = vi.fn((text: string) => this.sent.push({ kind: "speak", text }));
   cancelSpeak = vi.fn(() => this.sent.push({ kind: "cancel" }));
@@ -317,6 +318,23 @@ describe("useKyutaiVoiceSession", () => {
     act(() => client.emit({ type: "transcript.final", text: "delete entry" }));
     expect(onFinal).not.toHaveBeenCalled();
   });
+  it.each([false, true])("bounds split assistant echo to its continuing PCM sequence (expired=%s)", expired => {
+    const [, micImpl] = fakeMicCapture(); const onFinal = vi.fn();
+    const { result } = renderHook(() => useKyutaiVoiceSession({ onFinalTranscript: onFinal, client: client as unknown as VoiceCompanionClient, micCaptureImpl: micImpl, createTtsPlayer: fakeTtsPlayer }));
+    act(() => client.emit({ type: "transcript.partial", text: "Flow, delete entry" }));
+    act(() => client.emit({ type: "transcript.final", text: "Flow, delete entry" }));
+    act(() => result.current.speak("Delete this entry? The entry will be removed. Say confirm to continue."));
+    act(() => client.emit({ type: "tts.start" }));
+    const correlation = { sessionId: "session", workerEpoch: "worker" };
+    act(() => client.emit({ type: "speech.start", ...correlation, audioMs: 1000 }));
+    act(() => client.emit({ type: "transcript.final", ...correlation, audioMs: 2000, text: "Delete this entry?" }));
+    act(() => client.emit({ type: "speech.start", ...correlation, audioMs: expired ? 5000 : 2080 }));
+    act(() => client.emit({ type: "transcript.final", ...correlation, audioMs: expired ? 6000 : 3000, text: "The entry will be removed." }));
+    expect(onFinal).toHaveBeenCalledTimes(expired ? 2 : 1);
+    act(() => client.emit({ type: "speech.start", ...correlation, audioMs: 4000 }));
+    act(() => client.emit({ type: "transcript.final", ...correlation, audioMs: 4500, text: "Confirm." }));
+    expect(onFinal).toHaveBeenLastCalledWith("Confirm.");
+  });
   it("does not wake for an incomplete Flow token that becomes Flowers", () => {
     const [, micImpl] = fakeMicCapture(); const onFinal = vi.fn();
     const { result } = renderHook(() => useKyutaiVoiceSession({ onFinalTranscript: onFinal, client: client as unknown as VoiceCompanionClient, micCaptureImpl: micImpl, createTtsPlayer: fakeTtsPlayer }));
@@ -325,6 +343,19 @@ describe("useKyutaiVoiceSession", () => {
     act(() => client.emit({ type: "transcript.final", text: "Flowers bloom in spring." }));
     expect(result.current.state).toBe("SLEEPING");
     expect(onFinal).not.toHaveBeenCalled();
+  });
+  it("accepts a punctuated streaming wake immediately but dispatches its final clause only once", () => {
+    const [, micImpl] = fakeMicCapture(); const onFinal = vi.fn();
+    const { result } = renderHook(() => useKyutaiVoiceSession({ onFinalTranscript: onFinal, client: client as unknown as VoiceCompanionClient, micCaptureImpl: micImpl, createTtsPlayer: fakeTtsPlayer }));
+    act(() => client.emit({ type: "speech.start", utteranceId: "turn" }));
+    for (const text of ["F", "Flo", "Flow"]) act(() => client.emit({ type: "transcript.partial", utteranceId: "turn", text }));
+    expect(result.current.state).toBe("SLEEPING");
+    act(() => client.emit({ type: "transcript.partial", utteranceId: "turn", text: "Flow," }));
+    expect(result.current.state).toBe("TRANSCRIBING");
+    expect(onFinal).not.toHaveBeenCalled();
+    act(() => client.emit({ type: "transcript.final", utteranceId: "turn", text: "Flow, open calendar." }));
+    act(() => client.emit({ type: "transcript.final", utteranceId: "turn", text: "Flow, open calendar." }));
+    expect(onFinal).toHaveBeenCalledExactlyOnceWith("open calendar.");
   });
   it("rejects a cancelled utterance's late final while a newer utterance is speaking", () => {
     const [, micImpl] = fakeMicCapture(); const onFinal = vi.fn();

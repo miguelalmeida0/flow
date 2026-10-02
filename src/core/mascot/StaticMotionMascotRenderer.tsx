@@ -81,6 +81,7 @@ export function StaticMotionMascotRenderer({ presentation, layoutKey, placement 
         key={waking ? `wake-${presentation.sequence}` : "steady"}
         data-mascot-motion-stage="body-follow"
         onUpdate={(latest) => {
+          if (!presentation.attention?.actionId || presentation.attention.actionId !== signalled.current.actionId) return;
           if (!motionStageReached(presentation.attention?.motionStage, "body")) return;
           const moved = Math.abs(Number(latest.x ?? 0)) > 0.01 || Math.abs(Number(latest.y ?? 0)) > 0.01 || Math.abs(Number(latest.rotate ?? 0)) > 0.01 || Math.abs(Number(latest.scaleX ?? 1) - 1) > 0.001;
           if (!moved || signalled.current.body) return;
@@ -111,7 +112,12 @@ export function StaticMotionMascotRenderer({ presentation, layoutKey, placement 
         ><ellipse cx="166" cy="119" fill="#FFFDF9" rx="23" ry="20" /></motion.g>
         <ellipse cx="74" cy="126" fill="#F6CFC9" opacity="0.72" rx="12" ry="5" />
         <ellipse cx="132" cy="126" fill="#F6CFC9" opacity="0.72" rx="12" ry="5" />
-        {resting ? <g fill="none" stroke="#18212B" strokeLinecap="round" strokeWidth="2.4"><path d="M70 99 Q77 106 84 99" /><path d="M122 99 Q129 106 136 99" /></g> : <motion.g animate={{ x: gaze, y: centerNudge, scaleY: waking ? [0.15, 1.12, 1] : 1 }} data-mascot-motion-stage="gaze-first" data-wake-eyes onUpdate={(latest) => {
+        {/* Each command owns an eye movement even when two targets share the
+            same direction. Motion otherwise reuses the earlier animation. */}
+        {resting ? <g fill="none" stroke="#18212B" strokeLinecap="round" strokeWidth="2.4"><path d="M70 99 Q77 106 84 99" /><path d="M122 99 Q129 106 136 99" /></g> : <motion.g key={presentation.attention?.actionId ?? "idle-eyes"} initial={{ x: 0, y: 0 }} animate={{ x: gaze, y: centerNudge, scaleY: waking ? [0.15, 1.12, 1] : 1 }} data-mascot-motion-stage="gaze-first" data-wake-eyes onUpdate={(latest) => {
+          // Motion can finish a previous render's callback after a new command
+          // resets the shared flags. It must not consume the new acknowledgement.
+          if (!presentation.attention?.actionId || presentation.attention.actionId !== signalled.current.actionId) return;
           if ((Math.abs(Number(latest.x ?? 0)) <= 0.01 && Math.abs(Number(latest.y ?? 0)) <= 0.01) || signalled.current.eyes) return;
           signalled.current.eyes = true;
           reportVoiceTargetMotion(presentation.attention?.actionId, "eyes");

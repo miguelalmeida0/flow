@@ -315,7 +315,7 @@ const signatureScenarios: SignatureScenario[] = [
     id: "outcome-completion", durationMs: 1_120, transcript: "Complete this outcome", level: 3,
     setup: async (page) => {
       await prepare(page, "/outcomes");
-      await committedCommand(page, "I need to draft a report");
+      await committedCommand(page, "Create an outcome called Draft a report");
       for (const step of ["Define the audience and outcome", "Draft the structure", "Review and deliver"]) await committedCommand(page, `Mark ${step} complete`);
     },
     verify: async (page) => expect(page.getByTestId("plan-detail").getByText("Outcome complete")).toBeVisible(),

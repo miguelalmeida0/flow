@@ -4,8 +4,8 @@ import { interpretTranscript } from "./interpreter";
 const day = "2026-09-08";
 describe("September 8 geometry capability slots", () => {
   it.each([
-    ["Add Deep Work from nine to eleven", [{ type: "create", title: "deep work", durationMinutes: 120, destination: { type: "absolute", minutes: 540 } }]],
-    ["Tomorrow at three add Walk Dog", [{ type: "create", title: "walk dog", destination: { type: "absolute", minutes: 900, date: "tomorrow" } }]],
+    ["Add Deep Work from nine to eleven", [{ type: "create", title: "Deep Work", durationMinutes: 120, destination: { type: "absolute", minutes: 540 } }]],
+    ["Tomorrow at three add Walk Dog", [{ type: "create", title: "Walk Dog", destination: { type: "absolute", minutes: 900, date: "tomorrow" } }]],
     ["Make a focus block at two thirty for twenty-five minutes", [{ type: "create", title: "focus block", durationMinutes: 25, destination: { type: "absolute", minutes: 870 } }]],
     ["Finish it at four", [{ type: "resize", selector: { type: "anaphor" }, mode: "end", minutes: 960 }]],
     ["Start it at three and end at four", [{ type: "move", selector: { type: "anaphor" }, destination: { type: "absolute", minutes: 900 } }, { type: "resize", selector: { type: "anaphor" }, mode: "end", minutes: 960 }]],

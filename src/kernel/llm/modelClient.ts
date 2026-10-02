@@ -1,17 +1,15 @@
 import { callDesktopCapability, DesktopBridgeError } from "../lib/desktopBridgeClient";
+import { cloudInterpretTurn, type HostedModelRequest } from "./cloudModelClient";
+import { getHostedSession } from "../hostedSessionClient";
+import { getRuntimeMode } from "../../app/runtimeMode";
 
 /**
- * Client for the companion's `ai.interpretTurn` / `ai.status` capabilities
- * (server/desktop-bridge/index.mjs). Deliberately thin: it reuses
- * `callDesktopCapability`, the same authenticated-localhost primitive every
- * other capability call in this app already goes through, rather than
- * opening a second client/transport just for the model. There is no code
- * path here that can reach anything other than the companion's own
- * `/capability` endpoint — the companion itself is the only process allowed
- * to talk to Ollama (see index.mjs's module doc).
+ * Runtime-specific reasoning client. Local calls use the paired desktop
+ * companion; hosted calls send structured context to the authenticated,
+ * same-origin gateway. Typed-only mode never opens a model connection.
  */
-
 export interface InterpretTurnRequest {
+  hostedRequest?: HostedModelRequest;
   system: string;
   user: string;
   schema: Record<string, unknown>;
@@ -45,15 +43,18 @@ export type ModelCallOutcome =
  * clarification, without a try/catch at every call site. */
 export async function interpretTurn(request: InterpretTurnRequest): Promise<ModelCallOutcome> {
   if (request.signal?.aborted) return { ok: false, reason: "cancelled", message: "Cancelled." };
+  if (getRuntimeMode() === "hosted" && request.hostedRequest) return cloudInterpretTurn(request.hostedRequest, { signal: request.signal, fetchImpl: request.fetchImpl });
+  if (getRuntimeMode() !== "local") return { ok: false, reason: "unavailable", message: "Model interpretation is unavailable in this runtime." };
   try {
     const response = await callDesktopCapability<InterpretTurnResponse>(
       "ai.interpretTurn",
       { system: request.system, user: request.user, schema: request.schema, ...(request.model ? { model: request.model } : {}) },
-      { fetchImpl: request.fetchImpl },
+      { fetchImpl: request.fetchImpl, signal: request.signal },
     );
     if (request.signal?.aborted) return { ok: false, reason: "cancelled", message: "Cancelled." };
     return { ok: true, response };
   } catch (error) {
+    if (request.signal?.aborted) return { ok: false, reason: "cancelled", message: "Cancelled." };
     if (error instanceof DesktopBridgeError) {
       const reason = error.code === "rejected" ? "unavailable" : error.code;
       return { ok: false, reason, message: error.message };
@@ -84,6 +85,11 @@ export interface ModelStatus {
  * installed model actually responds, not just that Ollama reports it as
  * present — a stronger, slower check the caller opts into explicitly. */
 export async function checkModelStatus(fetchImpl?: typeof fetch, options: { liveProbe?: boolean } = {}): Promise<ModelStatus> {
+  if (getRuntimeMode() === "hosted") {
+    try { const session = await getHostedSession({ fetchImpl }); return { available: session.authenticated && session.reasoningEnabled, model: session.authenticated && session.reasoningEnabled ? "gpt-4.1-mini-2025-04-14" : null, liveProbeOk: null }; }
+    catch { return { available: false, model: null, liveProbeOk: null }; }
+  }
+  if (getRuntimeMode() !== "local") return { available: false, model: null, liveProbeOk: options.liveProbe ? false : null };
   try {
     return await callDesktopCapability<ModelStatus>("ai.status", options.liveProbe ? { liveProbe: true } : {}, { fetchImpl });
   } catch {

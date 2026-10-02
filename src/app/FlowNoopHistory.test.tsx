@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, expect, it } from "vitest";
 import { FlowEnvironmentApp } from "./FlowEnvironmentApp";
@@ -21,7 +22,7 @@ it.each(["typed", "voice"] as const)("%s identical edits preserve timestamps, re
       if (!screen.queryByLabelText("Tell Flow what to change")) fireEvent.click(screen.getByRole("button", { name: "Open Flow command" }));
       const field = screen.getByLabelText("Tell Flow what to change"); fireEvent.change(field, { target: { value: text } }); fireEvent.submit(field.closest("form")!);
     } else {
-      if (!adapter.startCount) { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); }
+      await activateFlowVoice(adapter);
       act(() => adapter.emitFinal(text, `noop-${++sequence}`));
     }
     await waitFor(() => {

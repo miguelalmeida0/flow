@@ -1,3 +1,4 @@
+import { APP_ORIGIN } from "./app-origin";
 import { expect, test, type Page } from "@playwright/test";
 import { createHash } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -15,7 +16,7 @@ let motionResiduePassed = false;
 async function clearAndOpen(page: Page, path = "/") {
   const session = await page.context().newCDPSession(page);
   try {
-    await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" });
+    await session.send("Storage.clearDataForOrigin", { origin: APP_ORIGIN, storageTypes: "local_storage" });
   } finally { await session.detach(); }
   await page.goto(path);
   await page.evaluate(() => window.scrollTo({ left: 0, top: 0, behavior: "auto" }));
@@ -151,7 +152,7 @@ test.beforeEach(async ({ page }) => {
   page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => {
-    if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
+    if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) {
       failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`);
     }
   });

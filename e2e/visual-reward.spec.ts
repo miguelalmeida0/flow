@@ -1,3 +1,4 @@
+import { awaitLocalListening } from "./local-voice-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import { fillCommandField } from "./tide-helpers";
 import { useNativeAnimationClock } from "./native-clock";
@@ -115,7 +116,7 @@ test("calendar snapshots skip unchanged feedback but measure real geometry and h
     const original = Element.prototype.getBoundingClientRect;
     runtime.__eventMeasurements = [];
     Element.prototype.getBoundingClientRect = function () {
-      const id = this.getAttribute("data-event-id");
+      const id = this.getAttribute("data-calendar-event-continuity");
       if (id) runtime.__eventMeasurements!.push(id);
       return original.call(this);
     };
@@ -157,7 +158,7 @@ test("Home mascot remains in reserved clear space through wrapped, short, and re
     await expect.poll(async () => (await measureRegions(page, { mascot: "[data-mascot-form='sprout']", hero: "[data-home-hero]", dock: "[data-workspace-dock]" })).overlaps).toEqual([]);
     await expect(mascot).toHaveAttribute("data-mascot-safe-zone", "clear");
   };
-  await page.getByRole("button", { name: "Start Flow Live" }).click();
+  await awaitLocalListening(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await expect(mascot).toBeVisible();
   await expect(mascot).toHaveAttribute("data-mascot-safe-zone", "clear");
@@ -177,6 +178,9 @@ test("Home mascot remains in reserved clear space through wrapped, short, and re
   const beforeRemote = (await reward(page)).sequence;
   const other = await page.context().newPage();
   await useNativeAnimationClock(other);
+  // This second document updates the shared date without claiming the voice
+  // session whose persistent geometry this journey is measuring.
+  await other.addInitScript(() => { window.__FLOW_RUNTIME__ = { mode: "typed-only", inferenceEnabled: false, releaseId: "remote-date-fixture" }; });
   await other.goto("/");
   await command(other, "Today");
   await expect(page.getByTestId("home-space")).toContainText("Friday, September 4");
@@ -195,7 +199,7 @@ test("Home mascot remains in reserved clear space through wrapped, short, and re
 test("a final browser-recognition intent emits a bounded acknowledgment before its domain reward", async ({ page }) => {
   await injectRecognition(page);
   await prepare(page, "/today");
-  await page.getByRole("button", { name: "Start Flow Live" }).click();
+  await awaitLocalListening(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await page.evaluate(() => {
     (window as Window & { __FLOW_REWARD_EVENT_LOG__?: unknown[] }).__FLOW_REWARD_EVENT_LOG__ = [];
@@ -312,7 +316,7 @@ test("meaningful focus completion is elapsed-time based and earns Level 3", asyn
 
 test("a completed outcome and kept commitment receive rare semantic ceremonies", async ({ page }) => {
   await prepare(page, "/outcomes");
-  await command(page, "I need to draft a report");
+  await command(page, "Create an outcome called Draft a report");
   for (const step of ["Define the audience and outcome", "Draft the structure", "Review and deliver"]) await command(page, `Mark ${step} complete`);
   await command(page, "Complete this outcome");
   await expect.poll(() => reward(page)).toMatchObject({ plan: { level: 3, recipe: { family: "bloom" } } });

@@ -51,6 +51,19 @@ export interface IdempotencyStore {
   size(): number;
 }
 
+/** Transaction-local writes become visible only after durable storage succeeds.
+ * A request scope distinguishes a deliberate repetition from transport replay. */
+export function stageIdempotency(parent: IdempotencyStore, requestId?: string): IdempotencyStore & { commit(): void } {
+  const pending = new Map<string, IdempotencyEntry>();
+  const scoped = (key: string) => requestId ? `${requestId}::${key}` : key;
+  return {
+    get: (key) => pending.get(scoped(key)) ?? parent.get(scoped(key)),
+    set: (key, entry) => { pending.set(scoped(key), { ...entry, completedAt: Date.now() }); },
+    size: () => pending.size,
+    commit: () => { for (const [key, entry] of pending) parent.set(key, entry); pending.clear(); },
+  };
+}
+
 const DEFAULT_TTL_MS = 90_000;
 const DEFAULT_MAX_ENTRIES = 200;
 

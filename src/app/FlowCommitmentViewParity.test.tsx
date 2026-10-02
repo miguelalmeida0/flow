@@ -1,3 +1,4 @@
+import { activateFlowVoice } from "../test/flowVoiceAcquisition";
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { FlowEnvironmentApp } from "./FlowEnvironmentApp";
@@ -30,7 +31,7 @@ function setup() {
       if (!screen.queryByLabelText("Tell Flow what to change")) fireEvent.click(screen.getByRole("button", { name: "Open Flow command" }));
       const input = screen.getByLabelText("Tell Flow what to change"); fireEvent.change(input, { target: { value: text } }); fireEvent.submit(input.closest("form")!);
     } else {
-      if (!adapter.startCount) { fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1)); }
+      await activateFlowVoice(adapter);
       act(() => adapter.emitFinal(text, `view-${text}`));
     }
     await waitFor(() => expect(document.querySelector("[data-last-transcript]")).toHaveAttribute("data-last-transcript", text));
@@ -78,7 +79,7 @@ describe("rendered commitment view capability parity", () => {
         if (!screen.queryByLabelText("Tell Flow what to change")) fireEvent.click(screen.getByRole("button", { name: "Open Flow command" }));
         const command = screen.getByLabelText("Tell Flow what to change"); fireEvent.change(command, { target: { value: "Search commitments for Maya" } }); fireEvent.submit(command.closest("form")!);
       } else {
-        fireEvent.click(screen.getByRole("button", { name: "Start Flow Live" })); await waitFor(() => expect(adapter.startCount).toBe(1));
+        await activateFlowVoice(adapter);
         act(() => adapter.emitFinal("Search commitments for Maya", "old-search"));
       }
       await waitFor(() => expect(queued).toHaveLength(1));

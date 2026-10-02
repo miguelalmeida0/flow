@@ -1,3 +1,5 @@
+import { APP_ORIGIN } from "./app-origin";
+import { awaitLocalListening } from "./local-voice-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fillCommandField } from "./tide-helpers";
@@ -9,7 +11,7 @@ const failedRequests: string[] = [];
 
 async function fresh(page: Page, path = "/") {
   const session = await page.context().newCDPSession(page);
-  try { await session.send("Storage.clearDataForOrigin", { origin: "http://127.0.0.1:5173", storageTypes: "local_storage" }); }
+  try { await session.send("Storage.clearDataForOrigin", { origin: APP_ORIGIN, storageTypes: "local_storage" }); }
   finally { await session.detach(); }
   await page.goto(path);
   if (path === "/") {
@@ -43,7 +45,7 @@ test.beforeEach(async ({ page }) => {
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"daily":{"time":[]}}' }));
   page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
   page.on("pageerror", (error) => pageErrors.push(error.message));
-  page.on("requestfailed", (request) => { if (request.url().startsWith("http://127.0.0.1:5173") && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`); });
+  page.on("requestfailed", (request) => { if (request.url().startsWith(APP_ORIGIN) && ["document", "script", "stylesheet", "fetch", "xhr"].includes(request.resourceType())) failedRequests.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "unknown"}`); });
 });
 test.afterEach(() => { expect(consoleErrors).toEqual([]); expect(pageErrors).toEqual([]); expect(failedRequests).toEqual([]); });
 test.afterAll(() => writeFileSync(`${evidenceDir}/browser-evidence.json`, `${JSON.stringify({ browserConsoleErrors: consoleErrors, pageErrors, failedRequests }, null, 2)}\n`));
@@ -125,7 +127,7 @@ test("all living projections navigate by Today pointer, command, deep link, and 
   await page.getByRole("button", { name: "Open Flow home" }).click();
   await command(page, "Inbox"); await expect(page.getByTestId("inbox-space")).toBeVisible();
   await command(page, "Go back"); await expect(page.getByTestId("home-space")).toBeVisible();
-  await page.goto("/people"); await expect(page.getByTestId("people-space")).toBeVisible();
+  await page.goto("/people"); await expect(page.getByTestId("friends-space")).toBeVisible();
 });
 
 test("locked Home lenses and global command support keyboard entry without legacy card shells", async ({ page }) => {
@@ -145,6 +147,7 @@ test("locked Home lenses and global command support keyboard entry without legac
 });
 
 test("locked Home command stays present, focuses by keyboard, and keeps actionable work open", async ({ page }) => {
+  await page.addInitScript(() => { window.__FLOW_RUNTIME__ = { mode: "typed-only", inferenceEnabled: false, releaseId: "typed-ui-fixture" }; });
   await fresh(page);
   await command(page, "Home");
   await expect(page.getByText("Opened Home")).toBeVisible();
@@ -209,7 +212,8 @@ test("Plan and People expose inspectable Calendar and lineage relationships", as
   await command(page, "Schedule Documents Friday at ten"); await expect(page.getByTestId("calendar-space")).toBeVisible();
   await command(page, "Plans"); await page.getByRole("button", { name: /Renew passport before Senegal/ }).click();
   await page.getByRole("button", { name: "Inspect Documents in Today" }).click();
-  await expect(page.getByTestId("calendar-relationship-inspector")).toContainText("Documents · Planned for 2026-09-04 at 10 AM");
+  await expect(page.getByRole("button", { name: /^Documents, 10 AM–10:25 AM/ })).toHaveAttribute("aria-pressed", "true");
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("flow.life.v3")!).temporal.scope)).toMatchObject({ kind: "day", dateKey: "2026-09-04" });
   await command(page, "I promised Maya I'd send the proposal"); await expect(page.getByTestId("people-space")).toBeVisible();
   await expect(page.getByRole("button", { name: /You owe · Maya.*No due date/ })).toBeVisible();
   await command(page, "Link Maya promise to Senegal plan"); await expect(page.getByText(/Plan · Renew passport before Senegal/)).toBeVisible();
@@ -241,8 +245,7 @@ test("Flow Live final transcript uses the global pipeline and restarts", async (
     (window as Window & { SpeechRecognition?: typeof Recognition }).SpeechRecognition = Recognition;
   });
   await fresh(page);
-  await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "sleeping");
-  await page.getByLabel("Start Flow Live").click();
+  await awaitLocalListening(page);
   await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
   await page.evaluate(() => (window as Window & { __livingRecognition?: { emit(value: string): void } }).__livingRecognition!.emit("Inbox"));
   await expect(page.getByTestId("inbox-space")).toBeVisible();
@@ -262,6 +265,7 @@ test("Flow Live final transcript uses the global pipeline and restarts", async (
 });
 
 test("mobile and reduced motion retain complete causality", async ({ page }) => {
+  await page.addInitScript(() => { window.__FLOW_RUNTIME__ = { mode: "typed-only", inferenceEnabled: false, releaseId: "typed-ui-fixture" }; });
   await page.setViewportSize({ width: 390, height: 844 }); await fresh(page);
   await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toHaveCount(0);
   await expect(page.locator("[data-elite-lens-grid] > div")).toHaveCount(5);

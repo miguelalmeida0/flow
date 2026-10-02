@@ -373,13 +373,15 @@ describe("persistKernelMutation", () => {
   });
 
   it("translates memory.forget into a memory.fact.delete action", () => {
-    const actions = persistKernelMutation("memory.forget", emptyDocument(), [], emptyDocument(), [], "f1");
+    const fact: PersonalMemoryFact = { id: "f1", text: "Sofia is vegetarian", createdAt: AT, source: "explicit" };
+    const actions = persistKernelMutation("memory.forget", emptyDocument(), [fact], emptyDocument(), [], undefined);
     expect(actions).toEqual([{ type: "memory.fact.delete", factId: "f1" }]);
   });
 
   it("translates a calendar.move mutation into a calendar.replace action for the changed date only", () => {
     const before = emptyDocument();
     const after = { ...before, calendars: { ...before.calendars, [before.calendar.dateKey]: { ...before.calendars[before.calendar.dateKey]!, events: [] } } };
+    after.calendar = after.calendars[before.calendar.dateKey]!;
     const actions = persistKernelMutation("calendar.move", before, [], after, [], undefined);
     expect(actions).toEqual([{ type: "calendar.replace", plan: after.calendars[after.calendar.dateKey] }]);
   });
