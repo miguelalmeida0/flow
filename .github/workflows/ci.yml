@@ -48,6 +48,8 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Install Chromium
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/node_modules/.cache/ms-playwright
         run: npx playwright install --with-deps chromium
       - name: Run Playwright behavior suite
         run: npm run test:e2e
