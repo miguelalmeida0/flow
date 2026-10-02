@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: flow-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Quality gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Full regression suite
+        run: node scripts/ci-regression-baseline.mjs tests
+      - name: Production build
+        run: npm run build
+      - name: Dependency regression gate
+        run: node scripts/ci-regression-baseline.mjs audit
+
+  browser:
+    name: Browser behavior
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install Chromium
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/node_modules/.cache/ms-playwright
+        run: npx playwright install --with-deps chromium
+      - name: Full Playwright regression suite
+        run: node scripts/ci-browser-baseline.mjs
+      - name: Save browser evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-browser-evidence
+          path: |
+            test-results/
+            artifacts/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  release-evidence:
+    name: Deep release evidence
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: quality
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run full historical release QA
+        run: npm run qa:release
+      - name: Preserve release evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-release-evidence
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 14
