@@ -50,8 +50,8 @@ jobs:
         env:
           PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/node_modules/.cache/ms-playwright
         run: npx playwright install --with-deps chromium
-      - name: Run Playwright behavior suite
-        run: npm run test:e2e
+      - name: Full Playwright regression suite
+        run: node scripts/ci-browser-baseline.mjs
       - name: Save browser evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
