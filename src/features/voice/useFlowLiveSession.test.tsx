@@ -6,7 +6,7 @@ import { useFlowLiveSession } from "./useFlowLiveSession";
 
 afterEach(() => { vi.useRealTimers(); delete window.__FLOW_RUNTIME__; localStorage.clear(); });
 
-it.each(["local", "hosted", "typed-only"] as const)("gates programmatic dialogue/capture start by runtime: %s", async (mode) => {
+it.each(["local", "hosted", "typed-only", "browser-native"] as const)("gates programmatic dialogue/capture start by runtime: %s", async (mode) => {
   vi.useFakeTimers();
   window.__FLOW_RUNTIME__ = { mode, inferenceEnabled: true, releaseId: "test" };
   const adapter = new FakeRecognitionAdapter();
@@ -14,9 +14,9 @@ it.each(["local", "hosted", "typed-only"] as const)("gates programmatic dialogue
   const hook = renderHook(() => useFlowLiveSession(final, () => undefined, [], adapter));
   act(() => window.dispatchEvent(new CustomEvent("flow-live-command", { detail: "start" })));
   await act(async () => { await vi.advanceTimersByTimeAsync(100); });
-  expect(adapter.startCount).toBe(mode === "local" ? 1 : 0);
-  expect(hook.result.current.status).toBe(mode === "local" ? "listening" : "sleeping");
-  if (mode !== "local") {
+  expect(adapter.startCount).toBe(["local", "browser-native"].includes(mode) ? 1 : 0);
+  expect(hook.result.current.status).toBe(["local", "browser-native"].includes(mode) ? "listening" : "sleeping");
+  if (!(["local", "browser-native"].includes(mode))) {
     act(() => hook.result.current.start());
     await act(async () => { await vi.advanceTimersByTimeAsync(100); });
     expect(adapter.startCount).toBe(0);

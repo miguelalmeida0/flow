@@ -4,7 +4,7 @@ import { createBrowserRecognitionAdapter, DEFAULT_VOICE_LOCALE, type Recognition
 import { createBrowserLiveOwnership, type LiveOwnershipCoordinator } from "./liveOwnership";
 import { reclaimStaleVoiceClients, recordVoiceAcquisitionDiagnostic } from "./staleClientReclaimer";
 import { voiceDebug } from "../day-planner/voice/voiceDebug";
-import { getRuntimeMode } from "../../app/runtimeMode";
+import { isBrowserVoiceAllowed } from "../../app/runtimeMode";
 
 export type FlowLiveStatus = "sleeping" | "live-idle" | "listening" | "interpreting" | "suspended" | "moved" | "permission-denied" | "microphone-unavailable" | "recognition-busy" | "start-failed" | "unavailable";
 
@@ -257,7 +257,7 @@ export function useFlowLiveSession(
   }, [getOwnership, startRecognition, sessionId]);
 
   const start = useCallback(() => {
-    if (getRuntimeMode() !== "local") { voiceDebug("recognition.start.blocked", { reason: "runtime-mode" }); return; }
+    if (!isBrowserVoiceAllowed()) { voiceDebug("recognition.start.blocked", { reason: "runtime-mode" }); return; }
     if (enabled.current) { voiceDebug("recognition.start.blocked", { reason: "session-already-active" }); return; }
     generation.current += 1; enabled.current = true; fatal.current = false; recoveryAttempts.current = 0; busyRetryUsed.current = false; busyRecoveryInFlight.current = false; busyRecoveryAttempt.current = 0; busyRecoveryDeadline.current = 0;
     claimAndStart(generation.current);

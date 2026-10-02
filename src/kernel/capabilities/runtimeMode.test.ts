@@ -11,7 +11,7 @@ import { desktopOpenFile } from "./desktop";
 
 afterEach(() => { delete window.__FLOW_RUNTIME__; localStorage.clear(); vi.restoreAllMocks(); });
 
-describe.each(["hosted", "typed-only"] as const)("%s boundaries", (mode) => {
+describe.each(["hosted", "typed-only", "browser-native"] as const)("%s boundaries", (mode) => {
   function configure() {
     window.__FLOW_RUNTIME__ = { mode, inferenceEnabled: false, releaseId: "test" };
     localStorage.setItem("flow.desktopCompanion.token", "stale-token");
@@ -46,12 +46,12 @@ describe.each(["hosted", "typed-only"] as const)("%s boundaries", (mode) => {
     expect(await checkDesktopCompanionHealth({ fetchImpl })).toBe(false);
     expect(fetchImpl).not.toHaveBeenCalled();
   });
-  it("never probes the local model or falls back to browser ownership", async () => {
+  it("keeps model probes and voice ownership within the selected runtime", async () => {
     configure();
     const fetchImpl = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ available: true }) });
     expect(await checkModelStatus(fetchImpl)).toMatchObject({ available: false });
     expect(await interpretTurn({ system: "s", user: "u", schema: {}, fetchImpl })).toMatchObject({ ok: false, reason: "unavailable" });
-    expect(deriveVoiceInputOwner(false)).toBe("none");
+    expect(deriveVoiceInputOwner(false)).toBe(mode === "browser-native" ? "browser-fallback" : "none");
     if (mode === "hosted") {
       expect(fetchImpl).toHaveBeenCalledOnce();
       expect(fetchImpl).toHaveBeenCalledWith("/api/session", expect.objectContaining({ credentials: "same-origin", redirect: "error" }));

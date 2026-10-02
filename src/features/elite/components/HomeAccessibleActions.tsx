@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useFlowEnvironment } from "../../../app/FlowEnvironmentProvider";
 import type { LifeRoute } from "../../../domain/life-model";
-import { getRuntimeMode } from "../../../app/runtimeMode";
+import { isBrowserVoiceAllowed } from "../../../app/runtimeMode";
 
 type Destination = Extract<LifeRoute, "calendar" | "inbox" | "plans" | "people">;
 const labels = { calendar: "Today", inbox: "Capture", plans: "Outcomes", people: "Commitments" } as const;
@@ -31,7 +31,7 @@ export function HomeAccessibleActions() {
       onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") open(route); }}
       type="button"
     >{labels[route]}</button>)}
-    {getRuntimeMode() === "local" ? <button data-action-id="session.control"
+    {isBrowserVoiceAllowed() ? <button data-action-id="session.control"
       aria-label={`Flow Live is ${environment.flowLiveStatus}. ${environment.flowLiveStatus === "sleeping" ? "Start voice session" : "Put voice session to sleep"}`}
       className="sr-only"
       data-flow-live-status={environment.flowLiveStatus}

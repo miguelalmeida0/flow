@@ -72,8 +72,8 @@ it("expires and requires explicit new Start",async()=>{
   await act(async()=>h.client.emit({...ready(),expiresAt:Date.now()+20}));
   act(()=>vi.advanceTimersByTime(21));expect(h.result.current.active).toBe(false);expect(h.client.disconnect).toHaveBeenCalled();
 });
-it("typed-only stays disconnected even on explicit Start",()=>{
-  window.__FLOW_RUNTIME__={mode:"typed-only",inferenceEnabled:false,releaseId:"test"};
+it.each(["typed-only", "browser-native"] as const)("%s keeps provider transport disconnected even on explicit Start",(mode)=>{
+  window.__FLOW_RUNTIME__={mode,inferenceEnabled:false,releaseId:"test"};
   const h=setup();act(()=>h.result.current.start());expect(h.client.connect).not.toHaveBeenCalled();
 });
 it.each(["command", "Escape"])("%s stops the actual hosted owner and rejects later PCM",async(kind)=>{

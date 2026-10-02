@@ -19,11 +19,11 @@ test('private preview identifies its commit and keeps every application space us
   expect(response.status()).toBe(200);
   expect(response.headers()['x-flow-commit']).toBe(info.config.metadata.expectedCommit);
   await expect(page).toHaveTitle(/WIP preview/);
-  expect(await page.evaluate(() => window.__FLOW_RUNTIME__)).toEqual({ mode: 'typed-only', inferenceEnabled: false, releaseId: `wip-${info.config.metadata.expectedCommit}` });
+  expect(await page.evaluate(() => window.__FLOW_RUNTIME__)).toEqual({ mode: 'browser-native', inferenceEnabled: false, releaseId: `wip-${info.config.metadata.expectedCommit}` });
   await expect(page.getByRole('button', { name: 'Open Calendar', exact: true })).toBeVisible();
   await command(page, 'Open my journal');
   await expect(page.getByTestId('journal-space')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Start Flow Live' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Start Flow Live' })).toBeEnabled();
   await page.getByRole('button', { name: 'New entry' }).click();
   const editor = page.getByRole('textbox', { name: 'Journal text' });
   await editor.fill('Private WIP verification entry.');
@@ -56,13 +56,36 @@ test('typed capture persists with exact undo and redo on the preview origin', as
   await expect.poll(captures).toEqual(created);
 });
 
-test('mobile preview remains usable with voice explicitly unavailable', async ({ page }, info) => {
+test('mobile preview remains usable with native voice available on click', async ({ page }, info) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await command(page, 'Open the calendar');
   await expect(page).toHaveURL(/\/today/);
   await expect(page.getByTestId('calendar-space')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Start Flow Live' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Start Flow Live' })).toBeEnabled();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('wip-mobile.png'), fullPage: true });
+});
+
+test('native Chrome permission denial is visible and offers retry', async ({ page, context }) => {
+  const cdp = await context.newCDPSession(page);
+  await page.goto('/');
+  await cdp.send('Browser.setPermission', { permission: { name: 'microphone' }, setting: 'denied', origin: new URL(page.url()).origin });
+  await expect(page.getByTestId('flow-live-presence')).toHaveAttribute('data-flow-live-status', 'sleeping');
+  await page.getByRole('button', { name: 'Start Flow Live' }).click();
+  await expect(page.getByTestId('flow-live-presence')).toHaveAttribute('data-flow-live-status', 'permission-denied');
+  await expect(page.getByText(/Chrome blocked microphone access/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Retry Flow Live' })).toBeEnabled();
+});
+
+test('unsupported browser explains unavailable voice and still accepts typed commands', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'SpeechRecognition', { value: undefined });
+    Object.defineProperty(window, 'webkitSpeechRecognition', { value: undefined });
+  });
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: 'Start Flow Live' })).toBeDisabled();
+  await expect(page.getByText(/Voice recognition is unavailable here/)).toBeVisible();
+  await command(page, 'Open the calendar');
+  await expect(page.getByTestId('calendar-space')).toBeVisible();
 });

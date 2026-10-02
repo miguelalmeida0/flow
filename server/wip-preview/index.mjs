@@ -55,8 +55,8 @@ export function createWipPreview({ distDir = 'dist', authSha256, commitSha } = {
       let content = await readFile(file);
       const nonce = randomBytes(18).toString('base64');
       if (relative === 'index.html') {
-        const runtime = JSON.stringify({ mode: 'typed-only', inferenceEnabled: false, releaseId: `wip-${commitSha}` });
-        content = Buffer.from(content.toString().replace('<head>', `<head><meta name="robots" content="noindex,nofollow"><meta name="flow-environment" content="wip-preview"><script nonce="${nonce}">window.__FLOW_RUNTIME__=${runtime};</script>`).replace(/<title>[^<]*<\/title>/, '<title>Flow — WIP preview · voice unavailable</title>'));
+        const runtime = JSON.stringify({ mode: 'browser-native', inferenceEnabled: false, releaseId: `wip-${commitSha}` });
+        content = Buffer.from(content.toString().replace('<head>', `<head><meta name="robots" content="noindex,nofollow"><meta name="flow-environment" content="wip-preview"><script nonce="${nonce}">window.__FLOW_RUNTIME__=${runtime};</script>`).replace(/<title>[^<]*<\/title>/, '<title>Flow — WIP preview · browser voice</title>'));
       }
       const csp = `default-src 'self'; script-src 'self' 'nonce-${nonce}'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob: data:; connect-src 'self' blob: https://api.open-meteo.com; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'`;
       return reply(200, content, { 'content-type': MIME[extname(file)], 'content-security-policy': csp });

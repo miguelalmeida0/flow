@@ -19,7 +19,7 @@ import { calendarReferenceScope } from "../../app/calendarCommandScope";
 import { BrowserPromptSpeech, PromptSpeechCoordinator, type PromptSpeechAdapter } from "../../features/voice/promptSpeech";
 import { beginRecordingUtterance, sampleRecordingUtterance, finishRecordingUtterance, discardRecordingUtterance } from "../../features/studio/journalRuntimeClock";
 import { getVoiceCompanionToken } from "../../kernel/voice/voiceCompanionClient";
-import { getRuntimeMode } from "../../app/runtimeMode";
+import { getRuntimeMode, isBrowserVoiceAllowed } from "../../app/runtimeMode";
 import { CloudVoiceConsent } from "../../features/voice/CloudVoiceConsent";
 import { useHostedAccess } from "../../features/voice/useHostedAccess";
 import { useOptionalStudioRuntime } from "../../features/studio/StudioRuntimeProvider";
@@ -28,7 +28,7 @@ const VOICE_PERMISSION_MARKER = "flow.voice.permission-granted.v1";
 
 export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnership, promptSpeechAdapter }: { recognitionAdapter?: RecognitionAdapter; voiceLocale?: VoiceLocale; liveOwnership?: LiveOwnershipCoordinator; promptSpeechAdapter?: PromptSpeechAdapter }) {
   const mode = getRuntimeMode();
-  const browserVoiceAllowed = mode === "local";
+  const browserVoiceAllowed = isBrowserVoiceAllowed(mode);
   const environment = useFlowEnvironment();
   const transition = useFlowTransition();
   const access = useHostedAccess(mode === "hosted", environment.hostedVoice.stop);
@@ -213,12 +213,12 @@ export function GlobalCommandDock({ recognitionAdapter, voiceLocale, liveOwnersh
   }, [browserVoiceAllowed, voice.status]);
   const selectedActive = hosted ? environment.hostedVoice.active : browserVoiceAllowed && voice.active;
   const selectedListening = hosted ? environment.hostedVoice.status === "active" : browserVoiceAllowed && voice.status === "listening";
-  const voiceMessage = hosted ? environment.hostedVoice.reason ?? (environment.hostedVoice.status === "connecting" ? "Connecting cloud voice…" : selectedListening ? "Cloud voice active" : "Voice stopped. Supported typed commands still work.") : browserVoiceAllowed ? voice.message : "Supported typed commands are available.";
+  const voiceMessage = hosted ? environment.hostedVoice.reason ?? (environment.hostedVoice.status === "connecting" ? "Connecting cloud voice…" : selectedListening ? "Cloud voice active" : "Voice stopped. Supported typed commands still work.") : browserVoiceAllowed ? voice.supported ? voice.message : "Voice recognition is unavailable here. Typed commands still work." : "Supported typed commands are available.";
   const voiceLabel = hosted ? selectedActive ? "Stop voice" : access.authenticated ? "Start voice" : "Enable cloud features" : voice.active ? "Stop Flow Live" : "Start Flow Live";
   const voiceDisabled = hosted ? access.busy || (access.authenticated && !access.session?.speechEnabled && !selectedActive) : !browserVoiceAllowed || !voice.supported;
   const retryable = ["permission-denied", "microphone-unavailable", "recognition-busy", "start-failed"].includes(voice.status);
   const dictating = environment.conversationContext.voiceMode === "journal-longform" || environment.conversationContext.voiceMode === "voice-note-longform";
-  const voiceNeedsSurface = hosted ? Boolean(environment.hostedVoice.reason && environment.hostedVoice.reason !== "Voice stopped.") : browserVoiceAllowed && (Boolean(voice.issue) || ["moved", "permission-denied", "microphone-unavailable", "recognition-busy", "start-failed", "unavailable"].includes(voice.status));
+  const voiceNeedsSurface = hosted ? Boolean(environment.hostedVoice.reason && environment.hostedVoice.reason !== "Voice stopped.") : browserVoiceAllowed && (!voice.supported || Boolean(voice.issue) || ["moved", "permission-denied", "microphone-unavailable", "recognition-busy", "start-failed", "unavailable"].includes(voice.status));
   const actionable = Boolean(environment.pending || environment.calendarPreview || environment.confirmationAuthority || environment.hasUnsavedChanges || transition || voiceNeedsSurface || settingsOpen)
     || ["understanding", "clarification", "confirmation", "error"].includes(environment.feedback.phase);
   const requestComposer = useCallback((open: boolean) => environment.dispatchPresentation({ type: "command-surface", surface: "composer", open }), [environment]);

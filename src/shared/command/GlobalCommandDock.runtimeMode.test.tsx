@@ -6,11 +6,11 @@ import { GlobalCommandDock } from "./GlobalCommandDock";
 
 afterEach(() => { delete window.__FLOW_RUNTIME__; localStorage.clear(); window.history.replaceState({}, "", "/"); });
 
-it.each(["local", "hosted", "typed-only"] as const)("Home only bypasses voice wake when voice cannot be enabled: %s", (mode) => {
+it.each(["local", "hosted", "typed-only", "browser-native"] as const)("Home remains accessible when voice is disabled or awaits an explicit click: %s", (mode) => {
   window.__FLOW_RUNTIME__ = { mode, inferenceEnabled: false, releaseId: "test" };
   function Entrance() { return <output data-testid="entrance">{useFlowEnvironment().voiceWorld.entrance}</output>; }
   render(<FlowEnvironmentProvider><Entrance /></FlowEnvironmentProvider>);
-  expect(screen.getByTestId("entrance")).toHaveTextContent(mode === "typed-only" ? "active" : "wake-armed");
+  expect(screen.getByTestId("entrance")).toHaveTextContent(["typed-only", "browser-native"].includes(mode) ? "active" : "wake-armed");
 });
 
 it("a reclaimed tab yields automatic capture while keeping explicit Start available", async () => {
@@ -25,7 +25,7 @@ it("a reclaimed tab yields automatic capture while keeping explicit Start availa
   expect(adapter.startCount).toBe(1);
 });
 
-it.each(["local", "hosted", "typed-only"] as const)("only autostarts the browser recognizer in local mode: %s", async (mode) => {
+it.each(["local", "hosted", "typed-only", "browser-native"] as const)("only autostarts the browser recognizer in local mode: %s", async (mode) => {
   window.__FLOW_RUNTIME__ = { mode, inferenceEnabled: true, releaseId: "test" };
   const adapter = new FakeRecognitionAdapter();
   await act(async () => { render(<FlowEnvironmentProvider><GlobalCommandDock recognitionAdapter={adapter} /></FlowEnvironmentProvider>); });

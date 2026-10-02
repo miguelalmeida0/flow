@@ -9,6 +9,7 @@ export type VoiceInputOwner = "kyutai-local" | "browser-fallback" | "hosted" | "
 export function deriveVoiceInputOwner(providerAvailable: boolean): VoiceInputOwner {
   const runtime = getRuntimeConfig();
   if (runtime.mode === "typed-only") return "none";
+  if (runtime.mode === "browser-native") return "browser-fallback";
   if (runtime.mode === "hosted") return runtime.inferenceEnabled && providerAvailable ? "hosted" : "none";
   return providerAvailable ? "kyutai-local" : "browser-fallback";
 }

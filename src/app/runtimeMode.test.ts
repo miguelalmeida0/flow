@@ -25,3 +25,8 @@ describe("runtime mode", () => {
     expect(getRuntimeConfig().mode).toBe("hosted");
   });
 });
+
+it("browser-native allows speech without enabling inference even if injected true", () => {
+  expect(resolveRuntimeConfig({ mode: "browser-native", inferenceEnabled: true, releaseId: "wip" }, "flow.example"))
+    .toEqual({ mode: "browser-native", inferenceEnabled: false, releaseId: "wip" });
+});

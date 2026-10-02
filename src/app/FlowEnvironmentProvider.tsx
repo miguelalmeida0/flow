@@ -299,7 +299,7 @@ const systemNow = () => new Date();
 export function FlowEnvironmentProvider({ children, now = systemNow, weatherProvider }: { children: ReactNode; now?: () => Date; weatherProvider?: WeatherProvider }) {
   const initialRoute = routeFromPath(window.location.pathname, window.location.search);
   const reducedMotion = useReducedMotionPreference();
-  const voiceWorldController = useVoiceWorld(initialRoute.route !== "home" || getRuntimeMode() === "typed-only", reducedMotion);
+  const voiceWorldController = useVoiceWorld(initialRoute.route !== "home" || ["typed-only", "browser-native"].includes(getRuntimeMode()), reducedMotion);
   const reconcileVoiceWorld = voiceWorldController.reconcile;
   const [clockTime, setClockTime] = useState(now);
   const dateKey = localDateKey(clockTime);

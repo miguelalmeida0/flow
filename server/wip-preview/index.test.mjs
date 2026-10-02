@@ -11,7 +11,7 @@ test('preview refuses to boot without credentials and a full commit identity', (
   assert.throws(() => createWipPreview({ authSha256: 'a'.repeat(64) }), /commit/);
 });
 
-test('all assets require authentication; typed-only SPA is isolated from APIs and source', async () => {
+test('all assets require authentication; browser-native SPA is isolated from APIs and source', async () => {
   const temporary = await mkdtemp(join(tmpdir(), 'flow-wip-test-'));
   const distDir = join(temporary, 'dist');
   await mkdir(join(distDir, 'assets'), { recursive: true });
@@ -37,9 +37,9 @@ test('all assets require authentication; typed-only SPA is isolated from APIs an
       const response = await fetch(origin + path, { headers });
       assert.equal(response.status, 200);
       const html = await response.text();
-      assert.match(html, /"mode":"typed-only","inferenceEnabled":false/);
+      assert.match(html, /"mode":"browser-native","inferenceEnabled":false/);
       assert.match(html, new RegExp(`wip-${commitSha}`));
-      assert.match(html, /WIP preview · voice unavailable/);
+      assert.match(html, /WIP preview · browser voice/);
       assert.equal(response.headers.get('cache-control'), 'private, no-store');
       assert.match(response.headers.get('content-security-policy'), /frame-ancestors 'none'/);
     }
