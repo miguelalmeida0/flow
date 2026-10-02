@@ -10,6 +10,7 @@ Deploy this branch to a separate Render **Free web service**, with automatic dep
 - Start: `node server/wip-preview/index.mjs`
 - `NODE_VERSION=22.23.3`
 - `NODE_ENV=production` (Node optimization only; the environment is WIP)
+- `NPM_CONFIG_INCLUDE=dev` (install TypeScript, Vite and esbuild during the build even with `NODE_ENV=production`)
 - `FLOW_ENVIRONMENT=wip-preview`
 - `FLOW_INFERENCE_ENABLED=false`
 - `FLOW_PREVIEW_AUTH_SHA256`: SHA-256 of a dedicated `username:password` pair, held only in the hosting environment. Use a cryptographically random password; never commit it or put it in a URL.
