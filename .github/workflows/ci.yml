@@ -4,7 +4,6 @@ on:
   pull_request:
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -18,13 +17,49 @@ env:
   PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/node_modules/.cache/ms-playwright
 
 jobs:
-  deterministic:
-    name: Deterministic gates
+  baseline:
+    name: Baseline test inventory
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
 
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Capture baseline Vitest report
+        shell: bash
+        run: |
+          mkdir -p artifacts/ci node_modules/.tmp
+          set +e
+          TMPDIR="$PWD/node_modules/.tmp" npx --no-install vitest run             --maxWorkers=1             --reporter=json             --outputFile=artifacts/ci/vitest.json
+          code=$?
+          set -e
+          printf '%s\n' "$code" > artifacts/ci/exit-code.txt
+          test -s artifacts/ci/vitest.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flow-baseline-tests
+          path: artifacts/ci/
+          retention-days: 7
+
+  candidate:
+    name: Candidate quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
@@ -36,34 +71,40 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Unit and semantic tests
-        run: npm run test:run
+      - name: Capture candidate Vitest report
+        shell: bash
+        run: |
+          mkdir -p artifacts/ci node_modules/.tmp
+          set +e
+          TMPDIR="$PWD/node_modules/.tmp" npx --no-install vitest run             --maxWorkers=1             --reporter=json             --outputFile=artifacts/ci/vitest.json
+          code=$?
+          set -e
+          printf '%s\n' "$code" > artifacts/ci/exit-code.txt
+          test -s artifacts/ci/vitest.json
 
       - name: Record semantic corpus
-        run: |
-          mkdir -p artifacts/ci
-          node scripts/qa-release.mjs --semantic-count-only | tee artifacts/ci/semantic-corpus.json
+        run: node scripts/qa-release.mjs --semantic-count-only > artifacts/ci/semantic-corpus.json
 
       - name: Production build
         run: npm run build
 
-      - name: Upload deterministic evidence
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: flow-deterministic-evidence
+          name: flow-candidate-tests
           path: artifacts/ci/
-          if-no-files-found: ignore
+          if-no-files-found: warn
           retention-days: 7
 
   browser:
     name: Browser journeys
-    needs: deterministic
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
@@ -114,3 +155,40 @@ jobs:
 
       - name: Audit high-severity dependencies
         run: npm audit --audit-level=high
+
+  deterministic:
+    name: Deterministic gates
+    if: always()
+    needs: [baseline, candidate, browser, security]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+
+      - name: Require supporting lanes
+        env:
+          CANDIDATE_RESULT: ${{ needs.candidate.result }}
+          BROWSER_RESULT: ${{ needs.browser.result }}
+          SECURITY_RESULT: ${{ needs.security.result }}
+          BASELINE_RESULT: ${{ needs.baseline.result }}
+        run: |
+          test "$BASELINE_RESULT" = "success"
+          test "$CANDIDATE_RESULT" = "success"
+          test "$BROWSER_RESULT" = "success"
+          test "$SECURITY_RESULT" = "success"
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: flow-baseline-tests
+          path: artifacts/ci/base
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: flow-candidate-tests
+          path: artifacts/ci/head
+
+      - name: Block new test failures
+        run: node scripts/ci/compare-vitest-ratchet.mjs artifacts/ci/base/vitest.json artifacts/ci/head/vitest.json
