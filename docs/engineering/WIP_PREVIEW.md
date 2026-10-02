@@ -18,7 +18,7 @@ Deploy this branch to a separate Render **Free web service**, with automatic dep
 
 The server refuses to start without authentication configuration and a full commit SHA. All application routes and assets require HTTP Basic authentication over the hosting platform's HTTPS. Only `/healthz` returns public liveness text. The response header `X-Flow-Commit` and runtime release ID identify the exact source; the page title and environment header label it WIP. Responses disable caching and indexing. Server source, maps, secret files and provider endpoints are not served.
 
-The preview server imports no provider or database code. It injects `mode: typed-only` and `inferenceEnabled: false`. Do not configure OpenAI, Deepgram, Redis or local-companion credentials. Local development still uses its existing runtime.
+The preview server imports no provider or database code. It injects `mode: typed-only` and `inferenceEnabled: false`. Typed-only Home opens directly because voice cannot be enabled there; local and hosted voice wake behavior is unchanged. Do not configure OpenAI, Deepgram, Redis or local-companion credentials. Local development still uses its existing runtime.
 
 ## Functionality and limits
 

@@ -1,10 +1,17 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
-import { FlowEnvironmentProvider } from "../../app/FlowEnvironmentProvider";
+import { FlowEnvironmentProvider, useFlowEnvironment } from "../../app/FlowEnvironmentProvider";
 import { FakeRecognitionAdapter } from "../../features/day-planner/voice/fakeRecognition";
 import { GlobalCommandDock } from "./GlobalCommandDock";
 
 afterEach(() => { delete window.__FLOW_RUNTIME__; localStorage.clear(); window.history.replaceState({}, "", "/"); });
+
+it.each(["local", "hosted", "typed-only"] as const)("Home only bypasses voice wake when voice cannot be enabled: %s", (mode) => {
+  window.__FLOW_RUNTIME__ = { mode, inferenceEnabled: false, releaseId: "test" };
+  function Entrance() { return <output data-testid="entrance">{useFlowEnvironment().voiceWorld.entrance}</output>; }
+  render(<FlowEnvironmentProvider><Entrance /></FlowEnvironmentProvider>);
+  expect(screen.getByTestId("entrance")).toHaveTextContent(mode === "typed-only" ? "active" : "wake-armed");
+});
 
 it("a reclaimed tab yields automatic capture while keeping explicit Start available", async () => {
   window.__FLOW_RUNTIME__ = { mode: "local", inferenceEnabled: false, releaseId: "test" };

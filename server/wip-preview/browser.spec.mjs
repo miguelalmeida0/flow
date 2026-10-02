@@ -20,6 +20,7 @@ test('private preview identifies its commit and keeps every application space us
   expect(response.headers()['x-flow-commit']).toBe(info.config.metadata.expectedCommit);
   await expect(page).toHaveTitle(/WIP preview/);
   expect(await page.evaluate(() => window.__FLOW_RUNTIME__)).toEqual({ mode: 'typed-only', inferenceEnabled: false, releaseId: `wip-${info.config.metadata.expectedCommit}` });
+  await expect(page.getByRole('button', { name: 'Open Calendar', exact: true })).toBeVisible();
   await command(page, 'Open my journal');
   await expect(page.getByTestId('journal-space')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Start Flow Live' })).toBeDisabled();
