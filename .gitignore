@@ -41,3 +41,6 @@ playwright-report/
 test-results/
 
 !.env.hosted.example
+
+# Recreated by build:hosted-contract; retain locally, never checkpoint output.
+server/hosted-gateway/generated/

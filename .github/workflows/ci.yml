@@ -37,6 +37,8 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
+      - name: Private preview boundary
+        run: node --test server/wip-preview/index.test.mjs
       - name: Unit and semantic corpus
         run: npm run test:run
       - name: Server behavior
@@ -73,6 +75,9 @@ jobs:
       - name: Motion and compositor behavior
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: npx playwright test --config=playwright.motion.config.ts
+      - name: Private WIP preview behavior
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: npx playwright test --config=playwright.wip.config.ts
       - name: Save failure evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
