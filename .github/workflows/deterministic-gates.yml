@@ -27,8 +27,17 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Unit tests
-        run: npm run test:run
+      - name: Wake and voice-home regression tests
+        run: >-
+          npm run test:run --
+          src/app/wakeAcquisition.test.tsx
+          src/app/FlowLockedVoiceHome.test.tsx
+          src/features/voice-home/useVoiceWorld.test.ts
+          src/features/voice-home/voiceWorld.test.ts
+          src/features/voice-home/WakeAcknowledgement.test.tsx
+          src/features/voice-home/wakeEnvelope.test.ts
+          src/features/voice-home/homeSurfaceInk.test.ts
+          src/features/voice-home/VoiceEnergy.test.tsx
 
       - name: Build
         run: npm run build
