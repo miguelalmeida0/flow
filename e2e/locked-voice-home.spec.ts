@@ -37,7 +37,7 @@ async function installGrantedRecognition(page: Page) {
 
 async function fresh(page: Page) {
   await page.route("https://api.open-meteo.com/**", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"daily":{"time":[]}}' }));
-  await page.goto("/");
+  await page.goto("/?flowWakeGate=1");
   await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "wake-armed");
   await expect.poll(() => page.evaluate(() => Boolean((window as Window & { __lockedReady?: boolean }).__lockedReady))).toBe(true);
 }
