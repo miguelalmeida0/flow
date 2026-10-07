@@ -30,13 +30,24 @@ class NativeRecognition {
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
-function install() {
-  localStorage.clear(); window.history.replaceState({}, "", "/?flowVoiceDebug=1");
+function install(path = "/?flowVoiceDebug=1&flowWakeGate=1") {
+  localStorage.clear(); window.history.replaceState({}, "", path);
   NativeRecognition.starts = 0; NativeRecognition.denied = false;
   vi.stubGlobal("SpeechRecognition", NativeRecognition);
   // Fresh-origin permission has not been granted. The native start owns prompting.
   vi.stubGlobal("navigator", Object.assign(Object.create(navigator), { permissions: { query: vi.fn().mockResolvedValue({ state: "prompt" }) } }));
 }
+
+it("opens Home active and accepts the first utterance without a wake word", async () => {
+  install("/?flowVoiceDebug=1");
+  vi.spyOn(console, "info").mockImplementation(() => undefined);
+  render(<FlowEnvironmentApp />);
+  await waitFor(() => expect(NativeRecognition.starts).toBe(1));
+  expect(screen.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "active");
+  expect(screen.queryByRole("heading", { name: "Say “Flow” to wake me up." })).not.toBeInTheDocument();
+  act(() => NativeRecognition.current.final("open the journal"));
+  await waitFor(() => expect(window.location.pathname).toBe("/journal"));
+});
 
 it.each([430, 1440])("acquires the native adapter once on the locked wake screen at %spx, including StrictMode", async (width) => {
   install(); vi.stubGlobal("innerWidth", width);
