@@ -2,6 +2,7 @@ name: Deterministic gates
 
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:
