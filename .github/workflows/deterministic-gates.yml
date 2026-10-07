@@ -1,0 +1,43 @@
+name: Deterministic gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  deterministic-gates:
+    name: Deterministic gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Wake and voice-home regression tests
+        run: >-
+          npm run test:run --
+          src/app/wakeAcquisition.test.tsx
+          src/app/FlowLockedVoiceHome.test.tsx
+          src/features/voice-home/useVoiceWorld.test.ts
+          src/features/voice-home/voiceWorld.test.ts
+          src/features/voice-home/WakeAcknowledgement.test.tsx
+          src/features/voice-home/wakeEnvelope.test.ts
+          src/features/voice-home/homeSurfaceInk.test.ts
+          src/features/voice-home/VoiceEnergy.test.tsx
+
+      - name: Build
+        run: npm run build

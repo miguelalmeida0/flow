@@ -21,10 +21,10 @@ for (const width of [430, 1440]) {
       Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: Recognition });
     });
     await page.goto("/");
-    await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "wake-armed");
+    await expect(page.getByTestId("home-space")).toHaveAttribute("data-home-entrance", "active");
     await expect(page.locator("html")).toHaveAttribute("data-native-start-count", "1");
     await expect(page.getByTestId("flow-live-presence")).toHaveAttribute("data-flow-live-status", "listening");
-    await expect(page.getByRole("heading", { name: "Say “Flow” to wake me up." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Say “Flow” to wake me up." })).toHaveCount(0);
     // Viewport changes rerender the same mounted session without reacquisition.
     await page.setViewportSize({ width: width === 430 ? 1440 : 430, height: 900 });
     await expect(page.locator("html")).toHaveAttribute("data-native-start-count", "1");

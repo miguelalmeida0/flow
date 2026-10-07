@@ -61,7 +61,7 @@ export function HomeSpace() {
         : voiceWorld.phase === "clarifying" ? "Choose the precise match below and I’ll continue."
           : voiceWorld.phase === "error" ? "Nothing changed. You can try another phrasing."
           : activeSession ? (voiceWorld.transcript || model.summary)
-            : "Say “Flow” when you need me.";
+            : "Speak naturally or type below.";
 
   return <motion.section
     animate={{ backgroundColor: surfaceColor }}
@@ -75,7 +75,7 @@ export function HomeSpace() {
   >
     <header className="relative z-20 flex items-start justify-between gap-4">
       <div><p className="font-serif text-[42px] italic leading-none tracking-[-0.045em]">Flow</p><p className={`mt-2 text-sm ${activeHome ? "text-[#736F68]" : "text-inherit"}`}>A calmer, smarter you.</p></div>
-      <div className={`text-right text-[11px] font-medium uppercase tracking-[0.14em] ${activeHome ? "text-[#736F68]" : "text-inherit"}`}><p>{model.dateLabel}</p><p className="mt-2 normal-case tracking-normal">{flowLiveStatus === "listening" ? "Live voice ready" : flowLiveStatus === "unavailable" ? "Typed control ready" : "Wake-aware session"}</p></div>
+      <div className={`text-right text-[11px] font-medium uppercase tracking-[0.14em] ${activeHome ? "text-[#736F68]" : "text-inherit"}`}><p>{model.dateLabel}</p><p className="mt-2 normal-case tracking-normal">{flowLiveStatus === "listening" ? "Live voice ready" : flowLiveStatus === "unavailable" ? "Typed control ready" : flowLiveStatus === "permission-denied" ? "Microphone blocked" : "Voice connecting"}</p></div>
     </header>
 
     <div className={`relative z-10 mx-auto flex min-h-0 w-full max-w-[1840px] flex-1 flex-col ${activeHome ? "" : "justify-center"}`}>

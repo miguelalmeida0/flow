@@ -21,7 +21,7 @@ function typeCommand(value: string) {
 
 beforeEach(() => {
   localStorage.clear();
-  window.history.replaceState({}, "", "/");
+  window.history.replaceState({}, "", "/?flowWakeGate=1");
   delete window.__FLOW_LOCKED_HOME__;
 });
 
