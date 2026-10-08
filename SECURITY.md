@@ -10,4 +10,4 @@ Flow's browser UI includes microphone-facing paths and locally operated calendar
 - Consequential actions require explicit confirmation, with accessible visual/keyboard alternatives.
 - Prevent cancellation races and stale requests from writing to newer application state.
 
-Release changes follow [deterministic CI](.github/workflows/deterministic-gates.yml) and the [`main`-only Pages workflow](.github/workflows/deploy-flow.yml). Do not expose tokens in `VITE_*` variables or static assets.
+Release changes follow [deterministic CI](https://github.com/miguelalmeida0/flow/blob/main/.github/workflows/deterministic-gates.yml) and the [`main`-only Pages workflow](.github/workflows/deploy-flow.yml). Do not expose tokens in `VITE_*` variables or static assets.
