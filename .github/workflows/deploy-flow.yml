@@ -2,18 +2,19 @@ name: Deploy Flow
 
 on:
   push:
-    branches: [main]
+    branches: [main, test]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: flow-pages
+  group: flow-pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    name: Deploy GitHub Pages
+  build:
+    name: Build Flow Pages artifact
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -38,15 +39,26 @@ jobs:
           touch dist/.nojekyll
           cp dist/index.html dist/404.html
 
-      - name: Publish gh-pages
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          cd dist
-          git init
-          git config user.name "Miguel Almeida"
-          git config user.email "94702822+miguelalmeida0@users.noreply.github.com"
-          git add -A
-          git commit -m "Deploy ${GITHUB_SHA}"
-          git branch -M gh-pages
-          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
+
+  deploy:
+    name: Publish Flow Pages artifact
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
