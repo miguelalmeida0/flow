@@ -17,6 +17,8 @@ import { describe, it, expect, afterAll } from "vitest";
 import { spawn } from "node:child_process";
 import path from "node:path";
 import fs from "node:fs";
+import os from "node:os";
+import { once } from "node:events";
 import { createSession } from "../kernel";
 import type { ConversationSession } from "../session";
 import { testEnvironment, fixedClock } from "../__tests__/fixtures";
@@ -53,6 +55,7 @@ const MODEL_OVERRIDE = process.env.FLOW_BENCHMARK_MODEL || undefined;
 const VERIFIER_MODEL_OVERRIDE = process.env.FLOW_BENCHMARK_VERIFIER_MODEL || undefined;
 const MODEL_ID = MODEL_OVERRIDE ?? "qwen3-vl:2b-instruct-q4_K_M";
 const REPO_ROOT = path.resolve(__dirname, "../../..");
+const COMPANION_HOME = fs.mkdtempSync(path.join(os.tmpdir(), "flow-model-pairing-"));
 const EVIDENCE_SUFFIX = VERIFIER_MODEL_OVERRIDE
   ? `.${(MODEL_OVERRIDE ?? MODEL_ID).replace(/[^a-z0-9._-]/gi, "-")}+verifier-${VERIFIER_MODEL_OVERRIDE.replace(/[^a-z0-9._-]/gi, "-")}`
   : MODEL_OVERRIDE ? `.${MODEL_OVERRIDE.replace(/[^a-z0-9._-]/gi, "-")}` : "";
@@ -80,8 +83,9 @@ let modelAvailable = false;
 
 try {
   const port = 21000 + Math.floor(Math.random() * 4000);
-  child = spawn("node", ["server/desktop-bridge/index.mjs"], { cwd: REPO_ROOT, env: { ...process.env, FLOW_COMPANION_PORT: String(port) }, stdio: ["ignore", "pipe", "pipe"] });
-  const token = await waitForLine(child, /session token: (\S+)/, 10_000);
+  child = spawn("node", ["server/desktop-bridge/index.mjs"], { cwd: REPO_ROOT, env: { ...process.env, HOME: COMPANION_HOME, FLOW_COMPANION_PORT: String(port) }, stdio: ["ignore", "pipe", "pipe"] });
+  await waitForLine(child, /session token written to (.+)/, 10_000);
+  const token = fs.readFileSync(path.join(COMPANION_HOME, ".flow-companion", "token"), "utf8").trim();
   const baseUrl = `http://127.0.0.1:${port}`;
   localStorage.setItem(DESKTOP_COMPANION_TOKEN_KEY, token);
   localStorage.setItem(DESKTOP_COMPANION_BASE_URL_KEY, baseUrl);
@@ -97,8 +101,15 @@ try {
 }
 console.log(`[acceptanceCorpus] real companion + local model (${MODEL_ID}) available: ${modelAvailable}`);
 
-afterAll(() => {
-  child?.kill();
+afterAll(async () => {
+  if (child && child.exitCode === null && child.signalCode === null) {
+    const exited = once(child, "exit");
+    child.kill();
+    await exited;
+  }
+  localStorage.removeItem(DESKTOP_COMPANION_TOKEN_KEY);
+  localStorage.removeItem(DESKTOP_COMPANION_BASE_URL_KEY);
+  fs.rmSync(COMPANION_HOME, { recursive: true, force: true });
 });
 
 interface CaseResult {

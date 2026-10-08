@@ -759,8 +759,7 @@ function main() {
   server.listen(port, "127.0.0.1", () => {
     console.log(`[flow-companion] listening on http://127.0.0.1:${port}`);
     console.log(`[flow-companion] session token written to ${tokenPath}`);
-    console.log(`[flow-companion] session token: ${token}`);
-    console.log("[flow-companion] paste this token into Flow's desktop companion settings.");
+    console.log("[flow-companion] read the protected token file to pair Flow; do not paste it into logs.");
   });
 }
 
