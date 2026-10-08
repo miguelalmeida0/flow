@@ -1,0 +1,145 @@
+name: Verify companion pairing hardening
+
+on:
+  push:
+    branches: [test]
+    paths: [.github/workflows/pairing-maintenance-20261008.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: companion-pairing-maintenance
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    if: github.repository == 'miguelalmeida0/flow' && github.ref == 'refs/heads/test'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    outputs:
+      commit: ${{ steps.commit.outputs.commit }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Apply exact reviewed patch to inspected source versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          expected = {
+            'server/desktop-bridge/index.mjs': '7e896906e8830a7960746214436a38fe602c2921b7ac728ba4e9ce547f8ef644',
+            'src/kernel/llm/realModel.e2e.test.ts': '7f896776029b45dc567d21c76eea7495909756ad7b9d8fb23730ae6261855aae',
+            'src/kernel/llm/acceptanceCorpus.realModel.test.ts': '519f2f5c0e96b9c5405b87eaa300454a3c45a9eb8155149df3954800d423babb',
+          }
+          for name,digest in expected.items():
+              if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=digest:
+                  raise SystemExit('Source moved; stop for a fresh review. No patch applied.')
+          def replace_one(s,a,b):
+              if s.count(a)!=1: raise RuntimeError('Patch precondition failed')
+              return s.replace(a,b,1)
+          changes={}
+          p=Path('server/desktop-bridge/index.mjs')
+          s=p.read_text()
+          s=replace_one(s,'    console.log(`[flow-companion] session token: ${token}`);\n','')
+          s=replace_one(s,'    console.log("[flow-companion] paste this token into Flow\'s desktop companion settings.");','    console.log("[flow-companion] read the protected token file to pair Flow; do not paste it into logs.");')
+          changes[p]=s
+          for name in ['realModel.e2e.test.ts','acceptanceCorpus.realModel.test.ts']:
+              p=Path('src/kernel/llm')/name
+              s=p.read_text()
+              if 'import fs from "node:fs";' not in s:
+                  s=replace_one(s,'import path from "node:path";','import path from "node:path";\nimport fs from "node:fs";')
+              s=replace_one(s,'import fs from "node:fs";','import fs from "node:fs";\nimport os from "node:os";\nimport { once } from "node:events";')
+              s=replace_one(s,'const REPO_ROOT = path.resolve(__dirname, "../../..");','const REPO_ROOT = path.resolve(__dirname, "../../..");\nconst COMPANION_HOME = fs.mkdtempSync(path.join(os.tmpdir(), "flow-model-pairing-"));')
+              s=replace_one(s,'env: { ...process.env, FLOW_COMPANION_PORT: String(port) }','env: { ...process.env, HOME: COMPANION_HOME, FLOW_COMPANION_PORT: String(port) }')
+              s=replace_one(s,r'  const token = await waitForLine(child, /session token: (\S+)/, 10_000);','  await waitForLine(child, /session token written to (.+)/, 10_000);\n  const token = fs.readFileSync(path.join(COMPANION_HOME, ".flow-companion", "token"), "utf8").trim();')
+              if name=='realModel.e2e.test.ts':
+                  s=replace_one(s,'  console.log("[realModel.e2e] captured token:", JSON.stringify(token), "stored:", localStorage.getItem(DESKTOP_COMPANION_TOKEN_KEY));\n','')
+              s=replace_one(s,'afterAll(() => {\n  child?.kill();\n});','afterAll(async () => {\n  if (child && child.exitCode === null && child.signalCode === null) {\n    const exited = once(child, "exit");\n    child.kill();\n    await exited;\n  }\n  localStorage.removeItem(DESKTOP_COMPANION_TOKEN_KEY);\n  localStorage.removeItem(DESKTOP_COMPANION_BASE_URL_KEY);\n  fs.rmSync(COMPANION_HOME, { recursive: true, force: true });\n});')
+              changes[p]=s
+          for p,s in changes.items(): p.write_text(s)
+          PY
+          mkdir -p scripts/security
+          cat > scripts/security/companion-output.test.mjs <<'TEST'
+          import test from 'node:test';
+          import assert from 'node:assert/strict';
+          import { spawn } from 'node:child_process';
+          import { once } from 'node:events';
+          import fs from 'node:fs/promises';
+          import os from 'node:os';
+          import path from 'node:path';
+          import net from 'node:net';
+          test('companion pairing secret stays in a private file, never process output', { timeout: 15000 }, async t => {
+            const home = await fs.mkdtemp(path.join(os.tmpdir(), 'flow-pairing-'));
+            const reservation = net.createServer();
+            reservation.listen(0, '127.0.0.1');
+            await once(reservation, 'listening');
+            const port = reservation.address().port;
+            await new Promise(resolve => reservation.close(resolve));
+            let output = '';
+            const child = spawn(process.execPath, ['server/desktop-bridge/index.mjs'], {
+              env: { ...process.env, HOME: home, FLOW_COMPANION_PORT: String(port) },
+              stdio: ['ignore', 'pipe', 'pipe'],
+            });
+            child.stdout.on('data', value => { output += value; });
+            child.stderr.on('data', value => { output += value; });
+            t.after(async () => {
+              if (child.exitCode === null && child.signalCode === null) {
+                const exited = once(child, 'exit'); child.kill(); await exited;
+              }
+              await fs.rm(home, { recursive: true, force: true });
+            });
+            const file = path.join(home, '.flow-companion', 'token');
+            let token = '';
+            for (let attempt = 0; attempt < 100; attempt++) {
+              if (child.exitCode !== null) throw new Error('Companion exited before pairing');
+              try { token = (await fs.readFile(file, 'utf8')).trim(); } catch { /* startup */ }
+              if (token && output.includes('listening on')) break;
+              await new Promise(resolve => setTimeout(resolve, 30));
+            }
+            await new Promise(resolve => setTimeout(resolve, 50));
+            assert.ok(token.length >= 32, 'A pairing token must be created');
+            assert.equal(output.includes(token), false, 'stdout/stderr must not contain the pairing token');
+            assert.equal((await fs.stat(file)).mode & 0o777, 0o600);
+            assert.equal((await fs.stat(path.dirname(file))).mode & 0o777, 0o700);
+          });
+          TEST
+          node --check server/desktop-bridge/index.mjs
+          node --test scripts/security/companion-output.test.mjs
+      - name: Commit only reviewed files to existing test branch
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Miguel Almeida'
+          git config user.email '94702822+miguelalmeida0@users.noreply.github.com'
+          git add -- server/desktop-bridge/index.mjs src/kernel/llm/realModel.e2e.test.ts src/kernel/llm/acceptanceCorpus.realModel.test.ts scripts/security/companion-output.test.mjs
+          git commit -m 'security: keep companion pairing credentials out of logs'
+          AUTH="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:refs/heads/test
+          printf 'commit=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  verify:
+    needs: apply
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ needs.apply.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+      - run: node --test scripts/security/companion-output.test.mjs
+      - run: npm ci
+      - run: npm run check
