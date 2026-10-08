@@ -24,7 +24,7 @@ A domain operation must not depend on browser animation state. Voice interpretat
 - [Engineering standards](../CONTRIBUTING.md)
 - [Security and microphone permission boundaries](../SECURITY.md)
 - [Pages artifact deployment](../.github/workflows/deploy-flow.yml): publish from `main` only; `test` can build without publishing
-- [Deterministic CI gates](../.github/workflows/deterministic-gates.yml)
+- [Deterministic CI gates](https://github.com/miguelalmeida0/flow/blob/main/.github/workflows/deterministic-gates.yml)
 
 ## Historic design evidence
 
