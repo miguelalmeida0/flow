@@ -44,8 +44,8 @@ jobs:
         run: |
           cd dist
           git init
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "Miguel Almeida"
+          git config user.email "94702822+miguelalmeida0@users.noreply.github.com"
           git add -A
           git commit -m "Deploy ${GITHUB_SHA}"
           git branch -M gh-pages
