@@ -131,6 +131,12 @@ linkStyle default stroke:#94A3B8,stroke-width:1.5px;
 - responsive behavior across phone, tablet, laptop and wide desktop
 - end-to-end verification of interaction state, not only screenshots
 
+## Engineering guide
+
+[Architecture and code ownership](docs/README.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Agent and branch policy](AGENTS.md)
+
+Flow's command, domain and UI boundaries are kept separate. Test changes on `test` and ship only reviewed changes on `main`; [deployment](.github/workflows/deploy-flow.yml) builds a Pages artifact without generating an additional `gh-pages` branch. The browser implementation does not itself certify a native, always-on microphone or remote-service guarantee.
+
 ## Run locally
 
 ```bash
