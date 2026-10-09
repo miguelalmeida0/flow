@@ -6,8 +6,8 @@ Then read every file under FLOW_ALWAYS_ON_VOICE_P0_HANDOFF in the exact order li
 
 Inspect the two supplied failure screenshots:
 
-- FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/assets/current-failures/01-home-live-listening.png
-- FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/assets/current-failures/02-navigation-captured-as-inbox.png
+- https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/assets/current-failures/01-home-live-listening.png
+- https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/assets/current-failures/02-navigation-captured-as-inbox.png
 
 Then execute FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/FLOW_ALWAYS_ON_VOICE_MASTER_PROMPT.md completely.
 

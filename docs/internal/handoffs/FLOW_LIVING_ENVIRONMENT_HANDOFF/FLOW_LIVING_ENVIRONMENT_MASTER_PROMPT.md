@@ -124,7 +124,7 @@ After P0 is functionally complete and all gates pass:
 
 ## Signature choreography
 
-The favored reference is `assets/screens/06-inbox-to-plan-morph.png`.
+The favored reference is [original 06-inbox-to-plan-morph.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/06-inbox-to-plan-morph.png).
 
 The production implementation must use the exact six-beat logic defined in `05_INBOX_TO_PLAN_CHOREOGRAPHY.md`:
 

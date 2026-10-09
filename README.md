@@ -149,3 +149,5 @@ npm run dev
 ```bash
 npm run build
 ```
+
+[Cleanup and preservation record](docs/CLEANUP_2026-10-09.md)

@@ -1,3 +1,5 @@
+> Historical export: binaries are preserved in [the immutable original handoff](https://github.com/miguelalmeida0/flow/tree/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF) and the verified archive listed in [the archive index](../README.md). Restore the archive for a complete offline export.
+
 # Flow Living Environment — Elite Motion-Led Handoff
 
 This package defines the next portfolio release after the Breathing Day + Tide calendar is stable.
@@ -47,19 +49,19 @@ Start the expansion on a separate branch when Git metadata exists. If the suppli
 
 ## Asset map
 
-- `assets/boards/screen-map.png` — all target screens in one board.
-- `assets/boards/motion-reference-annotated.png` — annotated motion language.
-- `assets/boards/inbox-to-plan-storyboard.png` — six-beat choreography.
-- `assets/reference/inbox-plan-animation-reference.png` — original favored visual reference.
-- `assets/screens/01-living-home.png`
-- `assets/screens/02-breathing-calendar.png`
-- `assets/screens/03-global-command-preview.png`
-- `assets/screens/04-automatic-tide-recovery.png`
-- `assets/screens/05-what-if-preview.png`
-- `assets/screens/06-inbox-to-plan-morph.png`
-- `assets/screens/07-plan-detail.png`
-- `assets/screens/08-people-commitments.png`
-- `assets/screens/09-now-engine.png`
+- [original screen-map.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/screen-map.png) — all target screens in one board.
+- [original motion-reference-annotated.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/motion-reference-annotated.png) — annotated motion language.
+- [original inbox-to-plan-storyboard.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/inbox-to-plan-storyboard.png) — six-beat choreography.
+- [original inbox-plan-animation-reference.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/reference/inbox-plan-animation-reference.png) — original favored visual reference.
+- [original 01-living-home.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/01-living-home.png)
+- [original 02-breathing-calendar.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/02-breathing-calendar.png)
+- [original 03-global-command-preview.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/03-global-command-preview.png)
+- [original 04-automatic-tide-recovery.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/04-automatic-tide-recovery.png)
+- [original 05-what-if-preview.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/05-what-if-preview.png)
+- [original 06-inbox-to-plan-morph.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/06-inbox-to-plan-morph.png)
+- [original 07-plan-detail.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/07-plan-detail.png)
+- [original 08-people-commitments.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/08-people-commitments.png)
+- [original 09-now-engine.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/09-now-engine.png)
 
 The images are product-direction references, not permission to hardcode screenshots or build static mock pages.
 

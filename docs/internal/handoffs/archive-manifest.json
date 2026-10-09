@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "2fe52ce84d30e58987858a425dc93e9ab994f1b7",
+  "archiveFile": "SIX_REPO_CLEANUP_EVIDENCE_2026-10-09.zip",
+  "archiveSha256": "5472f546d438b20826db407dbb320a6573d96866adeba7801dded82ca575d323",
+  "originalFiles": 119,
+  "retiredBytes": 39607610,
+  "entries": [
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/assets/current-failures/01-home-live-listening.png",
+      "bytes": 1002356,
+      "sha256": "7a73ad7200ad497cf44a86949cfd502506b2b48ef9c2e34a5be64d392cd9ac16",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_ALWAYS_ON_VOICE_P0_HANDOFF/assets/current-failures/02-navigation-captured-as-inbox.png",
+      "bytes": 154140,
+      "sha256": "4619d25ba61cd5b0dcad080831efea255ac11522314e4f4e9decc88aa45d209b",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/01-home-fragmented.png",
+      "bytes": 1002356,
+      "sha256": "7a73ad7200ad497cf44a86949cfd502506b2b48ef9c2e34a5be64d392cd9ac16",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/02-navigation-saved-as-data.png",
+      "bytes": 154140,
+      "sha256": "4619d25ba61cd5b0dcad080831efea255ac11522314e4f4e9decc88aa45d209b",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/03-calendar-local-parser-failure.png",
+      "bytes": 1033477,
+      "sha256": "47c838ca88013503fdc07496d610862c57e32240a0e2396a4cc132f1a4f68136",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/04-broken-reclaimed-time-motion.png",
+      "bytes": 50820,
+      "sha256": "c910f3c1ccb0d135c70eff63dd9a193853fc9c19257a73168e2861f9bdd38ecf",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/05-voice-confirmation-failure.png",
+      "bytes": 1005111,
+      "sha256": "ba803221d7aa0e7b12f58fbb8e048f7f40b520d7e03ad0245bcf1417785d9c3b",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/06-global-navigation-failure.png",
+      "bytes": 1000326,
+      "sha256": "ff89e92dd861bad0035d00c061ff0b42769a7511b4e99910b724167a0b4a85ac",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/07-cross-space-event-creation-failure.png",
+      "bytes": 916582,
+      "sha256": "a6ffa3745497996d0410e4dd130c4ccd53d2a3aebd2cd9223fc3772e7da4681c",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/08-now-dead-end.png",
+      "bytes": 963328,
+      "sha256": "c2c30c6b9784ea26b5d6e0573df326739c1f65cbfedaabdf0c3bfdc4d044156d",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/09-commitments-empty-taxonomy.png",
+      "bytes": 989170,
+      "sha256": "aa04b7b3b1af7f84f4960e6061a123915900e07b76233ffc6bc8eb2c7c51cbac",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/10-outcomes-empty.png",
+      "bytes": 930714,
+      "sha256": "25a0ed0952fb2c9b105ec6fceef8961c5c4957928b5e3f6a083f69a9e7f6a422",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/11-capture-empty.png",
+      "bytes": 944504,
+      "sha256": "347281575e046de5a55727985a99fc9a62b3d0fdcfd499d364b1b9849049db6e",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/01-living-home-direction.png",
+      "bytes": 1315596,
+      "sha256": "a2955042b73616bcc6925f5fc1ab0247a070f9dba8342d470b1a64a13c2bdcdc",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/02-today-direction.png",
+      "bytes": 1231581,
+      "sha256": "cc68e4c066bc544f67612a198536c27e653014d0c734e9376712d6fbf228c8ca",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/03-capture-direction.png",
+      "bytes": 1376640,
+      "sha256": "8289f16bd4fec9e20c77d6f6e8c7806fe7e08b800bd8243bd062ab9d7cc8d634",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/04-outcome-direction.png",
+      "bytes": 1166772,
+      "sha256": "7481e2b384925ff638da8b99d96aa0081585b754bc64352b462fc5d6f2368b11",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/05-commitments-direction.png",
+      "bytes": 1527847,
+      "sha256": "eb5ae1373a7b981e78b78445c125f504484bc9f784ebae63e971d32fd8b2ab57",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/06-now-embedded-direction.png",
+      "bytes": 1412812,
+      "sha256": "110cf1df8f63fb553cac80aad9db8f5a70aff12301e98e60ccd4be0c5b9d47d8",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_ELITE_HANDOFF_FINAL_2026-09-04/design/FLOW_FINAL_LOCKED_REFERENCE.png",
+      "bytes": 1326084,
+      "sha256": "9e439ed9ee367c606df2653a2c0b6d17d4cf4cf9ddd398312507b522f6c751c3",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/inbox-to-plan-storyboard.png",
+      "bytes": 369105,
+      "sha256": "08fd77c2bd3ee88a7953c0dfec806887dfb52274ac103f8c489c048833134ea3",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/motion-reference-annotated.png",
+      "bytes": 1487888,
+      "sha256": "b1fe16b0312641f7cd9d22a71c2cc05c82ab07604cd89378f563028eb1afc69c",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/screen-map.png",
+      "bytes": 1380220,
+      "sha256": "dfe862746eceeaceb23b016d97c5be5036eb661c86807b1755da46b76f3fbb4a",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/reference/inbox-plan-animation-reference.png",
+      "bytes": 2258446,
+      "sha256": "7e7078bd271c00e850c26781f279cebcbe4335870521a7a6739923302649fd71",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/01-living-home.png",
+      "bytes": 1315596,
+      "sha256": "a2955042b73616bcc6925f5fc1ab0247a070f9dba8342d470b1a64a13c2bdcdc",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/02-breathing-calendar.png",
+      "bytes": 1231581,
+      "sha256": "cc68e4c066bc544f67612a198536c27e653014d0c734e9376712d6fbf228c8ca",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/03-global-command-preview.png",
+      "bytes": 1455802,
+      "sha256": "ac12239a502cb3213556d1352fd6a7b079f17fa3ac685dc10e6d402d63fdcee5",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/04-automatic-tide-recovery.png",
+      "bytes": 1550852,
+      "sha256": "b14e26c8b9e1035de5c1374cc6e98addca79a9f8d3abf4d07378054f53ccc2b4",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/05-what-if-preview.png",
+      "bytes": 1586679,
+      "sha256": "73b89a6dabf4a8e3229cedec423ee04291b7be1af964e521291cfde4aeacdaf6",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/06-inbox-to-plan-morph.png",
+      "bytes": 2258446,
+      "sha256": "7e7078bd271c00e850c26781f279cebcbe4335870521a7a6739923302649fd71",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/07-plan-detail.png",
+      "bytes": 1166772,
+      "sha256": "7481e2b384925ff638da8b99d96aa0081585b754bc64352b462fc5d6f2368b11",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/08-people-commitments.png",
+      "bytes": 1527847,
+      "sha256": "eb5ae1373a7b981e78b78445c125f504484bc9f784ebae63e971d32fd8b2ab57",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/09-now-engine.png",
+      "bytes": 1412812,
+      "sha256": "110cf1df8f63fb553cac80aad9db8f5a70aff12301e98e60ccd4be0c5b9d47d8",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-annotated.png",
+      "bytes": 517270,
+      "sha256": "ff686fc755ce1b28aee1acf4ccabc7f2c7c489723e0c7bf4f2c834d89a0621fa",
+      "mode": "0o644"
+    },
+    {
+      "repository": "flow",
+      "path": "docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-reference.png",
+      "bytes": 583938,
+      "sha256": "b0f25cda7796280c8c8bc5f3070544315862bfe5cef1b7122ec5237416d7b6b9",
+      "mode": "0o644"
+    }
+  ]
+}

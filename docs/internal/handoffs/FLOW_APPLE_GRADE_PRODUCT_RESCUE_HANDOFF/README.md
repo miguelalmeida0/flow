@@ -1,3 +1,5 @@
+> Historical export: binaries are preserved in [the immutable original handoff](https://github.com/miguelalmeida0/flow/tree/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF) and the verified archive listed in [the archive index](../README.md). Restore the archive for a complete offline export.
+
 # Flow — Apple-grade Product Rescue Handoff
 
 This handoff supersedes the current fragmented multi-route implementation and the previous mascot/design-only work. It is a product rescue mission: make Flow useful, coherent, voice-first, and portfolio-ready before adding the mascot.

@@ -20,8 +20,8 @@
     },
     {
       "path": "03_SCREEN_SPECIFICATIONS.md",
-      "bytes": 6476,
-      "sha256": "e7637a8ecd534470e683bebedc6e85361526ca32ed39acd900a1f1f4e369c5ae"
+      "bytes": 9490,
+      "sha256": "f8ca01d8f6b1faf071b01631e86b9ef62f2063847c23de0988ba782838033208"
     },
     {
       "path": "04_MOTION_SYSTEM.md",
@@ -30,8 +30,8 @@
     },
     {
       "path": "05_INBOX_TO_PLAN_CHOREOGRAPHY.md",
-      "bytes": 3420,
-      "sha256": "37b5b9c7f93acbd32c075045bfffb48a7cedaf33e50dff5c3f7f5ff82988085f"
+      "bytes": 4349,
+      "sha256": "150388a75927ed4fa36f0d6165631eea7f5768ee7d69acd07c4ea4f66aaee5d3"
     },
     {
       "path": "06_GLOBAL_VOICE_AND_PRESENCE.md",
@@ -70,83 +70,96 @@
     },
     {
       "path": "FLOW_LIVING_ENVIRONMENT_MASTER_PROMPT.md",
-      "bytes": 8139,
-      "sha256": "09fbae8eba2a9c28fed84d1eba0474706233da8f6aee21805d5e8c1575fd2ce8"
+      "bytes": 8482,
+      "sha256": "51976ea7d009c2a321ed722de5b5d108b618d978d1ace0f2b91add4c5efe75de"
     },
     {
       "path": "PASTE_THIS_IN_CODEX.txt",
-      "bytes": 2051,
-      "sha256": "062fb4fee051b9f5e0efa6ae0aab91e43639d8946d628bc5b80e7c67eab7937f"
+      "bytes": 2443,
+      "sha256": "7dbb7721d89e7820b0182ad50490f23d26683a48e317bfbc689dccaa7d06cf62"
     },
     {
       "path": "README.md",
-      "bytes": 3997,
-      "sha256": "7b847d3f4e998f891cf396e26b79388e09c7b314b03366b2fc661d0788b8c787"
+      "bytes": 7940,
+      "sha256": "0b20ea37281353dc938c8e37a1f6c1b110f1fb23efa7fe21db0f106d9f29bdd6"
     },
     {
       "path": "assets/boards/inbox-to-plan-storyboard.png",
       "bytes": 369105,
-      "sha256": "08fd77c2bd3ee88a7953c0dfec806887dfb52274ac103f8c489c048833134ea3"
+      "sha256": "08fd77c2bd3ee88a7953c0dfec806887dfb52274ac103f8c489c048833134ea3",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/inbox-to-plan-storyboard.png"
     },
     {
       "path": "assets/boards/motion-reference-annotated.png",
       "bytes": 1487888,
-      "sha256": "b1fe16b0312641f7cd9d22a71c2cc05c82ab07604cd89378f563028eb1afc69c"
+      "sha256": "b1fe16b0312641f7cd9d22a71c2cc05c82ab07604cd89378f563028eb1afc69c",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/motion-reference-annotated.png"
     },
     {
       "path": "assets/boards/screen-map.png",
       "bytes": 1380220,
-      "sha256": "dfe862746eceeaceb23b016d97c5be5036eb661c86807b1755da46b76f3fbb4a"
+      "sha256": "dfe862746eceeaceb23b016d97c5be5036eb661c86807b1755da46b76f3fbb4a",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/screen-map.png"
     },
     {
       "path": "assets/reference/inbox-plan-animation-reference.png",
       "bytes": 2258446,
-      "sha256": "7e7078bd271c00e850c26781f279cebcbe4335870521a7a6739923302649fd71"
+      "sha256": "7e7078bd271c00e850c26781f279cebcbe4335870521a7a6739923302649fd71",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/reference/inbox-plan-animation-reference.png"
     },
     {
       "path": "assets/screens/01-living-home.png",
       "bytes": 1315596,
-      "sha256": "a2955042b73616bcc6925f5fc1ab0247a070f9dba8342d470b1a64a13c2bdcdc"
+      "sha256": "a2955042b73616bcc6925f5fc1ab0247a070f9dba8342d470b1a64a13c2bdcdc",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/01-living-home.png"
     },
     {
       "path": "assets/screens/02-breathing-calendar.png",
       "bytes": 1231581,
-      "sha256": "cc68e4c066bc544f67612a198536c27e653014d0c734e9376712d6fbf228c8ca"
+      "sha256": "cc68e4c066bc544f67612a198536c27e653014d0c734e9376712d6fbf228c8ca",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/02-breathing-calendar.png"
     },
     {
       "path": "assets/screens/03-global-command-preview.png",
       "bytes": 1455802,
-      "sha256": "ac12239a502cb3213556d1352fd6a7b079f17fa3ac685dc10e6d402d63fdcee5"
+      "sha256": "ac12239a502cb3213556d1352fd6a7b079f17fa3ac685dc10e6d402d63fdcee5",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/03-global-command-preview.png"
     },
     {
       "path": "assets/screens/04-automatic-tide-recovery.png",
       "bytes": 1550852,
-      "sha256": "b14e26c8b9e1035de5c1374cc6e98addca79a9f8d3abf4d07378054f53ccc2b4"
+      "sha256": "b14e26c8b9e1035de5c1374cc6e98addca79a9f8d3abf4d07378054f53ccc2b4",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/04-automatic-tide-recovery.png"
     },
     {
       "path": "assets/screens/05-what-if-preview.png",
       "bytes": 1586679,
-      "sha256": "73b89a6dabf4a8e3229cedec423ee04291b7be1af964e521291cfde4aeacdaf6"
+      "sha256": "73b89a6dabf4a8e3229cedec423ee04291b7be1af964e521291cfde4aeacdaf6",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/05-what-if-preview.png"
     },
     {
       "path": "assets/screens/06-inbox-to-plan-morph.png",
       "bytes": 2258446,
-      "sha256": "7e7078bd271c00e850c26781f279cebcbe4335870521a7a6739923302649fd71"
+      "sha256": "7e7078bd271c00e850c26781f279cebcbe4335870521a7a6739923302649fd71",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/06-inbox-to-plan-morph.png"
     },
     {
       "path": "assets/screens/07-plan-detail.png",
       "bytes": 1166772,
-      "sha256": "7481e2b384925ff638da8b99d96aa0081585b754bc64352b462fc5d6f2368b11"
+      "sha256": "7481e2b384925ff638da8b99d96aa0081585b754bc64352b462fc5d6f2368b11",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/07-plan-detail.png"
     },
     {
       "path": "assets/screens/08-people-commitments.png",
       "bytes": 1527847,
-      "sha256": "eb5ae1373a7b981e78b78445c125f504484bc9f784ebae63e971d32fd8b2ab57"
+      "sha256": "eb5ae1373a7b981e78b78445c125f504484bc9f784ebae63e971d32fd8b2ab57",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/08-people-commitments.png"
     },
     {
       "path": "assets/screens/09-now-engine.png",
       "bytes": 1412812,
-      "sha256": "110cf1df8f63fb553cac80aad9db8f5a70aff12301e98e60ccd4be0c5b9d47d8"
+      "sha256": "110cf1df8f63fb553cac80aad9db8f5a70aff12301e98e60ccd4be0c5b9d47d8",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/09-now-engine.png"
     },
     {
       "path": "reference/flow-design-tokens.reference.ts",
@@ -163,5 +176,11 @@
       "bytes": 907,
       "sha256": "a726a56a18dadada694e2f9755ecbe77616871472c426c5d4679e698600b2230"
     }
-  ]
+  ],
+  "evidenceArchive": {
+    "sourceCommit": "2fe52ce84d30e58987858a425dc93e9ab994f1b7",
+    "archiveFile": "SIX_REPO_CLEANUP_EVIDENCE_2026-10-09.zip",
+    "sha256": "5472f546d438b20826db407dbb320a6573d96866adeba7801dded82ca575d323",
+    "scope": "Historical snapshot; original manifest and all original files are preserved in the archive."
+  }
 }

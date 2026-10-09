@@ -2,7 +2,7 @@
 
 ## Chosen visual direction
 
-Use `assets/breathing-day-reference.png` as the primary art-direction reference.
+Use [original breathing-day-reference.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-reference.png) as the primary art-direction reference.
 
 The reference succeeds because:
 

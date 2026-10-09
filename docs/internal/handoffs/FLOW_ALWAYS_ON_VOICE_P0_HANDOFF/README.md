@@ -1,3 +1,5 @@
+> Historical export: binaries are preserved in [the immutable original handoff](https://github.com/miguelalmeida0/flow/tree/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_ALWAYS_ON_VOICE_P0_HANDOFF) and the verified archive listed in [the archive index](../README.md). Restore the archive for a complete offline export.
+
 # Flow Always-On Voice Shell — P0 Repair Handoff
 
 This handoff must be executed **before** mascot integration or any further visual expansion.

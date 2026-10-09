@@ -6,7 +6,7 @@
 | --- | --- |
 | [`src/app/`](../src/app/) | Application composition and shared environment wiring |
 | [`src/domain/`](../src/domain/) | Application/domain types, invariants and deterministic rules |
-| [`src/kernel/`](../src/kernel/) | Capability and orchestration contracts |
+| [`src/kernel/`](../src/kernel/) | Historical alternate implementation and contract tests; not mounted |
 | [`src/features/day-planner/`](../src/features/day-planner/) | Planning actions, reconciliation and calendar behavior |
 | [`src/features/voice-intelligence/`](../src/features/voice-intelligence/) | Voice intent, transcription and interpretation paths |
 | [`src/features/voice-home/`](../src/features/voice-home/) | Voice-home presentation and interaction state |

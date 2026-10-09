@@ -1,6 +1,6 @@
 # 03 — Screen Specifications
 
-Use `assets/boards/screen-map.png` as the visual index.
+Use [original screen-map.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/screen-map.png) as the visual index.
 
 The images establish mood, hierarchy, and key states. Production screens must remain responsive, accessible, and data-driven.
 
@@ -8,7 +8,7 @@ The images establish mood, hierarchy, and key states. Production screens must re
 
 ## 01 — Living Home
 
-Reference: `assets/screens/01-living-home.png`
+Reference: [original 01-living-home.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/01-living-home.png)
 
 ### Purpose
 
@@ -44,7 +44,7 @@ The chosen container expands from its exact Home geometry into the destination s
 
 ## 02 — Breathing Calendar
 
-Reference: `assets/screens/02-breathing-calendar.png`
+Reference: [original 02-breathing-calendar.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/02-breathing-calendar.png)
 
 ### Purpose
 
@@ -74,7 +74,7 @@ Preserve existing create/edit/move/resize/protect/color/label/recovery/what-if c
 
 ## 03 — Global Command Preview
 
-Reference: `assets/screens/03-global-command-preview.png`
+Reference: [original 03-global-command-preview.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/03-global-command-preview.png)
 
 ### Purpose
 
@@ -98,7 +98,7 @@ The target event rises while “2 PM meeting” is recognized. Importance and re
 
 ## 04 — Automatic Tide Recovery
 
-Reference: `assets/screens/04-automatic-tide-recovery.png`
+Reference: [original 04-automatic-tide-recovery.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/04-automatic-tide-recovery.png)
 
 ### Purpose
 
@@ -125,7 +125,7 @@ The Calendar remains dominant. A temporary details panel may appear only during 
 
 ## 05 — What-if Preview
 
-Reference: `assets/screens/05-what-if-preview.png`
+Reference: [original 05-what-if-preview.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/05-what-if-preview.png)
 
 ### Purpose
 
@@ -149,7 +149,7 @@ Let users experiment without mutating current state.
 
 ## 06 — Inbox → Plan Morph
 
-Reference: `assets/screens/06-inbox-to-plan-morph.png`
+Reference: [original 06-inbox-to-plan-morph.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/06-inbox-to-plan-morph.png)
 
 ### Purpose
 
@@ -169,7 +169,7 @@ Follow `05_INBOX_TO_PLAN_CHOREOGRAPHY.md` exactly.
 
 ## 07 — Plan Detail
 
-Reference: `assets/screens/07-plan-detail.png`
+Reference: [original 07-plan-detail.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/07-plan-detail.png)
 
 ### Purpose
 
@@ -197,7 +197,7 @@ When a step is scheduled, a Tide line extends from the step toward Calendar; on 
 
 ## 08 — People Commitments
 
-Reference: `assets/screens/08-people-commitments.png`
+Reference: [original 08-people-commitments.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/08-people-commitments.png)
 
 ### Purpose
 
@@ -225,7 +225,7 @@ A promise thread animates only when created, completed, reassigned, or linked. D
 
 ## 09 — Now Engine
 
-Reference: `assets/screens/09-now-engine.png`
+Reference: [original 09-now-engine.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/09-now-engine.png)
 
 ### Purpose
 

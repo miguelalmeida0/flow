@@ -2,7 +2,7 @@
 
 **Snapshot:** 2026-09-04
 **Status:** product direction + home UI are locked for implementation
-**Source of visual truth:** `design/FLOW_FINAL_LOCKED_REFERENCE.png`
+**Source of visual truth:** [original FLOW_FINAL_LOCKED_REFERENCE.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_ELITE_HANDOFF_FINAL_2026-09-04/design/FLOW_FINAL_LOCKED_REFERENCE.png)
 
 This package consolidates the prior Flow product-strategy handoff and the final UX/UI direction approved after the design exploration. It is meant to be attached to a fresh ChatGPT/Codex/agent session so the next agent can continue without re-litigating the product thesis or redesigning the home screen.
 

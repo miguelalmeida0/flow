@@ -4,9 +4,9 @@ Then read every file under FLOW_LIVING_ENVIRONMENT_HANDOFF in the exact order li
 
 Inspect all supplied boards and screen references, especially:
 
-- FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/motion-reference-annotated.png
-- FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/inbox-to-plan-storyboard.png
-- FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/06-inbox-to-plan-morph.png
+- https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/motion-reference-annotated.png
+- https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/boards/inbox-to-plan-storyboard.png
+- https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_LIVING_ENVIRONMENT_HANDOFF/assets/screens/06-inbox-to-plan-morph.png
 
 After reading everything, execute FLOW_LIVING_ENVIRONMENT_HANDOFF/FLOW_LIVING_ENVIRONMENT_MASTER_PROMPT.md completely.
 

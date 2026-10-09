@@ -1,3 +1,5 @@
+> Historical export: binaries are preserved in [the immutable original handoff](https://github.com/miguelalmeida0/flow/tree/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_TIDE_HANDOFF) and the verified archive listed in [the archive index](../README.md). Restore the archive for a complete offline export.
+
 # Flow Tide — Elite Product Handoff
 
 This package is the complete implementation brief for the next Flow release.
@@ -20,8 +22,8 @@ The app is not a voice-controlled calendar. It is a calendar that continuously r
 6. `FLOW_TIDE_ARCHITECTURE.md`
 7. `FLOW_TIDE_IMPLEMENTATION_SEQUENCE.md`
 8. `FLOW_TIDE_ACCEPTANCE_AND_QA.md`
-9. `assets/breathing-day-reference.png`
-10. `assets/breathing-day-annotated.png`
+9. [original breathing-day-reference.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-reference.png)
+10. [original breathing-day-annotated.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-annotated.png)
 11. `reference/design-tokens.reference.ts`
 
 ## Non-negotiable boundaries

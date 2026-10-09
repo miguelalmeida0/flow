@@ -58,13 +58,13 @@
     },
     {
       "path": "FLOW_PRODUCT_RESCUE_MASTER_PROMPT.md",
-      "bytes": 6228,
-      "sha256": "597059ae1ccab29fa204175ba6eb9ab25eb30299c62ac927692556742331de2e"
+      "bytes": 6266,
+      "sha256": "9116f1acaed4662c1320d8cc47aaa48c9a3fe41db31b6e1cfc52ac29d7d570d7"
     },
     {
       "path": "PASTE_THIS_IN_CODEX.txt",
-      "bytes": 2289,
-      "sha256": "47503cd33a810609deb6f732211e6eb4d8cc4f7e6344de2d21a0457002d623cb"
+      "bytes": 2327,
+      "sha256": "1e7172a5a7d0d6bb1217ce0c0516b0b28bf71adc9ae7d6bdac53822e1ee71bb4"
     },
     {
       "path": "README.md",
@@ -74,87 +74,104 @@
     {
       "path": "assets/current-state/01-home-fragmented.png",
       "bytes": 1002356,
-      "sha256": "7a73ad7200ad497cf44a86949cfd502506b2b48ef9c2e34a5be64d392cd9ac16"
+      "sha256": "7a73ad7200ad497cf44a86949cfd502506b2b48ef9c2e34a5be64d392cd9ac16",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/01-home-fragmented.png"
     },
     {
       "path": "assets/current-state/02-navigation-saved-as-data.png",
       "bytes": 154140,
-      "sha256": "4619d25ba61cd5b0dcad080831efea255ac11522314e4f4e9decc88aa45d209b"
+      "sha256": "4619d25ba61cd5b0dcad080831efea255ac11522314e4f4e9decc88aa45d209b",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/02-navigation-saved-as-data.png"
     },
     {
       "path": "assets/current-state/03-calendar-local-parser-failure.png",
       "bytes": 1033477,
-      "sha256": "47c838ca88013503fdc07496d610862c57e32240a0e2396a4cc132f1a4f68136"
+      "sha256": "47c838ca88013503fdc07496d610862c57e32240a0e2396a4cc132f1a4f68136",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/03-calendar-local-parser-failure.png"
     },
     {
       "path": "assets/current-state/04-broken-reclaimed-time-motion.png",
       "bytes": 50820,
-      "sha256": "c910f3c1ccb0d135c70eff63dd9a193853fc9c19257a73168e2861f9bdd38ecf"
+      "sha256": "c910f3c1ccb0d135c70eff63dd9a193853fc9c19257a73168e2861f9bdd38ecf",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/04-broken-reclaimed-time-motion.png"
     },
     {
       "path": "assets/current-state/05-voice-confirmation-failure.png",
       "bytes": 1005111,
-      "sha256": "ba803221d7aa0e7b12f58fbb8e048f7f40b520d7e03ad0245bcf1417785d9c3b"
+      "sha256": "ba803221d7aa0e7b12f58fbb8e048f7f40b520d7e03ad0245bcf1417785d9c3b",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/05-voice-confirmation-failure.png"
     },
     {
       "path": "assets/current-state/06-global-navigation-failure.png",
       "bytes": 1000326,
-      "sha256": "ff89e92dd861bad0035d00c061ff0b42769a7511b4e99910b724167a0b4a85ac"
+      "sha256": "ff89e92dd861bad0035d00c061ff0b42769a7511b4e99910b724167a0b4a85ac",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/06-global-navigation-failure.png"
     },
     {
       "path": "assets/current-state/07-cross-space-event-creation-failure.png",
       "bytes": 916582,
-      "sha256": "a6ffa3745497996d0410e4dd130c4ccd53d2a3aebd2cd9223fc3772e7da4681c"
+      "sha256": "a6ffa3745497996d0410e4dd130c4ccd53d2a3aebd2cd9223fc3772e7da4681c",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/07-cross-space-event-creation-failure.png"
     },
     {
       "path": "assets/current-state/08-now-dead-end.png",
       "bytes": 963328,
-      "sha256": "c2c30c6b9784ea26b5d6e0573df326739c1f65cbfedaabdf0c3bfdc4d044156d"
+      "sha256": "c2c30c6b9784ea26b5d6e0573df326739c1f65cbfedaabdf0c3bfdc4d044156d",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/08-now-dead-end.png"
     },
     {
       "path": "assets/current-state/09-commitments-empty-taxonomy.png",
       "bytes": 989170,
-      "sha256": "aa04b7b3b1af7f84f4960e6061a123915900e07b76233ffc6bc8eb2c7c51cbac"
+      "sha256": "aa04b7b3b1af7f84f4960e6061a123915900e07b76233ffc6bc8eb2c7c51cbac",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/09-commitments-empty-taxonomy.png"
     },
     {
       "path": "assets/current-state/10-outcomes-empty.png",
       "bytes": 930714,
-      "sha256": "25a0ed0952fb2c9b105ec6fceef8961c5c4957928b5e3f6a083f69a9e7f6a422"
+      "sha256": "25a0ed0952fb2c9b105ec6fceef8961c5c4957928b5e3f6a083f69a9e7f6a422",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/10-outcomes-empty.png"
     },
     {
       "path": "assets/current-state/11-capture-empty.png",
       "bytes": 944504,
-      "sha256": "347281575e046de5a55727985a99fc9a62b3d0fdcfd499d364b1b9849049db6e"
+      "sha256": "347281575e046de5a55727985a99fc9a62b3d0fdcfd499d364b1b9849049db6e",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/current-state/11-capture-empty.png"
     },
     {
       "path": "assets/target/01-living-home-direction.png",
       "bytes": 1315596,
-      "sha256": "a2955042b73616bcc6925f5fc1ab0247a070f9dba8342d470b1a64a13c2bdcdc"
+      "sha256": "a2955042b73616bcc6925f5fc1ab0247a070f9dba8342d470b1a64a13c2bdcdc",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/01-living-home-direction.png"
     },
     {
       "path": "assets/target/02-today-direction.png",
       "bytes": 1231581,
-      "sha256": "cc68e4c066bc544f67612a198536c27e653014d0c734e9376712d6fbf228c8ca"
+      "sha256": "cc68e4c066bc544f67612a198536c27e653014d0c734e9376712d6fbf228c8ca",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/02-today-direction.png"
     },
     {
       "path": "assets/target/03-capture-direction.png",
       "bytes": 1376640,
-      "sha256": "8289f16bd4fec9e20c77d6f6e8c7806fe7e08b800bd8243bd062ab9d7cc8d634"
+      "sha256": "8289f16bd4fec9e20c77d6f6e8c7806fe7e08b800bd8243bd062ab9d7cc8d634",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/03-capture-direction.png"
     },
     {
       "path": "assets/target/04-outcome-direction.png",
       "bytes": 1166772,
-      "sha256": "7481e2b384925ff638da8b99d96aa0081585b754bc64352b462fc5d6f2368b11"
+      "sha256": "7481e2b384925ff638da8b99d96aa0081585b754bc64352b462fc5d6f2368b11",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/04-outcome-direction.png"
     },
     {
       "path": "assets/target/05-commitments-direction.png",
       "bytes": 1527847,
-      "sha256": "eb5ae1373a7b981e78b78445c125f504484bc9f784ebae63e971d32fd8b2ab57"
+      "sha256": "eb5ae1373a7b981e78b78445c125f504484bc9f784ebae63e971d32fd8b2ab57",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/05-commitments-direction.png"
     },
     {
       "path": "assets/target/06-now-embedded-direction.png",
       "bytes": 1412812,
-      "sha256": "110cf1df8f63fb553cac80aad9db8f5a70aff12301e98e60ccd4be0c5b9d47d8"
+      "sha256": "110cf1df8f63fb553cac80aad9db8f5a70aff12301e98e60ccd4be0c5b9d47d8",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_APPLE_GRADE_PRODUCT_RESCUE_HANDOFF/assets/target/06-now-embedded-direction.png"
     },
     {
       "path": "reference/life-state.reference.ts",
@@ -166,5 +183,11 @@
       "bytes": 1504,
       "sha256": "c2fe59ea1d8eaff7c07c9ad040b106c0fb08f7641fd1c3e3e1ac2a0cc2f2bc3d"
     }
-  ]
+  ],
+  "evidenceArchive": {
+    "sourceCommit": "2fe52ce84d30e58987858a425dc93e9ab994f1b7",
+    "archiveFile": "SIX_REPO_CLEANUP_EVIDENCE_2026-10-09.zip",
+    "sha256": "5472f546d438b20826db407dbb320a6573d96866adeba7801dded82ca575d323",
+    "scope": "Historical snapshot; original manifest and all original files are preserved in the archive."
+  }
 }

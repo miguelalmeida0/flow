@@ -2,7 +2,7 @@
 
 ## Locked reference
 
-`design/FLOW_FINAL_LOCKED_REFERENCE.png`
+[original FLOW_FINAL_LOCKED_REFERENCE.png](https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_ELITE_HANDOFF_FINAL_2026-09-04/design/FLOW_FINAL_LOCKED_REFERENCE.png)
 
 The file checksum is stored beside it in `design/FLOW_FINAL_LOCKED_REFERENCE.sha256`.
 

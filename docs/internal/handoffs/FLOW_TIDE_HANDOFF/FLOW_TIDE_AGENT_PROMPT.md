@@ -16,8 +16,8 @@ Read, in full:
 
 Inspect both design references:
 
-- `FLOW_TIDE_HANDOFF/assets/breathing-day-reference.png`
-- `FLOW_TIDE_HANDOFF/assets/breathing-day-annotated.png`
+- `https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-reference.png`
+- `https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-annotated.png`
 
 Then inspect the current source, tests, release harness, and actual running UI before editing.
 

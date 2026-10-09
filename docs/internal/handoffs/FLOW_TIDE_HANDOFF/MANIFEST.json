@@ -9,8 +9,8 @@
     },
     {
       "path": "FLOW_TIDE_AGENT_PROMPT.md",
-      "bytes": 8640,
-      "sha256": "ab2d707e47180a85c80a0519efa8ebc55cf5f37286f4b88117bdbc31fdb29ac9"
+      "bytes": 8914,
+      "sha256": "a60341367573c72e8dfcfe0270c52684a10ab5693d0a80c43772f2d6f3aac3ec"
     },
     {
       "path": "FLOW_TIDE_ARCHITECTURE.md",
@@ -19,13 +19,13 @@
     },
     {
       "path": "FLOW_TIDE_CURRENT_STATE.md",
-      "bytes": 2105,
-      "sha256": "3c51e39828b3b9981bbeb960bd4c66799d482e7bddd66f47a0037bb9719004c6"
+      "bytes": 2091,
+      "sha256": "e1bf9aab2390c63e389d465cd51b1c2ed74805abae148df49dc54e2db972e67f"
     },
     {
       "path": "FLOW_TIDE_DESIGN_SYSTEM.md",
-      "bytes": 7514,
-      "sha256": "21553e83e0dab1e4def58b6519e1327f33d5a1228e025086c78c3e601e5278b5"
+      "bytes": 7806,
+      "sha256": "498620ebbf034ae3c8dae6b05189e34e865526ba7c615dc56b7521fa6ead3c91"
     },
     {
       "path": "FLOW_TIDE_IMPLEMENTATION_SEQUENCE.md",
@@ -44,28 +44,36 @@
     },
     {
       "path": "PASTE_THIS_IN_CODEX.txt",
-      "bytes": 8640,
-      "sha256": "ab2d707e47180a85c80a0519efa8ebc55cf5f37286f4b88117bdbc31fdb29ac9"
+      "bytes": 8914,
+      "sha256": "a60341367573c72e8dfcfe0270c52684a10ab5693d0a80c43772f2d6f3aac3ec"
     },
     {
       "path": "README.md",
-      "bytes": 2181,
-      "sha256": "7b658394dcc07526e364bb221d9d44348175a1662147c5f0eab9d1fbc3428ed1"
+      "bytes": 2765,
+      "sha256": "75dd66774650c562ea82502b0ba1a93cbf6f3d8c2188491fecdb9922820b6a0a"
     },
     {
       "path": "assets/breathing-day-annotated.png",
       "bytes": 517270,
-      "sha256": "ff686fc755ce1b28aee1acf4ccabc7f2c7c489723e0c7bf4f2c834d89a0621fa"
+      "sha256": "ff686fc755ce1b28aee1acf4ccabc7f2c7c489723e0c7bf4f2c834d89a0621fa",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-annotated.png"
     },
     {
       "path": "assets/breathing-day-reference.png",
       "bytes": 583938,
-      "sha256": "b0f25cda7796280c8c8bc5f3070544315862bfe5cef1b7122ec5237416d7b6b9"
+      "sha256": "b0f25cda7796280c8c8bc5f3070544315862bfe5cef1b7122ec5237416d7b6b9",
+      "archivedUrl": "https://raw.githubusercontent.com/miguelalmeida0/flow/2fe52ce84d30e58987858a425dc93e9ab994f1b7/docs/internal/handoffs/FLOW_TIDE_HANDOFF/assets/breathing-day-reference.png"
     },
     {
       "path": "reference/design-tokens.reference.ts",
       "bytes": 3243,
       "sha256": "36c9aa7fcaf20bdd8b6fff092d23cef47bf766e24206fdfddee07286705a3271"
     }
-  ]
+  ],
+  "evidenceArchive": {
+    "sourceCommit": "2fe52ce84d30e58987858a425dc93e9ab994f1b7",
+    "archiveFile": "SIX_REPO_CLEANUP_EVIDENCE_2026-10-09.zip",
+    "sha256": "5472f546d438b20826db407dbb320a6573d96866adeba7801dded82ca575d323",
+    "scope": "Historical snapshot; original manifest and all original files are preserved in the archive."
+  }
 }
