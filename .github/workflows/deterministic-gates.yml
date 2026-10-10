@@ -1,0 +1,49 @@
+name: Deterministic gates
+
+on:
+  # Called by Deploy Flow before production artifacts can be built.
+  workflow_call:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-gates:
+    name: Deterministic gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Wake and voice-home regression tests
+        run: >-
+          npm run test:run --
+          src/app/wakeAcquisition.test.tsx
+          src/app/FlowLockedVoiceHome.test.tsx
+          src/features/voice-home/useVoiceWorld.test.ts
+          src/features/voice-home/voiceWorld.test.ts
+          src/features/voice-home/WakeAcknowledgement.test.tsx
+          src/features/voice-home/wakeEnvelope.test.ts
+          src/features/voice-home/homeSurfaceInk.test.ts
+          src/features/voice-home/VoiceEnergy.test.tsx
+
+      - name: Build
+        run: npm run build
