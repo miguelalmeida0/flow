@@ -1,8 +1,9 @@
 name: Deploy Flow
 
 on:
+  # Experimental test pushes do not build Pages artifacts; PRs use deterministic gates.
   push:
-    branches: [main, test]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
