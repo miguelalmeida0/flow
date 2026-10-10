@@ -14,7 +14,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # This same checked workflow also validates pull requests and manual runs.
+  verify:
+    name: Verify release gates
+    uses: ./.github/workflows/deterministic-gates.yml
+
   build:
+    needs: verify
     name: Build Flow Pages artifact
     runs-on: ubuntu-latest
     timeout-minutes: 15

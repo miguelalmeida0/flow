@@ -1,9 +1,10 @@
 name: Deterministic gates
 
 on:
-  push:
-    branches: [main]
+  # Called by Deploy Flow before production artifacts can be built.
+  workflow_call:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
